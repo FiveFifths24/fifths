@@ -1,14 +1,15 @@
 # Known Limitations
 
-Phase 0 deliberately establishes the foundation only.
+Phase 1 establishes the complete public experience and design foundation. It does not activate member features.
 
-- The page is an architecture-status shell, not the Phase 1 landing experience.
-- Supabase is not connected and no migrations, authentication, RLS policies, storage, or seed data exist yet.
-- Product routes, dashboards, forms, recommendations, Sessions, Circles, Commons, Realm, Passport, reporting, moderation, and notifications are not implemented.
-- Legal and safety pages require drafting and professional review.
+- Authentication pages are accessible interfaces only. Submissions and social login are disabled until Phase 2.
+- Supabase is not connected; no migrations, Auth, Row Level Security, storage policies, or seed data exist yet.
+- Profiles, onboarding, dashboards, Pulse check-ins, recommendations, Sessions, registrations, Circle membership, Commons submissions, campaign applications, Passport entries, reports, and notifications are not implemented.
+- Demonstration and preview language is explicitly labeled; no sample card represents a live opportunity, community, campaign, or activity.
+- Privacy, terms, community, Creator Commons, and Fifth Realm safety pages are structured drafts requiring professional legal and operational review.
 - Rate limiting, email delivery, monitoring, backups, analytics persistence, and production security headers are not configured.
-- Playwright is deferred until Phase 1/2 provide real user journeys.
-- No shadcn/ui components are installed until the design system is defined.
+- Playwright remains deferred until Phase 2 provides real account journeys; Phase 1 behavior is covered by focused Vitest and Testing Library tests.
+- No component library was added. Phase 1 primitives are small, owned by FIFTHS, and documented in `docs/DESIGN_SYSTEM.md`.
 - The MVP remains restricted to adults 18 and older and excludes payments, direct messaging, chat, AI/ML, public leaderboards, physical venue control, virtual tabletop tools, and copyrighted game content.
 
-These are planned boundaries, not forgotten requirements. Track completion in `docs/ROADMAP.md`.
+These are intentional phase boundaries. Track the next work in `docs/ROADMAP.md`.

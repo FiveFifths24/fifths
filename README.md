@@ -4,14 +4,14 @@
 
 FIFTHS is a mobile-first community platform connecting five products—Pulse, Circles, Creator Commons, Fifth Realm, and Passport—through one account, profile, recommendation system, and Supabase backend.
 
-This repository is currently at **Phase 0: architecture and repository setup**. Product screens and live Supabase features begin in later phases.
+This repository has completed **Phase 1: public shell and unified design system**. It includes the finished public landing, ecosystem, module, authentication-interface, and policy pages. Accounts and product features remain intentionally nonfunctional until Phase 2 and later.
 
 ## Prerequisites
 
 - Node.js 22 LTS or newer
 - npm 10 or newer
 - Git
-- A Supabase project (required in Phase 2; placeholders work for Phase 0)
+- A Supabase project (required in Phase 2; placeholders work for Phase 1)
 - A Vercel account linked to this GitHub repository (required for deployment)
 
 ## Local setup
@@ -42,6 +42,7 @@ Run all four together with `npm run check`.
 ## Documentation
 
 - [Architecture](docs/ARCHITECTURE.md)
+- [Design system](docs/DESIGN_SYSTEM.md)
 - [Roadmap and tracked checklist](docs/ROADMAP.md)
 - [Database design](docs/DATABASE.md)
 - [Security approach](docs/SECURITY.md)
@@ -54,9 +55,10 @@ Run all four together with `npm run check`.
 
 - Next.js App Router, React, and strict TypeScript
 - Tailwind CSS for mobile-first styling
+- Reusable public shell, form, feedback, module, and document components
 - Supabase for PostgreSQL, authentication, Row Level Security, and limited storage
 - Zod at every external-data boundary
 - Vitest and React Testing Library for unit/component tests
 - ESLint and Prettier for consistency
 
-Feature code lives under `src/features`; shared platform code lives under `src/lib`, `src/components`, and `src/types`. See `docs/ARCHITECTURE.md` before adding a new module.
+Public routes live under `src/app`; shared design-system and shell components live under `src/components`. Future feature code belongs under `src/features` as documented in `docs/ARCHITECTURE.md`.
