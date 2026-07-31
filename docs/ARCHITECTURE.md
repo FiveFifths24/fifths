@@ -69,3 +69,28 @@ shadcn/ui is intentionally not installed as a package. Components will be added 
 - Shared status values use database constraints and TypeScript unions.
 - Analytics code calls an internal interface, not a paid vendor directly.
 - Audit-sensitive records use statuses or revocation rather than destructive deletion.
+
+## Phase 1 public architecture
+
+The root layout now owns the public shell: skip link, responsive header, main landmark, and footer. Route pages remain Server Components by default. `SiteHeader` and `PasswordField` are narrowly scoped Client Components because they require menu and visibility state.
+
+Reusable UI is organized by responsibility:
+
+- `src/components/ui` — tokens expressed through buttons, badges, containers, headings, messages, and preview states
+- `src/components/shell` — header, footer, and page hero
+- `src/components/forms` — accessible field and authentication-interface primitives
+- `src/components/modules` — shared module cards, public module overview, and participation loop
+- `src/components/legal` — readable policy document shell with required draft notices
+
+No component initializes Supabase or implies successful authentication. Disabled auth submissions make the Phase 1 boundary explicit while preserving semantic form structure for Phase 2.
+
+## Phase 1 routes
+
+| Area             | Routes                                                                                |
+| ---------------- | ------------------------------------------------------------------------------------- |
+| Core public      | `/`, `/about`, `/ecosystem`                                                           |
+| Products         | `/pulse`, `/circles`, `/commons`, `/realm`, `/passport`                               |
+| Auth interfaces  | `/login`, `/signup`, `/forgot-password`                                               |
+| Legal and safety | `/privacy`, `/terms`, `/community-guidelines`, `/commons/guidelines`, `/realm/safety` |
+
+Nested guideline routes reserve clear informational locations without conflicting with future Commons opportunities or Realm campaign routes.

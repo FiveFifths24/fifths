@@ -27,3 +27,7 @@ Owns immutable or revocable verified activity entries and configurable point val
 ## Shared platform capabilities
 
 Profiles, interests, skills, roles, organizations, Sessions, reports, notifications, analytics, authorization, and recommendations belong to the platform—not to an individual product module.
+
+## Phase 1 public representation
+
+Each module has a public overview route explaining audience, planned capabilities, Pulse and Passport connections, MVP scope, and explicit exclusions. Preview notices distinguish planned behavior from live functionality. All five routes use one shared `ModuleOverview` component so product storytelling stays cohesive while allowing restrained module accents.

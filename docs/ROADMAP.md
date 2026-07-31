@@ -19,7 +19,7 @@ Checked items are complete in the repository. A phase begins only after the prio
 
 ## Delivery phases
 
-- [ ] **Phase 1:** Public shell, design system, landing/module pages, auth page UI, legal drafts
+- [x] **Phase 1:** Public shell, design system, landing/module pages, auth page UI, legal drafts
 - [ ] **Phase 2:** Supabase migrations, authentication, roles, RLS, onboarding
 - [ ] **Phase 3:** Pulse check-in, history, recommendation foundation, personal Home
 - [ ] **Phase 4:** Session discovery, hosting, registration, capacity, attendance foundation
@@ -34,3 +34,18 @@ Checked items are complete in the repository. A phase begins only after the prio
 ## Release gate
 
 Every meaningful phase must pass lint, type checking, tests, and a production build. Legal text, threat modeling, abuse procedures, backup/recovery, and launch-grade rate limiting require review before public launch.
+
+## Phase 1 — Public shell and unified design system
+
+- [x] Responsive desktop header and accessible mobile navigation
+- [x] Skip link, main-content landmark, page container, and footer
+- [x] Landing, About, and ecosystem overview pages
+- [x] Public pages for Pulse, Circles, Creator Commons, Fifth Realm, and Passport
+- [x] Interface-only login, signup, and password-reset pages
+- [x] Draft privacy, terms, community, Commons, and Realm safety pages
+- [x] Reusable buttons, links, fields, labels, cards, badges, headings, preview states, and status messages
+- [x] Document design tokens, routes, boundaries, and accessibility decisions
+- [x] Test landing content, navigation/mobile behavior, auth structure, and legal notices
+- [x] Pass formatting, lint, strict TypeScript, tests, and production build
+
+Phase 2 is next. Supabase, authentication, database schema, roles, Row Level Security, and onboarding remain intentionally untouched.

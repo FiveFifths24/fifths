@@ -2,9 +2,22 @@
 
 :root {
   color-scheme: dark;
-  --background: #090909;
-  --foreground: #f7f7f7;
-  --accent: #d51f32;
+  --color-ink: #080808;
+  --color-panel: #101010;
+  --color-panel-raised: #171717;
+  --color-line: #2a2a2a;
+  --color-muted: #a3a3a3;
+  --color-paper: #f6f4ef;
+  --color-white: #ffffff;
+  --color-red: #b91f32;
+  --color-red-bright: #e2344b;
+  --color-red-dark: #6e101d;
+  --radius-sm: 0.65rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.5rem;
+  --radius-xl: 2rem;
+  --shadow-soft: 0 20px 60px rgba(0, 0, 0, 0.28);
+  --shadow-red: 0 24px 80px rgba(185, 31, 50, 0.14);
 }
 
 * {
@@ -12,27 +25,86 @@
 }
 
 html {
-  background: var(--background);
+  background: var(--color-ink);
+  scroll-behavior: smooth;
 }
 
 body {
   min-height: 100vh;
   margin: 0;
-  background: var(--background);
-  color: var(--foreground);
+  overflow-x: hidden;
+  background: var(--color-ink);
+  color: var(--color-paper);
   font-family: Arial, Helvetica, sans-serif;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-red);
+  color: var(--color-white);
+}
+
+a,
+button,
+input {
+  -webkit-tap-highlight-color: transparent;
 }
 
 :focus-visible {
-  outline: 3px solid var(--accent);
-  outline-offset: 3px;
+  outline: 3px solid var(--color-red-bright);
+  outline-offset: 4px;
+}
+
+.display-type {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 400;
+  letter-spacing: -0.045em;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.surface-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: linear-gradient(to bottom, black 0%, transparent 86%);
+}
+
+.document-content h2 {
+  margin-top: 3rem;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  letter-spacing: -0.025em;
+}
+
+.document-content h3 {
+  margin-top: 2rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.document-content p,
+.document-content li {
+  color: #c8c8c8;
+  line-height: 1.8;
+}
+
+.document-content ul {
+  padding-left: 1.25rem;
+  list-style: disc;
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   *,
   *::before,
   *::after {
-    scroll-behavior: auto !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
