@@ -5,77 +5,122 @@ import type {
   RecommendationReason,
 } from "./types";
 
-type ScoredCandidate = RankedRecommendation & { score: number };
+const weights = {
+  mode: 24,
+  energy: 18,
+  stimulation: 14,
+  social: 14,
+  format: 12,
+  time: 12,
+  interests: 18,
+  travel: 8,
+} as const;
+
+type ScoredCandidate = RankedRecommendation & {
+  matchedWeight: number;
+  availableWeight: number;
+};
+
+function fitLevel(matchedWeight: number, availableWeight: number) {
+  if (availableWeight === 0) return "possible" as const;
+  const percentage = (matchedWeight * 100) / availableWeight;
+  if (percentage >= 70) return "strong" as const;
+  if (percentage >= 40) return "good" as const;
+  return "possible" as const;
+}
 
 function scoreCandidate(
   pulse: PulseRecommendationInput,
   candidate: RecommendationCandidate,
 ): ScoredCandidate {
-  let score = 0;
+  let matchedWeight = 0;
+  let availableWeight = 0;
   const reasons: RecommendationReason[] = [];
 
-  if (candidate.modeSlugs?.includes(pulse.modeSlug)) {
-    score += 24;
-    reasons.push("Fits your current mode");
+  if (candidate.modeSlugs?.length) {
+    availableWeight += weights.mode;
+    if (candidate.modeSlugs.includes(pulse.modeSlug)) {
+      matchedWeight += weights.mode;
+      reasons.push("Fits your current mode");
+    }
   }
 
-  if (
-    candidate.energyRange &&
-    pulse.energyLevel >= candidate.energyRange.minimum &&
-    pulse.energyLevel <= candidate.energyRange.maximum
-  ) {
-    score += 18;
-    reasons.push("Matches your available energy");
+  if (candidate.energyRange) {
+    availableWeight += weights.energy;
+    if (
+      pulse.energyLevel >= candidate.energyRange.minimum &&
+      pulse.energyLevel <= candidate.energyRange.maximum
+    ) {
+      matchedWeight += weights.energy;
+      reasons.push("Matches your available energy");
+    }
   }
 
-  if (candidate.stimulationLevels?.includes(pulse.stimulationLevel)) {
-    score += 14;
-    reasons.push("Matches your preferred stimulation");
+  if (candidate.stimulationLevels?.length) {
+    availableWeight += weights.stimulation;
+    if (candidate.stimulationLevels.includes(pulse.stimulationLevel)) {
+      matchedWeight += weights.stimulation;
+      reasons.push("Matches your preferred stimulation");
+    }
   }
 
-  if (candidate.socialIntensities?.includes(pulse.socialIntensity)) {
-    score += 14;
-    reasons.push("Matches your social pace");
+  if (candidate.socialIntensities?.length) {
+    availableWeight += weights.social;
+    if (candidate.socialIntensities.includes(pulse.socialIntensity)) {
+      matchedWeight += weights.social;
+      reasons.push("Matches your social pace");
+    }
   }
 
-  if (
-    candidate.format &&
-    (candidate.format === "either" ||
+  if (candidate.format) {
+    availableWeight += weights.format;
+    if (
+      candidate.format === "either" ||
       pulse.preferredFormat === "either" ||
-      candidate.format === pulse.preferredFormat)
-  ) {
-    score += 12;
-    reasons.push("Works with your preferred format");
+      candidate.format === pulse.preferredFormat
+    ) {
+      matchedWeight += weights.format;
+      reasons.push("Works with your preferred format");
+    }
   }
 
-  if (
-    candidate.durationMinutes != null &&
-    candidate.durationMinutes <= pulse.availableMinutes
-  ) {
-    score += 12;
-    reasons.push("Fits your available time");
+  if (candidate.durationMinutes != null) {
+    availableWeight += weights.time;
+    if (candidate.durationMinutes <= pulse.availableMinutes) {
+      matchedWeight += weights.time;
+      reasons.push("Fits your available time");
+    }
   }
 
   const matchingInterests = new Set(pulse.interestIds);
   const candidateInterests = new Set(candidate.interestIds ?? []);
-  const interestMatchCount = [...candidateInterests].filter((id) =>
-    matchingInterests.has(id),
-  ).length;
-  if (interestMatchCount > 0) {
-    score += Math.min(18, interestMatchCount * 6);
-    reasons.push("Connects with today's interests");
+  if (matchingInterests.size > 0 && candidateInterests.size > 0) {
+    availableWeight += weights.interests;
+    const interestMatchCount = [...candidateInterests].filter((id) =>
+      matchingInterests.has(id),
+    ).length;
+    if (interestMatchCount > 0) {
+      matchedWeight +=
+        weights.interests * (interestMatchCount / candidateInterests.size);
+      reasons.push("Connects with today's interests");
+    }
   }
 
-  if (
-    pulse.maximumTravelMiles != null &&
-    candidate.distanceMiles != null &&
-    candidate.distanceMiles <= pulse.maximumTravelMiles
-  ) {
-    score += 8;
-    reasons.push("Within your travel range");
+  if (pulse.maximumTravelMiles != null && candidate.distanceMiles != null) {
+    availableWeight += weights.travel;
+    if (candidate.distanceMiles <= pulse.maximumTravelMiles) {
+      matchedWeight += weights.travel;
+      reasons.push("Within your travel range");
+    }
   }
 
-  return { candidate, reasons, score };
+  return {
+    candidate,
+    reasons,
+    fit: fitLevel(matchedWeight, availableWeight),
+    matchedWeight,
+    availableWeight,
+  };
 }
 
 function startTime(candidate: RecommendationCandidate) {
@@ -91,12 +136,18 @@ export function rankRecommendationCandidates(
 ): RankedRecommendation[] {
   return candidates
     .map((candidate) => scoreCandidate(pulse, candidate))
-    .sort(
-      (left, right) =>
-        right.score - left.score ||
+    .sort((left, right) => {
+      const ratioComparison =
+        right.matchedWeight * left.availableWeight -
+        left.matchedWeight * right.availableWeight;
+      return (
+        ratioComparison ||
+        right.reasons.length - left.reasons.length ||
         startTime(left.candidate) - startTime(right.candidate) ||
-        left.candidate.id.localeCompare(right.candidate.id),
-    )
+        left.candidate.module.localeCompare(right.candidate.module) ||
+        left.candidate.id.localeCompare(right.candidate.id)
+      );
+    })
     .slice(0, Math.max(0, limit))
-    .map(({ candidate, reasons }) => ({ candidate, reasons }));
+    .map(({ candidate, reasons, fit }) => ({ candidate, reasons, fit }));
 }

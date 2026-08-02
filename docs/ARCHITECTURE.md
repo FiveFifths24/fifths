@@ -232,7 +232,7 @@ Phase 7 activates original campaign coordination without becoming a rules reposi
 - Application acceptance locks the campaign row before capacity evaluation and creates active player membership atomically. Application answers never enter discovery or recommendation ranking.
 - Only compatible private draft Sessions can become Realm Sessions. After publication, campaign membership becomes the Realm visibility boundary while existing Session registration and manager lifecycle access remain intact.
 
-Published, RLS-eligible recruiting campaigns adapt to the deterministic recommendation service using mode, energy, stimulation, social pace, format, typical session duration, application deadline, and interests. Phase 8 remains responsible for reviewing cross-module weights and explanation behavior now that all four candidate modules exist.
+Published, RLS-eligible recruiting campaigns adapt to the deterministic recommendation service using mode, energy, stimulation, social pace, format, typical session duration, application deadline, and interests.
 
 ## Phase 7 routes
 
@@ -245,3 +245,17 @@ Published, RLS-eligible recruiting campaigns adapt to the deterministic recommen
 | Campaign management   | `/home/realm/manage/[campaignId]` | Lifecycle, private applications, roster, and Session associations     |
 
 Phase 7 does not add proprietary rules, copyrighted setting content, character builders, maps, dice, virtual tabletops, private meeting links, chat, payments, reports, notifications, organizations, or Passport entries. Those are later work or explicit exclusions.
+
+## Phase 8 unified recommendation architecture
+
+Phase 8 completes the shared application-code review without changing the database:
+
+- Each product adapter converts only records already returned by its RLS-protected discovery query into the shared `RecommendationCandidate` contract. The scorer never fetches data or expands eligibility.
+- The base scorer compares the private current Pulse with only the signals a candidate actually supplies. Fit is the matched weight divided by applicable weight, preventing products without duration or travel data from receiving an automatic disadvantage.
+- Internal weights order candidates deterministically but never leave the service. Callers receive the candidate, ordered plain-language reasons, and a nonnumeric `strong`, `good`, or `possible` fit label.
+- Stable comparison uses normalized fit, reason count, time, module, and record ID. Cross-module identity is `module:id`, so equal UUIDs from different product tables remain distinct while duplicate reads are removed.
+- Personal Home removes candidates with no truthful reason, softly admits up to two initial results per available module, fills remaining places from overall order, and caps the feed at eight results.
+- Module discovery pages keep their own complete eligible inventory and Pulse-aware ordering. Soft balance and relevance filtering apply only to the unified Personal Home feed.
+- The interface explains data eligibility, applicable-signal normalization, product balance, score privacy, absence of AI/diagnosis inference, and the member's final choice.
+
+Phase 8 adds no tables, RPCs, policies, grants, roles, mutations, analytics, or background jobs. Phase 9 owns verified Passport issuance and duplicate prevention; recommendation ranking must not award credit or consume unverified browser claims.

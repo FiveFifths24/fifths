@@ -33,6 +33,12 @@ export function assembleCircleCards(
       recommendation.reasons,
     ]),
   );
+  const fits = new Map(
+    recommendations.map((recommendation) => [
+      recommendation.candidate.id,
+      recommendation.fit,
+    ]),
+  );
   const membershipByCircle = new Map(
     memberships.map((membership) => [membership.circle_id, membership]),
   );
@@ -44,12 +50,24 @@ export function assembleCircleCards(
       .map((id) => interestNames.get(id))
       .filter((name): name is string => Boolean(name)),
     reasons: reasons.get(circle.id),
+    fit: fits.get(circle.id),
     membership: membershipByCircle.get(circle.id),
   }));
 }
 
 export function rankCircles(
   pulse: PulseRecommendationInput,
+  circles: Circle[],
+  modes: Array<Pick<Mode, "id" | "slug">>,
+  links: CircleInterestLink[],
+) {
+  return rankRecommendationCandidates(
+    pulse,
+    toCircleRecommendationCandidates(circles, modes, links),
+  );
+}
+
+export function toCircleRecommendationCandidates(
   circles: Circle[],
   modes: Array<Pick<Mode, "id" | "slug">>,
   links: CircleInterestLink[],
@@ -79,5 +97,5 @@ export function rankCircles(
     interestIds: linksByCircle.get(circle.id) ?? [],
   }));
 
-  return rankRecommendationCandidates(pulse, candidates);
+  return candidates;
 }

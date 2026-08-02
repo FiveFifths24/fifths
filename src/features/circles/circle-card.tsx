@@ -28,6 +28,7 @@ export type CircleCardItem = Pick<
   modeName: string;
   interestNames: string[];
   reasons?: RankedRecommendation["reasons"];
+  fit?: RankedRecommendation["fit"];
   membership?: Pick<CircleMember, "role" | "status">;
 };
 
@@ -47,6 +48,7 @@ export function CircleCard({ item }: { item: CircleCardItem }) {
   return (
     <article className="flex h-full flex-col rounded-[1.75rem] border border-rose-950/70 bg-neutral-900 p-6">
       <div className="flex flex-wrap items-center gap-2">
+        <Badge>Circle</Badge>
         <Badge className="border-rose-900 bg-rose-950/40 text-rose-100">
           {item.modeName}
         </Badge>
@@ -136,7 +138,7 @@ export function CircleCard({ item }: { item: CircleCardItem }) {
       {item.reasons?.length ? (
         <div className="mt-6 border-t border-neutral-800 pt-5">
           <p className="text-xs font-bold tracking-[0.14em] text-rose-300 uppercase">
-            Why it may fit
+            {item.fit ? `${item.fit} fit · ` : ""}Why it may fit
           </p>
           <ul className="mt-3 space-y-2 text-sm text-neutral-300">
             {item.reasons.slice(0, 3).map((reason) => (

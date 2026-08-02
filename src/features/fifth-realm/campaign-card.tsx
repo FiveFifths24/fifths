@@ -30,6 +30,7 @@ export type CampaignCardItem = Pick<
   modeName: string;
   interestNames: string[];
   reasons?: RankedRecommendation["reasons"];
+  fit?: RankedRecommendation["fit"];
   applicationStatus?: CampaignApplication["status"];
   isMember?: boolean;
 };
@@ -56,6 +57,7 @@ export function CampaignCard({ item }: { item: CampaignCardItem }) {
   return (
     <article className="flex h-full flex-col rounded-[1.75rem] border border-indigo-950 bg-neutral-900 p-6">
       <div className="flex flex-wrap items-center gap-2">
+        <Badge>Fifth Realm</Badge>
         <Badge className="border-indigo-900 bg-indigo-950/50 text-indigo-100">
           {item.modeName}
         </Badge>
@@ -144,7 +146,8 @@ export function CampaignCard({ item }: { item: CampaignCardItem }) {
       {item.reasons?.length ? (
         <div className="mt-5 border-t border-neutral-800 pt-5">
           <p className="flex items-center gap-2 text-xs font-bold tracking-wide text-indigo-200 uppercase">
-            <Zap aria-hidden="true" className="size-4" /> Why this may fit
+            <Zap aria-hidden="true" className="size-4" />
+            {item.fit ? `${item.fit} fit · ` : ""}Why this may fit
           </p>
           <ul
             className="mt-3 flex flex-wrap gap-2"

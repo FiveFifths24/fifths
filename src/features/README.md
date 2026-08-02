@@ -12,7 +12,7 @@ Implemented shared platform features:
 - `creator-commons/` — Phase 6 opportunity cards, Pulse adapter, draft creation, private response, selection, save, and completion controls
 - `fifth-realm/` — Phase 7 campaign cards, Pulse adapter, draft creation, private applications, membership, lifecycle, and Session-association controls
 
-Shared deterministic recommendation ranking lives in `src/lib/recommendations` because every product supplies already-eligible candidates to it. Phase 7 adapts authorized Session, Circle, Commons, and Realm records to that contract; the scorer still does not fetch data or bypass product eligibility. Phase 8 reviews unified ranking behavior now that every candidate module exists.
+Shared deterministic recommendation ranking lives in `src/lib/recommendations` because every product supplies already-eligible candidates to it. Phase 8 normalizes by applicable signals, creates stable cross-module ordering, deduplicates composite identities, softly balances product representation, and returns only nonnumeric fit levels plus reasons. The scorer still does not fetch data, bypass product eligibility, or inspect private participation state.
 
 Planned feature folders:
 

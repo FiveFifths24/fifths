@@ -131,3 +131,15 @@ The Phase 6 migration still requires founder-run positive/negative RLS and concu
 - No campaign, application, membership, or Session association creates a Passport entry, payment, message, report, notification, VTT record, or copyrighted game record.
 
 The Phase 7 migration still requires founder-run positive/negative RLS and concurrency tests with a game master, Circle host, two applicants, active player, departed player, and unrelated member. Static SQL contract tests protect checked-in intent but do not prove deployed database configuration, audit behavior, or contention handling.
+
+## Phase 8 implemented controls
+
+- Unified ranking consumes only records already returned by each product's authenticated RLS-protected discovery query. It cannot reveal an otherwise unreadable Circle, opportunity, campaign, Session, application, response, roster, or moderation record.
+- Product adapters pass bounded matching metadata only. Private applications, responses, memberships, attendance, completion confirmations, and profile skill data do not enter the scorer.
+- Applicable-signal normalization prevents missing product fields from becoming an implicit negative signal. Tests cover cross-module parity, stable ordering, soft representation limits, duplicate composite keys, and zero-reason filtering.
+- Only nonnumeric fit labels and truthful reason strings leave the scorer. Internal weights are neither returned to UI code nor written to the database.
+- The unified feed uses the member's explicit, unexpired Pulse. It does not infer energy, health, diagnosis, interests, or suitability from clicks, participation, protected characteristics, or missing data.
+- Ranking changes presentation order only. It does not change database eligibility, capacity, application or membership state, authorization, or future Passport credit.
+- Phase 8 adds no migration, grants, client writes, analytics collection, AI/ML dependency, or service-role access.
+
+Live review still requires representative eligible inventory in the founder-owned non-production project to confirm that deployed RLS and real product distributions produce understandable results. Offline deterministic tests cannot validate production inventory quality or substitute for ongoing founder review of weights and explanation language.

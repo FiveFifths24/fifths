@@ -12,25 +12,29 @@ import { PreviewState } from "@/components/ui/preview-state";
 import { StatusMessage } from "@/components/ui/status-message";
 import {
   assembleCircleCards,
-  rankCircles,
+  toCircleRecommendationCandidates,
 } from "@/features/circles/circle-data";
 import { CircleCard } from "@/features/circles/circle-card";
 import { OpportunityCard } from "@/features/creator-commons/opportunity-card";
 import {
   assembleOpportunityCards,
-  rankOpportunities,
+  toOpportunityRecommendationCandidates,
 } from "@/features/creator-commons/opportunity-data";
 import { CampaignCard } from "@/features/fifth-realm/campaign-card";
 import {
   assembleCampaignCards,
-  rankCampaigns,
+  toCampaignRecommendationCandidates,
 } from "@/features/fifth-realm/campaign-data";
 import {
   assembleSessionCards,
-  rankSessions,
+  toSessionRecommendationCandidates,
 } from "@/features/sessions/session-data";
 import { SessionCard } from "@/features/sessions/session-card";
 import type { PulseRecommendationInput } from "@/lib/recommendations/types";
+import {
+  rankUnifiedRecommendations,
+  recommendationKey,
+} from "@/lib/recommendations/unified-recommendations";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = { title: "Your Home" };
@@ -201,111 +205,94 @@ export default async function PersonalHomePage({
           ),
         }
       : null;
-  const recommendations = pulseInput
-    ? rankSessions(pulseInput, sessions, modes, links).slice(0, 3)
+  const unifiedRecommendations = pulseInput
+    ? rankUnifiedRecommendations(pulseInput, [
+        ...toSessionRecommendationCandidates(sessions, modes, links),
+        ...toCircleRecommendationCandidates(circles, modes, circleLinks),
+        ...toOpportunityRecommendationCandidates(
+          opportunities,
+          modes,
+          opportunityInterestLinks,
+        ),
+        ...toCampaignRecommendationCandidates(
+          campaigns,
+          modes,
+          campaignInterestLinkResult.data ?? [],
+        ),
+      ])
     : [];
-  const recommendedSessionIds = new Set(
-    recommendations.map((item) => item.candidate.id),
-  );
-  const recommendedSessions = sessions.filter((session) =>
-    recommendedSessionIds.has(session.id),
-  );
-  const recommendationOrder = new Map(
-    recommendations.map((item, index) => [item.candidate.id, index]),
-  );
-  recommendedSessions.sort(
-    (left, right) =>
-      (recommendationOrder.get(left.id) ?? 0) -
-      (recommendationOrder.get(right.id) ?? 0),
-  );
-  const recommendationCards = assembleSessionCards(
-    recommendedSessions,
+  const recommendationsFor = (
+    module: "sessions" | "circles" | "commons" | "realm",
+  ) =>
+    unifiedRecommendations.filter(
+      (recommendation) => recommendation.candidate.module === module,
+    );
+  const idsFor = (module: "sessions" | "circles" | "commons" | "realm") =>
+    new Set(
+      recommendationsFor(module).map(
+        (recommendation) => recommendation.candidate.id,
+      ),
+    );
+  const sessionRecommendationIds = idsFor("sessions");
+  const circleRecommendationIds = idsFor("circles");
+  const opportunityRecommendationIds = idsFor("commons");
+  const campaignRecommendationIds = idsFor("realm");
+  const sessionCards = assembleSessionCards(
+    sessions.filter((session) => sessionRecommendationIds.has(session.id)),
     modes,
     interestResult.data ?? [],
     links,
-    recommendations,
-  );
-  const circleRecommendations = pulseInput
-    ? rankCircles(pulseInput, circles, modes, circleLinks).slice(0, 3)
-    : [];
-  const recommendedCircleIds = new Set(
-    circleRecommendations.map((item) => item.candidate.id),
-  );
-  const recommendedCircles = circles.filter((circle) =>
-    recommendedCircleIds.has(circle.id),
-  );
-  const circleOrder = new Map(
-    circleRecommendations.map((item, index) => [item.candidate.id, index]),
-  );
-  recommendedCircles.sort(
-    (left, right) =>
-      (circleOrder.get(left.id) ?? 0) - (circleOrder.get(right.id) ?? 0),
+    recommendationsFor("sessions"),
   );
   const circleCards = assembleCircleCards(
-    recommendedCircles,
+    circles.filter((circle) => circleRecommendationIds.has(circle.id)),
     modes,
     interestResult.data ?? [],
     circleLinks,
-    circleRecommendations,
-  );
-  const opportunityRecommendations = pulseInput
-    ? rankOpportunities(
-        pulseInput,
-        opportunities,
-        modes,
-        opportunityInterestLinks,
-      ).slice(0, 3)
-    : [];
-  const recommendedOpportunityIds = new Set(
-    opportunityRecommendations.map((item) => item.candidate.id),
-  );
-  const recommendedOpportunities = opportunities.filter((opportunity) =>
-    recommendedOpportunityIds.has(opportunity.id),
-  );
-  const opportunityOrder = new Map(
-    opportunityRecommendations.map((item, index) => [item.candidate.id, index]),
-  );
-  recommendedOpportunities.sort(
-    (left, right) =>
-      (opportunityOrder.get(left.id) ?? 0) -
-      (opportunityOrder.get(right.id) ?? 0),
+    recommendationsFor("circles"),
   );
   const opportunityCards = assembleOpportunityCards(
-    recommendedOpportunities,
+    opportunities.filter((opportunity) =>
+      opportunityRecommendationIds.has(opportunity.id),
+    ),
     modes,
     skillResult.data ?? [],
     interestResult.data ?? [],
     opportunitySkillLinkResult.data ?? [],
     opportunityInterestLinks,
-    opportunityRecommendations,
-  );
-  const campaignRecommendations = pulseInput
-    ? rankCampaigns(
-        pulseInput,
-        campaigns,
-        modes,
-        campaignInterestLinkResult.data ?? [],
-      ).slice(0, 3)
-    : [];
-  const recommendedCampaignIds = new Set(
-    campaignRecommendations.map((item) => item.candidate.id),
-  );
-  const recommendedCampaigns = campaigns.filter((campaign) =>
-    recommendedCampaignIds.has(campaign.id),
-  );
-  const campaignOrder = new Map(
-    campaignRecommendations.map((item, index) => [item.candidate.id, index]),
-  );
-  recommendedCampaigns.sort(
-    (left, right) =>
-      (campaignOrder.get(left.id) ?? 0) - (campaignOrder.get(right.id) ?? 0),
+    recommendationsFor("commons"),
   );
   const campaignCards = assembleCampaignCards(
-    recommendedCampaigns,
+    campaigns.filter((campaign) => campaignRecommendationIds.has(campaign.id)),
     modes,
     interestResult.data ?? [],
     campaignInterestLinkResult.data ?? [],
-    campaignRecommendations,
+    recommendationsFor("realm"),
+  );
+  const sessionCardsById = new Map(sessionCards.map((card) => [card.id, card]));
+  const circleCardsById = new Map(circleCards.map((card) => [card.id, card]));
+  const opportunityCardsById = new Map(
+    opportunityCards.map((card) => [card.id, card]),
+  );
+  const campaignCardsById = new Map(
+    campaignCards.map((card) => [card.id, card]),
+  );
+  const unavailableModules = [
+    sessionResult.error ? "Sessions" : null,
+    circleResult.error ? "Circles" : null,
+    opportunityResult.error ? "Creator Commons" : null,
+    campaignResult.error ? "Fifth Realm" : null,
+  ].filter((name): name is string => Boolean(name));
+  const matchingDataIncomplete = Boolean(
+    modeResult.error ||
+    interestResult.error ||
+    skillResult.error ||
+    sessionLinkResult.error ||
+    circleLinkResult.error ||
+    opportunitySkillLinkResult.error ||
+    opportunityInterestLinkResult.error ||
+    campaignInterestLinkResult.error ||
+    pulseInterestResult.error,
   );
 
   return (
@@ -439,175 +426,122 @@ export default async function PersonalHomePage({
 
       <section className="mt-10 rounded-[2rem] border border-neutral-800 bg-neutral-900 p-6 sm:p-8">
         <p className="text-xs font-bold tracking-[0.18em] text-red-400 uppercase">
-          Recommendation foundation
+          Across FIFTHS
         </p>
         <h2 className="mt-3 text-3xl font-bold text-white">
-          Explainable matches from real Sessions.
+          One feed. Clear reasons. Your choice.
         </h2>
         <p className="mt-4 max-w-3xl text-base leading-7 text-neutral-400">
-          FIFTHS ranks eligible published Sessions by mode, energy, stimulation,
-          social pace, format, time, interests, and broad travel range. Matching
-          returns plain-language reasons and never exposes a raw score.
+          FIFTHS orders eligible Sessions, Circles, Creator Commons
+          opportunities, and Fifth Realm campaigns together. Each result shows a
+          nonnumeric fit level and plain-language reasons based on the Pulse you
+          chose to share for this 24-hour window.
         </p>
-        {sessionResult.error ? (
+
+        {unavailableModules.length ? (
           <StatusMessage className="mt-6" tone="error">
-            Session matches need the Phase 4 migration. Your existing Pulse
-            remains private and available.
+            Some recommendation sources are unavailable:{" "}
+            {unavailableModules.join(", ")}. Available sources are still shown;
+            confirm that the ordered Phase 4–7 migrations are applied.
           </StatusMessage>
-        ) : recommendationCards.length ? (
+        ) : null}
+        {matchingDataIncomplete ? (
+          <StatusMessage className="mt-6">
+            Some matching labels could not load, so this feed may use fewer
+            reasons than normal. Your Pulse remains private; confirm the six
+            ordered migrations and taxonomy data in Supabase.
+          </StatusMessage>
+        ) : null}
+
+        {unifiedRecommendations.length ? (
           <div className="mt-6 grid gap-5 lg:grid-cols-2">
-            {recommendationCards.map((card) => (
-              <SessionCard item={card} key={card.id} />
-            ))}
+            {unifiedRecommendations.map((recommendation) => {
+              const { candidate } = recommendation;
+              if (candidate.module === "sessions") {
+                const card = sessionCardsById.get(candidate.id);
+                return card ? (
+                  <SessionCard item={card} key={recommendationKey(candidate)} />
+                ) : null;
+              }
+              if (candidate.module === "circles") {
+                const card = circleCardsById.get(candidate.id);
+                return card ? (
+                  <CircleCard item={card} key={recommendationKey(candidate)} />
+                ) : null;
+              }
+              if (candidate.module === "commons") {
+                const card = opportunityCardsById.get(candidate.id);
+                return card ? (
+                  <OpportunityCard
+                    item={card}
+                    key={recommendationKey(candidate)}
+                  />
+                ) : null;
+              }
+              const card = campaignCardsById.get(candidate.id);
+              return card ? (
+                <CampaignCard item={card} key={recommendationKey(candidate)} />
+              ) : null;
+            })}
           </div>
         ) : (
           <div className="mt-6">
             <PreviewState
               title={
-                pulse
-                  ? "No published Session matches yet"
-                  : "Check your Pulse first"
+                pulse ? "No relevant matches yet" : "Check your Pulse first"
               }
             >
               {pulse
-                ? "No eligible live Sessions are available. FIFTHS does not invent events or other product activity."
-                : "A current Pulse lets FIFTHS order eligible Sessions with transparent reasons."}
+                ? "No eligible live result shares a documented signal with your current Pulse. FIFTHS does not add irrelevant filler or demonstration activity."
+                : "A current Pulse lets FIFTHS order eligible experiences across the ecosystem with transparent reasons."}
             </PreviewState>
           </div>
         )}
-        <ButtonLink className="mt-6" href="/home/sessions" variant="secondary">
-          Explore all Sessions
-        </ButtonLink>
+
+        <div className="mt-7 flex flex-wrap gap-3">
+          <ButtonLink href="/home/sessions" variant="secondary">
+            All Sessions
+          </ButtonLink>
+          <ButtonLink href="/home/circles" variant="secondary">
+            All Circles
+          </ButtonLink>
+          <ButtonLink href="/home/commons" variant="secondary">
+            Creator Commons
+          </ButtonLink>
+          <ButtonLink href="/home/realm" variant="secondary">
+            Fifth Realm
+          </ButtonLink>
+        </div>
       </section>
 
-      <section className="mt-10 rounded-[2rem] border border-rose-950/70 bg-neutral-900 p-6 sm:p-8">
-        <p className="text-xs font-bold tracking-[0.18em] text-rose-300 uppercase">
-          Circles
-        </p>
-        <h2 className="mt-3 text-3xl font-bold text-white">
-          Community matches with visible boundaries.
+      <section
+        aria-labelledby="recommendation-method"
+        className="mt-10 rounded-[2rem] border border-neutral-800 bg-neutral-950 p-6 sm:p-8"
+      >
+        <h2
+          id="recommendation-method"
+          className="text-2xl font-bold text-white"
+        >
+          How this feed is ordered
         </h2>
-        <p className="mt-4 max-w-3xl text-base leading-7 text-neutral-400">
-          Eligible published Circles can now match the same private Pulse by
-          mode, energy, stimulation, social pace, format, and current interests.
-          Joining remains a separate, intentional choice.
-        </p>
-        {circleResult.error ? (
-          <StatusMessage className="mt-6" tone="error">
-            Circle matches need the Phase 5 migration. Your Pulse and Session
-            matches remain available.
-          </StatusMessage>
-        ) : circleCards.length ? (
-          <div className="mt-6 grid gap-5 lg:grid-cols-2">
-            {circleCards.map((card) => (
-              <CircleCard item={card} key={card.id} />
-            ))}
-          </div>
-        ) : (
-          <div className="mt-6">
-            <PreviewState
-              title={
-                pulse
-                  ? "No published Circle matches yet"
-                  : "Check your Pulse first"
-              }
-            >
-              {pulse
-                ? "No eligible live Circles are available. FIFTHS does not invent communities."
-                : "A current Pulse lets FIFTHS order eligible Circles with transparent reasons."}
-            </PreviewState>
-          </div>
-        )}
-        <ButtonLink className="mt-6" href="/home/circles" variant="secondary">
-          Explore all Circles
-        </ButtonLink>
-      </section>
-
-      <section className="mt-10 rounded-[2rem] border border-amber-950/80 bg-neutral-900 p-6 sm:p-8">
-        <p className="text-xs font-bold tracking-[0.18em] text-amber-300 uppercase">
-          Creator Commons
-        </p>
-        <h2 className="mt-3 text-3xl font-bold text-white">
-          Opportunities matched to today—not promises.
-        </h2>
-        <p className="mt-4 max-w-3xl text-base leading-7 text-neutral-400">
-          Eligible published opportunities can match your mode, energy,
-          stimulation, social pace, format, available time, and current
-          interests. Saving and responding remain private, intentional actions.
-        </p>
-        {opportunityResult.error ? (
-          <StatusMessage className="mt-6" tone="error">
-            Creator Commons matches need the Phase 6 migration. Existing Pulse,
-            Session, and Circle experiences remain available.
-          </StatusMessage>
-        ) : opportunityCards.length ? (
-          <div className="mt-6 grid gap-5 lg:grid-cols-2">
-            {opportunityCards.map((card) => (
-              <OpportunityCard item={card} key={card.id} />
-            ))}
-          </div>
-        ) : (
-          <div className="mt-6">
-            <PreviewState
-              title={
-                pulse
-                  ? "No published opportunity matches yet"
-                  : "Check your Pulse first"
-              }
-            >
-              {pulse
-                ? "No eligible live Creator Commons opportunities are available. FIFTHS does not invent projects."
-                : "A current Pulse lets FIFTHS order eligible opportunities with transparent reasons."}
-            </PreviewState>
-          </div>
-        )}
-        <ButtonLink className="mt-6" href="/home/commons" variant="secondary">
-          Explore Creator Commons
-        </ButtonLink>
-      </section>
-
-      <section className="mt-10 rounded-[2rem] border border-indigo-950 bg-neutral-900 p-6 sm:p-8">
-        <p className="text-xs font-bold tracking-[0.18em] text-indigo-300 uppercase">
-          Fifth Realm
-        </p>
-        <h2 className="mt-3 text-3xl font-bold text-white">
-          Campaigns matched with context and consent.
-        </h2>
-        <p className="mt-4 max-w-3xl text-base leading-7 text-neutral-400">
-          Eligible recruiting campaigns can match your mode, energy,
-          stimulation, social pace, format, available time, and interests.
-          Applications remain private and require explicit safety
-          acknowledgement.
-        </p>
-        {campaignResult.error ? (
-          <StatusMessage className="mt-6" tone="error">
-            Fifth Realm matches need the Phase 7 migration. Existing ecosystem
-            experiences remain available.
-          </StatusMessage>
-        ) : campaignCards.length ? (
-          <div className="mt-6 grid gap-5 lg:grid-cols-2">
-            {campaignCards.map((card) => (
-              <CampaignCard item={card} key={card.id} />
-            ))}
-          </div>
-        ) : (
-          <div className="mt-6">
-            <PreviewState
-              title={
-                pulse
-                  ? "No recruiting campaign matches yet"
-                  : "Check your Pulse first"
-              }
-            >
-              {pulse
-                ? "No eligible live Fifth Realm campaigns are available. FIFTHS does not invent campaigns."
-                : "A current Pulse lets FIFTHS order eligible campaigns with transparent reasons."}
-            </PreviewState>
-          </div>
-        )}
-        <ButtonLink className="mt-6" href="/home/realm" variant="secondary">
-          Explore Fifth Realm
-        </ButtonLink>
+        <ul className="mt-5 grid gap-4 text-sm leading-6 text-neutral-400 md:grid-cols-2">
+          <li>
+            Only records you are already eligible to read under database access
+            rules enter the feed.
+          </li>
+          <li>
+            Matches are normalized to the signals each product actually has, so
+            a module is not penalized for a field it does not collect.
+          </li>
+          <li>
+            The first results are softly balanced across available products,
+            then remaining spaces return to overall fit order.
+          </li>
+          <li>
+            No AI, diagnosis, hidden activity inference, or raw public score is
+            used. You decide whether to open or join any result.
+          </li>
+        </ul>
       </section>
     </div>
   );

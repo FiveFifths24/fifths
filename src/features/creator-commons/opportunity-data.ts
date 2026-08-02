@@ -56,6 +56,12 @@ export function assembleOpportunityCards(
       recommendation.reasons,
     ]),
   );
+  const fits = new Map(
+    recommendations.map((recommendation) => [
+      recommendation.candidate.id,
+      recommendation.fit,
+    ]),
+  );
   const saved = new Set(savedIds);
   const responseByOpportunity = new Map(
     responses.map((response) => [response.opportunity_id, response.status]),
@@ -71,6 +77,7 @@ export function assembleOpportunityCards(
       .map((id) => interestNames.get(id))
       .filter((name): name is string => Boolean(name)),
     reasons: reasons.get(opportunity.id),
+    fit: fits.get(opportunity.id),
     saved: saved.has(opportunity.id),
     responseStatus: responseByOpportunity.get(opportunity.id),
   }));
@@ -78,6 +85,17 @@ export function assembleOpportunityCards(
 
 export function rankOpportunities(
   pulse: PulseRecommendationInput,
+  opportunities: CreatorOpportunity[],
+  modes: Array<Pick<Mode, "id" | "slug">>,
+  interestLinks: OpportunityInterestLink[],
+) {
+  return rankRecommendationCandidates(
+    pulse,
+    toOpportunityRecommendationCandidates(opportunities, modes, interestLinks),
+  );
+}
+
+export function toOpportunityRecommendationCandidates(
   opportunities: CreatorOpportunity[],
   modes: Array<Pick<Mode, "id" | "slug">>,
   interestLinks: OpportunityInterestLink[],
@@ -111,5 +129,5 @@ export function rankOpportunities(
     }),
   );
 
-  return rankRecommendationCandidates(pulse, candidates);
+  return candidates;
 }

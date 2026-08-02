@@ -35,6 +35,12 @@ export function assembleSessionCards(
       recommendation.reasons,
     ]),
   );
+  const fits = new Map(
+    recommendations.map((recommendation) => [
+      recommendation.candidate.id,
+      recommendation.fit,
+    ]),
+  );
 
   return sessions.map((session) => ({
     ...session,
@@ -43,11 +49,23 @@ export function assembleSessionCards(
       .map((id) => interestNames.get(id))
       .filter((name): name is string => Boolean(name)),
     reasons: reasons.get(session.id),
+    fit: fits.get(session.id),
   }));
 }
 
 export function rankSessions(
   pulse: PulseRecommendationInput,
+  sessions: Session[],
+  modes: Array<Pick<Mode, "id" | "slug">>,
+  links: SessionInterestLink[],
+) {
+  return rankRecommendationCandidates(
+    pulse,
+    toSessionRecommendationCandidates(sessions, modes, links),
+  );
+}
+
+export function toSessionRecommendationCandidates(
   sessions: Session[],
   modes: Array<Pick<Mode, "id" | "slug">>,
   links: SessionInterestLink[],
@@ -80,6 +98,5 @@ export function rankSessions(
     ),
     interestIds: linksBySession.get(session.id) ?? [],
   }));
-
-  return rankRecommendationCandidates(pulse, candidates);
+  return candidates;
 }
