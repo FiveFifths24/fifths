@@ -2,18 +2,37 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Activity, Clock3, House, UserRound } from "lucide-react";
+import {
+  Activity,
+  CalendarRange,
+  House,
+  TicketCheck,
+  UserRound,
+} from "lucide-react";
 import { cn } from "@/lib/cn";
 
 const items = [
   { href: "/home", label: "Home", icon: House },
-  { href: "/home/pulse", label: "Check Pulse", icon: Activity },
-  { href: "/home/pulse/history", label: "History", icon: Clock3 },
+  { href: "/home/pulse", label: "Pulse", icon: Activity, nested: true },
+  {
+    href: "/home/sessions",
+    label: "Sessions",
+    icon: CalendarRange,
+    nested: true,
+  },
+  {
+    href: "/home/registrations",
+    label: "Registrations",
+    icon: TicketCheck,
+  },
   { href: "/account", label: "Account", icon: UserRound },
 ] as const;
 
-function isActive(pathname: string, href: string) {
-  return pathname === href;
+function isActive(pathname: string, item: (typeof items)[number]) {
+  return (
+    pathname === item.href ||
+    ("nested" in item && item.nested && pathname.startsWith(`${item.href}/`))
+  );
 }
 
 export function MemberNavigation() {
@@ -23,7 +42,7 @@ export function MemberNavigation() {
       <ul className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
         {items.map((item) => {
           const Icon = item.icon;
-          const active = isActive(pathname, item.href);
+          const active = isActive(pathname, item);
           return (
             <li key={item.href}>
               <Link

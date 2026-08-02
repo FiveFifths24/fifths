@@ -40,6 +40,12 @@ Pulse now records a private, short-lived view of present capacity: one of five m
 
 The shared recommendation foundation can rank eligible future candidates with stable rules and plain-language reasons. It does not fetch product inventory and does not use AI. Personal Home therefore shows real Pulse state plus an explicitly empty recommendation state until Phase 4 and later modules create real eligible records.
 
+## Phase 4 Sessions implementation
+
+Shared Sessions are now the first live recommendation inventory. Authenticated members can discover published future Sessions, review timing and capacity, see transparent Pulse-match reasons, register or cancel, and review their private registration history. Personal Home shows up to three eligible Session matches without manufacturing activity.
+
+Trusted `host` and `platform_admin` roles can create private drafts, publish or cancel them, complete ended Sessions, review the active roster, and mark audited attendance. Registration capacity is enforced atomically in PostgreSQL. Phase 4 does not add Circle associations, Commons or Realm ownership, payments, waitlists, messaging, private access links, or Passport issuance.
+
 ## Phase 1 public representation
 
 Each module has a public overview route explaining audience, planned capabilities, Pulse and Passport connections, MVP scope, and explicit exclusions. Preview notices distinguish planned behavior from live functionality. All five routes use one shared `ModuleOverview` component so product storytelling stays cohesive while allowing restrained module accents.

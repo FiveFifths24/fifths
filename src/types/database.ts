@@ -175,6 +175,108 @@ export type Database = {
         Update: never;
         Relationships: [];
       };
+      sessions: {
+        Row: {
+          id: string;
+          host_user_id: string;
+          host_display_name: string;
+          source_module: Database["public"]["Enums"]["session_source_module"];
+          title: string;
+          summary: string;
+          description: string;
+          status: Database["public"]["Enums"]["session_status"];
+          format: Database["public"]["Enums"]["participation_format"];
+          starts_at: string;
+          ends_at: string;
+          timezone: string;
+          capacity: number;
+          confirmed_registration_count: number;
+          location_label: string | null;
+          mode_id: string;
+          minimum_energy: number;
+          maximum_energy: number;
+          stimulation_level: Database["public"]["Enums"]["pulse_stimulation_level"];
+          social_intensity: Database["public"]["Enums"]["pulse_social_intensity"];
+          published_at: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          host_user_id: string;
+          host_display_name: string;
+          source_module?: Database["public"]["Enums"]["session_source_module"];
+          title: string;
+          summary: string;
+          description: string;
+          status?: Database["public"]["Enums"]["session_status"];
+          format: Database["public"]["Enums"]["participation_format"];
+          starts_at: string;
+          ends_at: string;
+          timezone: string;
+          capacity: number;
+          confirmed_registration_count?: number;
+          location_label?: string | null;
+          mode_id: string;
+          minimum_energy: number;
+          maximum_energy: number;
+          stimulation_level: Database["public"]["Enums"]["pulse_stimulation_level"];
+          social_intensity: Database["public"]["Enums"]["pulse_social_intensity"];
+          published_at?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: never;
+        Relationships: [];
+      };
+      session_interests: {
+        Row: { session_id: string; interest_id: string; created_at: string };
+        Insert: {
+          session_id: string;
+          interest_id: string;
+          created_at?: string;
+        };
+        Update: never;
+        Relationships: [];
+      };
+      registrations: {
+        Row: {
+          session_id: string;
+          user_id: string;
+          status: Database["public"]["Enums"]["registration_status"];
+          registered_at: string;
+          cancelled_at: string | null;
+          updated_at: string;
+        };
+        Insert: {
+          session_id: string;
+          user_id: string;
+          status?: Database["public"]["Enums"]["registration_status"];
+          registered_at?: string;
+          cancelled_at?: string | null;
+          updated_at?: string;
+        };
+        Update: never;
+        Relationships: [];
+      };
+      attendance_records: {
+        Row: {
+          session_id: string;
+          user_id: string;
+          status: Database["public"]["Enums"]["attendance_status"];
+          marked_by: string;
+          marked_at: string;
+        };
+        Insert: {
+          session_id: string;
+          user_id: string;
+          status: Database["public"]["Enums"]["attendance_status"];
+          marked_by: string;
+          marked_at?: string;
+        };
+        Update: never;
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: {
@@ -206,6 +308,68 @@ export type Database = {
         };
         Returns: string;
       };
+      can_manage_session: {
+        Args: { p_session_id: string };
+        Returns: boolean;
+      };
+      can_view_session: {
+        Args: { p_session_id: string };
+        Returns: boolean;
+      };
+      create_session: {
+        Args: {
+          p_title: string;
+          p_summary: string;
+          p_description: string;
+          p_format: Database["public"]["Enums"]["participation_format"];
+          p_starts_local: string;
+          p_ends_local: string;
+          p_timezone: string;
+          p_capacity: number;
+          p_location_label: string | null;
+          p_mode_id: string;
+          p_minimum_energy: number;
+          p_maximum_energy: number;
+          p_stimulation_level: Database["public"]["Enums"]["pulse_stimulation_level"];
+          p_social_intensity: Database["public"]["Enums"]["pulse_social_intensity"];
+          p_interest_ids: string[];
+        };
+        Returns: string;
+      };
+      set_session_status: {
+        Args: {
+          p_session_id: string;
+          p_status: Database["public"]["Enums"]["session_status"];
+        };
+        Returns: undefined;
+      };
+      register_for_session: {
+        Args: { p_session_id: string };
+        Returns: undefined;
+      };
+      cancel_session_registration: {
+        Args: { p_session_id: string };
+        Returns: undefined;
+      };
+      mark_session_attendance: {
+        Args: {
+          p_session_id: string;
+          p_user_id: string;
+          p_status: Database["public"]["Enums"]["attendance_status"];
+        };
+        Returns: undefined;
+      };
+      get_session_roster: {
+        Args: { p_session_id: string };
+        Returns: Array<{
+          user_id: string;
+          display_name: string;
+          username: string | null;
+          registration_status: Database["public"]["Enums"]["registration_status"];
+          attendance_status:
+            Database["public"]["Enums"]["attendance_status"] | null;
+        }>;
+      };
     };
     Enums: {
       app_role:
@@ -220,6 +384,10 @@ export type Database = {
       pulse_stimulation_level: "low" | "moderate" | "high";
       pulse_social_intensity: "solo" | "light" | "social";
       participation_format: "in_person" | "online" | "either";
+      session_source_module: "platform" | "circles" | "commons" | "realm";
+      session_status: "draft" | "published" | "cancelled" | "completed";
+      registration_status: "registered" | "cancelled";
+      attendance_status: "attended" | "absent" | "excused";
     };
     CompositeTypes: Record<string, never>;
   };
@@ -231,3 +399,5 @@ export type Skill = Database["public"]["Tables"]["skills"]["Row"];
 export type Mode = Database["public"]["Tables"]["modes"]["Row"];
 export type PulseCheckIn =
   Database["public"]["Tables"]["pulse_check_ins"]["Row"];
+export type Session = Database["public"]["Tables"]["sessions"]["Row"];
+export type Registration = Database["public"]["Tables"]["registrations"]["Row"];
