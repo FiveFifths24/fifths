@@ -55,8 +55,9 @@ export default function HomePage() {
               </ButtonLink>
             </div>
             <p className="mt-5 text-xs text-neutral-500">
-              FIFTHS is being built. Public accounts and participation features
-              are not live yet.
+              The account and private Pulse foundations are built. Live access
+              depends on founder deployment setup; participation is still being
+              built.
             </p>
           </div>
           <Link

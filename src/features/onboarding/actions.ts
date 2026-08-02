@@ -65,5 +65,5 @@ export async function completeOnboardingAction(
     };
   }
 
-  redirect("/account?onboarding=complete");
+  redirect("/home?onboarding=complete");
 }

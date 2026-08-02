@@ -18,6 +18,7 @@ const footerGroups = [
     title: "Community",
     links: [
       ["Your account", "/account"],
+      ["Your Home", "/home"],
       ["Community Guidelines", "/community-guidelines"],
       ["Commons Guidelines", "/commons/guidelines"],
       ["Realm Safety", "/realm/safety"],
@@ -77,7 +78,8 @@ export function SiteFooter() {
         <Container className="flex flex-col gap-2 py-5 text-xs text-neutral-500 sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} Five Fifths. All rights reserved.</p>
           <p>
-            Phase 2 account foundation · Product features remain in development.
+            Phase 3 Pulse foundation · Sessions and participation remain in
+            development.
           </p>
         </Container>
       </div>

@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { Check, LockKeyhole } from "lucide-react";
 import { AccountUnavailable } from "@/components/account/account-unavailable";
 import { Container } from "@/components/ui/container";
+import { ButtonLink } from "@/components/ui/button-link";
 import { StatusMessage } from "@/components/ui/status-message";
 import { signOutAction } from "@/features/auth/actions";
 import { createClient } from "@/lib/supabase/server";
@@ -48,8 +49,8 @@ export default async function AccountPage({
           Welcome, {profile.display_name}.
         </h1>
         <p className="mt-5 max-w-2xl text-lg leading-8 text-neutral-300">
-          Your secure account and profile foundation are ready. Product activity
-          begins in later phases.
+          Your identity stays shared across every FIFTHS product. Pulse and your
+          private personal Home are now the first active product foundation.
         </p>
 
         {parameters?.onboarding === "complete" ? (
@@ -104,21 +105,24 @@ export default async function AccountPage({
               . Elevated roles cannot be self-assigned.
             </p>
             <p className="mt-4 text-sm leading-6 text-neutral-400">
-              Pulse, recommendations, registrations, Circle membership, Creator
-              Commons, Fifth Realm, and Passport activity remain intentionally
-              inactive.
+              Pulse check-ins and private history are available from your Home.
+              Sessions, registrations, Circle membership, Creator Commons, Fifth
+              Realm, and Passport activity remain intentionally inactive.
             </p>
           </section>
         </div>
 
-        <form action={signOutAction} className="mt-8">
-          <button
-            className="min-h-12 rounded-full border border-neutral-700 px-6 py-3 font-bold text-white hover:border-neutral-500"
-            type="submit"
-          >
-            Log out
-          </button>
-        </form>
+        <div className="mt-8 flex flex-wrap gap-3">
+          <ButtonLink href="/home">Go to your Home</ButtonLink>
+          <form action={signOutAction}>
+            <button
+              className="min-h-12 rounded-full border border-neutral-700 px-6 py-3 font-bold text-white hover:border-neutral-500"
+              type="submit"
+            >
+              Log out
+            </button>
+          </form>
+        </div>
       </div>
     </Container>
   );

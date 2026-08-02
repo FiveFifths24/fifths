@@ -80,13 +80,13 @@ export default function AboutPage() {
             Built in phases
           </p>
           <h2 className="display-type mt-4 max-w-3xl text-4xl leading-tight text-white sm:text-6xl">
-            The public foundation comes first. Accounts and participation come
-            next.
+            The public and personal foundations are in place. Participation
+            comes next.
           </h2>
           <p className="mt-6 max-w-2xl leading-7 text-neutral-300">
-            This Phase 1 experience explains the vision and establishes the
-            design system. Authentication, data, profiles, onboarding, and
-            permissions intentionally begin in Phase 2.
+            Phase 1 established the public design system, Phase 2 added secure
+            identity, and Phase 3 adds private Pulse and personal Home. Sessions
+            and participation remain intentionally deferred.
           </p>
         </Container>
       </section>

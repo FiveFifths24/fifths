@@ -34,6 +34,12 @@ One Supabase Auth identity now maps to one private profile and one or more centr
 
 This shared identity is intentionally product-neutral. Pulse, Circles, Creator Commons, Fifth Realm, and Passport will consume it in later phases without creating separate accounts or parallel role systems.
 
+## Phase 3 Pulse implementation
+
+Pulse now records a private, short-lived view of present capacity: one of five modes, energy, stimulation, social pace, format, available time, optional broad travel range, and up to five current interests. Check-ins remain readable only by their owner and stop influencing matching after 24 hours. The form deliberately avoids diagnoses, health notes, and precise location.
+
+The shared recommendation foundation can rank eligible future candidates with stable rules and plain-language reasons. It does not fetch product inventory and does not use AI. Personal Home therefore shows real Pulse state plus an explicitly empty recommendation state until Phase 4 and later modules create real eligible records.
+
 ## Phase 1 public representation
 
 Each module has a public overview route explaining audience, planned capabilities, Pulse and Passport connections, MVP scope, and explicit exclusions. Preview notices distinguish planned behavior from live functionality. All five routes use one shared `ModuleOverview` component so product storytelling stays cohesive while allowing restrained module accents.

@@ -1,6 +1,6 @@
 # Database Design
 
-Supabase PostgreSQL is the single source of truth. Phase 2 adds the first versioned migration at `supabase/migrations/202608010001_phase_2_identity_foundation.sql`; later modules will extend this topology instead of building parallel systems.
+Supabase PostgreSQL is the single source of truth. Phase 2 adds identity at `supabase/migrations/202608010001_phase_2_identity_foundation.sql`; Phase 3 extends it with `supabase/migrations/202608020001_phase_3_pulse_foundation.sql`. Later modules extend this topology instead of building parallel systems.
 
 ## Domain groups
 
@@ -8,7 +8,7 @@ Supabase PostgreSQL is the single source of truth. Phase 2 adds the first versio
 | -------------------- | --------------------------------------------------------------------------------------------- |
 | Identity             | `profiles`, `user_roles`, `interests`, `profile_interests`, `skills`, `profile_skills`        |
 | Organizations        | `organizations`, `organization_members`                                                       |
-| Pulse                | `modes`, `pulse_check_ins`                                                                    |
+| Pulse                | `modes`, `pulse_check_ins`, `pulse_check_in_interests`                                        |
 | Circles              | `circles`, `circle_members`                                                                   |
 | Shared sessions      | `sessions`, `session_interests`, `registrations`, `attendance_records`                        |
 | Creator Commons      | `creator_opportunities`, `opportunity_skills`, `opportunity_responses`, `saved_opportunities` |
@@ -63,12 +63,42 @@ No medical diagnosis, date of birth, or precise home address is collected.
 ## Migration order
 
 1. **Phase 2 complete:** extensions, identity enums/helpers, profiles, roles, interests, skills, identity policies
-2. Organizations
-3. remaining taxonomies (including Pulse modes)
-4. Circles and Sessions
+2. **Phase 3 complete:** Pulse enums, modes, private check-ins, current-interest joins, atomic write RPC, Pulse policies
+3. Organizations and shared Sessions
+4. Circles
 5. Commons and Realm
 6. Passport, feedback, reports, notifications, audit logs
-7. indexes, functions, triggers, RLS policies
-8. clearly labeled demonstration seed data
+7. module-specific indexes, functions, triggers, and RLS policies
+8. clearly labeled demonstration seed data where a later phase requires it
 
 Generated database TypeScript types will be committed after the first migration and regenerated whenever schema changes.
+
+## Phase 3 implemented schema
+
+Phase 3 creates the five-value `modes` taxonomy plus `pulse_check_ins` and `pulse_check_in_interests`. A check-in stores only matching inputs: mode, energy from 1–5, stimulation, social intensity, format, available time, an optional broad travel range, and up to five active interests. It stores no diagnosis, health note, free text, or precise location.
+
+Every record receives a database-derived creation time and an expiration no more than 24 hours later. Expiration stops the record from being considered current; the member can still read it in private history.
+
+`record_pulse_check_in` is an explicitly granted security-definer function that:
+
+1. derives the member only from `auth.uid()`;
+2. requires completed onboarding;
+3. validates every enum, range, active taxonomy record, duplicate, and selection limit again in PostgreSQL;
+4. creates the check-in and its interest rows atomically; and
+5. returns only the new record identifier.
+
+Authenticated clients have no direct insert, update, or delete grants on Pulse tables.
+
+## Phase 3 RLS and grant summary
+
+| Table                      | Authenticated access in Phase 3                             |
+| -------------------------- | ----------------------------------------------------------- |
+| `modes`                    | Select active mode rows                                     |
+| `pulse_check_ins`          | Select caller-owned rows; insert only through validated RPC |
+| `pulse_check_in_interests` | Select rows whose parent check-in belongs to the caller     |
+
+Anonymous clients receive no access. Static contract tests guard the presence of these policies and the absence of direct member write grants; founder-run database tests must still exercise the policies with two real users.
+
+## Recommendation contract
+
+The Phase 3 application scorer accepts candidates already filtered for authorization and eligibility. It weighs matching mode, energy, stimulation, social pace, format, time, current interests, and broad travel range. Sorting is deterministic: internal score, then earliest valid start, then stable candidate ID. The returned object strips the numeric score and exposes only ordered candidates and plain-language reasons. Phase 8 remains responsible for the unified production ranking review after all candidate modules exist.

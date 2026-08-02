@@ -6,9 +6,10 @@ export function AccountUnavailable() {
     <Container className="py-20">
       <div className="mx-auto max-w-2xl">
         <StatusMessage>
-          Account services are ready in the codebase but are not connected to a
-          founder-owned Supabase project. Complete the documented environment
-          and migration setup before testing live accounts.
+          Account and Pulse services are ready in the codebase but are not
+          connected to a founder-owned Supabase project. Complete the documented
+          environment and ordered migration setup before testing live member
+          experiences.
         </StatusMessage>
       </div>
     </Container>

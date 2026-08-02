@@ -36,7 +36,7 @@ export default async function LoginPage({
           try again.
         </StatusMessage>
       ) : null}
-      <LoginForm next={safeRedirectPath(parameters?.next, "/account")} />
+      <LoginForm next={safeRedirectPath(parameters?.next, "/home")} />
       <div className="mt-7 border-t border-neutral-800 pt-6">
         <button
           className="min-h-12 w-full cursor-not-allowed rounded-full border border-neutral-700 px-6 py-3 text-sm font-bold text-neutral-500"

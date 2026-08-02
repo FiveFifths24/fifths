@@ -13,9 +13,7 @@ describe("landing page", () => {
       }),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(
-        /public accounts and participation features are not live yet/i,
-      ),
+      screen.getByText(/private Pulse foundations are built/i),
     ).toBeInTheDocument();
     expect(
       screen.getAllByRole("link", { name: "Join FIFTHS" })[0],

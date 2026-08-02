@@ -30,8 +30,10 @@ Tokens are defined in `src/app/globals.css` and consumed through Tailwind utilit
 - `TextField` and `PasswordField` — labeled, validation-ready controls with accessible descriptions
 - `SubmitButton` and `ActionStatus` — pending, success, and error feedback for server-action forms
 - `SiteHeader`, `SiteFooter`, and mobile menu — consistent public navigation
+- `MemberShell` and `MemberNavigation` — protected personal context with exact active states and 48px mobile targets
 - `ModuleCard`, `ModuleOverview`, and `ParticipationLoop` — connected product storytelling
 - `LegalPage` — readable long-form document structure and mandatory draft notice
+- `PulseCheckInForm` and `PulseHistoryList` — accessible grouped signals, privacy context, and readable private activity cards
 
 ## Accessibility decisions
 
@@ -44,6 +46,8 @@ Tokens are defined in `src/app/globals.css` and consumed through Tailwind utilit
 - Motion respects `prefers-reduced-motion`.
 - Layouts avoid fixed content widths and horizontal overflow.
 - Legal documents use semantic headings, lists, readable line lengths, and mobile-first spacing.
+- Pulse controls use semantic fieldsets and legends, pair selected state with native controls and borders, and avoid free-text health inputs.
+- Member navigation uses a two-column mobile grid instead of a narrow horizontal scroller, preserving large targets without page overflow.
 
 ## Module personalities
 

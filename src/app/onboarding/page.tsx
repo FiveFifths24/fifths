@@ -33,7 +33,7 @@ export default async function OnboardingPage() {
     supabase.from("skills").select("id, name").eq("active", true).order("name"),
   ]);
 
-  if (profileResult.data?.onboarding_completed_at) redirect("/account");
+  if (profileResult.data?.onboarding_completed_at) redirect("/home");
 
   return (
     <section className="relative overflow-hidden py-14 sm:py-20">
