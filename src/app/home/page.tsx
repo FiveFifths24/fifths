@@ -15,6 +15,11 @@ import {
   rankCircles,
 } from "@/features/circles/circle-data";
 import { CircleCard } from "@/features/circles/circle-card";
+import { OpportunityCard } from "@/features/creator-commons/opportunity-card";
+import {
+  assembleOpportunityCards,
+  rankOpportunities,
+} from "@/features/creator-commons/opportunity-data";
 import {
   assembleSessionCards,
   rankSessions,
@@ -46,8 +51,10 @@ export default async function PersonalHomePage({
     pulseResult,
     sessionResult,
     circleResult,
+    opportunityResult,
     modeResult,
     interestResult,
+    skillResult,
     parameters,
   ] = await Promise.all([
     supabase
@@ -70,12 +77,20 @@ export default async function PersonalHomePage({
       .eq("status", "published")
       .order("name")
       .limit(20),
+    supabase
+      .from("creator_opportunities")
+      .select("*")
+      .eq("status", "published")
+      .gt("response_deadline", new Date().toISOString())
+      .order("response_deadline")
+      .limit(20),
     supabase.from("modes").select("id, slug, name").order("sort_order"),
     supabase
       .from("interests")
       .select("id, name")
       .eq("active", true)
       .order("name"),
+    supabase.from("skills").select("id, name").eq("active", true).order("name"),
     searchParams,
   ]);
 
@@ -93,35 +108,60 @@ export default async function PersonalHomePage({
   const mode = pulse ? modes.find((item) => item.id === pulse.mode_id) : null;
   const sessions = sessionResult.data ?? [];
   const circles = circleResult.data ?? [];
-  const [sessionLinkResult, circleLinkResult, pulseInterestResult] =
-    await Promise.all([
-      sessions.length
-        ? supabase
-            .from("session_interests")
-            .select("session_id, interest_id")
-            .in(
-              "session_id",
-              sessions.map((session) => session.id),
-            )
-        : Promise.resolve({ data: [], error: null }),
-      circles.length
-        ? supabase
-            .from("circle_interests")
-            .select("circle_id, interest_id")
-            .in(
-              "circle_id",
-              circles.map((circle) => circle.id),
-            )
-        : Promise.resolve({ data: [], error: null }),
-      pulse
-        ? supabase
-            .from("pulse_check_in_interests")
-            .select("interest_id")
-            .eq("check_in_id", pulse.id)
-        : Promise.resolve({ data: [], error: null }),
-    ]);
+  const opportunities = opportunityResult.data ?? [];
+  const [
+    sessionLinkResult,
+    circleLinkResult,
+    opportunitySkillLinkResult,
+    opportunityInterestLinkResult,
+    pulseInterestResult,
+  ] = await Promise.all([
+    sessions.length
+      ? supabase
+          .from("session_interests")
+          .select("session_id, interest_id")
+          .in(
+            "session_id",
+            sessions.map((session) => session.id),
+          )
+      : Promise.resolve({ data: [], error: null }),
+    circles.length
+      ? supabase
+          .from("circle_interests")
+          .select("circle_id, interest_id")
+          .in(
+            "circle_id",
+            circles.map((circle) => circle.id),
+          )
+      : Promise.resolve({ data: [], error: null }),
+    opportunities.length
+      ? supabase
+          .from("opportunity_skills")
+          .select("opportunity_id, skill_id")
+          .in(
+            "opportunity_id",
+            opportunities.map((opportunity) => opportunity.id),
+          )
+      : Promise.resolve({ data: [], error: null }),
+    opportunities.length
+      ? supabase
+          .from("opportunity_interests")
+          .select("opportunity_id, interest_id")
+          .in(
+            "opportunity_id",
+            opportunities.map((opportunity) => opportunity.id),
+          )
+      : Promise.resolve({ data: [], error: null }),
+    pulse
+      ? supabase
+          .from("pulse_check_in_interests")
+          .select("interest_id")
+          .eq("check_in_id", pulse.id)
+      : Promise.resolve({ data: [], error: null }),
+  ]);
   const links = sessionLinkResult.data ?? [];
   const circleLinks = circleLinkResult.data ?? [];
+  const opportunityInterestLinks = opportunityInterestLinkResult.data ?? [];
   const pulseInput: PulseRecommendationInput | null =
     pulse && mode
       ? {
@@ -183,6 +223,37 @@ export default async function PersonalHomePage({
     interestResult.data ?? [],
     circleLinks,
     circleRecommendations,
+  );
+  const opportunityRecommendations = pulseInput
+    ? rankOpportunities(
+        pulseInput,
+        opportunities,
+        modes,
+        opportunityInterestLinks,
+      ).slice(0, 3)
+    : [];
+  const recommendedOpportunityIds = new Set(
+    opportunityRecommendations.map((item) => item.candidate.id),
+  );
+  const recommendedOpportunities = opportunities.filter((opportunity) =>
+    recommendedOpportunityIds.has(opportunity.id),
+  );
+  const opportunityOrder = new Map(
+    opportunityRecommendations.map((item, index) => [item.candidate.id, index]),
+  );
+  recommendedOpportunities.sort(
+    (left, right) =>
+      (opportunityOrder.get(left.id) ?? 0) -
+      (opportunityOrder.get(right.id) ?? 0),
+  );
+  const opportunityCards = assembleOpportunityCards(
+    recommendedOpportunities,
+    modes,
+    skillResult.data ?? [],
+    interestResult.data ?? [],
+    opportunitySkillLinkResult.data ?? [],
+    opportunityInterestLinks,
+    opportunityRecommendations,
   );
 
   return (
@@ -397,6 +468,49 @@ export default async function PersonalHomePage({
         )}
         <ButtonLink className="mt-6" href="/home/circles" variant="secondary">
           Explore all Circles
+        </ButtonLink>
+      </section>
+
+      <section className="mt-10 rounded-[2rem] border border-amber-950/80 bg-neutral-900 p-6 sm:p-8">
+        <p className="text-xs font-bold tracking-[0.18em] text-amber-300 uppercase">
+          Creator Commons
+        </p>
+        <h2 className="mt-3 text-3xl font-bold text-white">
+          Opportunities matched to today—not promises.
+        </h2>
+        <p className="mt-4 max-w-3xl text-base leading-7 text-neutral-400">
+          Eligible published opportunities can match your mode, energy,
+          stimulation, social pace, format, available time, and current
+          interests. Saving and responding remain private, intentional actions.
+        </p>
+        {opportunityResult.error ? (
+          <StatusMessage className="mt-6" tone="error">
+            Creator Commons matches need the Phase 6 migration. Existing Pulse,
+            Session, and Circle experiences remain available.
+          </StatusMessage>
+        ) : opportunityCards.length ? (
+          <div className="mt-6 grid gap-5 lg:grid-cols-2">
+            {opportunityCards.map((card) => (
+              <OpportunityCard item={card} key={card.id} />
+            ))}
+          </div>
+        ) : (
+          <div className="mt-6">
+            <PreviewState
+              title={
+                pulse
+                  ? "No published opportunity matches yet"
+                  : "Check your Pulse first"
+              }
+            >
+              {pulse
+                ? "No eligible live Creator Commons opportunities are available. FIFTHS does not invent projects."
+                : "A current Pulse lets FIFTHS order eligible opportunities with transparent reasons."}
+            </PreviewState>
+          </div>
+        )}
+        <ButtonLink className="mt-6" href="/home/commons" variant="secondary">
+          Explore Creator Commons
         </ButtonLink>
       </section>
     </div>

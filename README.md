@@ -4,14 +4,14 @@
 
 FIFTHS is a mobile-first community platform connecting five products—Pulse, Circles, Creator Commons, Fifth Realm, and Passport—through one account, profile, recommendation system, and Supabase backend.
 
-This repository has completed **Phase 5: Circles foundation**. It includes the public experience, secure identity and onboarding, private Pulse check-ins, personal Home, shared Sessions, and real Circle discovery, membership, local roles, Session associations, and audited membership moderation. The founder-owned Supabase project must be connected and all four ordered migrations applied before live account, Pulse, Session, and Circle testing. Creator Commons begins in Phase 6.
+This repository has completed **Phase 6: Creator Commons foundation**. It includes the public experience, secure identity and onboarding, private Pulse check-ins, personal Home, shared Sessions, Circles, and real Creator Commons discovery, saves, private responses, capacity-safe acceptance, and two-sided completion confirmation. The founder-owned Supabase project must be connected and all five ordered migrations applied before live testing. Fifth Realm begins in Phase 7.
 
 ## Prerequisites
 
 - Node.js 22 LTS or newer
 - npm 10 or newer
 - Git
-- A Five Fifths-owned Supabase project (required for account, Pulse, Session, and Circle flows)
+- A Five Fifths-owned Supabase project (required for live account and product flows)
 - A Vercel account linked to this GitHub repository (required for deployment)
 
 ## Local setup
@@ -57,11 +57,11 @@ Run all four together with `npm run check`.
 - Tailwind CSS for mobile-first styling
 - Reusable public shell, form, feedback, module, and document components
 - Cookie-based Supabase SSR clients and Next.js Proxy session refresh
-- Versioned PostgreSQL identity, Pulse, Session, and Circle migrations with default-deny Row Level Security
-- Zod-validated email/password, onboarding, Pulse, Session, and Circle actions
-- Deterministic, explainable Session and Circle scoring without AI or raw user-facing scores
+- Versioned PostgreSQL identity, Pulse, Session, Circle, and Creator Commons migrations with default-deny Row Level Security
+- Zod-validated email/password, onboarding, Pulse, Session, Circle, and Commons actions
+- Deterministic, explainable Session, Circle, and Commons scoring without AI or raw user-facing scores
 - Zod at every external-data boundary
 - Vitest and React Testing Library for unit/component tests
 - ESLint and Prettier for consistency
 
-Public and protected routes live under `src/app`; shared design-system and member-shell components live under `src/components`; authentication, onboarding, Pulse, Sessions, and Circles live under `src/features`; shared recommendation rules live under `src/lib/recommendations`. Future product code follows the module boundaries documented in `docs/ARCHITECTURE.md`.
+Public and protected routes live under `src/app`; shared design-system and member-shell components live under `src/components`; authentication, onboarding, Pulse, Sessions, Circles, and Creator Commons live under `src/features`; shared recommendation rules live under `src/lib/recommendations`. Future product code follows the module boundaries documented in `docs/ARCHITECTURE.md`.

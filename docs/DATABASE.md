@@ -1,20 +1,20 @@
 # Database Design
 
-Supabase PostgreSQL is the single source of truth. Phase 2 adds identity at `supabase/migrations/202608010001_phase_2_identity_foundation.sql`; Phase 3 adds Pulse at `supabase/migrations/202608020001_phase_3_pulse_foundation.sql`; Phase 4 adds shared Sessions at `supabase/migrations/202608030001_phase_4_sessions_foundation.sql`; Phase 5 adds Circles at `supabase/migrations/202608040001_phase_5_circles_foundation.sql`. Later modules extend this topology instead of building parallel systems.
+Supabase PostgreSQL is the single source of truth. Phase 2 adds identity at `supabase/migrations/202608010001_phase_2_identity_foundation.sql`; Phase 3 adds Pulse at `supabase/migrations/202608020001_phase_3_pulse_foundation.sql`; Phase 4 adds shared Sessions at `supabase/migrations/202608030001_phase_4_sessions_foundation.sql`; Phase 5 adds Circles at `supabase/migrations/202608040001_phase_5_circles_foundation.sql`; Phase 6 adds Creator Commons at `supabase/migrations/202608050001_phase_6_creator_commons_foundation.sql`. Later modules extend this topology instead of building parallel systems.
 
 ## Domain groups
 
-| Group                | Tables                                                                                        |
-| -------------------- | --------------------------------------------------------------------------------------------- |
-| Identity             | `profiles`, `user_roles`, `interests`, `profile_interests`, `skills`, `profile_skills`        |
-| Organizations        | `organizations`, `organization_members`                                                       |
-| Pulse                | `modes`, `pulse_check_ins`, `pulse_check_in_interests`                                        |
-| Circles              | `circles`, `circle_interests`, `circle_members`                                               |
-| Shared sessions      | `sessions`, `session_interests`, `registrations`, `attendance_records`                        |
-| Creator Commons      | `creator_opportunities`, `opportunity_skills`, `opportunity_responses`, `saved_opportunities` |
-| Fifth Realm          | `realm_campaigns`, `campaign_applications`, `campaign_members`                                |
-| Passport             | `passport_entries`                                                                            |
-| Trust and engagement | feedback tables, `reports`, `notifications`, `audit_logs`                                     |
+| Group                | Tables                                                                                                                 |
+| -------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| Identity             | `profiles`, `user_roles`, `interests`, `profile_interests`, `skills`, `profile_skills`                                 |
+| Organizations        | `organizations`, `organization_members`                                                                                |
+| Pulse                | `modes`, `pulse_check_ins`, `pulse_check_in_interests`                                                                 |
+| Circles              | `circles`, `circle_interests`, `circle_members`                                                                        |
+| Shared sessions      | `sessions`, `session_interests`, `registrations`, `attendance_records`                                                 |
+| Creator Commons      | `creator_opportunities`, `opportunity_skills`, `opportunity_interests`, `opportunity_responses`, `saved_opportunities` |
+| Fifth Realm          | `realm_campaigns`, `campaign_applications`, `campaign_members`                                                         |
+| Passport             | `passport_entries`                                                                                                     |
+| Trust and engagement | feedback tables, `reports`, `notifications`, `audit_logs`                                                              |
 
 ## Conventions
 
@@ -66,10 +66,11 @@ No medical diagnosis, date of birth, or precise home address is collected.
 2. **Phase 3 complete:** Pulse enums, modes, private check-ins, current-interest joins, atomic write RPC, Pulse policies
 3. **Phase 4 complete:** shared Sessions, interest joins, capacity-safe registrations, attendance, audit, Session policies
 4. **Phase 5 complete:** Circles, interest joins, membership roles/state, Session associations, moderation audit, Circle policies
-5. Organizations, Commons, and Realm
-6. Passport, feedback, reports, notifications, audit logs
-7. module-specific indexes, functions, triggers, and RLS policies
-8. clearly labeled demonstration seed data where a later phase requires it
+5. **Phase 6 complete:** Creator Commons opportunities, taxonomy joins, saves, private responses, acceptance, completion, and audit
+6. Organizations and Realm
+7. Passport, feedback, reports, notifications, audit logs
+8. module-specific indexes, functions, triggers, and RLS policies
+9. clearly labeled demonstration seed data where a later phase requires it
 
 Generated database TypeScript types will be committed after the first migration and regenerated whenever schema changes.
 
@@ -144,3 +145,25 @@ Circle-local roles are owner, host, moderator, and member. They do not change `u
 | `sessions`         | Existing Phase 4 select boundary plus private-Circle membership visibility     |
 
 Anonymous clients receive no access. Authenticated clients receive select-only Circle table grants. Every write uses a narrowly granted RPC, derives the actor from `auth.uid()`, validates transitions again in PostgreSQL, and records membership/role changes in `private.circle_membership_audit_logs`. Static contract tests do not replace founder-run multi-user RLS and audit validation.
+
+## Phase 6 implemented schema
+
+Phase 6 creates `creator_opportunities`, `opportunity_skills`, `opportunity_interests`, `opportunity_responses`, and `saved_opportunities`. An opportunity stores creator provenance, optional Circle scope, bounded content and deliverables, kind, lifecycle, format, broad access label, deadline with timezone, estimated commitment, positions, authoritative accepted count, and Pulse-fit metadata. It stores no payment terms, contract, upload, contact detail, private meeting link, diagnosis, precise address, or Passport credit.
+
+Independent opportunity creation requires a centrally assigned `creator` or `platform_admin` role. Active Circle owners and local hosts can create only for their scoped Circle. Every new opportunity begins as a private draft. Publishing, closing, and cancellation use constrained database transitions; completed status can be reached only through the two-sided confirmation workflow.
+
+Each member has at most one response per opportunity. Submitted responses can be withdrawn and resubmitted while the opportunity remains eligible. Acceptance locks the opportunity row before checking and incrementing `accepted_count`; a filled opportunity closes atomically. Accepted participants can withdraw before completion, which decrements the authoritative count and safely reopens only a deadline-active opportunity that closed because it filled.
+
+Completion requires a closed opportunity, an accepted response, participant confirmation, and authorized-manager confirmation. When both exist, the response completes; the opportunity completes when no accepted response remains pending and at least one response completed. Private audit tables capture lifecycle and response/confirmation changes. No completion action creates Passport credit.
+
+## Phase 6 RLS and grant summary
+
+| Table                   | Authenticated access in Phase 6                                                      |
+| ----------------------- | ------------------------------------------------------------------------------------ |
+| `creator_opportunities` | Published eligible records, managed records, or records tied to caller save/response |
+| `opportunity_skills`    | Select only when the parent opportunity is visible                                   |
+| `opportunity_interests` | Select only when the parent opportunity is visible                                   |
+| `opportunity_responses` | Select caller-owned response or responses on an authorized managed opportunity       |
+| `saved_opportunities`   | Select caller-owned saves only                                                       |
+
+Anonymous clients receive no access. Authenticated clients receive select-only table grants. Every write uses a narrowly granted security-definer RPC, validates `auth.uid()` and the current lifecycle again in PostgreSQL, and writes audit-sensitive changes to private tables. Static contract tests do not replace founder-run multi-user RLS, capacity, withdrawal, and completion validation.

@@ -98,3 +98,20 @@ The Phase 4 migration still requires founder-run contention tests and positive/n
 - Phase 5 stores no posts, chat, direct messages, diagnosis data, precise address, payment data, report evidence, or Passport entry.
 
 The Phase 5 migration still requires founder-run positive/negative RLS tests with an owner, local host, local moderator, applicant, invitee, active member, and unrelated member. Static SQL contract tests protect the checked-in intent but do not prove the deployed database configuration or audit behavior.
+
+## Phase 6 implemented controls
+
+- All live Commons routes remain inside the protected, onboarding-gated member shell. The public `/commons` overview remains informational.
+- Only centrally assigned creators/platform administrators can create independent opportunities. Active Circle owners and local hosts can create and manage only opportunities associated with their Circle.
+- Every opportunity begins as a private draft. Publication, closure, and cancellation use constrained RPC transitions; authenticated clients receive no direct table write grants.
+- Private-Circle opportunities are unreadable to unrelated members. Associated taxonomy rows inherit the parent opportunity's visibility boundary.
+- Saves are caller-owned and private. Saving never reserves a position or submits a response.
+- Responses are readable only by their owner and authorized opportunity managers. Creator response reads use a narrow RPC that returns display identity, statement, availability, status, and confirmation state—not email or private profile data.
+- Response content is length-bounded and explicitly excludes contact, payment, diagnosis, precise-address, upload, and contract collection.
+- Acceptance locks the opportunity row before checking authoritative capacity. Unique `(opportunity_id, user_id)` rows prevent duplicate responses.
+- Participants can withdraw submitted or accepted responses. Accepted withdrawal decrements capacity and reopens only a still-active opportunity that closed because it filled.
+- Completion requires a closed opportunity and separate confirmation from both the accepted participant and an authorized manager. Opportunity and response state changes are recorded in private audit tables.
+- Commons recommendations receive only RLS-eligible published records plus bounded matching metadata. Required skills are labels, not a hidden eligibility score; raw recommendation scores remain hidden.
+- No save, response, acceptance, or completion action creates payment, a contract, a message, a notification, a report, or Passport credit.
+
+The Phase 6 migration still requires founder-run positive/negative RLS and concurrency tests with a creator, Circle host, two responders, accepted participant, and unrelated member. Static SQL contract tests protect the checked-in intent but do not prove the deployed database configuration, audit behavior, or contention handling.

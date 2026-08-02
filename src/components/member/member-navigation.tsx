@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Activity,
+  Aperture,
   CalendarRange,
   HeartHandshake,
   House,
@@ -25,6 +26,12 @@ const items = [
     href: "/home/circles",
     label: "Circles",
     icon: HeartHandshake,
+    nested: true,
+  },
+  {
+    href: "/home/commons",
+    label: "Commons",
+    icon: Aperture,
     nested: true,
   },
   {

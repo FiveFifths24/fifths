@@ -193,3 +193,30 @@ Published, RLS-eligible Circles now adapt to the deterministic recommendation se
 | Circle management  | `/home/circles/manage/[circleId]` | Role-scoped lifecycle, invitations, membership, roles, and associations    |
 
 Phase 5 does not add organizations, feeds, chat, direct messages, reports, notifications, bans, global moderation queues, Commons opportunities, Realm campaigns, Passport entries, payments, or an administrator interface. Those remain assigned to later phases.
+
+## Phase 6 Creator Commons architecture
+
+Phase 6 activates structured creator opportunities without turning FIFTHS into a payment processor, contract system, or messaging platform:
+
+- `src/features/creator-commons` owns opportunity validation, server actions, discovery cards, response forms, and the adapter into the shared recommendation scorer.
+- `src/app/home/commons` owns protected discovery, detail, saved opportunities, private response history, trusted creation, and role-scoped management routes. The public `/commons` route remains the product overview.
+- `supabase/migrations/202608050001_phase_6_creator_commons_foundation.sql` owns opportunity lifecycle, required skills, optional interests, saves, private responses, selection capacity, completion confirmation, audit records, grants, and RLS.
+- A centrally assigned `creator` or `platform_admin` can create an independent draft. Active Circle owners and local hosts can create and manage only opportunities associated with their Circle.
+- Associated private-Circle opportunities remain readable only to active members, authorized managers, savers, and response owners. A Circle with a published opportunity cannot be archived.
+- Response acceptance locks the opportunity row before checking authoritative openings. A participant can withdraw a submitted or accepted response; a filled opportunity reopens only when its deadline is still active.
+- Completion requires the opportunity to be closed plus separate confirmation by the accepted participant and an authorized manager. Completion is audited but does not issue Passport credit.
+
+Published, RLS-eligible opportunities adapt to the deterministic recommendation service using mode, energy, stimulation, social pace, format, estimated commitment, deadline ordering, and interests. Required skill labels inform the member but do not silently exclude them or expose profile skills to creators.
+
+## Phase 6 routes
+
+| Area                   | Route                                  | Boundary                                                                |
+| ---------------------- | -------------------------------------- | ----------------------------------------------------------------------- |
+| Commons discovery      | `/home/commons`                        | Published, deadline-active opportunities; Pulse-aware ordering          |
+| Opportunity details    | `/home/commons/[opportunityId]`        | RLS-authorized scope, save state, and caller-owned response controls    |
+| Saved opportunities    | `/home/commons/saved`                  | Caller-owned private collection; saving does not reserve a position     |
+| Response history       | `/home/commons/responses`              | Caller-owned private status, withdrawal, and completion confirmation    |
+| Opportunity creation   | `/home/commons/manage`                 | Creator/platform-admin gate plus scoped Circle-host authority           |
+| Opportunity management | `/home/commons/manage/[opportunityId]` | Lifecycle, private response review, selection, and creator confirmation |
+
+Phase 6 does not add organizations, payment or escrow, contracts, uploads, direct messaging, public applicant profiles, reports, notifications, Realm campaigns, or Passport entries. Those remain assigned to later phases.

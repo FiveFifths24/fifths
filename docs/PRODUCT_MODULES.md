@@ -54,6 +54,16 @@ Trusted platform hosts create private drafts and become the Circle owner. Circle
 
 Authorized hosts can associate a Circle with a draft shared Session. Private-Circle Sessions remain restricted to active Circle members after publication. Phase 5 does not add posts, chat, feeds, organizations, reports, notifications, global moderation queues, Commons or Realm ownership, payments, or Passport issuance.
 
+## Phase 6 Creator Commons implementation
+
+Creator Commons now provides protected opportunity discovery, clear scope and deliverables, required skills, optional interests, deadlines, openings, private saves, private structured responses, participant selection, and confirmed completion. Eligible published opportunities participate in the existing deterministic Pulse scorer without exposing raw scores, private responses, profile skills, or selection state.
+
+Centrally assigned creators and platform administrators can create independent private drafts. Active Circle owners and local hosts can create opportunities scoped only to their Circle. Private-Circle opportunities inherit member-aware visibility; unrelated members cannot discover the opportunity or its taxonomy data.
+
+Opportunity managers review responses privately and accept only while authoritative positions remain. Acceptance is capacity-safe under a row lock. Participants retain a withdrawal path before completion. A closed opportunity completes only after both the accepted participant and an authorized manager confirm the work; that confirmation does not create Passport credit.
+
+Phase 6 does not process payment, escrow, contracts, tax information, uploads, equipment transfers, private links, direct messages, organizations, reports, notifications, Realm campaigns, or Passport entries.
+
 ## Phase 1 public representation
 
 Each module has a public overview route explaining audience, planned capabilities, Pulse and Passport connections, MVP scope, and explicit exclusions. Preview notices distinguish planned behavior from live functionality. All five routes use one shared `ModuleOverview` component so product storytelling stays cohesive while allowing restrained module accents.
