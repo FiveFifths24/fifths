@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 import { LockKeyhole } from "lucide-react";
 import { Container } from "@/components/ui/container";
-import { StatusMessage } from "@/components/ui/status-message";
 
 export function AuthShell({
   eyebrow,
@@ -39,16 +38,13 @@ export function AuthShell({
               className="mt-0.5 size-5 shrink-0"
             />
             <p>
-              Authentication is intentionally not connected in Phase 1. These
-              interfaces prepare the experience for secure Supabase integration
-              in Phase 2.
+              FIFTHS uses secure, server-validated sessions. Your password is
+              handled by Supabase Auth and is never stored in the FIFTHS
+              application database.
             </p>
           </div>
         </div>
         <div className="mx-auto w-full max-w-xl rounded-[2rem] border border-neutral-800 bg-neutral-900/90 p-6 shadow-2xl shadow-black sm:p-9">
-          <StatusMessage className="mb-7">
-            Interface preview: form submissions are not active yet.
-          </StatusMessage>
           {children}
           <div className="mt-7 border-t border-neutral-800 pt-6 text-center text-sm text-neutral-400">
             {footer}

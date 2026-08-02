@@ -4,14 +4,14 @@
 
 FIFTHS is a mobile-first community platform connecting five products—Pulse, Circles, Creator Commons, Fifth Realm, and Passport—through one account, profile, recommendation system, and Supabase backend.
 
-This repository has completed **Phase 1: public shell and unified design system**. It includes the finished public landing, ecosystem, module, authentication-interface, and policy pages. Accounts and product features remain intentionally nonfunctional until Phase 2 and later.
+This repository has completed **Phase 2: authentication and identity foundation**. It includes the Phase 1 public experience plus Supabase migrations, email/password authentication, secure SSR sessions, protected onboarding, a minimal account-readiness page, roles, and default-deny Row Level Security. The founder-owned Supabase project must be connected before live account testing. Product activity begins in Phase 3 and later.
 
 ## Prerequisites
 
 - Node.js 22 LTS or newer
 - npm 10 or newer
 - Git
-- A Supabase project (required in Phase 2; placeholders work for Phase 1)
+- A Five Fifths-owned Supabase project (required for Phase 2 account flows)
 - A Vercel account linked to this GitHub repository (required for deployment)
 
 ## Local setup
@@ -26,7 +26,7 @@ npm run dev
 
 Open `http://localhost:3000`.
 
-Do not commit `.env.local`. Only the public Supabase URL and publishable/anonymous key may use the `NEXT_PUBLIC_` prefix. Never place the Supabase service-role key in browser code.
+Do not commit `.env.local`. Only the public Supabase URL and publishable/anonymous key may use the `NEXT_PUBLIC_` prefix. Never place the Supabase service-role key in browser code. Public pages remain reviewable with placeholder values; account actions show a setup notice until the real values and migration are present.
 
 ## Quality checks
 
@@ -56,9 +56,11 @@ Run all four together with `npm run check`.
 - Next.js App Router, React, and strict TypeScript
 - Tailwind CSS for mobile-first styling
 - Reusable public shell, form, feedback, module, and document components
-- Supabase for PostgreSQL, authentication, Row Level Security, and limited storage
+- Cookie-based Supabase SSR clients and Next.js Proxy session refresh
+- Versioned PostgreSQL identity migration with default-deny Row Level Security
+- Zod-validated email/password and onboarding server actions
 - Zod at every external-data boundary
 - Vitest and React Testing Library for unit/component tests
 - ESLint and Prettier for consistency
 
-Public routes live under `src/app`; shared design-system and shell components live under `src/components`. Future feature code belongs under `src/features` as documented in `docs/ARCHITECTURE.md`.
+Public and account routes live under `src/app`; shared design-system and shell components live under `src/components`; authentication and onboarding behavior lives under `src/features`. Future product code follows the module boundaries documented in `docs/ARCHITECTURE.md`.

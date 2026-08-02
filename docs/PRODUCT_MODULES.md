@@ -28,6 +28,12 @@ Owns immutable or revocable verified activity entries and configurable point val
 
 Profiles, interests, skills, roles, organizations, Sessions, reports, notifications, analytics, authorization, and recommendations belong to the platform—not to an individual product module.
 
+## Phase 2 account foundation
+
+One Supabase Auth identity now maps to one private profile and one or more centrally managed platform roles. Onboarding collects a display identity, timezone, optional pronouns, interests, skills, and an 18+ self-attestation. It does not collect diagnoses or a precise home address.
+
+This shared identity is intentionally product-neutral. Pulse, Circles, Creator Commons, Fifth Realm, and Passport will consume it in later phases without creating separate accounts or parallel role systems.
+
 ## Phase 1 public representation
 
 Each module has a public overview route explaining audience, planned capabilities, Pulse and Passport connections, MVP scope, and explicit exclusions. Preview notices distinguish planned behavior from live functionality. All five routes use one shared `ModuleOverview` component so product storytelling stays cohesive while allowing restrained module accents.

@@ -28,6 +28,7 @@ Tokens are defined in `src/app/globals.css` and consumed through Tailwind utilit
 - `SectionHeading` and `PageHero` — consistent hierarchy
 - `Badge`, `StatusMessage`, and `PreviewState` — labels and information that never depend on color alone
 - `TextField` and `PasswordField` — labeled, validation-ready controls with accessible descriptions
+- `SubmitButton` and `ActionStatus` — pending, success, and error feedback for server-action forms
 - `SiteHeader`, `SiteFooter`, and mobile menu — consistent public navigation
 - `ModuleCard`, `ModuleOverview`, and `ParticipationLoop` — connected product storytelling
 - `LegalPage` — readable long-form document structure and mandatory draft notice
@@ -38,6 +39,7 @@ Tokens are defined in `src/app/globals.css` and consumed through Tailwind utilit
 - All interactive elements use visible red focus rings and at least 44–48px mobile targets.
 - Mobile navigation exposes `aria-expanded`, `aria-controls`, labeled navigation landmarks, active-page state, and Escape-to-close behavior.
 - Form fields have explicit labels; visibility controls state their action.
+- Server validation is connected to `aria-invalid` and described field errors; pending submissions disable only their submit control and retain a clear label.
 - Color is paired with icons, copy, labels, or borders.
 - Motion respects `prefers-reduced-motion`.
 - Layouts avoid fixed content widths and horizontal overflow.
