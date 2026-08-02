@@ -4,7 +4,7 @@
 
 FIFTHS is a mobile-first community platform connecting five products—Pulse, Circles, Creator Commons, Fifth Realm, and Passport—through one account, profile, recommendation system, and Supabase backend.
 
-This repository has completed **Phase 7: Fifth Realm foundation**. It includes the public experience, secure identity and onboarding, private Pulse check-ins, personal Home, shared Sessions, Circles, Creator Commons, and real Fifth Realm campaign discovery, private applications, capacity-safe membership, game-master tools, and Realm Session associations. The founder-owned Supabase project must be connected and all six ordered migrations applied before live testing. The unified recommendation review begins in Phase 8.
+This repository has completed **Phase 8: unified recommendations**. It includes the public experience, secure identity and onboarding, private Pulse check-ins, shared Sessions, Circles, Creator Commons, Fifth Realm, and one cross-module Personal Home feed with normalized deterministic ranking, soft product balance, nonnumeric fit labels, and plain-language explanations. The founder-owned Supabase project must be connected and all six ordered migrations applied before live testing. Verified Passport activity begins in Phase 9.
 
 ## Prerequisites
 
@@ -59,7 +59,7 @@ Run all four together with `npm run check`.
 - Cookie-based Supabase SSR clients and Next.js Proxy session refresh
 - Versioned PostgreSQL identity, Pulse, Session, Circle, Creator Commons, and Fifth Realm migrations with default-deny Row Level Security
 - Zod-validated email/password, onboarding, Pulse, Session, Circle, Commons, and Realm actions
-- Deterministic, explainable Session, Circle, Commons, and Realm scoring without AI or raw user-facing scores
+- Unified, deterministic Session, Circle, Commons, and Realm ranking with applicable-signal normalization, stable tie-breaks, soft module balance, and no AI or raw user-facing scores
 - Zod at every external-data boundary
 - Vitest and React Testing Library for unit/component tests
 - ESLint and Prettier for consistency

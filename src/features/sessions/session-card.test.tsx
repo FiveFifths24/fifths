@@ -22,6 +22,7 @@ const session: SessionCardItem = {
   modeName: "Create",
   interestNames: ["Arts & culture"],
   reasons: ["Fits your current mode", "Matches your available energy"],
+  fit: "strong",
 };
 
 describe("SessionCard", () => {
@@ -36,6 +37,9 @@ describe("SessionCard", () => {
       name: "Why this matches your Pulse",
     });
     expect(within(reasons).getAllByRole("listitem")).toHaveLength(2);
+    expect(
+      screen.getByText(/strong fit · Why this may fit/i),
+    ).toBeInTheDocument();
   });
 
   it("communicates a full Session with text", () => {

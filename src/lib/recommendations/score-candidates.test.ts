@@ -53,6 +53,7 @@ describe("deterministic recommendation ranking", () => {
     expect(ranked).toHaveLength(2);
     const first = ranked[0]!;
     expect(first.candidate.id).toBe("strong-match");
+    expect(first.fit).toBe("strong");
     expect(first.reasons).toEqual(
       expect.arrayContaining([
         "Fits your current mode",
@@ -91,6 +92,8 @@ describe("deterministic recommendation ranking", () => {
     const ranked = rankRecommendationCandidates(pulse, candidates, 1);
     expect(ranked).toHaveLength(1);
     expect(ranked[0]).not.toHaveProperty("score");
+    expect(ranked[0]).not.toHaveProperty("matchedWeight");
+    expect(ranked[0]).not.toHaveProperty("availableWeight");
   });
 
   it("does not award reasons for candidate signals that are missing", () => {
@@ -98,5 +101,70 @@ describe("deterministic recommendation ranking", () => {
       { id: "unknown", title: "Unknown", module: "circles" },
     ]);
     expect(ranked?.reasons).toEqual([]);
+    expect(ranked?.fit).toBe("possible");
+  });
+
+  it("normalizes by applicable signals so modules are not penalized for fields they do not own", () => {
+    const [circle, session] = rankRecommendationCandidates(pulse, [
+      {
+        id: "circle",
+        title: "Circle",
+        module: "circles",
+        modeSlugs: ["connect"],
+        energyRange: { minimum: 2, maximum: 4 },
+        stimulationLevels: ["moderate"],
+        socialIntensities: ["light"],
+        format: "online",
+      },
+      {
+        id: "session",
+        title: "Session",
+        module: "sessions",
+        modeSlugs: ["connect"],
+        energyRange: { minimum: 2, maximum: 4 },
+        stimulationLevels: ["moderate"],
+        socialIntensities: ["light"],
+        format: "online",
+        durationMinutes: 120,
+      },
+    ]);
+    expect(circle?.candidate.id).toBe("circle");
+    expect(circle?.fit).toBe("strong");
+    expect(session?.fit).toBe("strong");
+    expect(session?.reasons).not.toContain("Fits your available time");
+  });
+
+  it("weights interest alignment by the candidate interests that are known", () => {
+    const ranked = rankRecommendationCandidates(pulse, [
+      {
+        id: "partial",
+        title: "Partial interest match",
+        module: "sessions",
+        interestIds: ["music", "gaming", "outdoors"],
+      },
+      {
+        id: "complete",
+        title: "Complete interest match",
+        module: "circles",
+        interestIds: ["music"],
+      },
+    ]);
+    expect(ranked.map(({ candidate }) => candidate.id)).toEqual([
+      "complete",
+      "partial",
+    ]);
+    expect(ranked[0]?.fit).toBe("strong");
+  });
+
+  it("uses module and ID as deterministic final tie-breakers", () => {
+    const tied: RecommendationCandidate[] = [
+      { id: "same", title: "Session", module: "sessions" },
+      { id: "same", title: "Circle", module: "circles" },
+    ];
+    expect(
+      rankRecommendationCandidates(pulse, tied).map(
+        ({ candidate }) => candidate.module,
+      ),
+    ).toEqual(["circles", "sessions"]);
   });
 });

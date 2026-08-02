@@ -26,7 +26,7 @@ Checked items are complete in the repository. A phase begins only after the prio
 - [x] **Phase 5:** Circle discovery, membership, roles, associations, moderation basics
 - [x] **Phase 6:** Creator Commons creation, discovery, responses, acceptance, completion
 - [x] **Phase 7:** Fifth Realm campaigns, discovery, applications, members, GM tools
-- [ ] **Phase 8:** Unified recommendation ranking and explanation tests
+- [x] **Phase 8:** Unified recommendation ranking and explanation tests
 - [ ] **Phase 9:** Verified Passport entries and duplicate prevention
 - [ ] **Phase 10:** Feedback, reports, notifications, moderation, admin controls
 - [ ] **Phase 11:** End-to-end, accessibility, mobile, security, and deployment review
@@ -147,4 +147,20 @@ The Phase 6 code foundation is complete. Live validation still requires the foun
 - [x] Document Phase 7 architecture, founder setup, trust boundaries, originality limits, and intentional exclusions
 - [x] Pass formatting, lint, strict TypeScript, tests, production build, and dependency audits
 
-The Phase 7 code foundation is complete. Live validation still requires the founder-owned non-production Supabase project, all six ordered migrations, deliberately assigned game-master and Circle-host roles, and multi-user discovery, application-privacy, capacity, membership, audit, Circle-visibility, and Realm-Session tests. Phase 8 is next: the unified recommendation ranking and explanation review. Organizations, Passport issuance, reports, notifications, messaging, copyrighted game content, virtual tabletop tools, files, and payments remain later or excluded work.
+The Phase 7 code foundation is complete. Live validation still requires the founder-owned non-production Supabase project, all six ordered migrations, deliberately assigned game-master and Circle-host roles, and multi-user discovery, application-privacy, capacity, membership, audit, Circle-visibility, and Realm-Session tests. Phase 8 builds on these eligible product records without changing Realm ownership. Organizations, Passport issuance, reports, notifications, messaging, copyrighted game content, virtual tabletop tools, files, and payments remain later or excluded work.
+
+## Phase 8 — Unified recommendations
+
+- [x] Normalize ranking by the recommendation signals each product actually supplies
+- [x] Combine eligible Sessions, Circles, Commons opportunities, and Realm campaigns into one Personal Home feed
+- [x] Keep database visibility and product eligibility outside the scorer and preserve module-specific discovery
+- [x] Deduplicate with stable module-and-record keys and deterministic cross-module tie-breaks
+- [x] Softly balance the initial feed across available products before filling remaining places by fit
+- [x] Exclude zero-explanation filler from Personal Home while keeping honest empty states
+- [x] Add nonnumeric strong, good, and possible fit labels plus plain-language reasons
+- [x] Document the method, privacy boundary, applicable-signal normalization, and member choice in the interface
+- [x] Test normalization, module balance, deduplication, relevance filtering, ordering stability, limits, and score privacy
+- [x] Document Phase 8 architecture, security decisions, completion status, and intentional exclusions
+- [x] Pass formatting, lint, strict TypeScript, tests, production build, and dependency audits
+
+The Phase 8 code foundation is complete. It adds no database migration and preserves the six existing migrations and RLS boundaries. Live validation still requires the founder-owned non-production Supabase project and representative eligible inventory across all four candidate modules. Phase 9 is next: verified, idempotent Passport entries and duplicate prevention. Organizations, reports, notifications, moderation, messaging, payments, AI/ML, and public leaderboards remain later or excluded work.

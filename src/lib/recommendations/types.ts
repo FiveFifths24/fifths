@@ -4,6 +4,8 @@ type StimulationLevel = Database["public"]["Enums"]["pulse_stimulation_level"];
 type SocialIntensity = Database["public"]["Enums"]["pulse_social_intensity"];
 type ParticipationFormat = Database["public"]["Enums"]["participation_format"];
 
+export type RecommendationModule = "circles" | "commons" | "realm" | "sessions";
+
 export type PulseRecommendationInput = {
   modeSlug: string;
   energyLevel: number;
@@ -18,7 +20,7 @@ export type PulseRecommendationInput = {
 export type RecommendationCandidate = {
   id: string;
   title: string;
-  module: "circles" | "commons" | "realm" | "sessions";
+  module: RecommendationModule;
   startsAt?: string | null;
   modeSlugs?: string[];
   energyRange?: { minimum: number; maximum: number };
@@ -43,4 +45,5 @@ export type RecommendationReason =
 export type RankedRecommendation = {
   candidate: RecommendationCandidate;
   reasons: RecommendationReason[];
+  fit: "strong" | "good" | "possible";
 };

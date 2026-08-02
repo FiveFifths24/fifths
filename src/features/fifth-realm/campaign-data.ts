@@ -42,6 +42,12 @@ export function assembleCampaignCards(
       recommendation.reasons,
     ]),
   );
+  const fits = new Map(
+    recommendations.map((recommendation) => [
+      recommendation.candidate.id,
+      recommendation.fit,
+    ]),
+  );
   const applicationStatus = new Map(
     applications.map((application) => [
       application.campaign_id,
@@ -57,6 +63,7 @@ export function assembleCampaignCards(
       .map((id) => interestNames.get(id))
       .filter((name): name is string => Boolean(name)),
     reasons: reasons.get(campaign.id),
+    fit: fits.get(campaign.id),
     applicationStatus: applicationStatus.get(campaign.id),
     isMember: memberships.has(campaign.id),
   }));
@@ -64,6 +71,17 @@ export function assembleCampaignCards(
 
 export function rankCampaigns(
   pulse: PulseRecommendationInput,
+  campaigns: RealmCampaign[],
+  modes: Array<Pick<Mode, "id" | "slug">>,
+  links: CampaignInterestLink[],
+) {
+  return rankRecommendationCandidates(
+    pulse,
+    toCampaignRecommendationCandidates(campaigns, modes, links),
+  );
+}
+
+export function toCampaignRecommendationCandidates(
   campaigns: RealmCampaign[],
   modes: Array<Pick<Mode, "id" | "slug">>,
   links: CampaignInterestLink[],
@@ -93,5 +111,5 @@ export function rankCampaigns(
     durationMinutes: campaign.estimated_session_minutes,
     interestIds: interestsByCampaign.get(campaign.id) ?? [],
   }));
-  return rankRecommendationCandidates(pulse, candidates);
+  return candidates;
 }

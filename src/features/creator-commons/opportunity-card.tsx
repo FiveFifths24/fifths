@@ -35,6 +35,7 @@ export type OpportunityCardItem = Pick<
   skillNames: string[];
   interestNames: string[];
   reasons?: RankedRecommendation["reasons"];
+  fit?: RankedRecommendation["fit"];
   saved?: boolean;
   responseStatus?: OpportunityResponse["status"];
 };
@@ -66,6 +67,7 @@ export function OpportunityCard({ item }: { item: OpportunityCardItem }) {
   return (
     <article className="flex h-full flex-col rounded-[1.75rem] border border-amber-950/80 bg-neutral-900 p-6">
       <div className="flex flex-wrap items-center gap-2">
+        <Badge>Creator Commons</Badge>
         <Badge className="border-amber-900 bg-amber-950/40 text-amber-100">
           {item.modeName}
         </Badge>
@@ -154,7 +156,8 @@ export function OpportunityCard({ item }: { item: OpportunityCardItem }) {
       {item.reasons?.length ? (
         <div className="mt-5 border-t border-neutral-800 pt-5">
           <p className="flex items-center gap-2 text-xs font-bold tracking-wide text-amber-200 uppercase">
-            <Zap aria-hidden="true" className="size-4" /> Why this may fit
+            <Zap aria-hidden="true" className="size-4" />
+            {item.fit ? `${item.fit} fit · ` : ""}Why this may fit
           </p>
           <ul
             className="mt-3 flex flex-wrap gap-2"

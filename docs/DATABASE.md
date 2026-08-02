@@ -125,7 +125,7 @@ Anonymous clients receive no access. Static contract tests guard the presence of
 
 ## Recommendation contract
 
-The Phase 3 application scorer accepts candidates already filtered for authorization and eligibility. It weighs matching mode, energy, stimulation, social pace, format, time, current interests, and broad travel range. Sorting is deterministic: internal score, then earliest valid start, then stable candidate ID. The returned object strips the numeric score and exposes only ordered candidates and plain-language reasons. Phase 8 remains responsible for the unified production ranking review after all candidate modules exist.
+The Phase 8 application scorer accepts candidates already filtered for authorization and eligibility. It compares mode, energy, stimulation, social pace, format, time, current interests, and broad travel range, normalized by the signals each candidate actually supplies. Cross-module sorting is deterministic, duplicate identity includes module and record ID, and Personal Home softly balances initial product representation before filling remaining places by fit. The returned object strips internal weights and exposes only ordered candidates, nonnumeric fit levels, and plain-language reasons. This application layer does not change database RLS or product eligibility.
 
 ## Phase 4 implemented schema
 

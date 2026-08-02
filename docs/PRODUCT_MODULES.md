@@ -74,6 +74,14 @@ Applications remain private to each applicant and the campaign manager. Acceptan
 
 Campaign meetings reuse shared Sessions. Only compatible private draft Sessions can be associated, and published Realm Sessions are readable only by active campaign members, registrants, or authorized Session managers. Phase 7 does not reproduce rules, host virtual tabletops, collect copyrighted content, add chat or payments, or issue Passport credit.
 
+## Phase 8 unified recommendations
+
+Personal Home now combines eligible Sessions, Circles, Creator Commons opportunities, and Fifth Realm campaigns into one ordered ecosystem feed. Products retain ownership of discovery, visibility, and candidate adaptation; the shared service owns only deterministic comparison, explanations, deduplication, and feed composition.
+
+Ranking compares the current private Pulse only with fields a candidate actually provides. This applicable-signal normalization avoids favoring a product merely because its schema has more matching fields. The initial feed is softly balanced across available products, then remaining places follow overall fit. Candidates without any truthful match reason are not used as filler.
+
+Members see `strong`, `good`, or `possible` fit and up to three plain-language reasons, never the internal weights. The labels communicate relative rule-based alignment, not eligibility, quality, health, safety, or a guarantee. Phase 8 adds no AI, behavior tracking, diagnosis inference, participation mutation, or Passport credit.
+
 ## Phase 1 public representation
 
 Each module has a public overview route explaining audience, planned capabilities, Pulse and Passport connections, MVP scope, and explicit exclusions. Preview notices distinguish planned behavior from live functionality. All five routes use one shared `ModuleOverview` component so product storytelling stays cohesive while allowing restrained module accents.
