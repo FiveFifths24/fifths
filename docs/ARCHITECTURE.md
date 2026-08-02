@@ -94,3 +94,27 @@ No component initializes Supabase or implies successful authentication. Disabled
 | Legal and safety | `/privacy`, `/terms`, `/community-guidelines`, `/commons/guidelines`, `/realm/safety` |
 
 Nested guideline routes reserve clear informational locations without conflicting with future Commons opportunities or Realm campaign routes.
+
+## Phase 2 identity architecture
+
+Phase 2 activates the account layer without crossing into product behavior:
+
+- `src/lib/supabase/client.ts` creates the browser client only when interactive client behavior needs it.
+- `src/lib/supabase/server.ts` creates a cookie-aware server client for Server Components, Server Actions, and Route Handlers.
+- root `proxy.ts` delegates token refresh to `src/lib/supabase/proxy.ts`; protected-route decisions use validated Auth claims rather than an unverified cookie session.
+- `src/features/auth` owns Zod schemas, server actions, action state, and accessible interactive forms.
+- `src/features/onboarding` owns profile validation, the onboarding form, and the single atomic onboarding RPC call.
+- `src/types/database.ts` is the checked-in Phase 2 database type snapshot and must be regenerated from the linked project after applying migrations.
+- `supabase/migrations` is the source of truth for identity tables, constraints, triggers, functions, grants, and RLS.
+
+The application never initializes a service-role client. Signup, login, password recovery, and onboarding use only the publishable key and the signed-in user's session under RLS.
+
+## Phase 2 routes
+
+| Area          | Routes                                                      | Boundary                                                                |
+| ------------- | ----------------------------------------------------------- | ----------------------------------------------------------------------- |
+| Account entry | `/login`, `/signup`, `/forgot-password`, `/update-password` | Email/password Auth only; social login is deferred                      |
+| Auth exchange | `/auth/callback`                                            | Exchanges PKCE codes and accepts only same-origin relative destinations |
+| Identity      | `/onboarding`, `/account`                                   | Protected profile setup and account readiness; not a product dashboard  |
+
+Phase 2 does not add Pulse check-ins, recommendations, Sessions, registrations, Circle membership, Creator Commons responses, Fifth Realm applications, or Passport entries. Those remain isolated to their later feature phases.

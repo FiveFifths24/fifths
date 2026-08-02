@@ -1,12 +1,12 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import ForgotPasswordPage from "./forgot-password/page";
-import LoginPage from "./login/page";
 import SignupPage from "./signup/page";
+import { LoginForm } from "@/features/auth/login-form";
 
 describe("authentication interfaces", () => {
-  it("provides validation-ready login controls without enabling authentication", () => {
-    render(<LoginPage />);
+  it("provides enabled, validation-ready login controls", () => {
+    render(<LoginForm />);
     expect(
       screen.getByRole("form", { name: "Log in to FIFTHS" }),
     ).toBeInTheDocument();
@@ -18,9 +18,7 @@ describe("authentication interfaces", () => {
       "type",
       "password",
     );
-    expect(
-      screen.getByRole("button", { name: /coming in phase 2/i }),
-    ).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Log in" })).toBeEnabled();
   });
 
   it("includes the adult and policy agreement on signup", () => {
@@ -34,6 +32,10 @@ describe("authentication interfaces", () => {
     expect(
       screen.getAllByRole("button", { name: /show password/i }),
     ).toHaveLength(2);
+    expect(screen.getByRole("checkbox")).toBeRequired();
+    expect(
+      screen.getByRole("button", { name: "Create account" }),
+    ).toBeEnabled();
   });
 
   it("labels the password reset email field", () => {

@@ -1,0 +1,47 @@
+import { describe, expect, it } from "vitest";
+import { onboardingSchema } from "./schemas";
+
+const validOnboarding = {
+  username: "fifths_member",
+  displayName: "FIFTHS Member",
+  pronouns: "they/them",
+  timezone: "America/New_York",
+  interestIds: ["aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"],
+  skillIds: ["bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb"],
+  ageConfirmation: "on",
+};
+
+describe("onboarding validation", () => {
+  it("normalizes valid profile data", () => {
+    const result = onboardingSchema.parse({
+      ...validOnboarding,
+      username: "  FIFTHS_member  ",
+    });
+    expect(result.username).toBe("fifths_member");
+  });
+
+  it("rejects unsafe usernames and missing adult confirmation", () => {
+    const result = onboardingSchema.safeParse({
+      ...validOnboarding,
+      username: "not allowed!",
+      ageConfirmation: undefined,
+    });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const fields = result.error.flatten().fieldErrors;
+      expect(fields.username).toBeDefined();
+      expect(fields.ageConfirmation).toBeDefined();
+    }
+  });
+
+  it("limits taxonomy selections to twelve", () => {
+    const interestIds = Array.from(
+      { length: 13 },
+      (_, index) =>
+        `aaaaaaaa-aaaa-4aaa-8aaa-${index.toString().padStart(12, "0")}`,
+    );
+    expect(
+      onboardingSchema.safeParse({ ...validOnboarding, interestIds }).success,
+    ).toBe(false);
+  });
+});

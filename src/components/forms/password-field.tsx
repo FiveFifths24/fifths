@@ -7,18 +7,19 @@ import { Eye, EyeOff } from "lucide-react";
 type PasswordFieldProps = Omit<
   InputHTMLAttributes<HTMLInputElement>,
   "type"
-> & { label: string; hint?: string };
+> & { label: string; hint?: string; error?: string };
 
 export function PasswordField({
   label,
   hint,
+  error,
   id,
   name,
   ...props
 }: PasswordFieldProps) {
   const [visible, setVisible] = useState(false);
   const inputId = id ?? name;
-  const hintId = hint ? `${inputId}-hint` : undefined;
+  const hintId = hint || error ? `${inputId}-hint` : undefined;
   return (
     <div>
       <label
@@ -30,7 +31,8 @@ export function PasswordField({
       <div className="relative">
         <input
           aria-describedby={hintId}
-          className="min-h-12 w-full rounded-xl border border-neutral-700 bg-neutral-950 px-4 py-3 pr-14 text-base text-white placeholder:text-neutral-600 hover:border-neutral-500 focus:border-red-500 focus:outline-none"
+          aria-invalid={error ? true : undefined}
+          className={`min-h-12 w-full rounded-xl border bg-neutral-950 px-4 py-3 pr-14 text-base text-white placeholder:text-neutral-600 hover:border-neutral-500 focus:border-red-500 focus:outline-none ${error ? "border-red-500" : "border-neutral-700"}`}
           id={inputId}
           name={name}
           type={visible ? "text" : "password"}
@@ -49,9 +51,12 @@ export function PasswordField({
           )}
         </button>
       </div>
-      {hint ? (
-        <p className="mt-2 text-xs leading-5 text-neutral-500" id={hintId}>
-          {hint}
+      {hint || error ? (
+        <p
+          className={`mt-2 text-xs leading-5 ${error ? "text-red-300" : "text-neutral-500"}`}
+          id={hintId}
+        >
+          {error ?? hint}
         </p>
       ) : null}
     </div>

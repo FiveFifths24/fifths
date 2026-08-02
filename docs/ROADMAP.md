@@ -20,7 +20,7 @@ Checked items are complete in the repository. A phase begins only after the prio
 ## Delivery phases
 
 - [x] **Phase 1:** Public shell, design system, landing/module pages, auth page UI, legal drafts
-- [ ] **Phase 2:** Supabase migrations, authentication, roles, RLS, onboarding
+- [x] **Phase 2:** Supabase migrations, authentication, roles, RLS, onboarding
 - [ ] **Phase 3:** Pulse check-in, history, recommendation foundation, personal Home
 - [ ] **Phase 4:** Session discovery, hosting, registration, capacity, attendance foundation
 - [ ] **Phase 5:** Circle discovery, membership, roles, associations, moderation basics
@@ -48,4 +48,18 @@ Every meaningful phase must pass lint, type checking, tests, and a production bu
 - [x] Test landing content, navigation/mobile behavior, auth structure, and legal notices
 - [x] Pass formatting, lint, strict TypeScript, tests, and production build
 
-Phase 2 is next. Supabase, authentication, database schema, roles, Row Level Security, and onboarding remain intentionally untouched.
+## Phase 2 — Authentication and identity foundation
+
+- [x] Add cookie-based browser/server Supabase clients and Next.js Proxy session refresh
+- [x] Add email/password signup, confirmation callback, login, logout, recovery, and password update
+- [x] Validate all account and onboarding mutations with Zod on the server
+- [x] Add profiles, platform roles, interests, skills, join tables, constraints, and audit records
+- [x] Create a safe new-user trigger and atomic onboarding database function
+- [x] Enable RLS on every exposed Phase 2 table and grant only narrow operations
+- [x] Prevent authenticated members from self-assigning or changing roles
+- [x] Add protected `/onboarding` and minimal `/account` routes without starting the product dashboard
+- [x] Add focused validation, redirect-safety, auth-interface, and database-security contract tests
+- [x] Document founder-owned Supabase setup, Auth redirects, migration application, and rollback cautions
+- [x] Pass formatting, lint, strict TypeScript, tests, and production build
+
+The code foundation for Phase 2 is complete. Live account testing still requires the founder to connect the Five Fifths Supabase project, apply the migration, configure Auth URLs, and set browser-safe environment values. Phase 3 is next: Pulse check-in, private history, deterministic recommendation foundations, and the personal Home experience.
