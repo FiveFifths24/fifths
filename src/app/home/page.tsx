@@ -11,6 +11,11 @@ import { ButtonLink } from "@/components/ui/button-link";
 import { PreviewState } from "@/components/ui/preview-state";
 import { StatusMessage } from "@/components/ui/status-message";
 import {
+  assembleCircleCards,
+  rankCircles,
+} from "@/features/circles/circle-data";
+import { CircleCard } from "@/features/circles/circle-card";
+import {
   assembleSessionCards,
   rankSessions,
 } from "@/features/sessions/session-data";
@@ -37,30 +42,42 @@ export default async function PersonalHomePage({
     return <AccountUnavailable />;
   }
 
-  const [pulseResult, sessionResult, modeResult, interestResult, parameters] =
-    await Promise.all([
-      supabase
-        .from("pulse_check_ins")
-        .select("*")
-        .gt("expires_at", "now")
-        .order("created_at", { ascending: false })
-        .limit(1)
-        .maybeSingle(),
-      supabase
-        .from("sessions")
-        .select("*")
-        .eq("status", "published")
-        .gt("starts_at", new Date().toISOString())
-        .order("starts_at")
-        .limit(20),
-      supabase.from("modes").select("id, slug, name").order("sort_order"),
-      supabase
-        .from("interests")
-        .select("id, name")
-        .eq("active", true)
-        .order("name"),
-      searchParams,
-    ]);
+  const [
+    pulseResult,
+    sessionResult,
+    circleResult,
+    modeResult,
+    interestResult,
+    parameters,
+  ] = await Promise.all([
+    supabase
+      .from("pulse_check_ins")
+      .select("*")
+      .gt("expires_at", "now")
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+    supabase
+      .from("sessions")
+      .select("*")
+      .eq("status", "published")
+      .gt("starts_at", new Date().toISOString())
+      .order("starts_at")
+      .limit(20),
+    supabase
+      .from("circles")
+      .select("*")
+      .eq("status", "published")
+      .order("name")
+      .limit(20),
+    supabase.from("modes").select("id, slug, name").order("sort_order"),
+    supabase
+      .from("interests")
+      .select("id, name")
+      .eq("active", true)
+      .order("name"),
+    searchParams,
+  ]);
 
   if (pulseResult.error) {
     return (
@@ -75,24 +92,36 @@ export default async function PersonalHomePage({
   const modes = modeResult.data ?? [];
   const mode = pulse ? modes.find((item) => item.id === pulse.mode_id) : null;
   const sessions = sessionResult.data ?? [];
-  const [sessionLinkResult, pulseInterestResult] = await Promise.all([
-    sessions.length
-      ? supabase
-          .from("session_interests")
-          .select("session_id, interest_id")
-          .in(
-            "session_id",
-            sessions.map((session) => session.id),
-          )
-      : Promise.resolve({ data: [], error: null }),
-    pulse
-      ? supabase
-          .from("pulse_check_in_interests")
-          .select("interest_id")
-          .eq("check_in_id", pulse.id)
-      : Promise.resolve({ data: [], error: null }),
-  ]);
+  const circles = circleResult.data ?? [];
+  const [sessionLinkResult, circleLinkResult, pulseInterestResult] =
+    await Promise.all([
+      sessions.length
+        ? supabase
+            .from("session_interests")
+            .select("session_id, interest_id")
+            .in(
+              "session_id",
+              sessions.map((session) => session.id),
+            )
+        : Promise.resolve({ data: [], error: null }),
+      circles.length
+        ? supabase
+            .from("circle_interests")
+            .select("circle_id, interest_id")
+            .in(
+              "circle_id",
+              circles.map((circle) => circle.id),
+            )
+        : Promise.resolve({ data: [], error: null }),
+      pulse
+        ? supabase
+            .from("pulse_check_in_interests")
+            .select("interest_id")
+            .eq("check_in_id", pulse.id)
+        : Promise.resolve({ data: [], error: null }),
+    ]);
   const links = sessionLinkResult.data ?? [];
+  const circleLinks = circleLinkResult.data ?? [];
   const pulseInput: PulseRecommendationInput | null =
     pulse && mode
       ? {
@@ -131,6 +160,29 @@ export default async function PersonalHomePage({
     interestResult.data ?? [],
     links,
     recommendations,
+  );
+  const circleRecommendations = pulseInput
+    ? rankCircles(pulseInput, circles, modes, circleLinks).slice(0, 3)
+    : [];
+  const recommendedCircleIds = new Set(
+    circleRecommendations.map((item) => item.candidate.id),
+  );
+  const recommendedCircles = circles.filter((circle) =>
+    recommendedCircleIds.has(circle.id),
+  );
+  const circleOrder = new Map(
+    circleRecommendations.map((item, index) => [item.candidate.id, index]),
+  );
+  recommendedCircles.sort(
+    (left, right) =>
+      (circleOrder.get(left.id) ?? 0) - (circleOrder.get(right.id) ?? 0),
+  );
+  const circleCards = assembleCircleCards(
+    recommendedCircles,
+    modes,
+    interestResult.data ?? [],
+    circleLinks,
+    circleRecommendations,
   );
 
   return (
@@ -302,6 +354,49 @@ export default async function PersonalHomePage({
         )}
         <ButtonLink className="mt-6" href="/home/sessions" variant="secondary">
           Explore all Sessions
+        </ButtonLink>
+      </section>
+
+      <section className="mt-10 rounded-[2rem] border border-rose-950/70 bg-neutral-900 p-6 sm:p-8">
+        <p className="text-xs font-bold tracking-[0.18em] text-rose-300 uppercase">
+          Circles
+        </p>
+        <h2 className="mt-3 text-3xl font-bold text-white">
+          Community matches with visible boundaries.
+        </h2>
+        <p className="mt-4 max-w-3xl text-base leading-7 text-neutral-400">
+          Eligible published Circles can now match the same private Pulse by
+          mode, energy, stimulation, social pace, format, and current interests.
+          Joining remains a separate, intentional choice.
+        </p>
+        {circleResult.error ? (
+          <StatusMessage className="mt-6" tone="error">
+            Circle matches need the Phase 5 migration. Your Pulse and Session
+            matches remain available.
+          </StatusMessage>
+        ) : circleCards.length ? (
+          <div className="mt-6 grid gap-5 lg:grid-cols-2">
+            {circleCards.map((card) => (
+              <CircleCard item={card} key={card.id} />
+            ))}
+          </div>
+        ) : (
+          <div className="mt-6">
+            <PreviewState
+              title={
+                pulse
+                  ? "No published Circle matches yet"
+                  : "Check your Pulse first"
+              }
+            >
+              {pulse
+                ? "No eligible live Circles are available. FIFTHS does not invent communities."
+                : "A current Pulse lets FIFTHS order eligible Circles with transparent reasons."}
+            </PreviewState>
+          </div>
+        )}
+        <ButtonLink className="mt-6" href="/home/circles" variant="secondary">
+          Explore all Circles
         </ButtonLink>
       </section>
     </div>

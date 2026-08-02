@@ -8,12 +8,12 @@ Implemented shared platform features:
 - `onboarding/` — identity setup validation, form UI, and the atomic onboarding RPC boundary
 - `pulse/` — Phase 3 private check-in validation, form UI, history presentation, and atomic write boundary
 - `sessions/` — Phase 4 discovery cards, Pulse adapter, hosting/registration validation, server actions, and attendance controls
+- `circles/` — Phase 5 discovery cards, Pulse adapter, membership validation, local-role actions, and moderation controls
 
-Shared deterministic recommendation ranking lives in `src/lib/recommendations` because every product will supply eligible candidates to it. Phase 4 adapts authorized, published Session records to that contract; the scorer still does not fetch data or bypass product eligibility.
+Shared deterministic recommendation ranking lives in `src/lib/recommendations` because every product supplies already-eligible candidates to it. Phase 5 adapts authorized, published Session and Circle records to that contract; the scorer still does not fetch data or bypass product eligibility.
 
 Planned feature folders:
 
-- `circles/` — communities, membership, and roles
 - `commons/` — creator opportunities and collaboration workflow
 - `realm/` — campaigns, applications, and game-master tools
 - `passport/` — verified participation ledger

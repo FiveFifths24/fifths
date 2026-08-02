@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import {
   Activity,
   CalendarRange,
+  HeartHandshake,
   House,
   TicketCheck,
   UserRound,
@@ -18,6 +19,12 @@ const items = [
     href: "/home/sessions",
     label: "Sessions",
     icon: CalendarRange,
+    nested: true,
+  },
+  {
+    href: "/home/circles",
+    label: "Circles",
+    icon: HeartHandshake,
     nested: true,
   },
   {

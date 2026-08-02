@@ -175,12 +175,99 @@ export type Database = {
         Update: never;
         Relationships: [];
       };
+      circles: {
+        Row: {
+          id: string;
+          created_by: string;
+          name: string;
+          slug: string;
+          summary: string;
+          description: string;
+          rules: string;
+          status: Database["public"]["Enums"]["circle_status"];
+          visibility: Database["public"]["Enums"]["circle_visibility"];
+          join_policy: Database["public"]["Enums"]["circle_join_policy"];
+          format: Database["public"]["Enums"]["participation_format"];
+          location_label: string | null;
+          mode_id: string;
+          minimum_energy: number;
+          maximum_energy: number;
+          stimulation_level: Database["public"]["Enums"]["pulse_stimulation_level"];
+          social_intensity: Database["public"]["Enums"]["pulse_social_intensity"];
+          published_at: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          created_by: string;
+          name: string;
+          slug: string;
+          summary: string;
+          description: string;
+          rules: string;
+          status?: Database["public"]["Enums"]["circle_status"];
+          visibility?: Database["public"]["Enums"]["circle_visibility"];
+          join_policy?: Database["public"]["Enums"]["circle_join_policy"];
+          format: Database["public"]["Enums"]["participation_format"];
+          location_label?: string | null;
+          mode_id: string;
+          minimum_energy: number;
+          maximum_energy: number;
+          stimulation_level: Database["public"]["Enums"]["pulse_stimulation_level"];
+          social_intensity: Database["public"]["Enums"]["pulse_social_intensity"];
+          published_at?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: never;
+        Relationships: [];
+      };
+      circle_interests: {
+        Row: { circle_id: string; interest_id: string; created_at: string };
+        Insert: {
+          circle_id: string;
+          interest_id: string;
+          created_at?: string;
+        };
+        Update: never;
+        Relationships: [];
+      };
+      circle_members: {
+        Row: {
+          circle_id: string;
+          user_id: string;
+          role: Database["public"]["Enums"]["circle_member_role"];
+          status: Database["public"]["Enums"]["circle_membership_status"];
+          requested_at: string | null;
+          invited_by: string | null;
+          joined_at: string | null;
+          ended_at: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          circle_id: string;
+          user_id: string;
+          role?: Database["public"]["Enums"]["circle_member_role"];
+          status: Database["public"]["Enums"]["circle_membership_status"];
+          requested_at?: string | null;
+          invited_by?: string | null;
+          joined_at?: string | null;
+          ended_at?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: never;
+        Relationships: [];
+      };
       sessions: {
         Row: {
           id: string;
           host_user_id: string;
           host_display_name: string;
           source_module: Database["public"]["Enums"]["session_source_module"];
+          circle_id: string | null;
           title: string;
           summary: string;
           description: string;
@@ -206,6 +293,7 @@ export type Database = {
           host_user_id: string;
           host_display_name: string;
           source_module?: Database["public"]["Enums"]["session_source_module"];
+          circle_id?: string | null;
           title: string;
           summary: string;
           description: string;
@@ -370,6 +458,97 @@ export type Database = {
             Database["public"]["Enums"]["attendance_status"] | null;
         }>;
       };
+      is_circle_member: {
+        Args: { p_circle_id: string };
+        Returns: boolean;
+      };
+      can_manage_circle: {
+        Args: { p_circle_id: string };
+        Returns: boolean;
+      };
+      can_moderate_circle: {
+        Args: { p_circle_id: string };
+        Returns: boolean;
+      };
+      can_host_circle: {
+        Args: { p_circle_id: string };
+        Returns: boolean;
+      };
+      can_view_circle: {
+        Args: { p_circle_id: string };
+        Returns: boolean;
+      };
+      create_circle: {
+        Args: {
+          p_name: string;
+          p_slug: string;
+          p_summary: string;
+          p_description: string;
+          p_rules: string;
+          p_visibility: Database["public"]["Enums"]["circle_visibility"];
+          p_join_policy: Database["public"]["Enums"]["circle_join_policy"];
+          p_format: Database["public"]["Enums"]["participation_format"];
+          p_location_label: string | null;
+          p_mode_id: string;
+          p_minimum_energy: number;
+          p_maximum_energy: number;
+          p_stimulation_level: Database["public"]["Enums"]["pulse_stimulation_level"];
+          p_social_intensity: Database["public"]["Enums"]["pulse_social_intensity"];
+          p_interest_ids: string[];
+        };
+        Returns: string;
+      };
+      set_circle_status: {
+        Args: {
+          p_circle_id: string;
+          p_status: Database["public"]["Enums"]["circle_status"];
+        };
+        Returns: undefined;
+      };
+      join_circle: {
+        Args: { p_circle_id: string };
+        Returns: Database["public"]["Enums"]["circle_membership_status"];
+      };
+      respond_to_circle_invitation: {
+        Args: { p_circle_id: string; p_accept: boolean };
+        Returns: undefined;
+      };
+      leave_circle: {
+        Args: { p_circle_id: string };
+        Returns: undefined;
+      };
+      invite_circle_member: {
+        Args: { p_circle_id: string; p_username: string };
+        Returns: undefined;
+      };
+      review_circle_membership: {
+        Args: { p_circle_id: string; p_user_id: string; p_decision: string };
+        Returns: undefined;
+      };
+      set_circle_member_role: {
+        Args: {
+          p_circle_id: string;
+          p_user_id: string;
+          p_role: Database["public"]["Enums"]["circle_member_role"];
+        };
+        Returns: undefined;
+      };
+      get_circle_roster: {
+        Args: { p_circle_id: string };
+        Returns: Array<{
+          user_id: string;
+          display_name: string;
+          username: string | null;
+          membership_status: Database["public"]["Enums"]["circle_membership_status"];
+          member_role: Database["public"]["Enums"]["circle_member_role"];
+          requested_at: string | null;
+          joined_at: string | null;
+        }>;
+      };
+      set_session_circle: {
+        Args: { p_session_id: string; p_circle_id: string | null };
+        Returns: undefined;
+      };
     };
     Enums: {
       app_role:
@@ -388,6 +567,12 @@ export type Database = {
       session_status: "draft" | "published" | "cancelled" | "completed";
       registration_status: "registered" | "cancelled";
       attendance_status: "attended" | "absent" | "excused";
+      circle_visibility: "public" | "private";
+      circle_join_policy: "open" | "request" | "invite_only";
+      circle_status: "draft" | "published" | "archived";
+      circle_member_role: "owner" | "host" | "moderator" | "member";
+      circle_membership_status:
+        "requested" | "invited" | "active" | "declined" | "removed" | "left";
     };
     CompositeTypes: Record<string, never>;
   };
@@ -401,3 +586,6 @@ export type PulseCheckIn =
   Database["public"]["Tables"]["pulse_check_ins"]["Row"];
 export type Session = Database["public"]["Tables"]["sessions"]["Row"];
 export type Registration = Database["public"]["Tables"]["registrations"]["Row"];
+export type Circle = Database["public"]["Tables"]["circles"]["Row"];
+export type CircleMember =
+  Database["public"]["Tables"]["circle_members"]["Row"];

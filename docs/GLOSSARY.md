@@ -1,9 +1,11 @@
 # Glossary
 
 - **Circle:** An organized community with members, roles, rules, and associated activity.
+- **Circle role:** A local owner, host, moderator, or member authorization scoped to one Circle; it never grants a platform role.
+- **Circle membership:** One caller-owned requested, invited, active, declined, removed, or left relationship with a Circle.
 - **Creator Commons:** The collaboration and opportunity marketplace; it does not process MVP payments.
 - **Fifth Realm:** Campaign and immersive-story coordination, not a virtual tabletop or rules library.
-- **Host:** A member authorized to create and manage Sessions and verify eligible attendance.
+- **Host:** A centrally trusted platform role that can create shared Sessions and Circle drafts; a Circle-local host remains scoped to associated activity in that Circle.
 - **Mode:** Play, Create, Connect, Focus, or Reset—the user's desired kind of participation.
 - **Onboarding:** The protected Phase 2 step that establishes a member's display identity, timezone, interests, skills, and adult-beta attestation.
 - **Platform role:** A centrally granted authorization label such as member, host, moderator, creator, game master, organization admin, or platform admin; members cannot self-assign roles.

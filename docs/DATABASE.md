@@ -1,6 +1,6 @@
 # Database Design
 
-Supabase PostgreSQL is the single source of truth. Phase 2 adds identity at `supabase/migrations/202608010001_phase_2_identity_foundation.sql`; Phase 3 adds Pulse at `supabase/migrations/202608020001_phase_3_pulse_foundation.sql`; Phase 4 adds shared Sessions at `supabase/migrations/202608030001_phase_4_sessions_foundation.sql`. Later modules extend this topology instead of building parallel systems.
+Supabase PostgreSQL is the single source of truth. Phase 2 adds identity at `supabase/migrations/202608010001_phase_2_identity_foundation.sql`; Phase 3 adds Pulse at `supabase/migrations/202608020001_phase_3_pulse_foundation.sql`; Phase 4 adds shared Sessions at `supabase/migrations/202608030001_phase_4_sessions_foundation.sql`; Phase 5 adds Circles at `supabase/migrations/202608040001_phase_5_circles_foundation.sql`. Later modules extend this topology instead of building parallel systems.
 
 ## Domain groups
 
@@ -9,7 +9,7 @@ Supabase PostgreSQL is the single source of truth. Phase 2 adds identity at `sup
 | Identity             | `profiles`, `user_roles`, `interests`, `profile_interests`, `skills`, `profile_skills`        |
 | Organizations        | `organizations`, `organization_members`                                                       |
 | Pulse                | `modes`, `pulse_check_ins`, `pulse_check_in_interests`                                        |
-| Circles              | `circles`, `circle_members`                                                                   |
+| Circles              | `circles`, `circle_interests`, `circle_members`                                               |
 | Shared sessions      | `sessions`, `session_interests`, `registrations`, `attendance_records`                        |
 | Creator Commons      | `creator_opportunities`, `opportunity_skills`, `opportunity_responses`, `saved_opportunities` |
 | Fifth Realm          | `realm_campaigns`, `campaign_applications`, `campaign_members`                                |
@@ -65,8 +65,8 @@ No medical diagnosis, date of birth, or precise home address is collected.
 1. **Phase 2 complete:** extensions, identity enums/helpers, profiles, roles, interests, skills, identity policies
 2. **Phase 3 complete:** Pulse enums, modes, private check-ins, current-interest joins, atomic write RPC, Pulse policies
 3. **Phase 4 complete:** shared Sessions, interest joins, capacity-safe registrations, attendance, audit, Session policies
-4. Organizations and Circles
-5. Commons and Realm
+4. **Phase 5 complete:** Circles, interest joins, membership roles/state, Session associations, moderation audit, Circle policies
+5. Organizations, Commons, and Realm
 6. Passport, feedback, reports, notifications, audit logs
 7. module-specific indexes, functions, triggers, and RLS policies
 8. clearly labeled demonstration seed data where a later phase requires it
@@ -123,3 +123,24 @@ Only `host` and `platform_admin` roles can call `create_session`. New records ar
 | `attendance_records` | Select own rows or managed-Session rows; mutate only through the audited RPC       |
 
 Anonymous clients receive no access. Authenticated clients receive select-only table grants. Static contract tests guard the policies, role checks, capacity lock, audit path, and absence of later product writes; live multi-user tests remain required.
+
+## Phase 5 implemented schema
+
+Phase 5 creates `circles`, `circle_interests`, and `circle_members`, then adds an optional `circle_id` to shared `sessions`. A Circle stores bounded identity, purpose, rules, visibility, join policy, participation format, broad access label, Pulse-fit signals, lifecycle state, and up to eight active interests. It stores no member posts, messages, diagnoses, precise address, report evidence, payment data, or Passport credit.
+
+Public Circles support open, request-reviewed, or invite-only membership. Private Circles are invite-only and become readable only to invited/active members or authorized moderators. Membership uses one unique `(circle_id, user_id)` record with audited status transitions: requested, invited, active, declined, removed, or left.
+
+Circle-local roles are owner, host, moderator, and member. They do not change `user_roles`. The creator becomes the fixed owner; Phase 5 intentionally has no ownership-transfer workflow. Owners/platform administrators control lifecycle and role assignment, moderators handle requests/invitations/removals, and local hosts can associate only draft Sessions they are separately authorized to manage.
+
+`set_session_circle` adds or removes a Circle association only while a Session is a draft. The Session source module changes atomically with the foreign key. `can_view_session` now prevents a private-Circle Session from becoming generally discoverable while preserving access for active Circle members, registered participants, and authorized Session managers.
+
+## Phase 5 RLS and grant summary
+
+| Table              | Authenticated access in Phase 5                                                |
+| ------------------ | ------------------------------------------------------------------------------ |
+| `circles`          | Select published public, caller-related private, or authorized managed Circles |
+| `circle_interests` | Select only when the parent Circle is visible                                  |
+| `circle_members`   | Select caller-owned membership or rows in a Circle the caller may moderate     |
+| `sessions`         | Existing Phase 4 select boundary plus private-Circle membership visibility     |
+
+Anonymous clients receive no access. Authenticated clients receive select-only Circle table grants. Every write uses a narrowly granted RPC, derives the actor from `auth.uid()`, validates transitions again in PostgreSQL, and records membership/role changes in `private.circle_membership_audit_logs`. Static contract tests do not replace founder-run multi-user RLS and audit validation.

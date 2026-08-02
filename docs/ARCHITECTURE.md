@@ -166,3 +166,30 @@ Published, upcoming Sessions are the first real candidate inventory for the Phas
 | Registration history | `/home/registrations`             | Caller-owned active and cancelled registrations                  |
 
 Phase 4 does not create Circle membership, Commons opportunities, Realm campaigns, organizations, Passport entries, payments, messaging, or an administrator UI. Those remain assigned to later phases.
+
+## Phase 5 Circles architecture
+
+Phase 5 activates Circles as the first product-specific community layer while preserving the shared identity, Pulse, and Session boundaries:
+
+- `src/features/circles` owns Circle validation, server actions, discovery cards, membership controls, and the adapter into the shared recommendation scorer.
+- `src/app/home/circles` owns protected discovery, details, the caller's membership/invitation history, trusted creation, and role-scoped management routes. The public `/circles` route remains the product overview.
+- `supabase/migrations/202608040001_phase_5_circles_foundation.sql` owns Circle lifecycle, visibility, join policies, membership state, local roles, Session association, private audit records, grants, and RLS.
+- Platform `host` or `platform_admin` roles can create private drafts. A Circle creator becomes its fixed Phase 5 owner; owner transfer is intentionally deferred.
+- Circle-local `host`, `moderator`, and `member` roles never modify or imply a platform role. Owners and platform administrators manage lifecycle and roles; Circle moderators review membership; Circle hosts can associate Sessions they are independently authorized to manage.
+- Public Circles can be open, request-based, or invite-only. Private Circles are invite-only and readable only by invited/active members or authorized moderators.
+- Circle membership and role changes run through RPCs and write to a private audit log. Authenticated clients have no direct Circle-table mutation grants.
+- Only draft Sessions can be associated or detached. Private-Circle Sessions inherit member-aware visibility after publication; registration and Session-management rules remain owned by Phase 4.
+
+Published, RLS-eligible Circles now adapt to the deterministic recommendation service using mode, energy, stimulation, social pace, format, and interests. The scorer receives no private membership queue, rules content, or numeric member-health signal and exposes no raw score.
+
+## Phase 5 routes
+
+| Area               | Route                             | Boundary                                                                   |
+| ------------------ | --------------------------------- | -------------------------------------------------------------------------- |
+| Circle discovery   | `/home/circles`                   | Eligible published Circles; Pulse-aware ordering when available            |
+| Circle details     | `/home/circles/[circleId]`        | RLS-authorized identity, rules, membership action, and associated Sessions |
+| Membership history | `/home/circles/memberships`       | Caller-owned active, requested, and invited memberships                    |
+| Circle creation    | `/home/circles/manage`            | Trusted platform role gate plus scoped managed-Circle list                 |
+| Circle management  | `/home/circles/manage/[circleId]` | Role-scoped lifecycle, invitations, membership, roles, and associations    |
+
+Phase 5 does not add organizations, feeds, chat, direct messages, reports, notifications, bans, global moderation queues, Commons opportunities, Realm campaigns, Passport entries, payments, or an administrator interface. Those remain assigned to later phases.
