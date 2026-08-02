@@ -47,5 +47,9 @@
     "tailwindcss": "latest",
     "typescript": "latest",
     "vitest": "latest"
+  },
+  "overrides": {
+    "postcss": "8.5.25",
+    "sharp": "0.35.3"
   }
 }
