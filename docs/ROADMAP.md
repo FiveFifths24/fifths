@@ -21,7 +21,7 @@ Checked items are complete in the repository. A phase begins only after the prio
 
 - [x] **Phase 1:** Public shell, design system, landing/module pages, auth page UI, legal drafts
 - [x] **Phase 2:** Supabase migrations, authentication, roles, RLS, onboarding
-- [ ] **Phase 3:** Pulse check-in, history, recommendation foundation, personal Home
+- [x] **Phase 3:** Pulse check-in, history, recommendation foundation, personal Home
 - [ ] **Phase 4:** Session discovery, hosting, registration, capacity, attendance foundation
 - [ ] **Phase 5:** Circle discovery, membership, roles, associations, moderation basics
 - [ ] **Phase 6:** Creator Commons creation, discovery, responses, acceptance, completion
@@ -62,4 +62,20 @@ Every meaningful phase must pass lint, type checking, tests, and a production bu
 - [x] Document founder-owned Supabase setup, Auth redirects, migration application, and rollback cautions
 - [x] Pass formatting, lint, strict TypeScript, tests, and production build
 
-The code foundation for Phase 2 is complete. Live account testing still requires the founder to connect the Five Fifths Supabase project, apply the migration, configure Auth URLs, and set browser-safe environment values. Phase 3 is next: Pulse check-in, private history, deterministic recommendation foundations, and the personal Home experience.
+The code foundation for Phase 2 is complete. Live account testing still requires the founder to connect the Five Fifths Supabase project, apply the migration, configure Auth URLs, and set browser-safe environment values.
+
+## Phase 3 — Pulse and personal Home foundation
+
+- [x] Add protected `/home`, `/home/pulse`, and `/home/pulse/history` routes
+- [x] Add reusable member navigation and preserve the public product routes
+- [x] Add modes and constrained private Pulse check-ins with a 24-hour matching window
+- [x] Store optional current interests without collecting diagnoses, notes, or precise location
+- [x] Route Pulse writes through one validated RPC scoped only to `auth.uid()`
+- [x] Enable default-deny RLS for modes, Pulse history, and Pulse-interest joins
+- [x] Add deterministic candidate ranking with stable tie-breaks and plain-language reasons
+- [x] Show real private state and an honest no-inventory recommendation state in personal Home
+- [x] Add focused validation, accessibility, ranking, and database-security contract tests
+- [x] Document Phase 3 architecture, privacy boundaries, founder setup, and intentional exclusions
+- [x] Pass formatting, lint, strict TypeScript, tests, and production build
+
+The Phase 3 code foundation is complete. Live validation still requires the founder-owned Supabase project, both ordered migrations, Auth configuration, and two-user RLS testing. Phase 4 is next: Session discovery, hosting, registration, capacity, and attendance foundations. Circle membership, Commons workflows, Realm campaigns, and Passport issuance remain in their later tracked phases.

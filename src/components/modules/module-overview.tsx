@@ -48,9 +48,9 @@ export function ModuleOverview({ module }: { module: PlatformModule }) {
             </div>
           </div>
           <PreviewState title="Product preview">
-            This page describes planned MVP behavior. Accounts, recommendations,
-            submissions, registrations, and verified activity are not available
-            in Phase 1.
+            This page describes planned MVP behavior. Account and Pulse
+            foundations are built; live product inventory, submissions,
+            registrations, and verified activity begin in later phases.
           </PreviewState>
         </Container>
       </section>

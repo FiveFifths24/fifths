@@ -118,3 +118,26 @@ The application never initializes a service-role client. Signup, login, password
 | Identity      | `/onboarding`, `/account`                                   | Protected profile setup and account readiness; not a product dashboard  |
 
 Phase 2 does not add Pulse check-ins, recommendations, Sessions, registrations, Circle membership, Creator Commons responses, Fifth Realm applications, or Passport entries. Those remain isolated to their later feature phases.
+
+## Phase 3 Pulse and personal Home architecture
+
+Phase 3 adds the first private product behavior while retaining the modular-monolith boundary:
+
+- `src/app/home` owns the protected personal experience. It does not replace the public `/pulse` overview or claim later module routes.
+- `src/components/member` owns the reusable member navigation and signed-in shell inside the existing root design system.
+- `src/features/pulse` owns check-in validation, the accessible form, the server action, and private-history presentation.
+- `src/lib/recommendations` owns a pure deterministic ranking function shared by future modules. Callers must fetch only eligible records; PostgreSQL remains responsible for privacy, publication status, capacity, and later location narrowing.
+- `supabase/migrations/202608020001_phase_3_pulse_foundation.sql` owns Pulse taxonomies, records, constraints, grants, the authenticated-user RPC, and RLS.
+
+The scoring service accepts normalized Pulse signals and candidate metadata, applies documented weights, uses start time and ID for stable ties, and returns ordered candidates with reason labels. Numeric scores stay internal. Phase 3 does not query Sessions, Circles, Commons, or Realm because those records do not exist yet.
+
+## Phase 3 routes
+
+| Area              | Route                 | Boundary                                                        |
+| ----------------- | --------------------- | --------------------------------------------------------------- |
+| Personal overview | `/home`               | Real account/Pulse state and honest no-inventory matching state |
+| Pulse check-in    | `/home/pulse`         | Private validated capacity signals; no diagnoses or free text   |
+| Pulse history     | `/home/pulse/history` | Latest 30 caller-owned records under RLS                        |
+| Identity          | `/account`            | Existing identity summary with a link back to personal Home     |
+
+The public `/pulse` route remains the product overview. Phase 4 owns Session discovery, hosting, registration, capacity, and attendance; none of those are stubbed as live behavior in Phase 3.

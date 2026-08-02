@@ -28,7 +28,7 @@ export async function loginAction(
     };
   }
 
-  let destination = safeRedirectPath(parsed.data.next, "/account");
+  let destination = safeRedirectPath(parsed.data.next, "/home");
   try {
     const supabase = await createClient();
     const { data, error } = await supabase.auth.signInWithPassword({

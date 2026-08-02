@@ -114,7 +114,7 @@ export function OnboardingForm({
 
       <ChoiceGrid
         choices={interests}
-        hint="Choose up to 12. These prepare future recommendations; Phase 3 will activate Pulse matching."
+        hint="Choose up to 12. These provide broad context; each Pulse can add today's interests."
         legend="What draws you in?"
         name="interestIds"
       />

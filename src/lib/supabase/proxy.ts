@@ -4,7 +4,12 @@ import { getSupabaseEnvironment } from "@/lib/env";
 import { safeRedirectPath } from "@/lib/auth/redirects";
 import type { Database } from "@/types/database";
 
-const protectedRoutes = ["/account", "/onboarding", "/update-password"];
+const protectedRoutes = [
+  "/account",
+  "/home",
+  "/onboarding",
+  "/update-password",
+];
 
 function isProtected(pathname: string) {
   return protectedRoutes.some(
@@ -45,7 +50,7 @@ export async function updateSession(request: NextRequest) {
       "next",
       safeRedirectPath(
         `${request.nextUrl.pathname}${request.nextUrl.search}`,
-        "/account",
+        "/home",
       ),
     );
     return NextResponse.redirect(loginUrl);

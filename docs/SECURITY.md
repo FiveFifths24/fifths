@@ -34,6 +34,20 @@ Security uses overlapping controls: server authorization prevents inappropriate 
 
 RLS still requires integration testing against the founder-owned Supabase project with multiple real test users before public beta. Static contract tests in this repository detect missing Phase 2 RLS statements and accidental member role-mutation grants, but they do not replace database execution tests.
 
+## Phase 3 implemented controls
+
+- `/home` and all nested Pulse routes join the existing protected-route list and verify the current user and completed onboarding on the server.
+- Pulse form data is validated by Zod and independently constrained inside PostgreSQL.
+- Check-in writes use `record_pulse_check_in`, which derives its target only from `auth.uid()`; callers cannot supply or impersonate a user ID.
+- Authenticated members receive select-only table grants. They cannot directly insert, update, or delete Pulse rows or joins.
+- Pulse-history RLS allows only the owning member to read a check-in. Interest rows authorize through their parent check-in.
+- A check-in can affect matching for no more than 24 hours, using timestamps created inside the database.
+- Pulse collects no diagnosis, health note, free text, date of birth, or precise location. Optional travel preference is only a broad maximum distance.
+- Recommendation ranking is deterministic application code. It receives already-eligible candidates, exposes reason labels rather than raw scores, and uses no AI or machine learning.
+- Personal Home renders no demonstration sessions, communities, opportunities, or campaigns as if they were live.
+
+The Phase 3 migration also needs multi-user positive and negative RLS tests in the founder-owned non-production project. Static SQL contract tests are safeguards, not proof that the deployed database and Auth configuration are correct.
+
 ## Rate-limiting plan
 
 Before public beta, rate-limit authentication, password reset, content creation, applications, responses, registrations, and reports. Prefer platform/database-backed limits that work across serverless instances. Add bot protection to abuse-prone public forms. This is documented but intentionally not implemented before endpoints exist.
