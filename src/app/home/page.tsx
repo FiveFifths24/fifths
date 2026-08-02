@@ -10,6 +10,12 @@ import { AccountUnavailable } from "@/components/account/account-unavailable";
 import { ButtonLink } from "@/components/ui/button-link";
 import { PreviewState } from "@/components/ui/preview-state";
 import { StatusMessage } from "@/components/ui/status-message";
+import {
+  assembleSessionCards,
+  rankSessions,
+} from "@/features/sessions/session-data";
+import { SessionCard } from "@/features/sessions/session-card";
+import type { PulseRecommendationInput } from "@/lib/recommendations/types";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = { title: "Your Home" };
@@ -31,16 +37,30 @@ export default async function PersonalHomePage({
     return <AccountUnavailable />;
   }
 
-  const [pulseResult, parameters] = await Promise.all([
-    supabase
-      .from("pulse_check_ins")
-      .select("*")
-      .gt("expires_at", "now")
-      .order("created_at", { ascending: false })
-      .limit(1)
-      .maybeSingle(),
-    searchParams,
-  ]);
+  const [pulseResult, sessionResult, modeResult, interestResult, parameters] =
+    await Promise.all([
+      supabase
+        .from("pulse_check_ins")
+        .select("*")
+        .gt("expires_at", "now")
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle(),
+      supabase
+        .from("sessions")
+        .select("*")
+        .eq("status", "published")
+        .gt("starts_at", new Date().toISOString())
+        .order("starts_at")
+        .limit(20),
+      supabase.from("modes").select("id, slug, name").order("sort_order"),
+      supabase
+        .from("interests")
+        .select("id, name")
+        .eq("active", true)
+        .order("name"),
+      searchParams,
+    ]);
 
   if (pulseResult.error) {
     return (
@@ -52,15 +72,66 @@ export default async function PersonalHomePage({
   }
 
   const pulse = pulseResult.data;
-  const mode = pulse
-    ? (
-        await supabase
-          .from("modes")
-          .select("name")
-          .eq("id", pulse.mode_id)
-          .maybeSingle()
-      ).data
-    : null;
+  const modes = modeResult.data ?? [];
+  const mode = pulse ? modes.find((item) => item.id === pulse.mode_id) : null;
+  const sessions = sessionResult.data ?? [];
+  const [sessionLinkResult, pulseInterestResult] = await Promise.all([
+    sessions.length
+      ? supabase
+          .from("session_interests")
+          .select("session_id, interest_id")
+          .in(
+            "session_id",
+            sessions.map((session) => session.id),
+          )
+      : Promise.resolve({ data: [], error: null }),
+    pulse
+      ? supabase
+          .from("pulse_check_in_interests")
+          .select("interest_id")
+          .eq("check_in_id", pulse.id)
+      : Promise.resolve({ data: [], error: null }),
+  ]);
+  const links = sessionLinkResult.data ?? [];
+  const pulseInput: PulseRecommendationInput | null =
+    pulse && mode
+      ? {
+          modeSlug: mode.slug,
+          energyLevel: pulse.energy_level,
+          stimulationLevel: pulse.stimulation_level,
+          socialIntensity: pulse.social_intensity,
+          preferredFormat: pulse.preferred_format,
+          availableMinutes: pulse.available_minutes,
+          maximumTravelMiles: pulse.maximum_travel_miles,
+          interestIds: (pulseInterestResult.data ?? []).map(
+            (item) => item.interest_id,
+          ),
+        }
+      : null;
+  const recommendations = pulseInput
+    ? rankSessions(pulseInput, sessions, modes, links).slice(0, 3)
+    : [];
+  const recommendedSessionIds = new Set(
+    recommendations.map((item) => item.candidate.id),
+  );
+  const recommendedSessions = sessions.filter((session) =>
+    recommendedSessionIds.has(session.id),
+  );
+  const recommendationOrder = new Map(
+    recommendations.map((item, index) => [item.candidate.id, index]),
+  );
+  recommendedSessions.sort(
+    (left, right) =>
+      (recommendationOrder.get(left.id) ?? 0) -
+      (recommendationOrder.get(right.id) ?? 0),
+  );
+  const recommendationCards = assembleSessionCards(
+    recommendedSessions,
+    modes,
+    interestResult.data ?? [],
+    links,
+    recommendations,
+  );
 
   return (
     <div>
@@ -196,21 +267,42 @@ export default async function PersonalHomePage({
           Recommendation foundation
         </p>
         <h2 className="mt-3 text-3xl font-bold text-white">
-          Explainable matches, ready for real inventory.
+          Explainable matches from real Sessions.
         </h2>
         <p className="mt-4 max-w-3xl text-base leading-7 text-neutral-400">
-          Phase 3 can rank eligible future experiences by mode, energy,
-          stimulation, social pace, format, time, interests, and broad travel
-          range. It returns plain-language reasons and never exposes a raw
-          score.
+          FIFTHS ranks eligible published Sessions by mode, energy, stimulation,
+          social pace, format, time, interests, and broad travel range. Matching
+          returns plain-language reasons and never exposes a raw score.
         </p>
-        <div className="mt-6">
-          <PreviewState title="No live recommendations yet">
-            Sessions and product discovery begin in Phase 4 and later. This
-            state will not invent events, communities, opportunities, or
-            campaigns before they exist.
-          </PreviewState>
-        </div>
+        {sessionResult.error ? (
+          <StatusMessage className="mt-6" tone="error">
+            Session matches need the Phase 4 migration. Your existing Pulse
+            remains private and available.
+          </StatusMessage>
+        ) : recommendationCards.length ? (
+          <div className="mt-6 grid gap-5 lg:grid-cols-2">
+            {recommendationCards.map((card) => (
+              <SessionCard item={card} key={card.id} />
+            ))}
+          </div>
+        ) : (
+          <div className="mt-6">
+            <PreviewState
+              title={
+                pulse
+                  ? "No published Session matches yet"
+                  : "Check your Pulse first"
+              }
+            >
+              {pulse
+                ? "No eligible live Sessions are available. FIFTHS does not invent events or other product activity."
+                : "A current Pulse lets FIFTHS order eligible Sessions with transparent reasons."}
+            </PreviewState>
+          </div>
+        )}
+        <ButtonLink className="mt-6" href="/home/sessions" variant="secondary">
+          Explore all Sessions
+        </ButtonLink>
       </section>
     </div>
   );

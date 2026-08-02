@@ -1,6 +1,6 @@
 # Database Design
 
-Supabase PostgreSQL is the single source of truth. Phase 2 adds identity at `supabase/migrations/202608010001_phase_2_identity_foundation.sql`; Phase 3 extends it with `supabase/migrations/202608020001_phase_3_pulse_foundation.sql`. Later modules extend this topology instead of building parallel systems.
+Supabase PostgreSQL is the single source of truth. Phase 2 adds identity at `supabase/migrations/202608010001_phase_2_identity_foundation.sql`; Phase 3 adds Pulse at `supabase/migrations/202608020001_phase_3_pulse_foundation.sql`; Phase 4 adds shared Sessions at `supabase/migrations/202608030001_phase_4_sessions_foundation.sql`. Later modules extend this topology instead of building parallel systems.
 
 ## Domain groups
 
@@ -64,8 +64,8 @@ No medical diagnosis, date of birth, or precise home address is collected.
 
 1. **Phase 2 complete:** extensions, identity enums/helpers, profiles, roles, interests, skills, identity policies
 2. **Phase 3 complete:** Pulse enums, modes, private check-ins, current-interest joins, atomic write RPC, Pulse policies
-3. Organizations and shared Sessions
-4. Circles
+3. **Phase 4 complete:** shared Sessions, interest joins, capacity-safe registrations, attendance, audit, Session policies
+4. Organizations and Circles
 5. Commons and Realm
 6. Passport, feedback, reports, notifications, audit logs
 7. module-specific indexes, functions, triggers, and RLS policies
@@ -102,3 +102,24 @@ Anonymous clients receive no access. Static contract tests guard the presence of
 ## Recommendation contract
 
 The Phase 3 application scorer accepts candidates already filtered for authorization and eligibility. It weighs matching mode, energy, stimulation, social pace, format, time, current interests, and broad travel range. Sorting is deterministic: internal score, then earliest valid start, then stable candidate ID. The returned object strips the numeric score and exposes only ordered candidates and plain-language reasons. Phase 8 remains responsible for the unified production ranking review after all candidate modules exist.
+
+## Phase 4 implemented schema
+
+Phase 4 creates `sessions`, `session_interests`, `registrations`, and `attendance_records`. A Session records a host snapshot, lifecycle status, format, start/end time, supported timezone, bounded capacity, broad venue/access label, one Pulse mode, an energy range, stimulation, social pace, and up to eight active interests. It stores no precise address, private meeting link, payment data, diagnosis, or participant note.
+
+The `confirmed_registration_count` lives on the Session row so every authorized discovery read sees the same capacity state. `register_for_session` locks that row, validates publication and timing, checks the count, upserts the caller's unique registration, and increments within one transaction. Cancellation locks the same row and safely decrements. There is no Phase 4 waitlist.
+
+Only `host` and `platform_admin` roles can call `create_session`. New records are drafts. `set_session_status` allows only draft-to-published, draft/published-to-cancelled, and ended published-to-completed transitions. Members cannot self-assign roles or mutate Session tables directly.
+
+`get_session_roster` exposes registered member display identity only to the owning host or platform administrator. `mark_session_attendance` requires an active registration and a started, published/completed Session. A private trigger-backed audit table records the old/new attendance state and actor. No attendance action creates Passport credit.
+
+## Phase 4 RLS and grant summary
+
+| Table                | Authenticated access in Phase 4                                                    |
+| -------------------- | ---------------------------------------------------------------------------------- |
+| `sessions`           | Select published Sessions, managed Sessions, and Sessions tied to own registration |
+| `session_interests`  | Select only when the parent Session is visible                                     |
+| `registrations`      | Select own rows or managed-Session roster rows; mutate only through RPCs           |
+| `attendance_records` | Select own rows or managed-Session rows; mutate only through the audited RPC       |
+
+Anonymous clients receive no access. Authenticated clients receive select-only table grants. Static contract tests guard the policies, role checks, capacity lock, audit path, and absence of later product writes; live multi-user tests remain required.

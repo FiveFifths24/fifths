@@ -22,7 +22,7 @@ Checked items are complete in the repository. A phase begins only after the prio
 - [x] **Phase 1:** Public shell, design system, landing/module pages, auth page UI, legal drafts
 - [x] **Phase 2:** Supabase migrations, authentication, roles, RLS, onboarding
 - [x] **Phase 3:** Pulse check-in, history, recommendation foundation, personal Home
-- [ ] **Phase 4:** Session discovery, hosting, registration, capacity, attendance foundation
+- [x] **Phase 4:** Session discovery, hosting, registration, capacity, attendance foundation
 - [ ] **Phase 5:** Circle discovery, membership, roles, associations, moderation basics
 - [ ] **Phase 6:** Creator Commons creation, discovery, responses, acceptance, completion
 - [ ] **Phase 7:** Fifth Realm campaigns, discovery, applications, members, GM tools
@@ -78,4 +78,20 @@ The code foundation for Phase 2 is complete. Live account testing still requires
 - [x] Document Phase 3 architecture, privacy boundaries, founder setup, and intentional exclusions
 - [x] Pass formatting, lint, strict TypeScript, tests, and production build
 
-The Phase 3 code foundation is complete. Live validation still requires the founder-owned Supabase project, both ordered migrations, Auth configuration, and two-user RLS testing. Phase 4 is next: Session discovery, hosting, registration, capacity, and attendance foundations. Circle membership, Commons workflows, Realm campaigns, and Passport issuance remain in their later tracked phases.
+The Phase 3 code foundation remains complete. Its live validation still requires the founder-owned Supabase project, ordered migrations, Auth configuration, and two-user RLS testing. Phase 4 builds on that boundary without changing Pulse privacy. Circle membership, Commons workflows, Realm campaigns, and Passport issuance remain in their later tracked phases.
+
+## Phase 4 — Shared Sessions foundation
+
+- [x] Add protected Session discovery, detail, registration, and registration-history routes
+- [x] Add trusted-role hosting with draft, publish, cancel, and complete lifecycle controls
+- [x] Add shared Session records with Pulse-fit metadata and interest joins
+- [x] Adapt published Sessions to the existing deterministic scorer with reason labels
+- [x] Enforce registration uniqueness and capacity atomically under a database row lock
+- [x] Add host-only roster access and audited attendance marking for active registrants
+- [x] Enable default-deny RLS and keep all Session writes behind validated RPCs
+- [x] Preserve honest empty states with no demonstration or seeded member activity
+- [x] Add focused schema, component, recommendation-adapter, navigation, and database-security tests
+- [x] Document Phase 4 architecture, founder setup, role boundaries, and intentional exclusions
+- [x] Pass formatting, lint, strict TypeScript, tests, and production build
+
+The Phase 4 code foundation is complete. Live validation still requires the founder-owned non-production Supabase project, all three ordered migrations, a deliberately assigned host role, and multi-user capacity/RLS testing. Phase 5 is next: Circle discovery, membership, roles, associations, and moderation basics. Commons workflows, Realm campaigns, Passport issuance, payments, and messaging remain in later phases.

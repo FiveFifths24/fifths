@@ -60,3 +60,18 @@ Before public beta, rate-limit authentication, password reset, content creation,
 - Establish report escalation, account suspension, and evidence-retention procedures.
 - Configure security headers, monitoring, backup/recovery, dependency scanning, and secret rotation.
 - Complete privacy and legal review; the application is 18+ and will not collect diagnoses or precise home addresses.
+
+## Phase 4 implemented controls
+
+- All Session routes remain inside the protected, onboarding-gated member shell; the public product overview routes are unchanged.
+- Only centrally assigned `host` and `platform_admin` roles can create Sessions. Members have no role-mutation grant and no application path can self-elevate.
+- New Sessions begin as private drafts. Publication, cancellation, and completion run through constrained status transitions in a security-definer function.
+- Authenticated clients receive select-only grants on Session, interest, registration, and attendance tables. Every write uses a narrowly granted RPC that derives or validates the actor with `auth.uid()`.
+- Registration locks the Session row before evaluating capacity, so concurrent requests cannot overbook the authoritative count. The `(session_id, user_id)` primary key prevents duplicates.
+- A member can read only their registration and attendance records. Session hosts and platform administrators can read a roster only for Sessions they are authorized to manage.
+- Attendance requires an active registration and a started, published/completed Session. Every insert or change is recorded in `private.session_attendance_audit_logs`, which has no anonymous or authenticated access.
+- Session discovery reads only published future records. Draft and cancelled Sessions remain visible only to authorized managers or members tied to a registration for lifecycle clarity.
+- Hosting stores a broad venue/access label only. Phase 4 does not collect precise addresses, private meeting links, participant notes, diagnosis data, payment data, or messages.
+- Attendance does not award Passport credit. Verified, idempotent issuance remains isolated to Phase 9.
+
+The Phase 4 migration still requires founder-run contention tests and positive/negative RLS tests with a host, two members, and an unrelated account. Static SQL contract tests protect the checked-in intent but do not prove the deployed database configuration.

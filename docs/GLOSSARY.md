@@ -12,6 +12,8 @@
 - **Pulse:** A private daily capacity check-in that drives transparent recommendations.
 - **Personal Home:** The protected member overview that shows current Pulse state and future explainable matches without replacing public product pages.
 - **Recommendation reason:** A plain-language explanation for why an eligible record matches a Pulse; internal numeric weights are not shown to members.
+- **Registration:** A caller-owned, capacity-counted place in a published Session; it can be cancelled but not duplicated.
+- **Attendance record:** A host- or administrator-marked Session outcome for an active registrant, audited privately and not yet eligible for Passport credit.
 - **RLS:** Row Level Security—database rules deciding which records a signed-in user may read or change.
 - **Session:** A scheduled experience shared across modules, such as a sprint, game night, workshop, or campaign meeting.
 - **Supabase publishable key:** Browser-safe project identifier whose access is constrained by RLS.

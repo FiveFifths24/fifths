@@ -141,3 +141,28 @@ The scoring service accepts normalized Pulse signals and candidate metadata, app
 | Identity          | `/account`            | Existing identity summary with a link back to personal Home     |
 
 The public `/pulse` route remains the product overview. Phase 4 owns Session discovery, hosting, registration, capacity, and attendance; none of those are stubbed as live behavior in Phase 3.
+
+## Phase 4 shared Sessions architecture
+
+Phase 4 activates the shared scheduled-experience layer without claiming a product-specific workflow:
+
+- `src/features/sessions` owns Session validation, host and member actions, cards, registration controls, and the adapter into the shared recommendation scorer.
+- `src/app/home/sessions` owns authenticated discovery, detail, hosting, and host-management routes. `/home/registrations` owns the caller's private registration history.
+- `supabase/migrations/202608030001_phase_4_sessions_foundation.sql` owns Session lifecycle, capacity, registration, attendance, functions, grants, audit records, and RLS.
+- Hosts create private drafts through a role-authorized RPC. Publishing, cancelling, and completion use constrained status transitions; authenticated clients receive no direct table mutation grants.
+- Registration locks the Session row before checking and incrementing authoritative capacity. Re-registration is idempotent, cancellation decrements capacity safely, and Phase 4 deliberately has no waitlist.
+- Attendance is available only after a Session begins, only for active registrants, and only to the Session host or a platform administrator. Every insert or change is written to a private audit table. It does not issue Passport credit.
+
+Published, upcoming Sessions are the first real candidate inventory for the Phase 3 scorer. The adapter supplies mode, energy, stimulation, social pace, format, duration, time, and interests; it does not bypass RLS, publication state, timing, or capacity checks. Personal Home shows at most three matches, while discovery orders the complete eligible result set. Both use reason labels without exposing numeric scores.
+
+## Phase 4 routes
+
+| Area                 | Route                             | Boundary                                                         |
+| -------------------- | --------------------------------- | ---------------------------------------------------------------- |
+| Session discovery    | `/home/sessions`                  | Published future Sessions; Pulse-aware ordering when available   |
+| Session details      | `/home/sessions/[sessionId]`      | Authorized record details and caller-owned registration controls |
+| Hosting              | `/home/sessions/host`             | Host/platform-admin role gate and draft creation                 |
+| Session management   | `/home/sessions/host/[sessionId]` | Host/admin lifecycle, roster, and audited attendance controls    |
+| Registration history | `/home/registrations`             | Caller-owned active and cancelled registrations                  |
+
+Phase 4 does not create Circle membership, Commons opportunities, Realm campaigns, organizations, Passport entries, payments, messaging, or an administrator UI. Those remain assigned to later phases.
