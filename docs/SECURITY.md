@@ -115,3 +115,19 @@ The Phase 5 migration still requires founder-run positive/negative RLS tests wit
 - No save, response, acceptance, or completion action creates payment, a contract, a message, a notification, a report, or Passport credit.
 
 The Phase 6 migration still requires founder-run positive/negative RLS and concurrency tests with a creator, Circle host, two responders, accepted participant, and unrelated member. Static SQL contract tests protect the checked-in intent but do not prove the deployed database configuration, audit behavior, or contention handling.
+
+## Phase 7 implemented controls
+
+- All live Realm routes remain inside the protected, onboarding-gated member shell. Public `/realm` and `/realm/safety` pages remain informational.
+- Only centrally assigned game masters and platform administrators create campaigns. Optional Circle association also requires active local owner or host authority; no campaign action changes platform or Circle roles.
+- Every campaign begins as a private draft. Recruiting, active, completed, and cancelled transitions use constrained RPCs; authenticated clients receive no direct Realm-table write grants.
+- Private-Circle campaigns and their interest rows are unreadable to unrelated members. A Circle cannot be archived while associated campaigns are recruiting or active.
+- Applications are readable only by the applicant and authorized campaign manager. The narrow manager RPC returns display identity, structured application fields, experience comfort, status, and submission time—not email or private profile data.
+- Application content is length-bounded and explicitly excludes contact information, diagnoses, precise addresses, copyrighted rules, and proprietary game content. Safety acknowledgement is required in both application validation and the database constraint.
+- Acceptance locks the campaign row before checking authoritative player capacity. Unique campaign/application and campaign/member keys prevent duplicates; accepted membership and capacity update occur atomically.
+- Game-master, application, and membership state changes write to private audit tables unavailable to anonymous and authenticated clients.
+- Only compatible private draft Sessions can be associated. Published Realm Sessions require active campaign membership, prior registration, or Session-management authority.
+- Realm recommendations receive only RLS-eligible campaign records and bounded matching metadata. Private applications, safety acknowledgements, and roster state never enter ranking; raw scores remain hidden.
+- No campaign, application, membership, or Session association creates a Passport entry, payment, message, report, notification, VTT record, or copyrighted game record.
+
+The Phase 7 migration still requires founder-run positive/negative RLS and concurrency tests with a game master, Circle host, two applicants, active player, departed player, and unrelated member. Static SQL contract tests protect checked-in intent but do not prove deployed database configuration, audit behavior, or contention handling.

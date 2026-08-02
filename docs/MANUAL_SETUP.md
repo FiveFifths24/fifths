@@ -1,6 +1,6 @@
 # Manual Founder Setup
 
-No credentials are needed to review public pages. The following founder-owned steps are required before live Phase 6 account and product testing. Never paste credentials into an issue, pull request, chat, or committed file.
+No credentials are needed to review public pages. The following founder-owned steps are required before live Phase 7 account and product testing. Never paste credentials into an issue, pull request, chat, or committed file.
 
 ## 1. Supabase
 
@@ -16,12 +16,13 @@ No credentials are needed to review public pages. The following founder-owned st
    - `supabase/migrations/202608030001_phase_4_sessions_foundation.sql`
    - `supabase/migrations/202608040001_phase_5_circles_foundation.sql`
    - `supabase/migrations/202608050001_phase_6_creator_commons_foundation.sql`
+   - `supabase/migrations/202608060001_phase_7_fifth_realm_foundation.sql`
 8. In **Authentication → URL Configuration**, set the Site URL to the deployed application origin and add these redirect URLs for local and preview/production environments:
    - `http://localhost:3000/auth/callback`
    - `https://<your-preview-domain>/auth/callback`
    - `https://<your-production-domain>/auth/callback`
 9. Keep email confirmations enabled. Configure custom SMTP before beta; the default Supabase sender is for limited testing only.
-10. Create at least eight ordinary test accounts: one trusted owner/host, one trusted platform moderator, one trusted creator, one future local host, two Commons responders, one invitee/applicant, and one unrelated member. Complete onboarding for each. After offline trust review, copy the host, moderator, and creator Auth user UUIDs and assign only the required platform roles in the non-production SQL Editor:
+10. Create at least ten ordinary test accounts: one trusted owner/host, one trusted platform moderator, one trusted creator, one trusted game master, one future local host, two Commons responders, two Realm applicants, and one unrelated member. Complete onboarding for each. After offline trust review, copy the host, moderator, creator, and game-master Auth user UUIDs and assign only the required platform roles in the non-production SQL Editor:
 
     ```sql
     insert into public.user_roles (user_id, role, granted_by)
@@ -34,6 +35,10 @@ No credentials are needed to review public pages. The following founder-owned st
 
     insert into public.user_roles (user_id, role, granted_by)
     values ('<CREATOR_USER_UUID>'::uuid, 'creator', null)
+    on conflict (user_id, role) do nothing;
+
+    insert into public.user_roles (user_id, role, granted_by)
+    values ('<GAME_MASTER_USER_UUID>'::uuid, 'game_master', null)
     on conflict (user_id, role) do nothing;
     ```
 
@@ -52,9 +57,16 @@ No credentials are needed to review public pages. The following founder-owned st
 21. Withdraw an accepted response before completion. Confirm the authoritative count decrements and a deadline-active opportunity closed as filled reopens. Accept another responder, close the opportunity, and verify neither side alone can complete the response.
 22. Confirm completion first as the participant and then as the authorized manager. Confirm the response and opportunity complete only after both confirmations, and confirm no Passport entry, payment, contract, message, notification, report, or upload is created.
 23. Confirm a Circle with a published Commons opportunity cannot be archived. Close or cancel the opportunity through an allowed transition before testing archival again.
-24. Regenerate `src/types/database.ts` from the applied schema and review the diff before committing any generated update.
+24. Create one independent Realm draft as the trusted game master. Confirm the ordinary member cannot create a campaign and the draft is absent from discovery before recruiting opens.
+25. Try to associate the campaign with a Circle the game master does not host; confirm denial. Grant local host authority through the existing Circle owner flow, create a separate Circle-scoped draft, and confirm private-Circle campaign data is unreadable to the unrelated member.
+26. Open recruiting on a campaign with one player seat. Submit applications from both Realm applicants, confirm each applicant can read only their own application, the game master can read the scoped queue, and the unrelated member cannot read application rows.
+27. Attempt near-simultaneous acceptance for both applicants. Exactly one acceptance must succeed; `active_player_count` must remain one, the accepted application must have one active player membership, and all campaign/application/membership changes must reach the private Phase 7 audit tables.
+28. Confirm the accepted player can read the active roster but cannot read other application answers. Exercise applicant withdrawal, active-player departure, and GM removal, verifying authoritative capacity decrements once and never becomes negative.
+29. Create a compatible private Session draft, associate it with the campaign, publish it, and confirm only active campaign members, prior registrants, and authorized Session managers can read it. Confirm a published Session cannot be newly associated and a Circle with recruiting or active Realm work cannot be archived.
+30. Complete a campaign and confirm that no Passport entry, payment, message, report, notification, virtual tabletop record, copyrighted rule content, or proprietary game content is created.
+31. Regenerate `src/types/database.ts` from the applied schema and review the diff before committing any generated update.
 
-Do not paste or commit the database password, JWT signing key, or service-role key. Phase 6 does not require a service-role key.
+Do not paste or commit the database password, JWT signing key, or service-role key. Phase 7 does not require a service-role key.
 
 ## 2. Vercel
 
@@ -77,4 +89,4 @@ cp .env.example .env.local
 npm run check
 ```
 
-With the non-production Supabase values configured, manually verify signup email confirmation, login, logout, password recovery, expired/invalid callback handling, onboarding, duplicate username handling, direct protected-route access, Pulse validation and history, 24-hour expiration, Session lifecycle controls, capacity contention, registration cancellation/re-entry, attendance authorization/audit, Circle lifecycle and discovery, public/private membership boundaries, invitation/request handling, local-role authorization, membership audit, draft Session association, Creator Commons draft/public lifecycle, private saves and responses, acceptance contention, withdrawal, mutual completion, and cross-user RLS denial. Do not apply any migration to production until these checks and a legal/privacy review are complete.
+With the non-production Supabase values configured, manually verify signup email confirmation, login, logout, password recovery, expired/invalid callback handling, onboarding, duplicate username handling, direct protected-route access, Pulse validation and history, 24-hour expiration, Session lifecycle controls, capacity contention, registration cancellation/re-entry, attendance authorization/audit, Circle lifecycle and discovery, public/private membership boundaries, invitation/request handling, local-role authorization, membership audit, draft Session association, Creator Commons draft/public lifecycle, private saves and responses, acceptance contention, withdrawal, mutual completion, Realm draft/recruiting/active/completed lifecycle, private applications, campaign-capacity contention, membership departure/removal, Realm Session visibility, originality boundaries, and cross-user RLS denial. Do not apply any migration to production until these checks and a legal/privacy review are complete.

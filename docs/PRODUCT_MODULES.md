@@ -64,6 +64,16 @@ Opportunity managers review responses privately and accept only while authoritat
 
 Phase 6 does not process payment, escrow, contracts, tax information, uploads, equipment transfers, private links, direct messages, organizations, reports, notifications, Realm campaigns, or Passport entries.
 
+## Phase 7 Fifth Realm implementation
+
+Fifth Realm now provides protected discovery for original, system-neutral campaign profiles with genre, tone, cadence, experience welcome, safety expectations, player capacity, and bounded Pulse-fit metadata. Eligible recruiting campaigns participate in the existing deterministic scorer without exposing raw scores, private applications, or roster data.
+
+Centrally assigned game masters and platform administrators create private drafts. A campaign can be associated with a Circle only when its game master is also an active Circle owner or host. Private-Circle campaigns inherit member-aware visibility, and a Circle cannot be archived while associated Realm work is recruiting or active.
+
+Applications remain private to each applicant and the campaign manager. Acceptance locks the campaign row, verifies seats, changes application state, creates active player membership, and increments authoritative capacity in one transaction. Game masters have a private application queue and active roster; players can leave, and managers can remove players, with all state changes audited.
+
+Campaign meetings reuse shared Sessions. Only compatible private draft Sessions can be associated, and published Realm Sessions are readable only by active campaign members, registrants, or authorized Session managers. Phase 7 does not reproduce rules, host virtual tabletops, collect copyrighted content, add chat or payments, or issue Passport credit.
+
 ## Phase 1 public representation
 
 Each module has a public overview route explaining audience, planned capabilities, Pulse and Passport connections, MVP scope, and explicit exclusions. Preview notices distinguish planned behavior from live functionality. All five routes use one shared `ModuleOverview` component so product storytelling stays cohesive while allowing restrained module accents.

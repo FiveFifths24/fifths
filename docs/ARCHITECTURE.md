@@ -220,3 +220,28 @@ Published, RLS-eligible opportunities adapt to the deterministic recommendation 
 | Opportunity management | `/home/commons/manage/[opportunityId]` | Lifecycle, private response review, selection, and creator confirmation |
 
 Phase 6 does not add organizations, payment or escrow, contracts, uploads, direct messaging, public applicant profiles, reports, notifications, Realm campaigns, or Passport entries. Those remain assigned to later phases.
+
+## Phase 7 Fifth Realm architecture
+
+Phase 7 activates original campaign coordination without becoming a rules repository or virtual tabletop:
+
+- `src/features/fifth-realm` owns campaign validation, cards, application forms, server actions, and the Realm recommendation adapter.
+- `src/app/home/realm` owns protected discovery, detail, caller-owned application and membership history, game-master creation, and campaign management. The public `/realm` and `/realm/safety` routes remain informational drafts.
+- `supabase/migrations/202608060001_phase_7_fifth_realm_foundation.sql` owns campaign lifecycle, interest joins, private applications, membership, Session association, private audit records, grants, and RLS.
+- A centrally assigned `game_master` or `platform_admin` creates each private draft and becomes its fixed game master. Optional Circle association additionally requires local Circle owner or host authority.
+- Application acceptance locks the campaign row before capacity evaluation and creates active player membership atomically. Application answers never enter discovery or recommendation ranking.
+- Only compatible private draft Sessions can become Realm Sessions. After publication, campaign membership becomes the Realm visibility boundary while existing Session registration and manager lifecycle access remain intact.
+
+Published, RLS-eligible recruiting campaigns adapt to the deterministic recommendation service using mode, energy, stimulation, social pace, format, typical session duration, application deadline, and interests. Phase 8 remains responsible for reviewing cross-module weights and explanation behavior now that all four candidate modules exist.
+
+## Phase 7 routes
+
+| Area                  | Route                             | Boundary                                                              |
+| --------------------- | --------------------------------- | --------------------------------------------------------------------- |
+| Realm discovery       | `/home/realm`                     | Eligible recruiting/active campaigns; Pulse-aware ordering            |
+| Campaign details      | `/home/realm/[campaignId]`        | RLS-authorized profile, safety context, application, and Sessions     |
+| Participation history | `/home/realm/applications`        | Caller-owned applications and active campaign memberships             |
+| Campaign creation     | `/home/realm/manage`              | Game-master/platform-admin gate plus optional scoped Circle authority |
+| Campaign management   | `/home/realm/manage/[campaignId]` | Lifecycle, private applications, roster, and Session associations     |
+
+Phase 7 does not add proprietary rules, copyrighted setting content, character builders, maps, dice, virtual tabletops, private meeting links, chat, payments, reports, notifications, organizations, or Passport entries. Those are later work or explicit exclusions.

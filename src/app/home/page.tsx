@@ -20,6 +20,11 @@ import {
   assembleOpportunityCards,
   rankOpportunities,
 } from "@/features/creator-commons/opportunity-data";
+import { CampaignCard } from "@/features/fifth-realm/campaign-card";
+import {
+  assembleCampaignCards,
+  rankCampaigns,
+} from "@/features/fifth-realm/campaign-data";
 import {
   assembleSessionCards,
   rankSessions,
@@ -52,6 +57,7 @@ export default async function PersonalHomePage({
     sessionResult,
     circleResult,
     opportunityResult,
+    campaignResult,
     modeResult,
     interestResult,
     skillResult,
@@ -84,6 +90,13 @@ export default async function PersonalHomePage({
       .gt("response_deadline", new Date().toISOString())
       .order("response_deadline")
       .limit(20),
+    supabase
+      .from("realm_campaigns")
+      .select("*")
+      .eq("status", "recruiting")
+      .gt("application_deadline", new Date().toISOString())
+      .order("application_deadline")
+      .limit(20),
     supabase.from("modes").select("id, slug, name").order("sort_order"),
     supabase
       .from("interests")
@@ -109,11 +122,13 @@ export default async function PersonalHomePage({
   const sessions = sessionResult.data ?? [];
   const circles = circleResult.data ?? [];
   const opportunities = opportunityResult.data ?? [];
+  const campaigns = campaignResult.data ?? [];
   const [
     sessionLinkResult,
     circleLinkResult,
     opportunitySkillLinkResult,
     opportunityInterestLinkResult,
+    campaignInterestLinkResult,
     pulseInterestResult,
   ] = await Promise.all([
     sessions.length
@@ -150,6 +165,15 @@ export default async function PersonalHomePage({
           .in(
             "opportunity_id",
             opportunities.map((opportunity) => opportunity.id),
+          )
+      : Promise.resolve({ data: [], error: null }),
+    campaigns.length
+      ? supabase
+          .from("campaign_interests")
+          .select("campaign_id, interest_id")
+          .in(
+            "campaign_id",
+            campaigns.map((campaign) => campaign.id),
           )
       : Promise.resolve({ data: [], error: null }),
     pulse
@@ -254,6 +278,34 @@ export default async function PersonalHomePage({
     opportunitySkillLinkResult.data ?? [],
     opportunityInterestLinks,
     opportunityRecommendations,
+  );
+  const campaignRecommendations = pulseInput
+    ? rankCampaigns(
+        pulseInput,
+        campaigns,
+        modes,
+        campaignInterestLinkResult.data ?? [],
+      ).slice(0, 3)
+    : [];
+  const recommendedCampaignIds = new Set(
+    campaignRecommendations.map((item) => item.candidate.id),
+  );
+  const recommendedCampaigns = campaigns.filter((campaign) =>
+    recommendedCampaignIds.has(campaign.id),
+  );
+  const campaignOrder = new Map(
+    campaignRecommendations.map((item, index) => [item.candidate.id, index]),
+  );
+  recommendedCampaigns.sort(
+    (left, right) =>
+      (campaignOrder.get(left.id) ?? 0) - (campaignOrder.get(right.id) ?? 0),
+  );
+  const campaignCards = assembleCampaignCards(
+    recommendedCampaigns,
+    modes,
+    interestResult.data ?? [],
+    campaignInterestLinkResult.data ?? [],
+    campaignRecommendations,
   );
 
   return (
@@ -511,6 +563,50 @@ export default async function PersonalHomePage({
         )}
         <ButtonLink className="mt-6" href="/home/commons" variant="secondary">
           Explore Creator Commons
+        </ButtonLink>
+      </section>
+
+      <section className="mt-10 rounded-[2rem] border border-indigo-950 bg-neutral-900 p-6 sm:p-8">
+        <p className="text-xs font-bold tracking-[0.18em] text-indigo-300 uppercase">
+          Fifth Realm
+        </p>
+        <h2 className="mt-3 text-3xl font-bold text-white">
+          Campaigns matched with context and consent.
+        </h2>
+        <p className="mt-4 max-w-3xl text-base leading-7 text-neutral-400">
+          Eligible recruiting campaigns can match your mode, energy,
+          stimulation, social pace, format, available time, and interests.
+          Applications remain private and require explicit safety
+          acknowledgement.
+        </p>
+        {campaignResult.error ? (
+          <StatusMessage className="mt-6" tone="error">
+            Fifth Realm matches need the Phase 7 migration. Existing ecosystem
+            experiences remain available.
+          </StatusMessage>
+        ) : campaignCards.length ? (
+          <div className="mt-6 grid gap-5 lg:grid-cols-2">
+            {campaignCards.map((card) => (
+              <CampaignCard item={card} key={card.id} />
+            ))}
+          </div>
+        ) : (
+          <div className="mt-6">
+            <PreviewState
+              title={
+                pulse
+                  ? "No recruiting campaign matches yet"
+                  : "Check your Pulse first"
+              }
+            >
+              {pulse
+                ? "No eligible live Fifth Realm campaigns are available. FIFTHS does not invent campaigns."
+                : "A current Pulse lets FIFTHS order eligible campaigns with transparent reasons."}
+            </PreviewState>
+          </div>
+        )}
+        <ButtonLink className="mt-6" href="/home/realm" variant="secondary">
+          Explore Fifth Realm
         </ButtonLink>
       </section>
     </div>

@@ -9,6 +9,7 @@ const base: Session = {
   host_display_name: "Jordan",
   source_module: "platform",
   circle_id: null,
+  campaign_id: null,
   title: "Quiet creative sprint",
   summary: "A focused making session.",
   description: "A focused making session with a clear beginning and ending.",

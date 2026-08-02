@@ -4,7 +4,7 @@
 
 FIFTHS is a mobile-first community platform connecting five products—Pulse, Circles, Creator Commons, Fifth Realm, and Passport—through one account, profile, recommendation system, and Supabase backend.
 
-This repository has completed **Phase 6: Creator Commons foundation**. It includes the public experience, secure identity and onboarding, private Pulse check-ins, personal Home, shared Sessions, Circles, and real Creator Commons discovery, saves, private responses, capacity-safe acceptance, and two-sided completion confirmation. The founder-owned Supabase project must be connected and all five ordered migrations applied before live testing. Fifth Realm begins in Phase 7.
+This repository has completed **Phase 7: Fifth Realm foundation**. It includes the public experience, secure identity and onboarding, private Pulse check-ins, personal Home, shared Sessions, Circles, Creator Commons, and real Fifth Realm campaign discovery, private applications, capacity-safe membership, game-master tools, and Realm Session associations. The founder-owned Supabase project must be connected and all six ordered migrations applied before live testing. The unified recommendation review begins in Phase 8.
 
 ## Prerequisites
 
@@ -57,11 +57,11 @@ Run all four together with `npm run check`.
 - Tailwind CSS for mobile-first styling
 - Reusable public shell, form, feedback, module, and document components
 - Cookie-based Supabase SSR clients and Next.js Proxy session refresh
-- Versioned PostgreSQL identity, Pulse, Session, Circle, and Creator Commons migrations with default-deny Row Level Security
-- Zod-validated email/password, onboarding, Pulse, Session, Circle, and Commons actions
-- Deterministic, explainable Session, Circle, and Commons scoring without AI or raw user-facing scores
+- Versioned PostgreSQL identity, Pulse, Session, Circle, Creator Commons, and Fifth Realm migrations with default-deny Row Level Security
+- Zod-validated email/password, onboarding, Pulse, Session, Circle, Commons, and Realm actions
+- Deterministic, explainable Session, Circle, Commons, and Realm scoring without AI or raw user-facing scores
 - Zod at every external-data boundary
 - Vitest and React Testing Library for unit/component tests
 - ESLint and Prettier for consistency
 
-Public and protected routes live under `src/app`; shared design-system and member-shell components live under `src/components`; authentication, onboarding, Pulse, Sessions, Circles, and Creator Commons live under `src/features`; shared recommendation rules live under `src/lib/recommendations`. Future product code follows the module boundaries documented in `docs/ARCHITECTURE.md`.
+Public and protected routes live under `src/app`; shared design-system and member-shell components live under `src/components`; authentication, onboarding, Pulse, Sessions, Circles, Creator Commons, and Fifth Realm live under `src/features`; shared recommendation rules live under `src/lib/recommendations`. Future product code follows the module boundaries documented in `docs/ARCHITECTURE.md`.

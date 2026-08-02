@@ -8,6 +8,9 @@
 - **Opportunity response:** A private expression of interest readable only by its owner and authorized opportunity managers; it can be submitted, accepted, declined, withdrawn, or completed.
 - **Confirmed completion:** Separate acknowledgement from an accepted participant and an authorized opportunity manager; Phase 6 records it without issuing Passport credit.
 - **Fifth Realm:** Campaign and immersive-story coordination, not a virtual tabletop or rules library.
+- **Realm campaign:** An original, system-neutral campaign profile with a game master, bounded recruiting lifecycle, safety expectations, player capacity, Pulse-fit context, and shared Sessions.
+- **Campaign application:** A private, safety-acknowledged expression of interest readable only by its applicant and authorized campaign manager.
+- **Campaign membership:** An authoritative active, left, or removed relationship between a game master or player and one Realm campaign.
 - **Host:** A centrally trusted platform role that can create shared Sessions and Circle drafts; a Circle-local host remains scoped to associated activity in that Circle.
 - **Mode:** Play, Create, Connect, Focus, or Reset—the user's desired kind of participation.
 - **Onboarding:** The protected Phase 2 step that establishes a member's display identity, timezone, interests, skills, and adult-beta attestation.
