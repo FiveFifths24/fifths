@@ -1,6 +1,6 @@
 # Database Design
 
-Supabase PostgreSQL is the single source of truth. Phase 2 adds identity at `supabase/migrations/202608010001_phase_2_identity_foundation.sql`; Phase 3 adds Pulse at `supabase/migrations/202608020001_phase_3_pulse_foundation.sql`; Phase 4 adds shared Sessions at `supabase/migrations/202608030001_phase_4_sessions_foundation.sql`; Phase 5 adds Circles at `supabase/migrations/202608040001_phase_5_circles_foundation.sql`; Phase 6 adds Creator Commons at `supabase/migrations/202608050001_phase_6_creator_commons_foundation.sql`. Later modules extend this topology instead of building parallel systems.
+Supabase PostgreSQL is the single source of truth. Phase 2 adds identity at `supabase/migrations/202608010001_phase_2_identity_foundation.sql`; Phase 3 adds Pulse at `supabase/migrations/202608020001_phase_3_pulse_foundation.sql`; Phase 4 adds shared Sessions at `supabase/migrations/202608030001_phase_4_sessions_foundation.sql`; Phase 5 adds Circles at `supabase/migrations/202608040001_phase_5_circles_foundation.sql`; Phase 6 adds Creator Commons at `supabase/migrations/202608050001_phase_6_creator_commons_foundation.sql`; Phase 7 adds Fifth Realm at `supabase/migrations/202608060001_phase_7_fifth_realm_foundation.sql`. Later modules extend this topology instead of building parallel systems.
 
 ## Domain groups
 
@@ -12,7 +12,7 @@ Supabase PostgreSQL is the single source of truth. Phase 2 adds identity at `sup
 | Circles              | `circles`, `circle_interests`, `circle_members`                                                                        |
 | Shared sessions      | `sessions`, `session_interests`, `registrations`, `attendance_records`                                                 |
 | Creator Commons      | `creator_opportunities`, `opportunity_skills`, `opportunity_interests`, `opportunity_responses`, `saved_opportunities` |
-| Fifth Realm          | `realm_campaigns`, `campaign_applications`, `campaign_members`                                                         |
+| Fifth Realm          | `realm_campaigns`, `campaign_interests`, `campaign_applications`, `campaign_members`                                   |
 | Passport             | `passport_entries`                                                                                                     |
 | Trust and engagement | feedback tables, `reports`, `notifications`, `audit_logs`                                                              |
 
@@ -67,12 +67,35 @@ No medical diagnosis, date of birth, or precise home address is collected.
 3. **Phase 4 complete:** shared Sessions, interest joins, capacity-safe registrations, attendance, audit, Session policies
 4. **Phase 5 complete:** Circles, interest joins, membership roles/state, Session associations, moderation audit, Circle policies
 5. **Phase 6 complete:** Creator Commons opportunities, taxonomy joins, saves, private responses, acceptance, completion, and audit
-6. Organizations and Realm
-7. Passport, feedback, reports, notifications, audit logs
-8. module-specific indexes, functions, triggers, and RLS policies
-9. clearly labeled demonstration seed data where a later phase requires it
+6. **Phase 7 complete:** Fifth Realm campaigns, interest joins, private applications, capacity-safe membership, Session associations, and audit
+7. Organizations
+8. Passport, feedback, reports, notifications, audit logs
+9. module-specific indexes, functions, triggers, and RLS policies
+10. clearly labeled demonstration seed data where a later phase requires it
 
 Generated database TypeScript types will be committed after the first migration and regenerated whenever schema changes.
+
+## Phase 7 implemented schema
+
+Phase 7 creates `realm_campaigns`, `campaign_interests`, `campaign_applications`, and `campaign_members`, then adds nullable `sessions.campaign_id`. Campaign profiles store original, system-neutral premise and discovery metadata, a constrained lifecycle, broad access and cadence labels, safety expectations, authoritative player capacity, one Pulse mode, energy bounds, stimulation, social pace, and one to eight active interests.
+
+Every campaign begins as a private draft. Only centrally assigned game masters and platform administrators can create one; Circle association additionally requires local owner or host authority. The creator receives one fixed active `game_master` membership. Recruiting, active, completed, and cancelled transitions run through a validated RPC.
+
+Applications are private, unique per campaign/member, and require explicit safety acknowledgement. `review_campaign_application` locks the campaign row before checking seats, then accepts the application, creates active player membership, and increments `active_player_count` in one transaction. Player departure and manager removal use the same authoritative row lock before decrementing capacity.
+
+Realm Session association is limited to compatible private drafts managed by the caller. A database constraint keeps `campaign_id` and `source_module = 'realm'` consistent. Published Realm Sessions require active campaign membership, an existing registration, or Session-manager authority.
+
+## Phase 7 RLS and grant summary
+
+| Table                   | Authenticated access in Phase 7                                            |
+| ----------------------- | -------------------------------------------------------------------------- |
+| `realm_campaigns`       | Select eligible published/member/manager records; writes through RPCs only |
+| `campaign_interests`    | Select only when the parent campaign is visible                            |
+| `campaign_applications` | Select own rows or managed-campaign rows; writes through RPCs only         |
+| `campaign_members`      | Select within active membership or manager scope; writes through RPCs only |
+| private Realm audit     | No anonymous or authenticated access                                       |
+
+No Phase 7 function inserts Passport credit, rule content, VTT state, payments, messages, reports, or notifications.
 
 ## Phase 3 implemented schema
 

@@ -268,6 +268,7 @@ export type Database = {
           host_display_name: string;
           source_module: Database["public"]["Enums"]["session_source_module"];
           circle_id: string | null;
+          campaign_id: string | null;
           title: string;
           summary: string;
           description: string;
@@ -294,6 +295,7 @@ export type Database = {
           host_display_name: string;
           source_module?: Database["public"]["Enums"]["session_source_module"];
           circle_id?: string | null;
+          campaign_id?: string | null;
           title: string;
           summary: string;
           description: string;
@@ -497,6 +499,138 @@ export type Database = {
           opportunity_id: string;
           user_id: string;
           created_at?: string;
+        };
+        Update: never;
+        Relationships: [];
+      };
+      realm_campaigns: {
+        Row: {
+          id: string;
+          created_by: string;
+          game_master_display_name: string;
+          circle_id: string | null;
+          title: string;
+          summary: string;
+          premise: string;
+          genre: string;
+          tone: string;
+          safety_expectations: string;
+          status: Database["public"]["Enums"]["realm_campaign_status"];
+          format: Database["public"]["Enums"]["participation_format"];
+          location_label: string | null;
+          schedule_summary: string;
+          timezone: string;
+          estimated_session_minutes: number;
+          application_deadline: string;
+          player_capacity: number;
+          active_player_count: number;
+          experience_level: Database["public"]["Enums"]["campaign_experience_level"];
+          mode_id: string;
+          minimum_energy: number;
+          maximum_energy: number;
+          stimulation_level: Database["public"]["Enums"]["pulse_stimulation_level"];
+          social_intensity: Database["public"]["Enums"]["pulse_social_intensity"];
+          published_at: string | null;
+          recruiting_closed_at: string | null;
+          completed_at: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          created_by: string;
+          game_master_display_name: string;
+          circle_id?: string | null;
+          title: string;
+          summary: string;
+          premise: string;
+          genre: string;
+          tone: string;
+          safety_expectations: string;
+          status?: Database["public"]["Enums"]["realm_campaign_status"];
+          format: Database["public"]["Enums"]["participation_format"];
+          location_label?: string | null;
+          schedule_summary: string;
+          timezone: string;
+          estimated_session_minutes: number;
+          application_deadline: string;
+          player_capacity: number;
+          active_player_count?: number;
+          experience_level: Database["public"]["Enums"]["campaign_experience_level"];
+          mode_id: string;
+          minimum_energy: number;
+          maximum_energy: number;
+          stimulation_level: Database["public"]["Enums"]["pulse_stimulation_level"];
+          social_intensity: Database["public"]["Enums"]["pulse_social_intensity"];
+          published_at?: string | null;
+          recruiting_closed_at?: string | null;
+          completed_at?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: never;
+        Relationships: [];
+      };
+      campaign_interests: {
+        Row: { campaign_id: string; interest_id: string; created_at: string };
+        Insert: {
+          campaign_id: string;
+          interest_id: string;
+          created_at?: string;
+        };
+        Update: never;
+        Relationships: [];
+      };
+      campaign_applications: {
+        Row: {
+          campaign_id: string;
+          user_id: string;
+          motivation: string;
+          availability: string;
+          experience_level: Database["public"]["Enums"]["campaign_experience_level"];
+          safety_acknowledged: boolean;
+          status: Database["public"]["Enums"]["campaign_application_status"];
+          submitted_at: string;
+          accepted_at: string | null;
+          declined_at: string | null;
+          withdrawn_at: string | null;
+          updated_at: string;
+        };
+        Insert: {
+          campaign_id: string;
+          user_id: string;
+          motivation: string;
+          availability: string;
+          experience_level: Database["public"]["Enums"]["campaign_experience_level"];
+          safety_acknowledged?: boolean;
+          status?: Database["public"]["Enums"]["campaign_application_status"];
+          submitted_at?: string;
+          accepted_at?: string | null;
+          declined_at?: string | null;
+          withdrawn_at?: string | null;
+          updated_at?: string;
+        };
+        Update: never;
+        Relationships: [];
+      };
+      campaign_members: {
+        Row: {
+          campaign_id: string;
+          user_id: string;
+          role: Database["public"]["Enums"]["campaign_member_role"];
+          status: Database["public"]["Enums"]["campaign_membership_status"];
+          joined_at: string;
+          ended_at: string | null;
+          updated_at: string;
+        };
+        Insert: {
+          campaign_id: string;
+          user_id: string;
+          role?: Database["public"]["Enums"]["campaign_member_role"];
+          status?: Database["public"]["Enums"]["campaign_membership_status"];
+          joined_at?: string;
+          ended_at?: string | null;
+          updated_at?: string;
         };
         Update: never;
         Relationships: [];
@@ -768,6 +902,105 @@ export type Database = {
           completed_at: string | null;
         }>;
       };
+      can_manage_realm_campaign: {
+        Args: { p_campaign_id: string };
+        Returns: boolean;
+      };
+      can_view_realm_campaign: {
+        Args: { p_campaign_id: string };
+        Returns: boolean;
+      };
+      is_campaign_member: {
+        Args: { p_campaign_id: string };
+        Returns: boolean;
+      };
+      create_realm_campaign: {
+        Args: {
+          p_circle_id: string | null;
+          p_title: string;
+          p_summary: string;
+          p_premise: string;
+          p_genre: string;
+          p_tone: string;
+          p_safety_expectations: string;
+          p_format: Database["public"]["Enums"]["participation_format"];
+          p_location_label: string | null;
+          p_schedule_summary: string;
+          p_timezone: string;
+          p_estimated_session_minutes: number;
+          p_application_deadline_local: string;
+          p_player_capacity: number;
+          p_experience_level: Database["public"]["Enums"]["campaign_experience_level"];
+          p_mode_id: string;
+          p_minimum_energy: number;
+          p_maximum_energy: number;
+          p_stimulation_level: Database["public"]["Enums"]["pulse_stimulation_level"];
+          p_social_intensity: Database["public"]["Enums"]["pulse_social_intensity"];
+          p_interest_ids: string[];
+        };
+        Returns: string;
+      };
+      set_realm_campaign_status: {
+        Args: {
+          p_campaign_id: string;
+          p_status: Database["public"]["Enums"]["realm_campaign_status"];
+        };
+        Returns: undefined;
+      };
+      submit_campaign_application: {
+        Args: {
+          p_campaign_id: string;
+          p_motivation: string;
+          p_availability: string;
+          p_experience_level: Database["public"]["Enums"]["campaign_experience_level"];
+          p_safety_acknowledged: boolean;
+        };
+        Returns: undefined;
+      };
+      withdraw_campaign_application: {
+        Args: { p_campaign_id: string };
+        Returns: undefined;
+      };
+      review_campaign_application: {
+        Args: { p_campaign_id: string; p_user_id: string; p_decision: string };
+        Returns: undefined;
+      };
+      leave_realm_campaign: {
+        Args: { p_campaign_id: string };
+        Returns: undefined;
+      };
+      remove_campaign_member: {
+        Args: { p_campaign_id: string; p_user_id: string };
+        Returns: undefined;
+      };
+      get_realm_campaign_roster: {
+        Args: { p_campaign_id: string };
+        Returns: Array<{
+          user_id: string;
+          display_name: string;
+          username: string | null;
+          member_role: Database["public"]["Enums"]["campaign_member_role"];
+          membership_status: Database["public"]["Enums"]["campaign_membership_status"];
+          joined_at: string;
+        }>;
+      };
+      get_realm_campaign_applications: {
+        Args: { p_campaign_id: string };
+        Returns: Array<{
+          user_id: string;
+          display_name: string;
+          username: string | null;
+          motivation: string;
+          availability: string;
+          experience_level: Database["public"]["Enums"]["campaign_experience_level"];
+          application_status: Database["public"]["Enums"]["campaign_application_status"];
+          submitted_at: string;
+        }>;
+      };
+      set_session_campaign: {
+        Args: { p_session_id: string; p_campaign_id: string | null };
+        Returns: undefined;
+      };
     };
     Enums: {
       app_role:
@@ -799,6 +1032,13 @@ export type Database = {
       creator_opportunity_close_reason: "manual" | "filled" | "deadline";
       opportunity_response_status:
         "submitted" | "accepted" | "declined" | "withdrawn" | "completed";
+      realm_campaign_status:
+        "draft" | "recruiting" | "active" | "completed" | "cancelled";
+      campaign_experience_level: "new" | "comfortable" | "experienced";
+      campaign_application_status:
+        "submitted" | "accepted" | "declined" | "withdrawn";
+      campaign_member_role: "game_master" | "player";
+      campaign_membership_status: "active" | "left" | "removed";
     };
     CompositeTypes: Record<string, never>;
   };
@@ -819,3 +1059,9 @@ export type CreatorOpportunity =
   Database["public"]["Tables"]["creator_opportunities"]["Row"];
 export type OpportunityResponse =
   Database["public"]["Tables"]["opportunity_responses"]["Row"];
+export type RealmCampaign =
+  Database["public"]["Tables"]["realm_campaigns"]["Row"];
+export type CampaignApplication =
+  Database["public"]["Tables"]["campaign_applications"]["Row"];
+export type CampaignMember =
+  Database["public"]["Tables"]["campaign_members"]["Row"];

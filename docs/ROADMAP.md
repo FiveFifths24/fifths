@@ -25,7 +25,7 @@ Checked items are complete in the repository. A phase begins only after the prio
 - [x] **Phase 4:** Session discovery, hosting, registration, capacity, attendance foundation
 - [x] **Phase 5:** Circle discovery, membership, roles, associations, moderation basics
 - [x] **Phase 6:** Creator Commons creation, discovery, responses, acceptance, completion
-- [ ] **Phase 7:** Fifth Realm campaigns, discovery, applications, members, GM tools
+- [x] **Phase 7:** Fifth Realm campaigns, discovery, applications, members, GM tools
 - [ ] **Phase 8:** Unified recommendation ranking and explanation tests
 - [ ] **Phase 9:** Verified Passport entries and duplicate prevention
 - [ ] **Phase 10:** Feedback, reports, notifications, moderation, admin controls
@@ -129,3 +129,22 @@ The Phase 5 code foundation remains complete. Its live validation still requires
 - [x] Pass formatting, lint, strict TypeScript, tests, production build, and dependency audits
 
 The Phase 6 code foundation is complete. Live validation still requires the founder-owned non-production Supabase project, all five ordered migrations, deliberately assigned creator and Circle-host roles, and multi-user discovery, response-privacy, capacity, withdrawal, audit, and completion-confirmation testing. Phase 7 is next: Fifth Realm campaigns, discovery, applications, members, and game-master tools. Organizations, Passport issuance, reports, notifications, messaging, contracts, files, and payments remain later work.
+
+## Phase 7 — Fifth Realm foundation
+
+- [x] Add protected campaign discovery, detail, application-history, creation, and game-master routes
+- [x] Add game-master-role private draft creation with optional scoped Circle association
+- [x] Store system-neutral premise, genre, tone, cadence, safety expectations, experience welcome, and bounded Pulse-fit metadata
+- [x] Keep applications structured and private with explicit safety acknowledgement
+- [x] Lock the campaign row before acceptance and create authoritative membership atomically
+- [x] Add applicant withdrawal, player departure, GM removal, roster access, and constrained campaign lifecycle controls
+- [x] Audit campaign, application, and membership state changes in private tables
+- [x] Preserve private-Circle visibility and block archival while Realm work is recruiting or active
+- [x] Associate compatible private draft Sessions and restrict published Realm Sessions to active campaign members
+- [x] Adapt eligible recruiting campaigns to the deterministic Pulse scorer with reason labels
+- [x] Keep every Realm write behind validated RPCs with default-deny RLS
+- [x] Add focused schema, component, recommendation-adapter, navigation, and database-security tests
+- [x] Document Phase 7 architecture, founder setup, trust boundaries, originality limits, and intentional exclusions
+- [x] Pass formatting, lint, strict TypeScript, tests, production build, and dependency audits
+
+The Phase 7 code foundation is complete. Live validation still requires the founder-owned non-production Supabase project, all six ordered migrations, deliberately assigned game-master and Circle-host roles, and multi-user discovery, application-privacy, capacity, membership, audit, Circle-visibility, and Realm-Session tests. Phase 8 is next: the unified recommendation ranking and explanation review. Organizations, Passport issuance, reports, notifications, messaging, copyrighted game content, virtual tabletop tools, files, and payments remain later or excluded work.

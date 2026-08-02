@@ -143,7 +143,7 @@ export const platformModules: PlatformModule[] = [
     eyebrow: "Enter worlds through people",
     purpose: "Campaign and immersive-story coordination.",
     summary:
-      "Fifth Realm will help players, game masters, and worldbuilders discover compatible campaigns and coordinate participation around clear expectations.",
+      "Fifth Realm helps players, game masters, and worldbuilders discover compatible original campaigns and coordinate participation around clear expectations.",
     audience: [
       "Tabletop players",
       "Game masters",
@@ -151,7 +151,7 @@ export const platformModules: PlatformModule[] = [
     ],
     capabilities: [
       "Discover campaigns",
-      "Filter by system and experience",
+      "Understand genre, tone, cadence, and experience welcome",
       "Apply and coordinate campaign sessions",
     ],
     mvpIncludes: [
@@ -172,6 +172,7 @@ export const platformModules: PlatformModule[] = [
     icon: Gamepad2,
     accent: "text-violet-300",
     glow: "from-violet-950/70 to-neutral-950",
+    memberHref: "/home/realm",
   },
   {
     slug: "passport",

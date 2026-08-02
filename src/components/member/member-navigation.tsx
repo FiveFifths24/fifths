@@ -8,6 +8,7 @@ import {
   CalendarRange,
   HeartHandshake,
   House,
+  Orbit,
   TicketCheck,
   UserRound,
 } from "lucide-react";
@@ -32,6 +33,12 @@ const items = [
     href: "/home/commons",
     label: "Commons",
     icon: Aperture,
+    nested: true,
+  },
+  {
+    href: "/home/realm",
+    label: "Realm",
+    icon: Orbit,
     nested: true,
   },
   {
