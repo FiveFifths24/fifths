@@ -48,6 +48,13 @@ RLS still requires integration testing against the founder-owned Supabase projec
 
 The Phase 3 migration also needs multi-user positive and negative RLS tests in the founder-owned non-production project. Static SQL contract tests are safeguards, not proof that the deployed database and Auth configuration are correct.
 
+## Dependency supply-chain controls
+
+- Keep `package-lock.json` committed and use `npm ci` in automated environments so reviewed dependency resolution is reproducible.
+- Run `npm audit --omit=dev` alongside the full formatting, lint, type, test, and production-build gates when changing dependency resolution.
+- Next.js 16.2.12 declares vulnerable transitive `postcss` 8.4.31 and `sharp` 0.34.x ranges. The root package uses exact npm overrides to resolve those packages to patched `postcss` 8.5.25 and `sharp` 0.35.3 throughout the dependency tree.
+- Treat the override as temporary compatibility debt. Recheck it on each Next.js upgrade and remove it once the framework declares patched versions directly; never use `npm audit fix --force` when it proposes a framework downgrade.
+
 ## Rate-limiting plan
 
 Before public beta, rate-limit authentication, password reset, content creation, applications, responses, registrations, and reports. Prefer platform/database-backed limits that work across serverless instances. Add bot protection to abuse-prone public forms. This is documented but intentionally not implemented before endpoints exist.
