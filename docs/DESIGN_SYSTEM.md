@@ -36,6 +36,8 @@ Tokens are defined in `src/app/globals.css` and consumed through Tailwind utilit
 - `PulseCheckInForm` and `PulseHistoryList` — accessible grouped signals, privacy context, and readable private activity cards
 - `CreateSessionForm` — grouped host content, timing, capacity, Pulse-fit, and interest controls with draft context
 - `SessionCard` and `SessionRegistrationForm` — reusable discovery detail, textual capacity state, match reasons, and pending/error feedback
+- `CreateCircleForm` — grouped community identity, visibility, membership-policy, Pulse-fit, rules, and interest controls with draft context
+- `CircleCard` and `CircleMembershipForm` — reusable community discovery, textual visibility/membership state, match reasons, and accessible join/leave feedback
 
 ## Accessibility decisions
 
@@ -52,6 +54,7 @@ Tokens are defined in `src/app/globals.css` and consumed through Tailwind utilit
 - Member navigation uses a two-column mobile grid instead of a narrow horizontal scroller, preserving large targets without page overflow.
 - Session cards pair capacity and lifecycle colors with explicit text, preserve logical definition lists, and expose Pulse reasons as a labeled list.
 - Hosting controls use semantic fieldsets, explicit labels, native date/time and select inputs, and minimum 48px action targets. Destructive cancellation is named in text and visually distinct.
+- Circle controls use semantic fieldsets, explicit public/private and join-policy labels, native selects, minimum 48px targets, and textual lifecycle/role state. Private visibility and destructive removal never rely on rose/red color alone.
 
 ## Module personalities
 

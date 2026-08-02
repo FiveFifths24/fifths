@@ -82,3 +82,19 @@ Before public beta, rate-limit authentication, password reset, content creation,
 - Attendance does not award Passport credit. Verified, idempotent issuance remains isolated to Phase 9.
 
 The Phase 4 migration still requires founder-run contention tests and positive/negative RLS tests with a host, two members, and an unrelated account. Static SQL contract tests protect the checked-in intent but do not prove the deployed database configuration.
+
+## Phase 5 implemented controls
+
+- All live Circle routes remain inside the protected, onboarding-gated member shell. The public `/circles` product overview remains informational.
+- Only centrally assigned `host` and `platform_admin` roles can create a Circle. Creation produces a private draft and one active owner membership; no member can self-elevate a platform role.
+- Circle-local owner, host, moderator, and member roles are scoped to one Circle. They never write to or imply `user_roles`.
+- Private Circles are invite-only. Their identity, rules, interests, membership, and associated published Sessions are unreadable to unrelated members under RLS.
+- Open joins, requests, invitations, approvals, declines, removals, departures, and role changes use security-definer RPCs with database-side transition validation. Authenticated clients receive no direct Circle-table write grant.
+- Only owners/platform administrators assign local host or moderator roles. Local moderators cannot remove or demote an owner, host, or another moderator; those actions require owner/platform authority.
+- Membership inserts and updates are recorded in `private.circle_membership_audit_logs`, which has no anonymous or authenticated access.
+- Session association requires both authorization over the draft Session and Circle-local hosting authority. A published Session cannot be attached after its visibility boundary is active.
+- Archiving is final in Phase 5 and is rejected while the Circle has a future published Session. This prevents an archived Circle from silently stranding active public activity.
+- Circle recommendations receive only already-visible published records and bounded matching metadata. Private membership state and moderator queues never enter ranking, and raw scores remain hidden.
+- Phase 5 stores no posts, chat, direct messages, diagnosis data, precise address, payment data, report evidence, or Passport entry.
+
+The Phase 5 migration still requires founder-run positive/negative RLS tests with an owner, local host, local moderator, applicant, invitee, active member, and unrelated member. Static SQL contract tests protect the checked-in intent but do not prove the deployed database configuration or audit behavior.

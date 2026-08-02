@@ -1,24 +1,22 @@
 import { describe, expect, it } from "vitest";
 import type { PulseRecommendationInput } from "@/lib/recommendations/types";
-import type { Session } from "@/types/database";
-import { rankSessions } from "./session-data";
+import type { Circle } from "@/types/database";
+import { rankCircles } from "./circle-data";
 
-const base: Session = {
+const circle: Circle = {
   id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
-  host_user_id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
-  host_display_name: "Jordan",
-  source_module: "platform",
-  circle_id: null,
-  title: "Quiet creative sprint",
-  summary: "A focused making session.",
-  description: "A focused making session with a clear beginning and ending.",
+  created_by: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+  name: "Quiet creators",
+  slug: "quiet-creators",
+  summary: "A focused community for thoughtful creative practice.",
+  description:
+    "A detailed community description for thoughtful creative practice.",
+  rules:
+    "Respect privacy, consent, focus, and every member's stated boundaries.",
   status: "published",
+  visibility: "public",
+  join_policy: "request",
   format: "online",
-  starts_at: "2027-01-15T18:00:00.000Z",
-  ends_at: "2027-01-15T19:00:00.000Z",
-  timezone: "UTC",
-  capacity: 20,
-  confirmed_registration_count: 0,
   location_label: null,
   mode_id: "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
   minimum_energy: 1,
@@ -41,26 +39,20 @@ const pulse: PulseRecommendationInput = {
   interestIds: ["dddddddd-dddd-4ddd-8ddd-dddddddddddd"],
 };
 
-describe("rankSessions", () => {
-  it("adapts real Session records to the shared deterministic scorer", () => {
-    const ranked = rankSessions(
+describe("rankCircles", () => {
+  it("adapts eligible Circles to the shared scorer without exposing a score", () => {
+    const ranked = rankCircles(
       pulse,
-      [base],
-      [{ id: base.mode_id, slug: "create" }],
-      [
-        {
-          session_id: base.id,
-          interest_id: "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
-        },
-      ],
+      [circle],
+      [{ id: circle.mode_id, slug: "create" }],
+      [{ circle_id: circle.id, interest_id: pulse.interestIds[0]! }],
     );
-
     expect(ranked).toHaveLength(1);
-    expect(ranked[0]?.candidate.id).toBe(base.id);
+    expect(ranked[0]?.candidate.module).toBe("circles");
     expect(ranked[0]?.reasons).toEqual(
       expect.arrayContaining([
         "Fits your current mode",
-        "Matches your available energy",
+        "Matches your preferred stimulation",
         "Connects with today's interests",
       ]),
     );

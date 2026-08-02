@@ -23,7 +23,7 @@ Checked items are complete in the repository. A phase begins only after the prio
 - [x] **Phase 2:** Supabase migrations, authentication, roles, RLS, onboarding
 - [x] **Phase 3:** Pulse check-in, history, recommendation foundation, personal Home
 - [x] **Phase 4:** Session discovery, hosting, registration, capacity, attendance foundation
-- [ ] **Phase 5:** Circle discovery, membership, roles, associations, moderation basics
+- [x] **Phase 5:** Circle discovery, membership, roles, associations, moderation basics
 - [ ] **Phase 6:** Creator Commons creation, discovery, responses, acceptance, completion
 - [ ] **Phase 7:** Fifth Realm campaigns, discovery, applications, members, GM tools
 - [ ] **Phase 8:** Unified recommendation ranking and explanation tests
@@ -94,4 +94,20 @@ The Phase 3 code foundation remains complete. Its live validation still requires
 - [x] Document Phase 4 architecture, founder setup, role boundaries, and intentional exclusions
 - [x] Pass formatting, lint, strict TypeScript, tests, and production build
 
-The Phase 4 code foundation is complete. Live validation still requires the founder-owned non-production Supabase project, all three ordered migrations, a deliberately assigned host role, and multi-user capacity/RLS testing. Phase 5 is next: Circle discovery, membership, roles, associations, and moderation basics. Commons workflows, Realm campaigns, Passport issuance, payments, and messaging remain in later phases.
+The Phase 4 code foundation remains complete. Its live validation still requires the founder-owned non-production Supabase project, the first three ordered migrations, a deliberately assigned host role, and multi-user capacity/RLS testing. Phase 5 builds on that boundary without changing registration or attendance ownership. Commons workflows, Realm campaigns, Passport issuance, payments, and messaging remain in later phases.
+
+## Phase 5 — Circles foundation
+
+- [x] Add protected Circle discovery, detail, membership, invitation, and management routes
+- [x] Add trusted-role Circle creation with draft, publish, and archive lifecycle controls
+- [x] Add public and private Circle visibility plus open, request, and invite-only membership boundaries
+- [x] Add Circle-local owner, host, moderator, and member roles without changing platform roles
+- [x] Add audited request approval, decline, invitation, role change, removal, and self-service departure flows
+- [x] Add optional draft Session associations and member-aware visibility for private-Circle Sessions
+- [x] Adapt eligible published Circles to the existing deterministic Pulse scorer with reason labels
+- [x] Keep Circle and membership writes behind validated RPCs with default-deny RLS
+- [x] Add focused schema, component, recommendation-adapter, navigation, and database-security tests
+- [x] Document Phase 5 architecture, founder setup, role boundaries, and intentional exclusions
+- [x] Pass formatting, lint, strict TypeScript, tests, production build, and dependency audits
+
+The Phase 5 code foundation is complete. Live validation still requires the founder-owned non-production Supabase project, all four ordered migrations, deliberately assigned host/moderator test roles, and multi-user Circle visibility, membership, moderation, audit, and Session-association testing. Phase 6 is next: Creator Commons creation, discovery, responses, acceptance, and completion. Organizations, Realm campaigns, Passport issuance, reports, notifications, messaging, and payments remain later work.

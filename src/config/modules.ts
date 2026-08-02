@@ -67,22 +67,22 @@ export const platformModules: PlatformModule[] = [
     eyebrow: "Find community with context",
     purpose: "Intentional communities and their shared activity.",
     summary:
-      "Circles will make it easier to discover communities with clear purpose, expectations, hosts, and ways to participate—without trying to replace Discord.",
+      "Circles makes it easier to discover communities with clear purpose, expectations, hosts, and ways to participate—without trying to replace Discord.",
     audience: [
       "Community members",
       "Hosts and organizers",
       "Identity and interest-based groups",
     ],
     capabilities: [
-      "Discover public and private communities",
+      "Discover public communities and invited private spaces",
       "Understand rules before joining",
       "See related sessions and opportunities",
     ],
     mvpIncludes: [
-      "Circle discovery",
-      "Membership and requests",
-      "Community roles",
-      "Associated activity",
+      "Pulse-aware Circle discovery",
+      "Open, request, and invitation membership",
+      "Scoped owner, host, moderator, and member roles",
+      "Associated shared Sessions",
     ],
     notIncluded: [
       "Real-time chat",

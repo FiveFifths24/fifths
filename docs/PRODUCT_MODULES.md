@@ -46,6 +46,14 @@ Shared Sessions are now the first live recommendation inventory. Authenticated m
 
 Trusted `host` and `platform_admin` roles can create private drafts, publish or cancel them, complete ended Sessions, review the active roster, and mark audited attendance. Registration capacity is enforced atomically in PostgreSQL. Phase 4 does not add Circle associations, Commons or Realm ownership, payments, waitlists, messaging, private access links, or Passport issuance.
 
+## Phase 5 Circles implementation
+
+Circles now provide real protected discovery, purpose and rule context, public/private visibility, open/request/invite-only membership, and caller-owned membership history. Eligible published Circles participate in the existing deterministic Pulse scorer without exposing raw scores or private moderation state.
+
+Trusted platform hosts create private drafts and become the Circle owner. Circle-local owner, host, moderator, and member roles stay scoped to one Circle. Membership requests, invitations, approvals, declines, removals, departures, and role changes run through audited database functions; ordinary authenticated clients have no direct write grants.
+
+Authorized hosts can associate a Circle with a draft shared Session. Private-Circle Sessions remain restricted to active Circle members after publication. Phase 5 does not add posts, chat, feeds, organizations, reports, notifications, global moderation queues, Commons or Realm ownership, payments, or Passport issuance.
+
 ## Phase 1 public representation
 
 Each module has a public overview route explaining audience, planned capabilities, Pulse and Passport connections, MVP scope, and explicit exclusions. Preview notices distinguish planned behavior from live functionality. All five routes use one shared `ModuleOverview` component so product storytelling stays cohesive while allowing restrained module accents.

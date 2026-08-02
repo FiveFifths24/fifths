@@ -21,5 +21,8 @@ describe("MemberNavigation", () => {
     expect(
       within(navigation).getByRole("link", { name: "Registrations" }),
     ).toHaveAttribute("href", "/home/registrations");
+    expect(
+      within(navigation).getByRole("link", { name: "Circles" }),
+    ).toHaveAttribute("href", "/home/circles");
   });
 });

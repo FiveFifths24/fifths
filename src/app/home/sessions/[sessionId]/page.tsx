@@ -59,18 +59,26 @@ export default async function SessionDetailsPage({
   if (!sessionResult.data) notFound();
 
   const session = sessionResult.data;
-  const [modeResult, linkResult, interestResult] = await Promise.all([
-    supabase.from("modes").select("id, name").eq("id", session.mode_id),
-    supabase
-      .from("session_interests")
-      .select("session_id, interest_id")
-      .eq("session_id", session.id),
-    supabase
-      .from("interests")
-      .select("id, name")
-      .eq("active", true)
-      .order("name"),
-  ]);
+  const [modeResult, linkResult, interestResult, circleResult] =
+    await Promise.all([
+      supabase.from("modes").select("id, name").eq("id", session.mode_id),
+      supabase
+        .from("session_interests")
+        .select("session_id, interest_id")
+        .eq("session_id", session.id),
+      supabase
+        .from("interests")
+        .select("id, name")
+        .eq("active", true)
+        .order("name"),
+      session.circle_id
+        ? supabase
+            .from("circles")
+            .select("id, name")
+            .eq("id", session.circle_id)
+            .maybeSingle()
+        : Promise.resolve({ data: null, error: null }),
+    ]);
   const card = assembleSessionCards(
     [session],
     modeResult.data ?? [],
@@ -108,6 +116,18 @@ export default async function SessionDetailsPage({
           <p className="mt-4 text-sm font-bold text-neutral-500">
             Hosted by {session.host_display_name}
           </p>
+          {circleResult.data ? (
+            <p className="mt-4 text-sm text-neutral-300">
+              Associated with{" "}
+              <ButtonLink
+                className="ml-2 min-h-0 px-4 py-2"
+                href={`/home/circles/${circleResult.data.id}`}
+                variant="secondary"
+              >
+                {circleResult.data.name}
+              </ButtonLink>
+            </p>
+          ) : null}
         </div>
         {manageResult.data ? (
           <ButtonLink
@@ -233,8 +253,9 @@ export default async function SessionDetailsPage({
             />
           </div>
           <p className="mt-5 border-t border-neutral-800 pt-5 text-xs leading-5 text-neutral-500">
-            Registration enforces capacity in the database. Phase 4 includes no
-            payment, waitlist, messaging, or Passport issuance.
+            Registration enforces capacity in the database. Circle association
+            changes visibility but does not add payment, waitlist, messaging, or
+            Passport issuance.
           </p>
         </aside>
       </div>
