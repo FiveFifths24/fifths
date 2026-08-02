@@ -29,7 +29,9 @@ export function ModuleOverview({ module }: { module: PlatformModule }) {
                 aria-hidden="true"
                 className={cn("mr-2 size-4", module.accent)}
               />
-              Coming to FIFTHS
+              {module.memberHref
+                ? "Member foundation built"
+                : "Coming to FIFTHS"}
             </Badge>
             <p className="mt-8 text-xs font-bold tracking-[0.2em] text-neutral-400 uppercase">
               {module.eyebrow}
@@ -41,16 +43,24 @@ export function ModuleOverview({ module }: { module: PlatformModule }) {
               {module.summary}
             </p>
             <div className="mt-9 flex flex-wrap gap-3">
-              <ButtonLink href="/signup">Join the future beta</ButtonLink>
+              <ButtonLink href={module.memberHref ?? "/signup"}>
+                {module.memberHref
+                  ? `Open ${module.name}`
+                  : "Join the future beta"}
+              </ButtonLink>
               <ButtonLink href="/ecosystem" variant="secondary">
                 Back to ecosystem
               </ButtonLink>
             </div>
           </div>
-          <PreviewState title="Product preview">
-            This page describes planned MVP behavior. Account and Pulse
-            foundations are built; live product inventory, submissions,
-            registrations, and verified activity begin in later phases.
+          <PreviewState
+            title={
+              module.memberHref ? "Implementation status" : "Product preview"
+            }
+          >
+            {module.memberHref
+              ? "The protected member foundation is implemented in this repository. Live use still requires the founder-owned Supabase project, ordered migrations, Auth configuration, and launch review."
+              : "This page describes planned MVP behavior. Realm campaigns and verified Passport activity begin in later phases."}
           </PreviewState>
         </Container>
       </section>

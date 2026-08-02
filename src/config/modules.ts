@@ -22,6 +22,7 @@ export type PlatformModule = {
   icon: LucideIcon;
   accent: string;
   glow: string;
+  memberHref?: string;
 };
 
 export const platformModules: PlatformModule[] = [
@@ -60,6 +61,7 @@ export const platformModules: PlatformModule[] = [
     icon: Radio,
     accent: "text-red-400",
     glow: "from-red-950/80 to-neutral-950",
+    memberHref: "/home/pulse",
   },
   {
     slug: "circles",
@@ -96,6 +98,7 @@ export const platformModules: PlatformModule[] = [
     icon: HeartHandshake,
     accent: "text-rose-300",
     glow: "from-rose-950/70 to-neutral-950",
+    memberHref: "/home/circles",
   },
   {
     slug: "commons",
@@ -111,7 +114,7 @@ export const platformModules: PlatformModule[] = [
     ],
     capabilities: [
       "Browse creator opportunities",
-      "Filter by skill, format, and compensation",
+      "Understand required skills, format, scope, and openings",
       "Express interest and confirm completion",
     ],
     mvpIncludes: [
@@ -132,6 +135,7 @@ export const platformModules: PlatformModule[] = [
     icon: Aperture,
     accent: "text-amber-200",
     glow: "from-amber-950/60 to-neutral-950",
+    memberHref: "/home/commons",
   },
   {
     slug: "realm",

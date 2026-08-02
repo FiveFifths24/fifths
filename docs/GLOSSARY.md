@@ -4,6 +4,9 @@
 - **Circle role:** A local owner, host, moderator, or member authorization scoped to one Circle; it never grants a platform role.
 - **Circle membership:** One caller-owned requested, invited, active, declined, removed, or left relationship with a Circle.
 - **Creator Commons:** The collaboration and opportunity marketplace; it does not process MVP payments.
+- **Creator opportunity:** A creator- or Circle-scoped brief with clear deliverables, required skills, openings, deadline, Pulse-fit context, and a controlled lifecycle; it is not a contract or payment promise.
+- **Opportunity response:** A private expression of interest readable only by its owner and authorized opportunity managers; it can be submitted, accepted, declined, withdrawn, or completed.
+- **Confirmed completion:** Separate acknowledgement from an accepted participant and an authorized opportunity manager; Phase 6 records it without issuing Passport credit.
 - **Fifth Realm:** Campaign and immersive-story coordination, not a virtual tabletop or rules library.
 - **Host:** A centrally trusted platform role that can create shared Sessions and Circle drafts; a Circle-local host remains scoped to associated activity in that Circle.
 - **Mode:** Play, Create, Connect, Focus, or Reset—the user's desired kind of participation.

@@ -365,6 +365,142 @@ export type Database = {
         Update: never;
         Relationships: [];
       };
+      creator_opportunities: {
+        Row: {
+          id: string;
+          created_by: string;
+          creator_display_name: string;
+          circle_id: string | null;
+          title: string;
+          summary: string;
+          description: string;
+          deliverables: string;
+          kind: Database["public"]["Enums"]["creator_opportunity_kind"];
+          status: Database["public"]["Enums"]["creator_opportunity_status"];
+          close_reason:
+            | Database["public"]["Enums"]["creator_opportunity_close_reason"]
+            | null;
+          format: Database["public"]["Enums"]["participation_format"];
+          location_label: string | null;
+          response_deadline: string;
+          timezone: string;
+          estimated_minutes: number;
+          positions: number;
+          accepted_count: number;
+          mode_id: string;
+          minimum_energy: number;
+          maximum_energy: number;
+          stimulation_level: Database["public"]["Enums"]["pulse_stimulation_level"];
+          social_intensity: Database["public"]["Enums"]["pulse_social_intensity"];
+          published_at: string | null;
+          closed_at: string | null;
+          completed_at: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          created_by: string;
+          creator_display_name: string;
+          circle_id?: string | null;
+          title: string;
+          summary: string;
+          description: string;
+          deliverables: string;
+          kind: Database["public"]["Enums"]["creator_opportunity_kind"];
+          status?: Database["public"]["Enums"]["creator_opportunity_status"];
+          close_reason?:
+            | Database["public"]["Enums"]["creator_opportunity_close_reason"]
+            | null;
+          format: Database["public"]["Enums"]["participation_format"];
+          location_label?: string | null;
+          response_deadline: string;
+          timezone: string;
+          estimated_minutes: number;
+          positions: number;
+          accepted_count?: number;
+          mode_id: string;
+          minimum_energy: number;
+          maximum_energy: number;
+          stimulation_level: Database["public"]["Enums"]["pulse_stimulation_level"];
+          social_intensity: Database["public"]["Enums"]["pulse_social_intensity"];
+          published_at?: string | null;
+          closed_at?: string | null;
+          completed_at?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: never;
+        Relationships: [];
+      };
+      opportunity_skills: {
+        Row: { opportunity_id: string; skill_id: string; created_at: string };
+        Insert: {
+          opportunity_id: string;
+          skill_id: string;
+          created_at?: string;
+        };
+        Update: never;
+        Relationships: [];
+      };
+      opportunity_interests: {
+        Row: {
+          opportunity_id: string;
+          interest_id: string;
+          created_at: string;
+        };
+        Insert: {
+          opportunity_id: string;
+          interest_id: string;
+          created_at?: string;
+        };
+        Update: never;
+        Relationships: [];
+      };
+      opportunity_responses: {
+        Row: {
+          opportunity_id: string;
+          user_id: string;
+          statement: string;
+          availability: string;
+          status: Database["public"]["Enums"]["opportunity_response_status"];
+          submitted_at: string;
+          accepted_at: string | null;
+          declined_at: string | null;
+          withdrawn_at: string | null;
+          creator_confirmed_at: string | null;
+          participant_confirmed_at: string | null;
+          completed_at: string | null;
+          updated_at: string;
+        };
+        Insert: {
+          opportunity_id: string;
+          user_id: string;
+          statement: string;
+          availability: string;
+          status?: Database["public"]["Enums"]["opportunity_response_status"];
+          submitted_at?: string;
+          accepted_at?: string | null;
+          declined_at?: string | null;
+          withdrawn_at?: string | null;
+          creator_confirmed_at?: string | null;
+          participant_confirmed_at?: string | null;
+          completed_at?: string | null;
+          updated_at?: string;
+        };
+        Update: never;
+        Relationships: [];
+      };
+      saved_opportunities: {
+        Row: { opportunity_id: string; user_id: string; created_at: string };
+        Insert: {
+          opportunity_id: string;
+          user_id: string;
+          created_at?: string;
+        };
+        Update: never;
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: {
@@ -549,6 +685,89 @@ export type Database = {
         Args: { p_session_id: string; p_circle_id: string | null };
         Returns: undefined;
       };
+      can_manage_creator_opportunity: {
+        Args: { p_opportunity_id: string };
+        Returns: boolean;
+      };
+      can_view_creator_opportunity: {
+        Args: { p_opportunity_id: string };
+        Returns: boolean;
+      };
+      create_creator_opportunity: {
+        Args: {
+          p_circle_id: string | null;
+          p_title: string;
+          p_summary: string;
+          p_description: string;
+          p_deliverables: string;
+          p_kind: Database["public"]["Enums"]["creator_opportunity_kind"];
+          p_format: Database["public"]["Enums"]["participation_format"];
+          p_location_label: string | null;
+          p_response_deadline_local: string;
+          p_timezone: string;
+          p_estimated_minutes: number;
+          p_positions: number;
+          p_mode_id: string;
+          p_minimum_energy: number;
+          p_maximum_energy: number;
+          p_stimulation_level: Database["public"]["Enums"]["pulse_stimulation_level"];
+          p_social_intensity: Database["public"]["Enums"]["pulse_social_intensity"];
+          p_skill_ids: string[];
+          p_interest_ids: string[];
+        };
+        Returns: string;
+      };
+      set_creator_opportunity_status: {
+        Args: {
+          p_opportunity_id: string;
+          p_status: Database["public"]["Enums"]["creator_opportunity_status"];
+        };
+        Returns: undefined;
+      };
+      save_creator_opportunity: {
+        Args: { p_opportunity_id: string; p_save: boolean };
+        Returns: undefined;
+      };
+      submit_opportunity_response: {
+        Args: {
+          p_opportunity_id: string;
+          p_statement: string;
+          p_availability: string;
+        };
+        Returns: undefined;
+      };
+      withdraw_opportunity_response: {
+        Args: { p_opportunity_id: string };
+        Returns: undefined;
+      };
+      review_opportunity_response: {
+        Args: {
+          p_opportunity_id: string;
+          p_user_id: string;
+          p_decision: string;
+        };
+        Returns: undefined;
+      };
+      confirm_opportunity_completion: {
+        Args: { p_opportunity_id: string; p_user_id: string };
+        Returns: undefined;
+      };
+      get_creator_opportunity_responses: {
+        Args: { p_opportunity_id: string };
+        Returns: Array<{
+          user_id: string;
+          display_name: string;
+          username: string | null;
+          statement: string;
+          availability: string;
+          response_status: Database["public"]["Enums"]["opportunity_response_status"];
+          submitted_at: string;
+          accepted_at: string | null;
+          creator_confirmed_at: string | null;
+          participant_confirmed_at: string | null;
+          completed_at: string | null;
+        }>;
+      };
     };
     Enums: {
       app_role:
@@ -573,6 +792,13 @@ export type Database = {
       circle_member_role: "owner" | "host" | "moderator" | "member";
       circle_membership_status:
         "requested" | "invited" | "active" | "declined" | "removed" | "left";
+      creator_opportunity_kind:
+        "collaboration" | "project" | "volunteer" | "mentorship";
+      creator_opportunity_status:
+        "draft" | "published" | "closed" | "completed" | "cancelled";
+      creator_opportunity_close_reason: "manual" | "filled" | "deadline";
+      opportunity_response_status:
+        "submitted" | "accepted" | "declined" | "withdrawn" | "completed";
     };
     CompositeTypes: Record<string, never>;
   };
@@ -589,3 +815,7 @@ export type Registration = Database["public"]["Tables"]["registrations"]["Row"];
 export type Circle = Database["public"]["Tables"]["circles"]["Row"];
 export type CircleMember =
   Database["public"]["Tables"]["circle_members"]["Row"];
+export type CreatorOpportunity =
+  Database["public"]["Tables"]["creator_opportunities"]["Row"];
+export type OpportunityResponse =
+  Database["public"]["Tables"]["opportunity_responses"]["Row"];

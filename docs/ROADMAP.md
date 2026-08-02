@@ -24,7 +24,7 @@ Checked items are complete in the repository. A phase begins only after the prio
 - [x] **Phase 3:** Pulse check-in, history, recommendation foundation, personal Home
 - [x] **Phase 4:** Session discovery, hosting, registration, capacity, attendance foundation
 - [x] **Phase 5:** Circle discovery, membership, roles, associations, moderation basics
-- [ ] **Phase 6:** Creator Commons creation, discovery, responses, acceptance, completion
+- [x] **Phase 6:** Creator Commons creation, discovery, responses, acceptance, completion
 - [ ] **Phase 7:** Fifth Realm campaigns, discovery, applications, members, GM tools
 - [ ] **Phase 8:** Unified recommendation ranking and explanation tests
 - [ ] **Phase 9:** Verified Passport entries and duplicate prevention
@@ -110,4 +110,22 @@ The Phase 4 code foundation remains complete. Its live validation still requires
 - [x] Document Phase 5 architecture, founder setup, role boundaries, and intentional exclusions
 - [x] Pass formatting, lint, strict TypeScript, tests, production build, and dependency audits
 
-The Phase 5 code foundation is complete. Live validation still requires the founder-owned non-production Supabase project, all four ordered migrations, deliberately assigned host/moderator test roles, and multi-user Circle visibility, membership, moderation, audit, and Session-association testing. Phase 6 is next: Creator Commons creation, discovery, responses, acceptance, and completion. Organizations, Realm campaigns, Passport issuance, reports, notifications, messaging, and payments remain later work.
+The Phase 5 code foundation remains complete. Its live validation still requires the founder-owned non-production Supabase project, the first four ordered migrations, deliberately assigned host/moderator test roles, and multi-user Circle visibility, membership, moderation, audit, and Session-association testing. Phase 6 builds on this boundary without changing Circle membership ownership. Organizations, Realm campaigns, Passport issuance, reports, notifications, messaging, and payments remain later work.
+
+## Phase 6 — Creator Commons foundation
+
+- [x] Add protected opportunity discovery, detail, saved, response-history, creation, and management routes
+- [x] Add creator-role and scoped Circle-host private draft creation with constrained publish, close, and cancel transitions
+- [x] Add required skills, optional interests, bounded Pulse-fit metadata, deadlines, openings, and broad access labels
+- [x] Add private saves and private structured responses without collecting contact, payment, contract, or file data
+- [x] Lock the opportunity row before accepting a response and enforce authoritative position capacity
+- [x] Add response withdrawal, acceptance, decline, and two-sided completion confirmation
+- [x] Audit opportunity lifecycle plus response state and confirmation changes in private tables
+- [x] Preserve private-Circle visibility for associated opportunities and block unsafe Circle archival
+- [x] Adapt eligible published Commons opportunities to the deterministic Pulse scorer with reason labels
+- [x] Keep every Commons write behind validated RPCs with default-deny RLS
+- [x] Add focused schema, component, recommendation-adapter, navigation, and database-security tests
+- [x] Document Phase 6 architecture, founder setup, trust boundaries, and intentional exclusions
+- [x] Pass formatting, lint, strict TypeScript, tests, production build, and dependency audits
+
+The Phase 6 code foundation is complete. Live validation still requires the founder-owned non-production Supabase project, all five ordered migrations, deliberately assigned creator and Circle-host roles, and multi-user discovery, response-privacy, capacity, withdrawal, audit, and completion-confirmation testing. Phase 7 is next: Fifth Realm campaigns, discovery, applications, members, and game-master tools. Organizations, Passport issuance, reports, notifications, messaging, contracts, files, and payments remain later work.

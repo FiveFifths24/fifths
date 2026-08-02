@@ -105,9 +105,9 @@ export default async function AccountPage({
               . Elevated roles cannot be self-assigned.
             </p>
             <p className="mt-4 text-sm leading-6 text-neutral-400">
-              Pulse check-ins, private history, Sessions, registrations, and
-              Circle participation are available from your Home. Creator
-              Commons, Fifth Realm, and Passport activity remain intentionally
+              Pulse check-ins, private history, Sessions, registrations,
+              Circles, and Creator Commons participation are available from your
+              Home. Fifth Realm and Passport activity remain intentionally
               inactive.
             </p>
           </section>
