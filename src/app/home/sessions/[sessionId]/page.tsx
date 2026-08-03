@@ -148,7 +148,9 @@ export default async function SessionDetailsPage({
       {attendanceResult.data ? (
         <StatusMessage className="mt-8" tone="success">
           Your attendance record is marked as {attendanceResult.data.status}.
-          Passport credit is intentionally not created in Phase 4.
+          {attendanceResult.data.status === "attended"
+            ? " Verified Passport activity is issued automatically."
+            : " Only attended participation creates verified Passport activity."}
         </StatusMessage>
       ) : null}
 

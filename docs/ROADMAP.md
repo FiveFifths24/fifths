@@ -27,7 +27,7 @@ Checked items are complete in the repository. A phase begins only after the prio
 - [x] **Phase 6:** Creator Commons creation, discovery, responses, acceptance, completion
 - [x] **Phase 7:** Fifth Realm campaigns, discovery, applications, members, GM tools
 - [x] **Phase 8:** Unified recommendation ranking and explanation tests
-- [ ] **Phase 9:** Verified Passport entries and duplicate prevention
+- [x] **Phase 9:** Verified Passport entries and duplicate prevention
 - [ ] **Phase 10:** Feedback, reports, notifications, moderation, admin controls
 - [ ] **Phase 11:** End-to-end, accessibility, mobile, security, and deployment review
 
@@ -163,4 +163,22 @@ The Phase 7 code foundation is complete. Live validation still requires the foun
 - [x] Document Phase 8 architecture, security decisions, completion status, and intentional exclusions
 - [x] Pass formatting, lint, strict TypeScript, tests, production build, and dependency audits
 
-The Phase 8 code foundation is complete. It adds no database migration and preserves the six existing migrations and RLS boundaries. Live validation still requires the founder-owned non-production Supabase project and representative eligible inventory across all four candidate modules. Phase 9 is next: verified, idempotent Passport entries and duplicate prevention. Organizations, reports, notifications, moderation, messaging, payments, AI/ML, and public leaderboards remain later or excluded work.
+The Phase 8 code foundation is complete. It adds no database migration and preserves the six existing migrations and RLS boundaries. Live validation still requires the founder-owned non-production Supabase project and representative eligible inventory across all four candidate modules. Phase 9 builds on verified product outcomes without changing recommendation ordering. Organizations, reports, notifications, moderation, messaging, payments, AI/ML, and public leaderboards remain later or excluded work.
+
+## Phase 9 — Verified Passport activity
+
+- [x] Add a protected `/home/passport` history route and member-navigation destination
+- [x] Add private Passport entries with activity categories, product provenance, source snapshots, and explicit verified/revoked state
+- [x] Issue activity only from host-marked Session attendance, completed Sessions with a verified non-host attendee, mutually confirmed Commons completion, and completed Realm membership
+- [x] Map Circle-, Commons-, and Realm-owned Sessions to their product provenance without treating membership alone as contribution
+- [x] Prevent duplicates with one unique member, activity-kind, and source-record identity
+- [x] Backfill eligible trusted Phase 4, 6, and 7 state through the same idempotent issuer
+- [x] Revoke corrected attendance automatically while preserving history and private audit evidence
+- [x] Add a platform-admin-only correction RPC whose revocations cannot be silently restored by source replay
+- [x] Keep members on select-only, caller-owned RLS access with no self-verification path
+- [x] Add accessible cards, text status, honest empty states, summary counts, and privacy explanations
+- [x] Add component, summary, navigation, duplicate-prevention, issuance, correction, RLS, and phase-boundary tests
+- [x] Document Phase 9 architecture, migration order, security controls, founder validation, and intentional exclusions
+- [x] Pass formatting, lint, strict TypeScript, tests, production build, and dependency audits
+
+The Phase 9 code foundation is complete. Live validation still requires the founder-owned non-production Supabase project, all seven ordered migrations, and multi-user tests for issuance, duplicate replay, correction, administrative revocation, audit, and cross-user RLS denial. Phase 10 is next: feedback, reports, notifications, moderation, and admin controls. Organizations, messaging, payments, AI/ML, public Passport sharing, points, and leaderboards remain later or excluded work.

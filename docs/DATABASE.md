@@ -135,7 +135,7 @@ The `confirmed_registration_count` lives on the Session row so every authorized 
 
 Only `host` and `platform_admin` roles can call `create_session`. New records are drafts. `set_session_status` allows only draft-to-published, draft/published-to-cancelled, and ended published-to-completed transitions. Members cannot self-assign roles or mutate Session tables directly.
 
-`get_session_roster` exposes registered member display identity only to the owning host or platform administrator. `mark_session_attendance` requires an active registration and a started, published/completed Session. A private trigger-backed audit table records the old/new attendance state and actor. No attendance action creates Passport credit.
+`get_session_roster` exposes registered member display identity only to the owning host or platform administrator. `mark_session_attendance` requires an active registration and a started, published/completed Session. A private trigger-backed audit table records the old/new attendance state and actor. Phase 9 separately observes the authoritative attended state for Passport issuance and correction.
 
 ## Phase 4 RLS and grant summary
 
@@ -177,7 +177,26 @@ Independent opportunity creation requires a centrally assigned `creator` or `pla
 
 Each member has at most one response per opportunity. Submitted responses can be withdrawn and resubmitted while the opportunity remains eligible. Acceptance locks the opportunity row before checking and incrementing `accepted_count`; a filled opportunity closes atomically. Accepted participants can withdraw before completion, which decrements the authoritative count and safely reopens only a deadline-active opportunity that closed because it filled.
 
-Completion requires a closed opportunity, an accepted response, participant confirmation, and authorized-manager confirmation. When both exist, the response completes; the opportunity completes when no accepted response remains pending and at least one response completed. Private audit tables capture lifecycle and response/confirmation changes. No completion action creates Passport credit.
+Completion requires a closed opportunity, an accepted response, participant confirmation, and authorized-manager confirmation. When both exist, the response completes; the opportunity completes when no accepted response remains pending and at least one response completed. Private audit tables capture lifecycle and response/confirmation changes. Phase 9 observes only these final states for duplicate-safe participant and creator Passport entries.
+
+## Phase 9 implemented schema
+
+Phase 9 creates `passport_entries` plus activity, source-module, entry-status, and correction-kind enums. Entries retain a bounded source-title snapshot and UUID rather than a polymorphic foreign key, so a member's verified history survives later source visibility changes while issuance remains traceable.
+
+Private trigger functions issue or correct entries from trusted source state. One unique member/activity/source key prevents duplicates during concurrent or repeated processing. Session host activity additionally requires a completed Session with at least one attended non-host participant. Existing eligible attendance, qualifying Session hosting, mutually completed Commons work, and completed active Realm membership are backfilled through the same issuer.
+
+Automatic source corrections and administrative corrections are distinct. Only source corrections may be restored by later valid source state; a platform-admin revocation requires a reason and cannot be undone by replay. Every insert or status change reaches `private.passport_entry_audit_logs`.
+
+## Phase 9 RLS and grant summary
+
+| Table                    | Authenticated access in Phase 9                             |
+| ------------------------ | ----------------------------------------------------------- |
+| `passport_entries`       | Select caller-owned history only; no direct mutation grants |
+| private Passport audit   | No anonymous or authenticated access                        |
+| private issuance helpers | Trigger/backfill use only; no authenticated execute grant   |
+| correction RPC           | Callable but rejects every caller without `platform_admin`  |
+
+No Phase 9 schema stores points, popularity, diagnoses, public highlights, manual claims, reports, notifications, messages, payment data, or leaderboard state.
 
 ## Phase 6 RLS and grant summary
 
