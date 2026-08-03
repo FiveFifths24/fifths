@@ -33,5 +33,11 @@ describe("MemberNavigation", () => {
     expect(
       within(navigation).getByRole("link", { name: "Passport" }),
     ).toHaveAttribute("href", "/home/passport");
+    expect(
+      within(navigation).getByRole("link", { name: "Inbox" }),
+    ).toHaveAttribute("href", "/home/notifications");
+    expect(
+      within(navigation).getByRole("link", { name: "Safety" }),
+    ).toHaveAttribute("href", "/home/safety");
   });
 });

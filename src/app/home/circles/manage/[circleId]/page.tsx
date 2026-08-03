@@ -289,7 +289,7 @@ export default async function ManageCirclePage({
             </div>
             <p className="mt-4 text-sm leading-6 text-neutral-400">
               Use an exact onboarded username. The invitation reveals no email
-              address and creates no message or notification.
+              address and creates a private in-app notification, not a message.
             </p>
             <form
               action={inviteCircleMemberAction}

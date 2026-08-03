@@ -1,6 +1,6 @@
 # Database Design
 
-Supabase PostgreSQL is the single source of truth. Phase 2 adds identity at `supabase/migrations/202608010001_phase_2_identity_foundation.sql`; Phase 3 adds Pulse at `supabase/migrations/202608020001_phase_3_pulse_foundation.sql`; Phase 4 adds shared Sessions at `supabase/migrations/202608030001_phase_4_sessions_foundation.sql`; Phase 5 adds Circles at `supabase/migrations/202608040001_phase_5_circles_foundation.sql`; Phase 6 adds Creator Commons at `supabase/migrations/202608050001_phase_6_creator_commons_foundation.sql`; Phase 7 adds Fifth Realm at `supabase/migrations/202608060001_phase_7_fifth_realm_foundation.sql`. Later modules extend this topology instead of building parallel systems.
+Supabase PostgreSQL is the single source of truth. Ordered migrations implement identity (Phase 2), Pulse (3), Sessions (4), Circles (5), Creator Commons (6), Fifth Realm (7), Passport (9), and trust/safety (10). Phase 8 was application-code-only. Later modules extend this topology instead of building parallel systems.
 
 ## Domain groups
 
@@ -14,7 +14,7 @@ Supabase PostgreSQL is the single source of truth. Phase 2 adds identity at `sup
 | Creator Commons      | `creator_opportunities`, `opportunity_skills`, `opportunity_interests`, `opportunity_responses`, `saved_opportunities` |
 | Fifth Realm          | `realm_campaigns`, `campaign_interests`, `campaign_applications`, `campaign_members`                                   |
 | Passport             | `passport_entries`                                                                                                     |
-| Trust and engagement | feedback tables, `reports`, `notifications`, `audit_logs`                                                              |
+| Trust and engagement | `member_feedback`, `reports`, `notifications`, private audit logs                                                      |
 
 ## Conventions
 
@@ -68,10 +68,10 @@ No medical diagnosis, date of birth, or precise home address is collected.
 4. **Phase 5 complete:** Circles, interest joins, membership roles/state, Session associations, moderation audit, Circle policies
 5. **Phase 6 complete:** Creator Commons opportunities, taxonomy joins, saves, private responses, acceptance, completion, and audit
 6. **Phase 7 complete:** Fifth Realm campaigns, interest joins, private applications, capacity-safe membership, Session associations, and audit
-7. Organizations
-8. Passport, feedback, reports, notifications, audit logs
-9. module-specific indexes, functions, triggers, and RLS policies
-10. clearly labeled demonstration seed data where a later phase requires it
+7. **Phase 9 complete:** Passport entries, trusted-source issuance, corrections, audit, and RLS
+8. **Phase 10 complete:** feedback, reports, notifications, moderation/admin RPCs, audit, and RLS
+9. Organizations remain deferred
+10. Clearly labeled demonstration seed data only where a later phase requires it
 
 Generated database TypeScript types will be committed after the first migration and regenerated whenever schema changes.
 
@@ -197,6 +197,23 @@ Automatic source corrections and administrative corrections are distinct. Only s
 | correction RPC           | Callable but rejects every caller without `platform_admin`  |
 
 No Phase 9 schema stores points, popularity, diagnoses, public highlights, manual claims, reports, notifications, messages, payment data, or leaderboard state.
+
+## Phase 10 implemented schema
+
+Phase 10 creates `member_feedback`, `reports`, and `notifications` plus bounded workflow enums. Feedback stores one private member statement, area, optional future-contact consent, and review state. Reports store a structured target type, category, summary, details, optional internal FIFTHS path, and lifecycle state. They do not store uploads, external evidence links, diagnoses, precise locations, or public accusations.
+
+Submission and mutation occur only through security-definer RPCs that derive the actor from `auth.uid()`. Daily limits cap feedback and report intake at five each, and a matching active report cannot be repeated within 24 hours. Moderators can triage/escalate; platform administrators own final decisions and feedback review. Internal notes and status evidence are stored in private audit tables.
+
+Notifications are deduplicated by member and source key. Product triggers create bounded updates without copying protected source content, while caller-owned RPCs mark one or all notifications read.
+
+| Table                | Authenticated access in Phase 10                                                         |
+| -------------------- | ---------------------------------------------------------------------------------------- |
+| `member_feedback`    | Select caller-owned rows; platform-admin review visibility; no direct writes             |
+| `reports`            | Select caller-owned rows or restricted reviewer queue; no target access or direct writes |
+| `notifications`      | Select caller-owned rows only; no direct writes                                          |
+| private audit tables | No anonymous or authenticated access                                                     |
+
+No Phase 10 schema creates messages, uploads, account sanctions, public moderation records, payments, leaderboards, email/push delivery, or AI/ML state.
 
 ## Phase 6 RLS and grant summary
 

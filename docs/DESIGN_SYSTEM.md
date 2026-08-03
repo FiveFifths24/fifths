@@ -40,6 +40,7 @@ Tokens are defined in `src/app/globals.css` and consumed through Tailwind utilit
 - `CircleCard` and `CircleMembershipForm` — reusable community discovery, textual visibility/membership state, match reasons, and accessible join/leave feedback
 - `CreateOpportunityForm` and `OpportunityResponseForm` — grouped scope, deadline, taxonomy, Pulse-fit, response, and privacy controls with explicit Phase 6 boundaries
 - `OpportunityCard` — reusable Commons discovery with textual kind, openings, saved/response state, required skills, deadline, and Pulse reasons
+- `FeedbackForm` and `ReportForm` — labeled, validation-ready private intake with data-minimization warnings and explicit human-review boundaries
 
 ## Accessibility decisions
 
@@ -58,6 +59,7 @@ Tokens are defined in `src/app/globals.css` and consumed through Tailwind utilit
 - Hosting controls use semantic fieldsets, explicit labels, native date/time and select inputs, and minimum 48px action targets. Destructive cancellation is named in text and visually distinct.
 - Circle controls use semantic fieldsets, explicit public/private and join-policy labels, native selects, minimum 48px targets, and textual lifecycle/role state. Private visibility and destructive removal never rely on rose/red color alone.
 - Commons controls use semantic fieldsets, native deadline/timezone controls, explicit required-skill and optional-interest groups, minimum 48px targets, and textual lifecycle/response state. Amber accents never carry selection, privacy, capacity, or completion meaning alone.
+- Trust-and-safety controls use explicit labels, descriptions, text status, internal-path validation, minimum 48px targets, urgent-safety guidance, and no color-only severity or outcome signal.
 
 ## Module personalities
 

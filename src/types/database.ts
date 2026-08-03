@@ -677,6 +677,92 @@ export type Database = {
         Update: never;
         Relationships: [];
       };
+      member_feedback: {
+        Row: {
+          id: string;
+          user_id: string;
+          area: Database["public"]["Enums"]["feedback_area"];
+          message: string;
+          consent_to_contact: boolean;
+          status: Database["public"]["Enums"]["feedback_status"];
+          reviewed_by: string | null;
+          reviewed_at: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          area: Database["public"]["Enums"]["feedback_area"];
+          message: string;
+          consent_to_contact?: boolean;
+          status?: Database["public"]["Enums"]["feedback_status"];
+          reviewed_by?: string | null;
+          reviewed_at?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: never;
+        Relationships: [];
+      };
+      reports: {
+        Row: {
+          id: string;
+          reporter_user_id: string;
+          target_type: Database["public"]["Enums"]["report_target_type"];
+          category: Database["public"]["Enums"]["report_category"];
+          summary: string;
+          details: string;
+          context_url: string | null;
+          status: Database["public"]["Enums"]["report_status"];
+          assigned_to: string | null;
+          resolved_at: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          reporter_user_id: string;
+          target_type: Database["public"]["Enums"]["report_target_type"];
+          category: Database["public"]["Enums"]["report_category"];
+          summary: string;
+          details: string;
+          context_url?: string | null;
+          status?: Database["public"]["Enums"]["report_status"];
+          assigned_to?: string | null;
+          resolved_at?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: never;
+        Relationships: [];
+      };
+      notifications: {
+        Row: {
+          id: string;
+          user_id: string;
+          kind: Database["public"]["Enums"]["notification_kind"];
+          title: string;
+          body: string;
+          action_url: string | null;
+          dedupe_key: string | null;
+          read_at: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          kind: Database["public"]["Enums"]["notification_kind"];
+          title: string;
+          body: string;
+          action_url?: string | null;
+          dedupe_key?: string | null;
+          read_at?: string | null;
+          created_at?: string;
+        };
+        Update: never;
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: {
@@ -1047,6 +1133,47 @@ export type Database = {
         Args: { p_entry_id: string; p_reason: string };
         Returns: undefined;
       };
+      submit_feedback: {
+        Args: {
+          p_area: Database["public"]["Enums"]["feedback_area"];
+          p_message: string;
+          p_consent_to_contact: boolean;
+        };
+        Returns: string;
+      };
+      submit_report: {
+        Args: {
+          p_target_type: Database["public"]["Enums"]["report_target_type"];
+          p_category: Database["public"]["Enums"]["report_category"];
+          p_summary: string;
+          p_details: string;
+          p_context_url: string | null;
+        };
+        Returns: string;
+      };
+      review_report: {
+        Args: {
+          p_report_id: string;
+          p_status: Database["public"]["Enums"]["report_status"];
+          p_note: string | null;
+        };
+        Returns: undefined;
+      };
+      review_feedback: {
+        Args: {
+          p_feedback_id: string;
+          p_status: Database["public"]["Enums"]["feedback_status"];
+        };
+        Returns: undefined;
+      };
+      mark_notification_read: {
+        Args: { p_notification_id: string };
+        Returns: undefined;
+      };
+      mark_all_notifications_read: {
+        Args: Record<string, never>;
+        Returns: undefined;
+      };
     };
     Enums: {
       app_role:
@@ -1095,6 +1222,43 @@ export type Database = {
       passport_source_module: "sessions" | "circles" | "commons" | "realm";
       passport_entry_status: "verified" | "revoked";
       passport_revocation_kind: "source_correction" | "administrative";
+      feedback_area:
+        | "platform"
+        | "pulse"
+        | "sessions"
+        | "circles"
+        | "commons"
+        | "realm"
+        | "passport"
+        | "accessibility"
+        | "safety";
+      feedback_status: "submitted" | "reviewed" | "closed";
+      report_target_type:
+        | "member"
+        | "session"
+        | "circle"
+        | "opportunity"
+        | "campaign"
+        | "platform";
+      report_category:
+        | "harassment"
+        | "hate_or_discrimination"
+        | "threat_or_violence"
+        | "sexual_content"
+        | "spam_or_fraud"
+        | "privacy"
+        | "copyright_or_proprietary_content"
+        | "other";
+      report_status:
+        "submitted" | "reviewing" | "escalated" | "resolved" | "dismissed";
+      notification_kind:
+        | "report_received"
+        | "report_updated"
+        | "circle_invitation"
+        | "commons_response"
+        | "realm_application"
+        | "passport_activity"
+        | "system";
     };
     CompositeTypes: Record<string, never>;
   };
@@ -1123,3 +1287,7 @@ export type CampaignMember =
   Database["public"]["Tables"]["campaign_members"]["Row"];
 export type PassportEntry =
   Database["public"]["Tables"]["passport_entries"]["Row"];
+export type MemberFeedback =
+  Database["public"]["Tables"]["member_feedback"]["Row"];
+export type SafetyReport = Database["public"]["Tables"]["reports"]["Row"];
+export type Notification = Database["public"]["Tables"]["notifications"]["Row"];

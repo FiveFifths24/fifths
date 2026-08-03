@@ -128,7 +128,7 @@ The Phase 6 migration still requires founder-run positive/negative RLS and concu
 - Game-master, application, and membership state changes write to private audit tables unavailable to anonymous and authenticated clients.
 - Only compatible private draft Sessions can be associated. Published Realm Sessions require active campaign membership, prior registration, or Session-management authority.
 - Realm recommendations receive only RLS-eligible campaign records and bounded matching metadata. Private applications, safety acknowledgements, and roster state never enter ranking; raw scores remain hidden.
-- No campaign creation, application, membership, or Session association creates Passport activity. Phase 9 observes only final campaign completion for active members; Realm actions still create no payment, message, report, notification, VTT record, or copyrighted game record.
+- No campaign creation, application, membership, or Session association creates Passport activity. Phase 9 observes only final campaign completion for active members; Phase 10 may issue a bounded private application-status notification. Realm actions still create no payment, message, report, VTT record, or copyrighted game record.
 
 The Phase 7 migration still requires founder-run positive/negative RLS and concurrency tests with a game master, Circle host, two applicants, active player, departed player, and unrelated member. Static SQL contract tests protect checked-in intent but do not prove deployed database configuration, audit behavior, or contention handling.
 
@@ -156,3 +156,14 @@ Live review still requires representative eligible inventory in the founder-owne
 - Passport is private by default and exposes no point total, public profile, highlight, leaderboard, export, or organization issuer.
 
 The Phase 9 migration requires founder-run positive/negative tests with a host, participant, creator, Commons responder, game master, active player, platform administrator, and unrelated member. Test duplicate replay, attended-to-absent-to-attended correction, administrative revocation resistance, backfill, cross-user denial, and private audit records before production.
+
+## Phase 10 implemented controls
+
+- Reports and feedback are never public and are unreadable to the subject of a report. Reporters see their own status but cannot read internal moderation notes.
+- Direct table writes are revoked. Submission RPCs derive identity from `auth.uid()`, enforce content limits, accept only internal FIFTHS context paths, cap daily intake, and block matching active reports.
+- Centrally assigned moderators can triage or escalate only. Final resolution/dismissal and private feedback review require `platform_admin`; final reports cannot be reopened in Phase 10.
+- Every report and feedback status transition reaches a private audit table. Review notes are session-local input captured only by the private report audit trigger.
+- Notifications remain caller-owned under RLS. Private issuance helpers are unavailable to authenticated clients, dedupe repeated events, and contain no report details, application answers, contact data, diagnosis data, or precise location.
+- Safety copy explicitly distinguishes reporting from emergency response and prevents claims of automated enforcement or guaranteed outcomes.
+
+The Phase 10 migration requires founder-run positive/negative tests with two members, a moderator, a platform administrator, and workflow owners. Test cross-user report/feedback/notification denial, daily and duplicate limits, moderator final-decision denial, admin completion, audit-note privacy, mark-read ownership, and every source notification trigger before production.

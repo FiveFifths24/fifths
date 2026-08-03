@@ -4,7 +4,7 @@
 
 FIFTHS is a mobile-first community platform connecting five products—Pulse, Circles, Creator Commons, Fifth Realm, and Passport—through one account, profile, recommendation system, and Supabase backend.
 
-This repository has completed **Phase 9: verified Passport activity**. It includes the public experience, secure identity and onboarding, private Pulse check-ins, shared Sessions, Circles, Creator Commons, Fifth Realm, unified recommendations, and a private Passport ledger issued only from trusted participation workflows. The founder-owned Supabase project must be connected and all seven ordered migrations applied before live testing. Feedback, reporting, notifications, moderation, and admin controls begin in Phase 10.
+This repository has completed **Phase 10: trust and safety**. It includes the public experience, identity, Pulse, Sessions, Circles, Creator Commons, Fifth Realm, unified recommendations, private Passport activity, structured feedback and reports, private in-app notifications, and role-gated human review. The founder-owned Supabase project must be connected and all eight ordered migrations applied before live testing. Phase 11 is the final end-to-end, accessibility, mobile, security, and deployment review.
 
 ## Prerequisites
 
@@ -61,6 +61,7 @@ Run all four together with `npm run check`.
 - Zod-validated email/password, onboarding, Pulse, Session, Circle, Commons, and Realm actions
 - Unified, deterministic Session, Circle, Commons, and Realm ranking with applicable-signal normalization, stable tie-breaks, soft module balance, and no AI or raw user-facing scores
 - Private, duplicate-safe Passport activity with audited correction and no member write access
+- Private feedback and structured safety reports with bounded submissions, restricted human review, audited decisions, and caller-owned notifications
 - Zod at every external-data boundary
 - Vitest and React Testing Library for unit/component tests
 - ESLint and Prettier for consistency

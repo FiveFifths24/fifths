@@ -54,8 +54,8 @@ export function CircleMembershipForm({
   if (membership?.status === "requested") {
     return (
       <p className="text-sm leading-6 text-neutral-300" role="status">
-        Your request is waiting for a Circle owner or moderator. Phase 5 does
-        not send notifications.
+        Your request is waiting for a Circle owner or moderator. Relevant
+        invitation changes can now appear in the private in-app inbox.
       </p>
     );
   }

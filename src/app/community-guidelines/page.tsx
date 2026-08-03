@@ -54,9 +54,9 @@ export default function CommunityGuidelinesPage() {
       </p>
       <h2>Reporting and review</h2>
       <p>
-        Members will be able to report users and content. Reports will enter a
+        Signed-in members can submit structured private reports. Reports enter a
         restricted moderation queue for human review. Serious concerns can be
-        escalated; permanent punishments will not be automated.
+        escalated; Phase 10 does not automate punishment or account sanctions.
       </p>
       <h2>Adult beta</h2>
       <p>

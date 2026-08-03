@@ -28,7 +28,7 @@ Checked items are complete in the repository. A phase begins only after the prio
 - [x] **Phase 7:** Fifth Realm campaigns, discovery, applications, members, GM tools
 - [x] **Phase 8:** Unified recommendation ranking and explanation tests
 - [x] **Phase 9:** Verified Passport entries and duplicate prevention
-- [ ] **Phase 10:** Feedback, reports, notifications, moderation, admin controls
+- [x] **Phase 10:** Feedback, reports, notifications, moderation, admin controls
 - [ ] **Phase 11:** End-to-end, accessibility, mobile, security, and deployment review
 
 ## Release gate
@@ -181,4 +181,20 @@ The Phase 8 code foundation is complete. It adds no database migration and prese
 - [x] Document Phase 9 architecture, migration order, security controls, founder validation, and intentional exclusions
 - [x] Pass formatting, lint, strict TypeScript, tests, production build, and dependency audits
 
-The Phase 9 code foundation is complete. Live validation still requires the founder-owned non-production Supabase project, all seven ordered migrations, and multi-user tests for issuance, duplicate replay, correction, administrative revocation, audit, and cross-user RLS denial. Phase 10 is next: feedback, reports, notifications, moderation, and admin controls. Organizations, messaging, payments, AI/ML, public Passport sharing, points, and leaderboards remain later or excluded work.
+The Phase 9 code foundation is complete. Live validation still requires the founder-owned non-production Supabase project, all seven ordered migrations, and multi-user tests for issuance, duplicate replay, correction, administrative revocation, audit, and cross-user RLS denial. Phase 10 builds on those private ownership rules without changing Passport issuance. Organizations, messaging, payments, AI/ML, public Passport sharing, points, and leaderboards remain later or excluded work.
+
+## Phase 10 — Trust, safety, and private notifications
+
+- [x] Add protected member feedback and structured safety-report interfaces
+- [x] Bound content, accept only internal context paths, cap daily submissions, and reject duplicate active reports
+- [x] Keep feedback and report history caller-owned while allowing only authorized review roles into restricted queues
+- [x] Separate moderator triage/escalation from platform-admin final decisions and feedback review
+- [x] Keep internal review notes in private audit storage rather than reporter-readable rows
+- [x] Add private deduplicated notifications for report updates, Circle invitations, Commons responses, Realm applications, and Passport changes
+- [x] Add owner-only notification reads and database-controlled mark-read actions
+- [x] Add accessible text status, urgent-safety guidance, honest empty states, and large mobile actions
+- [x] Add schema, component, navigation, privacy, authorization, audit, notification, and phase-boundary tests
+- [x] Document Phase 10 routes, database boundaries, manual validation, completion status, and exclusions
+- [x] Pass formatting, lint, strict TypeScript, tests, production build, and dependency audits
+
+The Phase 10 code foundation is complete. Live validation still requires all eight ordered migrations in the founder-owned non-production Supabase project and multi-user tests for report privacy, submission limits, moderator/admin separation, audit records, notification ownership, and workflow delivery. Phase 11 is next: end-to-end, accessibility, mobile, security, and deployment review. Automated moderation, account suspension, evidence uploads, appeals, email/push delivery, emergency response, organizations, messaging, payments, AI/ML, and leaderboards remain later or excluded work.
