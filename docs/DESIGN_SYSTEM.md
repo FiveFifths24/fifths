@@ -51,6 +51,7 @@ Tokens are defined in `src/app/globals.css` and consumed through Tailwind utilit
 - Server validation is connected to `aria-invalid` and described field errors; pending submissions disable only their submit control and retain a clear label.
 - Color is paired with icons, copy, labels, or borders.
 - Motion respects `prefers-reduced-motion`.
+- Forced-colors mode preserves the browser-selected focus outline and removes the decorative surface grid so structure does not depend on authored color effects.
 - Layouts avoid fixed content widths and horizontal overflow.
 - Legal documents use semantic headings, lists, readable line lengths, and mobile-first spacing.
 - Pulse controls use semantic fieldsets and legends, pair selected state with native controls and borders, and avoid free-text health inputs.
@@ -60,6 +61,8 @@ Tokens are defined in `src/app/globals.css` and consumed through Tailwind utilit
 - Circle controls use semantic fieldsets, explicit public/private and join-policy labels, native selects, minimum 48px targets, and textual lifecycle/role state. Private visibility and destructive removal never rely on rose/red color alone.
 - Commons controls use semantic fieldsets, native deadline/timezone controls, explicit required-skill and optional-interest groups, minimum 48px targets, and textual lifecycle/response state. Amber accents never carry selection, privacy, capacity, or completion meaning alone.
 - Trust-and-safety controls use explicit labels, descriptions, text status, internal-path validation, minimum 48px targets, urgent-safety guidance, and no color-only severity or outcome signal.
+
+Phase 11 runs representative public layouts at desktop and mobile viewport sizes and blocks serious or critical automated WCAG findings. Automated scans do not replace manual keyboard, screen-reader, 200% zoom, forced-colors, reduced-motion, plain-language, and representative-device review before beta.
 
 ## Module personalities
 

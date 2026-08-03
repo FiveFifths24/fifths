@@ -48,14 +48,14 @@ export function SiteFooter() {
             Find your space. Match your energy. A connected community platform
             being built by Five Fifths.
           </p>
-          <p className="mt-7 text-xs text-neutral-500">
+          <p className="mt-7 text-xs text-neutral-400">
             Initial beta planned for adults 18 and older.
           </p>
         </div>
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
           {footerGroups.map((group) => (
             <div key={group.title}>
-              <h2 className="text-xs font-bold tracking-[0.16em] text-neutral-500 uppercase">
+              <h2 className="text-xs font-bold tracking-[0.16em] text-neutral-400 uppercase">
                 {group.title}
               </h2>
               <ul className="mt-4 space-y-3">
@@ -75,11 +75,11 @@ export function SiteFooter() {
         </div>
       </Container>
       <div className="border-t border-neutral-800">
-        <Container className="flex flex-col gap-2 py-5 text-xs text-neutral-500 sm:flex-row sm:items-center sm:justify-between">
+        <Container className="flex flex-col gap-2 py-5 text-xs text-neutral-400 sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} Five Fifths. All rights reserved.</p>
           <p>
-            Phase 3 Pulse foundation · Sessions and participation remain in
-            development.
+            Phase 11 release review · Live beta remains gated on founder setup
+            and validation.
           </p>
         </Container>
       </div>

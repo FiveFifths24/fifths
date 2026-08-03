@@ -29,7 +29,7 @@ export function TextField({
         aria-describedby={descriptionId}
         aria-invalid={error ? true : undefined}
         className={cn(
-          "min-h-12 w-full rounded-xl border border-neutral-700 bg-neutral-950 px-4 py-3 text-base text-white placeholder:text-neutral-600 hover:border-neutral-500 focus:border-red-500 focus:outline-none",
+          "min-h-12 w-full rounded-xl border border-neutral-700 bg-neutral-950 px-4 py-3 text-base text-white placeholder:text-neutral-400 hover:border-neutral-500 focus:border-red-500 focus:outline-none",
           error && "border-red-500",
           className,
         )}
@@ -39,7 +39,7 @@ export function TextField({
       {hint || error ? (
         <p
           className={cn(
-            "mt-2 text-xs leading-5 text-neutral-500",
+            "mt-2 text-xs leading-5 text-neutral-400",
             error && "text-red-300",
           )}
           id={descriptionId}

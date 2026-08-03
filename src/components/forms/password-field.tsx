@@ -32,7 +32,7 @@ export function PasswordField({
         <input
           aria-describedby={hintId}
           aria-invalid={error ? true : undefined}
-          className={`min-h-12 w-full rounded-xl border bg-neutral-950 px-4 py-3 pr-14 text-base text-white placeholder:text-neutral-600 hover:border-neutral-500 focus:border-red-500 focus:outline-none ${error ? "border-red-500" : "border-neutral-700"}`}
+          className={`min-h-12 w-full rounded-xl border bg-neutral-950 px-4 py-3 pr-14 text-base text-white placeholder:text-neutral-400 hover:border-neutral-500 focus:border-red-500 focus:outline-none ${error ? "border-red-500" : "border-neutral-700"}`}
           id={inputId}
           name={name}
           type={visible ? "text" : "password"}
@@ -53,7 +53,7 @@ export function PasswordField({
       </div>
       {hint || error ? (
         <p
-          className={`mt-2 text-xs leading-5 ${error ? "text-red-300" : "text-neutral-500"}`}
+          className={`mt-2 text-xs leading-5 ${error ? "text-red-300" : "text-neutral-400"}`}
           id={hintId}
         >
           {error ?? hint}
