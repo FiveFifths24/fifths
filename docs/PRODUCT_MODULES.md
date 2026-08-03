@@ -90,6 +90,12 @@ The database—not a member form—issues entries from authoritative state. Atte
 
 One unique member/category/source identity prevents duplicate issuance and safely supports backfill. Corrected attendance revokes the same entry. Administrative corrections require a platform-admin role and reason and cannot be silently restored by replay. Phase 9 has no points, public profile highlights, manual claims, organization issuers, exports, leaderboards, reports, notifications, or admin interface.
 
+## Phase 10 shared trust-and-safety implementation
+
+Members can submit private product feedback and structured safety reports, review their own receipts, and receive caller-owned in-app workflow updates. Reports use human review only: moderators triage/escalate, while platform administrators make final decisions and review feedback. Internal notes stay outside reporter-readable tables, and report subjects receive no allegation visibility.
+
+Notifications connect existing products without taking ownership from them. Circle invitations, Commons response changes, Realm application decisions, Passport changes, and report updates issue bounded, deduplicated inbox items linking back to protected routes. Phase 10 adds no chat, marketing delivery, automated moderation, account sanctions, evidence uploads, public reports, or AI.
+
 ## Phase 1 public representation
 
 Each module has a public overview route explaining audience, planned capabilities, Pulse and Passport connections, MVP scope, and explicit exclusions. Preview notices distinguish planned behavior from live functionality. All five routes use one shared `ModuleOverview` component so product storytelling stays cohesive while allowing restrained module accents.

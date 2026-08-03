@@ -45,8 +45,8 @@ export default async function PassportPage() {
   if (entryResult.error) {
     return (
       <StatusMessage tone="error">
-        Passport is unavailable. Confirm that all seven ordered migrations,
-        including the Phase 9 Passport migration, are applied to Supabase.
+        Passport is unavailable. Confirm that all eight ordered migrations,
+        including the Phase 9 and Phase 10 migrations, are applied to Supabase.
       </StatusMessage>
     );
   }

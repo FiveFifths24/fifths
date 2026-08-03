@@ -6,10 +6,12 @@ import {
   Activity,
   Aperture,
   BadgeCheck,
+  Bell,
   CalendarRange,
   HeartHandshake,
   House,
   Orbit,
+  ShieldCheck,
   TicketCheck,
   UserRound,
 } from "lucide-react";
@@ -46,6 +48,18 @@ const items = [
     href: "/home/passport",
     label: "Passport",
     icon: BadgeCheck,
+    nested: true,
+  },
+  {
+    href: "/home/notifications",
+    label: "Inbox",
+    icon: Bell,
+    nested: true,
+  },
+  {
+    href: "/home/safety",
+    label: "Safety",
+    icon: ShieldCheck,
     nested: true,
   },
   {

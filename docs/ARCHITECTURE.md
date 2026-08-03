@@ -280,3 +280,22 @@ Phase 9 adds one private outcome layer without moving ownership out of the produ
 | Private Passport | `/home/passport` | Caller-owned verified and corrected entries; no client mutations |
 
 Phase 9 does not add public Passport profiles, highlight controls, points, badges, exports, organization issuers, manual claims, self-verification, leaderboards, reports, notifications, moderation queues, or an administrator UI. Phase 10 owns the next trust-and-safety layer.
+
+## Phase 10 trust-and-safety architecture
+
+Phase 10 adds a shared trust layer without moving product ownership or exposing allegations to reported members:
+
+- `member_feedback` is private to its author and platform administrators. `reports` is private to its reporter plus centrally assigned moderators/platform administrators. Neither table grants authenticated insert, update, or delete access.
+- Submission RPCs derive the member from `auth.uid()`, enforce bounded content, five-per-day limits, internal-only context paths, and duplicate active-report prevention.
+- Moderators may move reports into review or escalation. Only platform administrators may resolve/dismiss reports or review/close feedback. Final reports cannot be silently reopened.
+- Internal review notes exist only in `private.report_audit_logs`; reporter-readable rows expose status, not staff notes. Targets receive no report visibility.
+- `notifications` is a caller-owned in-app inbox. Private database triggers issue deduplicated updates for report status, Circle invitations, Commons response decisions, Realm application decisions, and Passport changes.
+- No notification trigger expands source visibility. Notification copy contains bounded titles and links only to protected FIFTHS paths; it does not copy application answers, reports, private feedback, or contact details.
+
+| Area          | Route                    | Boundary                                                             |
+| ------------- | ------------------------ | -------------------------------------------------------------------- |
+| Member safety | `/home/safety`           | Caller-owned feedback/report receipts and private submission RPCs    |
+| In-app inbox  | `/home/notifications`    | Caller-owned newest 50 notifications and mark-read RPCs              |
+| Human review  | `/home/admin/moderation` | Moderator triage; platform-admin final decisions and feedback review |
+
+Phase 10 does not add automated moderation, account suspension, content deletion, evidence uploads, appeals, email/push/SMS, emergency response, public allegations, AI classification, or Phase 11 deployment changes.

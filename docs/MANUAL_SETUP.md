@@ -1,6 +1,6 @@
 # Manual Founder Setup
 
-No credentials are needed to review public pages. The following founder-owned steps are required before live Phase 9 account and product testing. Never paste credentials into an issue, pull request, chat, or committed file.
+No credentials are needed to review public pages. The following founder-owned steps are required before live Phase 10 account, product, and trust-and-safety testing. Never paste credentials into an issue, pull request, chat, or committed file.
 
 ## 1. Supabase
 
@@ -18,6 +18,7 @@ No credentials are needed to review public pages. The following founder-owned st
    - `supabase/migrations/202608050001_phase_6_creator_commons_foundation.sql`
    - `supabase/migrations/202608060001_phase_7_fifth_realm_foundation.sql`
    - `supabase/migrations/202608070001_phase_9_passport_foundation.sql`
+   - `supabase/migrations/202608080001_phase_10_trust_safety_foundation.sql`
 8. In **Authentication → URL Configuration**, set the Site URL to the deployed application origin and add these redirect URLs for local and preview/production environments:
    - `http://localhost:3000/auth/callback`
    - `https://<your-preview-domain>/auth/callback`
@@ -60,7 +61,7 @@ No credentials are needed to review public pages. The following founder-owned st
 19. Publish an opportunity with one position. Submit near-simultaneous responses from both responders, then attempt to accept both. Exactly one acceptance must succeed; `accepted_count` must remain one and the opportunity must close as filled.
 20. Confirm a response owner can read only their own statement and status, the authorized manager can read the scoped response queue, and an unrelated member cannot read any response. Verify changes reach both private Phase 6 audit tables.
 21. Withdraw an accepted response before completion. Confirm the authoritative count decrements and a deadline-active opportunity closed as filled reopens. Accept another responder, close the opportunity, and verify neither side alone can complete the response.
-22. Confirm completion first as the participant and then as the authorized manager. Confirm the response and opportunity complete only after both confirmations, one participant entry and one creator-lead Passport entry are issued without duplicates, and no payment, contract, message, notification, report, or upload is created.
+22. Confirm completion first as the participant and then as the authorized manager. Confirm the response and opportunity complete only after both confirmations, one participant entry and one creator-lead Passport entry are issued without duplicates, and bounded Commons/Passport inbox updates appear without exposing the private response. Confirm no payment, contract, message, report, or upload is created.
 23. Confirm a Circle with a published Commons opportunity cannot be archived. Close or cancel the opportunity through an allowed transition before testing archival again.
 24. Create one independent Realm draft as the trusted game master. Confirm the ordinary member cannot create a campaign and the draft is absent from discovery before recruiting opens.
 25. Try to associate the campaign with a Circle the game master does not host; confirm denial. Grant local host authority through the existing Circle owner flow, create a separate Circle-scoped draft, and confirm private-Circle campaign data is unreadable to the unrelated member.
@@ -68,11 +69,16 @@ No credentials are needed to review public pages. The following founder-owned st
 27. Attempt near-simultaneous acceptance for both applicants. Exactly one acceptance must succeed; `active_player_count` must remain one, the accepted application must have one active player membership, and all campaign/application/membership changes must reach the private Phase 7 audit tables.
 28. Confirm the accepted player can read the active roster but cannot read other application answers. Exercise applicant withdrawal, active-player departure, and GM removal, verifying authoritative capacity decrements once and never becomes negative.
 29. Create a compatible private Session draft, associate it with the campaign, publish it, and confirm only active campaign members, prior registrants, and authorized Session managers can read it. Confirm a published Session cannot be newly associated and a Circle with recruiting or active Realm work cannot be archived.
-30. Complete a campaign and confirm one Passport entry is issued to each active player plus one game-master entry. Confirm left/removed members receive none and no payment, message, report, notification, virtual tabletop record, copyrighted rule content, or proprietary game content is created.
+30. Complete a campaign and confirm one Passport entry and bounded Passport notification are issued to each active player plus one game-master entry. Confirm left/removed members receive none and no payment, message, report, virtual tabletop record, copyrighted rule content, or proprietary game content is created.
 31. Confirm each member can read only their own Passport. Replay every eligible source action and verify the unique member/activity/source identity prevents duplicates. Revoke one entry as the platform administrator with a reason, replay its source, and confirm the administrative correction remains revoked and is recorded in `private.passport_entry_audit_logs`. Confirm an ordinary member cannot call the correction successfully.
-32. Regenerate `src/types/database.ts` from the applied schema and review the diff before committing any generated update.
+32. As one ordinary member, submit private feedback and a safety report. Confirm an unrelated member cannot read either, the reporter can read status but not internal review notes, and the report target receives no report visibility or allegation notification.
+33. Submit matching and repeated intake to verify duplicate active-report prevention and the five-per-24-hour limits. Confirm external context URLs are rejected while a protected path such as `/home/circles` succeeds.
+34. As the moderator, move a report to reviewing and escalation, then confirm resolution and dismissal are denied. As the platform administrator, resolve or dismiss it with a note. Confirm each transition reaches `private.report_audit_logs`, the note exists only there, and the reporter receives bounded status notifications.
+35. Confirm only the platform administrator can review/close feedback and that every transition reaches `private.feedback_audit_logs`. Confirm moderators cannot read the feedback queue.
+36. Trigger a Circle invitation, Commons response decision, Realm application decision, Passport issuance/correction, and report update. Confirm exactly one caller-owned notification per dedupe key, cross-user denial, protected action paths, and owner-only mark-one/mark-all-read behavior.
+37. Regenerate `src/types/database.ts` from the applied schema and review the diff before committing any generated update.
 
-Do not paste or commit the database password, JWT signing key, or service-role key. Phase 9 does not require a service-role key.
+Do not paste or commit the database password, JWT signing key, or service-role key. Phase 10 does not require a service-role key.
 
 ## 2. Vercel
 
@@ -95,4 +101,4 @@ cp .env.example .env.local
 npm run check
 ```
 
-With the non-production Supabase values configured, manually verify signup email confirmation, login, logout, password recovery, expired/invalid callback handling, onboarding, duplicate username handling, direct protected-route access, Pulse validation and history, 24-hour expiration, Session lifecycle controls, capacity contention, registration cancellation/re-entry, attendance authorization/audit, Circle lifecycle and discovery, public/private membership boundaries, invitation/request handling, local-role authorization, membership audit, draft Session association, Creator Commons draft/public lifecycle, private saves and responses, acceptance contention, withdrawal, mutual completion, Realm draft/recruiting/active/completed lifecycle, private applications, campaign-capacity contention, membership departure/removal, Realm Session visibility, Passport issuance, duplicate replay, correction/audit, originality boundaries, and cross-user RLS denial. Do not apply any migration to production until these checks and a legal/privacy review are complete.
+With the non-production Supabase values configured, manually verify all account, Pulse, Session, Circle, Commons, Realm, Passport, report, feedback, moderation, audit, notification, privacy, capacity, and cross-user RLS journeys listed above. Do not apply any migration to production until these checks and a professional legal/privacy review are complete.

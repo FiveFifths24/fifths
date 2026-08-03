@@ -28,3 +28,7 @@
 - **Supabase service-role key:** Highly privileged server secret that bypasses RLS and must never reach a browser.
 - **Verified activity:** A private Passport entry issued through an authorized, traceable source workflow rather than by its recipient.
 - **Passport correction:** A visible revoked entry whose source verification changed or whose platform-admin review documented a required correction.
+- **Safety report:** A private, structured member concern visible only to its reporter and authorized human reviewers; it is not a public accusation or emergency channel.
+- **Moderator:** A centrally assigned reviewer who may triage or escalate reports but cannot make Phase 10 final decisions.
+- **Platform administrator:** A centrally assigned role authorized for final report decisions, private feedback review, and existing narrow administrative corrections.
+- **In-app notification:** A caller-owned, deduplicated workflow update displayed only inside FIFTHS; Phase 10 sends no email, push, or SMS.

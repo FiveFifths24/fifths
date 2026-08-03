@@ -12,6 +12,7 @@ Implemented shared platform features:
 - `creator-commons/` — Phase 6 opportunity cards, Pulse adapter, draft creation, private response, selection, save, and completion controls
 - `fifth-realm/` — Phase 7 campaign cards, Pulse adapter, draft creation, private applications, membership, lifecycle, and Session-association controls
 - `passport/` — Phase 9 private verified-entry presentation, labels, and summary logic; issuance remains database-owned
+- `trust-safety/` — Phase 10 feedback/report validation, member forms, notification actions, and restricted moderation transitions
 
 Shared deterministic recommendation ranking lives in `src/lib/recommendations` because every product supplies already-eligible candidates to it. Phase 8 normalizes by applicable signals, creates stable cross-module ordering, deduplicates composite identities, softly balances product representation, and returns only nonnumeric fit levels plus reasons. The scorer still does not fetch data, bypass product eligibility, or inspect private participation state.
 
@@ -19,7 +20,5 @@ Planned feature folders:
 
 - `profiles/` — unified identity, preferences, interests, and skills
 - `organizations/` — approved organizational spaces and staff
-- `moderation/` — reports, review queue, and audit activity
-- `notifications/` — in-app notification delivery
 
 Create these folders when their implementation phase begins; the roadmap prevents empty placeholder code.
