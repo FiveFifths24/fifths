@@ -110,3 +110,13 @@ input {
     transition-duration: 0.01ms !important;
   }
 }
+
+@media (forced-colors: active) {
+  :focus-visible {
+    outline-color: Highlight;
+  }
+
+  .surface-grid {
+    background-image: none;
+  }
+}

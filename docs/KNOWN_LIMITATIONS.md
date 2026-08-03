@@ -1,6 +1,6 @@
 # Known Limitations
 
-Phase 10 establishes private feedback, structured reports, caller-owned in-app notifications, and role-gated human review. It does not activate organizations, automated enforcement, or the Phase 11 deployment review.
+Phase 11 establishes browser/accessibility regression coverage, production response-header configuration, continuous quality gates, and a documented deployment review. It does not make an unconnected application ready for public beta or activate new product scope.
 
 - Email/password authentication, recovery, profile onboarding, logout, Pulse, Sessions, Circles, Creator Commons, Fifth Realm, Passport, reporting, and notifications are implemented, but they cannot operate until the founder-owned Supabase project is connected, all eight ordered migrations are applied, and Auth URLs are configured.
 - Social login, MFA enrollment, account deletion, email change, profile editing, avatar upload, production SMTP, and an administrator role-management interface are not implemented.
@@ -16,11 +16,11 @@ Phase 10 establishes private feedback, structured reports, caller-owned in-app n
 - Moderation is limited to private intake, triage, escalation, final status, and audit evidence. Account suspension, member bans, content deletion, evidence uploads, appeals, case assignment workflows, public transparency reports, automated moderation, emergency response, and administrator role management are not implemented.
 - Demonstration and preview language is explicitly labeled; no sample card represents a live opportunity, community, campaign, or activity.
 - Privacy, terms, community, Creator Commons, and Fifth Realm safety pages are structured drafts requiring professional legal and operational review.
-- Database-level daily intake caps exist for feedback and reports, but distributed endpoint throttling, bot protection, email delivery, monitoring, backups, analytics persistence, and production security headers are not configured.
-- Playwright remains deferred until a founder-owned Supabase preview environment can support deterministic account, Pulse, feed, Passport, reporting, moderation, notification, capacity, privacy, and completion journeys. Phase 10 uses focused validation, component, ranking, adapter, redirect, and database-security contract tests.
+- Database-level daily intake caps exist for feedback and reports, and production security headers are configured in application code. Distributed endpoint throttling, bot protection, production email delivery, monitoring, backups/restore rehearsal, analytics persistence, and deployed-header verification are not configured or proven.
+- Playwright covers deterministic public shell, navigation, authentication-interface, policy, security-header, responsive-layout, and automated accessibility behavior at desktop and mobile sizes. Live account, Pulse, feed, Passport, reporting, moderation, notification, capacity, privacy, and completion journeys still require the founder-owned Supabase preview environment and cannot be honestly automated in this repository alone.
 - The SQL migrations have not been executed against a live project in this repository environment. Apply all eight in order to a non-production Supabase branch/project, run the documented multi-user RLS, capacity, privacy, Passport, report, moderation, audit, and notification tests, and review regenerated database types before production.
 - Next.js 16.2.12 still declares vulnerable transitive versions of `postcss` and `sharp`. Exact npm overrides resolve `postcss` to 8.5.25 and `sharp` to 0.35.3 throughout the dependency tree; both npm audit checks report zero vulnerabilities. Remove the overrides after Next.js directly declares patched versions, then regenerate the lockfile and rerun the full quality and audit gates.
 - No component library was added. Phase 1 primitives are small, owned by FIFTHS, and documented in `docs/DESIGN_SYSTEM.md`.
 - The MVP remains restricted to adults 18 and older and excludes payments, direct messaging, chat, AI/ML, public leaderboards, physical venue control, virtual tabletop tools, and copyrighted game content.
 
-These are intentional phase boundaries. Phase 11 is the next tracked work in `docs/ROADMAP.md`.
+These are intentional boundaries. Phase 11 completes the tracked MVP code phases, but `docs/RELEASE_READINESS.md` keeps public beta at no-go until the founder-owned legal, accessibility, security, Supabase, backup, monitoring, and operational gates pass. Any additional product phase requires a separately reviewed roadmap.

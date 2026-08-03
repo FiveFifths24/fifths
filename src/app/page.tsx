@@ -35,7 +35,7 @@ export default function HomePage() {
             <h1 className="display-type mt-8 text-[clamp(4rem,10vw,8.8rem)] leading-[0.82] text-balance text-white">
               Find your space.
               <br />
-              <span className="text-neutral-500">Match your energy.</span>
+              <span className="text-neutral-400">Match your energy.</span>
             </h1>
             <p className="mt-9 max-w-2xl text-lg leading-8 text-neutral-300 sm:text-xl">
               FIFTHS connects your daily capacity with communities, creator
@@ -54,14 +54,14 @@ export default function HomePage() {
                 Explore the Ecosystem
               </ButtonLink>
             </div>
-            <p className="mt-5 text-xs text-neutral-500">
+            <p className="mt-5 text-xs text-neutral-400">
               The account and private Pulse foundations are built. Live access
               depends on founder deployment setup; participation is still being
               built.
             </p>
           </div>
           <Link
-            className="absolute right-5 bottom-7 hidden min-h-12 items-center gap-2 text-xs font-bold tracking-[0.14em] text-neutral-500 uppercase hover:text-white sm:flex lg:right-10"
+            className="absolute right-5 bottom-7 hidden min-h-12 items-center gap-2 text-xs font-bold tracking-[0.14em] text-neutral-400 uppercase hover:text-white sm:flex lg:right-10"
             href="#vision"
           >
             See the vision <ArrowDown aria-hidden="true" className="size-4" />
@@ -83,7 +83,7 @@ export default function HomePage() {
               Most platforms begin with content. FIFTHS begins with capacity:
               what kind of room, energy, and participation actually fits today.
             </p>
-            <p className="text-neutral-500">
+            <p className="text-neutral-400">
               One identity connects discovery, collaboration, play,
               contribution, and a credible record of showing up.
             </p>

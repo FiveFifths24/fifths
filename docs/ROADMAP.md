@@ -29,7 +29,7 @@ Checked items are complete in the repository. A phase begins only after the prio
 - [x] **Phase 8:** Unified recommendation ranking and explanation tests
 - [x] **Phase 9:** Verified Passport entries and duplicate prevention
 - [x] **Phase 10:** Feedback, reports, notifications, moderation, admin controls
-- [ ] **Phase 11:** End-to-end, accessibility, mobile, security, and deployment review
+- [x] **Phase 11:** End-to-end, accessibility, mobile, security, and deployment review
 
 ## Release gate
 
@@ -198,3 +198,18 @@ The Phase 9 code foundation is complete. Live validation still requires the foun
 - [x] Pass formatting, lint, strict TypeScript, tests, production build, and dependency audits
 
 The Phase 10 code foundation is complete. Live validation still requires all eight ordered migrations in the founder-owned non-production Supabase project and multi-user tests for report privacy, submission limits, moderator/admin separation, audit records, notification ownership, and workflow delivery. Phase 11 is next: end-to-end, accessibility, mobile, security, and deployment review. Automated moderation, account suspension, evidence uploads, appeals, email/push delivery, emergency response, organizations, messaging, payments, AI/ML, and leaderboards remain later or excluded work.
+
+## Phase 11 — Release readiness review
+
+- [x] Add Chromium end-to-end coverage for the public shell, navigation, auth interfaces, legal notices, and response headers
+- [x] Exercise desktop and mobile viewports and reject horizontal overflow on representative public routes
+- [x] Add axe-core WCAG regression checks for representative landing, account-entry, and policy pages
+- [x] Add production CSP, frame denial, content-type, referrer, permissions, and HSTS response headers
+- [x] Preserve visible focus, reduced-motion, large-target, semantic-landmark, and forced-colors behavior
+- [x] Add least-privilege GitHub Actions gates for formatting, lint, strict TypeScript, tests, build, audits, and browser review
+- [x] Document environment promotion, preview/production smoke tests, founder go/no-go gates, deployment, and rollback
+- [x] Separate locally verifiable release controls from founder-owned Supabase, legal, accessibility, backup, monitoring, and operational review
+- [x] Update architecture, security, setup, limitations, and completion documentation without changing product or database boundaries
+- [x] Pass the complete release gate and review the final dependency tree and repository contents
+
+Phase 11 completes the tracked MVP code phases. It adds no migration or new product behavior. Public beta remains a no-go until the founder completes `docs/RELEASE_READINESS.md`, applies all eight migrations to a non-production Supabase project, passes the documented multi-user tests, and approves legal, security, accessibility, backup, monitoring, and operational readiness. Any additional product scope requires a separately reviewed roadmap; it is not implied by Phase 11 completion.

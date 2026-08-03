@@ -41,7 +41,7 @@ export function ParticipationLoop() {
         <li className="relative bg-neutral-950 p-6 sm:p-7" key={title}>
           <div className="flex items-center justify-between">
             <Icon aria-hidden="true" className="size-5 text-red-400" />
-            <span className="text-xs font-bold text-neutral-600">
+            <span className="text-xs font-bold text-neutral-400">
               0{index + 1}
             </span>
           </div>

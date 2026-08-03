@@ -56,9 +56,10 @@ tests/e2e/              essential Playwright journeys (Phase 11)
 | Lucide React                | Consistent accessible icon primitives                             |
 | clsx + tailwind-merge       | Predictable reusable component class composition                  |
 | Vitest + Testing Library    | Fast behavior-focused unit and component tests                    |
+| Playwright + axe-core       | Desktop/mobile journeys and accessibility regression checks       |
 | ESLint + Prettier           | Automated correctness and formatting standards                    |
 
-shadcn/ui is intentionally not installed as a package. Components will be added selectively in Phase 1 so FIFTHS owns the source and avoids unused UI code. Playwright is deferred until essential journeys exist.
+shadcn/ui is intentionally not installed as a package. FIFTHS owns the small Phase 1 component primitives and avoids unused UI code. Phase 11 activates Playwright for deterministic public journeys; live authenticated multi-user journeys remain environment-owned release gates.
 
 ## Architectural rules
 
@@ -299,3 +300,15 @@ Phase 10 adds a shared trust layer without moving product ownership or exposing 
 | Human review  | `/home/admin/moderation` | Moderator triage; platform-admin final decisions and feedback review |
 
 Phase 10 does not add automated moderation, account suspension, content deletion, evidence uploads, appeals, email/push/SMS, emergency response, public allegations, AI classification, or Phase 11 deployment changes.
+
+## Phase 11 release architecture
+
+Phase 11 changes release assurance without changing the database or product model:
+
+- `tests/e2e` owns Chromium journeys for public content, responsive navigation, authentication structure, policy notices, overflow, response headers, and representative axe-core scans.
+- `playwright.config.ts` runs the same journeys against desktop and mobile Chromium profiles with failure-only screenshots and retained traces.
+- `next.config.ts` applies one response-header policy to every route. The policy permits the existing Next.js runtime and Supabase HTTPS/WebSocket connections while denying frames, objects, camera, microphone, and geolocation. HSTS and insecure-request upgrades are production-only.
+- `.github/workflows/quality.yml` installs from the lockfile and separates the application gate from the browser/accessibility gate. Workflow permissions are read-only and redundant runs on the same ref are cancelled.
+- `docs/RELEASE_READINESS.md` is the source of truth for environment promotion, founder-owned validation, smoke tests, deployment, rollback, and the current public-beta no-go decision.
+
+The browser suite deliberately does not fake successful authentication or database state. Offline coverage proves public behavior and release configuration; the founder-owned preview project must prove Auth, RLS, capacity, audit, privacy, and cross-user behavior with synthetic accounts. Phase 11 adds no route, migration, database permission, product mutation, analytics provider, or service-role client.

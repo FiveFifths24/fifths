@@ -65,7 +65,7 @@ Before public beta, rate-limit authentication, password reset, content creation,
 - Test RLS using multiple users and negative cases.
 - Review storage bucket policies and upload type/size limits.
 - Establish report escalation, account suspension, and evidence-retention procedures.
-- Configure security headers, monitoring, backup/recovery, dependency scanning, and secret rotation.
+- Keep the Phase 11 response headers and dependency gates enabled; configure monitoring, backup/recovery, operational secret rotation, and restore testing.
 - Complete privacy and legal review; the application is 18+ and will not collect diagnoses or precise home addresses.
 
 ## Phase 4 implemented controls
@@ -167,3 +167,14 @@ The Phase 9 migration requires founder-run positive/negative tests with a host, 
 - Safety copy explicitly distinguishes reporting from emergency response and prevents claims of automated enforcement or guaranteed outcomes.
 
 The Phase 10 migration requires founder-run positive/negative tests with two members, a moderator, a platform administrator, and workflow owners. Test cross-user report/feedback/notification denial, daily and duplicate limits, moderator final-decision denial, admin completion, audit-note privacy, mark-read ownership, and every source notification trigger before production.
+
+## Phase 11 implemented controls
+
+- Every application response receives a Content Security Policy, frame denial, MIME sniffing prevention, a strict-origin referrer policy, and a permissions policy that disables camera, microphone, and geolocation. Production responses also receive two-year HSTS and insecure-request upgrades.
+- The CSP permits only same-origin application resources, HTTPS images, and the required Supabase HTTPS/WebSocket origins. Next.js inline runtime styles/scripts remain allowed; this is documented residual policy debt, not a claim of a nonce-based strict CSP.
+- Browser tests exercise representative public, auth-interface, and policy pages at desktop and mobile dimensions, verify no horizontal overflow, and check security-header delivery.
+- axe-core blocks serious and critical WCAG regression findings on representative pages. Automated scans do not replace manual assistive-technology or disability-led review.
+- GitHub Actions uses lockfile installs, read-only repository permission, bounded timeouts, current major official actions, both npm audit scopes, and retained browser diagnostics.
+- The release checklist requires environment separation, live negative RLS and concurrency checks, production SMTP, platform rate limiting, monitoring, backup/restore rehearsal, legal/privacy review, manual accessibility review, and a named release/rollback owner before beta.
+
+The repository remains a public-beta no-go until those founder-owned controls are completed. Security headers do not compensate for an untested deployed database, missing operational monitoring, or draft legal policy.

@@ -32,7 +32,7 @@ export function AuthShell({
           <p className="mt-6 text-lg leading-8 text-neutral-300">
             {description}
           </p>
-          <div className="mt-8 flex items-start gap-3 text-sm leading-6 text-neutral-500">
+          <div className="mt-8 flex items-start gap-3 text-sm leading-6 text-neutral-400">
             <LockKeyhole
               aria-hidden="true"
               className="mt-0.5 size-5 shrink-0"

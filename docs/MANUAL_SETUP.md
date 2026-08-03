@@ -1,6 +1,6 @@
 # Manual Founder Setup
 
-No credentials are needed to review public pages. The following founder-owned steps are required before live Phase 10 account, product, and trust-and-safety testing. Never paste credentials into an issue, pull request, chat, or committed file.
+No credentials are needed to review public pages. The following founder-owned steps are required before live Phase 11 account, product, trust-and-safety, and release testing. Never paste credentials into an issue, pull request, chat, or committed file.
 
 ## 1. Supabase
 
@@ -78,7 +78,7 @@ No credentials are needed to review public pages. The following founder-owned st
 36. Trigger a Circle invitation, Commons response decision, Realm application decision, Passport issuance/correction, and report update. Confirm exactly one caller-owned notification per dedupe key, cross-user denial, protected action paths, and owner-only mark-one/mark-all-read behavior.
 37. Regenerate `src/types/database.ts` from the applied schema and review the diff before committing any generated update.
 
-Do not paste or commit the database password, JWT signing key, or service-role key. Phase 10 does not require a service-role key.
+Do not paste or commit the database password, JWT signing key, or service-role key. Phase 11 does not require a service-role key.
 
 ## 2. Vercel
 
@@ -88,17 +88,20 @@ Do not paste or commit the database password, JWT signing key, or service-role k
 4. Add the three public values from `.env.example` under Project Settings → Environment Variables. Use the matching preview or production application origin for `NEXT_PUBLIC_SITE_URL`.
 5. Require preview deployments for pull requests and keep production deployment on `main` only.
 6. Enable multi-factor authentication and limit project access.
+7. Confirm preview and production responses deliver the headers documented in `docs/SECURITY.md`; HSTS must appear only on the HTTPS production deployment.
+8. Enable availability/error monitoring, define privacy-safe log retention, configure database backups, and complete one restore rehearsal before beta.
 
 ## 3. GitHub branch protection
 
-After the first pull request exists, protect `main`: require a pull request, require passing lint/type/test/build checks, block force pushes, and require the branch to be current before merging.
+Protect `main`: require a pull request, require the `Format, lint, type, unit, build, and audit` and `Browser, accessibility, and responsive review` checks, block force pushes, and require the branch to be current before merging.
 
 ## 4. Required account-flow validation
 
 ```bash
 npm install
 cp .env.example .env.local
-npm run check
+npx playwright install chromium
+npm run check:release
 ```
 
-With the non-production Supabase values configured, manually verify all account, Pulse, Session, Circle, Commons, Realm, Passport, report, feedback, moderation, audit, notification, privacy, capacity, and cross-user RLS journeys listed above. Do not apply any migration to production until these checks and a professional legal/privacy review are complete.
+With the non-production Supabase values configured, manually verify all account, Pulse, Session, Circle, Commons, Realm, Passport, report, feedback, moderation, audit, notification, privacy, capacity, and cross-user RLS journeys listed above. Then complete the go/no-go, smoke, deployment, and rollback controls in `docs/RELEASE_READINESS.md`. Do not apply any migration to production until these checks and professional legal/privacy and accessibility reviews are complete.

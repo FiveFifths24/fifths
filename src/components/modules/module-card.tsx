@@ -34,7 +34,7 @@ export function ModuleCard({
           >
             <Icon aria-hidden="true" className="size-5" />
           </span>
-          <span className="text-xs font-bold tracking-[0.14em] text-neutral-500 uppercase">
+          <span className="text-xs font-bold tracking-[0.14em] text-neutral-400 uppercase">
             Connected product
           </span>
         </div>

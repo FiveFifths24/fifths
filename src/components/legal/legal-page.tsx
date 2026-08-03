@@ -28,7 +28,7 @@ export function LegalPage({
           <p className="mt-6 max-w-2xl text-lg leading-8 text-neutral-300">
             {summary}
           </p>
-          <p className="mt-5 text-xs text-neutral-500">
+          <p className="mt-5 text-xs text-neutral-400">
             Draft updated July 31, 2026
           </p>
         </Container>
