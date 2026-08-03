@@ -148,10 +148,10 @@ export default async function FifthRealmPage() {
       </div>
       <StatusMessage className="mt-8">
         <span>
-          <strong>Phase 7 boundary:</strong> Fifth Realm coordinates campaigns
-          and uses shared Sessions for meetings. It does not host copyrighted
-          rules, virtual tabletop tools, private chat, payments, or Passport
-          credit.
+          <strong>Fifth Realm boundary:</strong> Completing a campaign verifies
+          Passport activity for its active players and game master. Fifth Realm
+          still does not host copyrighted rules, virtual tabletop tools, private
+          chat, or payments.
         </span>
       </StatusMessage>
       <nav aria-label="Fifth Realm workspace" className="mt-7">

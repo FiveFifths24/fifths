@@ -79,7 +79,7 @@ Before public beta, rate-limit authentication, password reset, content creation,
 - Attendance requires an active registration and a started, published/completed Session. Every insert or change is recorded in `private.session_attendance_audit_logs`, which has no anonymous or authenticated access.
 - Session discovery reads only published future records. Draft and cancelled Sessions remain visible only to authorized managers or members tied to a registration for lifecycle clarity.
 - Hosting stores a broad venue/access label only. Phase 4 does not collect precise addresses, private meeting links, participant notes, diagnosis data, payment data, or messages.
-- Attendance does not award Passport credit. Verified, idempotent issuance remains isolated to Phase 9.
+- Phase 9 observes attended state through a private trigger. Members still cannot award attendance or call the Passport issuer.
 
 The Phase 4 migration still requires founder-run contention tests and positive/negative RLS tests with a host, two members, and an unrelated account. Static SQL contract tests protect the checked-in intent but do not prove the deployed database configuration.
 
@@ -112,7 +112,7 @@ The Phase 5 migration still requires founder-run positive/negative RLS tests wit
 - Participants can withdraw submitted or accepted responses. Accepted withdrawal decrements capacity and reopens only a still-active opportunity that closed because it filled.
 - Completion requires a closed opportunity and separate confirmation from both the accepted participant and an authorized manager. Opportunity and response state changes are recorded in private audit tables.
 - Commons recommendations receive only RLS-eligible published records plus bounded matching metadata. Required skills are labels, not a hidden eligibility score; raw recommendation scores remain hidden.
-- No save, response, acceptance, or completion action creates payment, a contract, a message, a notification, a report, or Passport credit.
+- No save, response, or acceptance action creates Passport activity. Phase 9 observes only mutually completed responses and fully completed opportunities; none of these actions creates payment, a contract, a message, a notification, or a report.
 
 The Phase 6 migration still requires founder-run positive/negative RLS and concurrency tests with a creator, Circle host, two responders, accepted participant, and unrelated member. Static SQL contract tests protect the checked-in intent but do not prove the deployed database configuration, audit behavior, or contention handling.
 
@@ -128,7 +128,7 @@ The Phase 6 migration still requires founder-run positive/negative RLS and concu
 - Game-master, application, and membership state changes write to private audit tables unavailable to anonymous and authenticated clients.
 - Only compatible private draft Sessions can be associated. Published Realm Sessions require active campaign membership, prior registration, or Session-management authority.
 - Realm recommendations receive only RLS-eligible campaign records and bounded matching metadata. Private applications, safety acknowledgements, and roster state never enter ranking; raw scores remain hidden.
-- No campaign, application, membership, or Session association creates a Passport entry, payment, message, report, notification, VTT record, or copyrighted game record.
+- No campaign creation, application, membership, or Session association creates Passport activity. Phase 9 observes only final campaign completion for active members; Realm actions still create no payment, message, report, notification, VTT record, or copyrighted game record.
 
 The Phase 7 migration still requires founder-run positive/negative RLS and concurrency tests with a game master, Circle host, two applicants, active player, departed player, and unrelated member. Static SQL contract tests protect checked-in intent but do not prove deployed database configuration, audit behavior, or contention handling.
 
@@ -143,3 +143,16 @@ The Phase 7 migration still requires founder-run positive/negative RLS and concu
 - Phase 8 adds no migration, grants, client writes, analytics collection, AI/ML dependency, or service-role access.
 
 Live review still requires representative eligible inventory in the founder-owned non-production project to confirm that deployed RLS and real product distributions produce understandable results. Offline deterministic tests cannot validate production inventory quality or substitute for ongoing founder review of weights and explanation language.
+
+## Phase 9 implemented controls
+
+- Passport entries are caller-owned under RLS. Authenticated members receive select only and cannot insert, update, delete, self-verify, or choose another member's target identity.
+- The issuer is a private security-definer function with no authenticated execute grant. Only database triggers and the one-time migration backfill can call it.
+- Issuance observes authoritative source state already protected by earlier phases: host-marked attendance, completed Sessions with at least one attended non-host participant, mutually completed Commons responses, completed opportunities, and active Realm membership at campaign completion.
+- The unique member/activity/source constraint and conflict-safe issuer make repeated trigger execution and backfill idempotent. No browser-generated idempotency key is trusted.
+- A corrected attendance source revokes rather than deletes its entry. A later valid source correction can restore the same identity; a platform-admin administrative revocation cannot be silently restored by source replay.
+- The correction RPC requires the centrally granted `platform_admin` role and a bounded reason. Every entry insertion or status change writes to a private audit table unavailable to anonymous or authenticated clients.
+- Source title and provenance are bounded snapshots. Passport stores no free-form member claim, diagnosis, precise location, private application answer, response statement, contact detail, payment data, or protected-profile attribute.
+- Passport is private by default and exposes no point total, public profile, highlight, leaderboard, export, or organization issuer.
+
+The Phase 9 migration requires founder-run positive/negative tests with a host, participant, creator, Commons responder, game master, active player, platform administrator, and unrelated member. Test duplicate replay, attended-to-absent-to-attended correction, administrative revocation resistance, backfill, cross-user denial, and private audit records before production.

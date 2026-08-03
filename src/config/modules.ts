@@ -209,6 +209,7 @@ export const platformModules: PlatformModule[] = [
     icon: BadgeCheck,
     accent: "text-emerald-300",
     glow: "from-emerald-950/60 to-neutral-950",
+    memberHref: "/home/passport",
   },
 ];
 

@@ -30,5 +30,8 @@ describe("MemberNavigation", () => {
     expect(
       within(navigation).getByRole("link", { name: "Realm" }),
     ).toHaveAttribute("href", "/home/realm");
+    expect(
+      within(navigation).getByRole("link", { name: "Passport" }),
+    ).toHaveAttribute("href", "/home/passport");
   });
 });

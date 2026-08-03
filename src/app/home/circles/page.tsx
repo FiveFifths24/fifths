@@ -183,8 +183,8 @@ export default async function CirclesDiscoveryPage() {
           className="mt-0.5 size-5 shrink-0 text-emerald-400"
         />
         Private Circles and their associated Sessions are restricted to invited
-        or active members. Phase 5 adds no chat, feed, public member directory,
-        or Passport credit.
+        or active members. Membership alone does not create Passport activity;
+        verified attendance or hosting through an associated Session can.
       </aside>
     </div>
   );

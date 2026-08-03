@@ -6,7 +6,7 @@
 - **Creator Commons:** The collaboration and opportunity marketplace; it does not process MVP payments.
 - **Creator opportunity:** A creator- or Circle-scoped brief with clear deliverables, required skills, openings, deadline, Pulse-fit context, and a controlled lifecycle; it is not a contract or payment promise.
 - **Opportunity response:** A private expression of interest readable only by its owner and authorized opportunity managers; it can be submitted, accepted, declined, withdrawn, or completed.
-- **Confirmed completion:** Separate acknowledgement from an accepted participant and an authorized opportunity manager; Phase 6 records it without issuing Passport credit.
+- **Confirmed completion:** Separate acknowledgement from an accepted participant and an authorized opportunity manager; once both exist, Phase 9 can issue duplicate-safe Passport activity.
 - **Fifth Realm:** Campaign and immersive-story coordination, not a virtual tabletop or rules library.
 - **Realm campaign:** An original, system-neutral campaign profile with a game master, bounded recruiting lifecycle, safety expectations, player capacity, Pulse-fit context, and shared Sessions.
 - **Campaign application:** A private, safety-acknowledged expression of interest readable only by its applicant and authorized campaign manager.
@@ -21,9 +21,10 @@
 - **Personal Home:** The protected member overview that shows current Pulse state and future explainable matches without replacing public product pages.
 - **Recommendation reason:** A plain-language explanation for why an eligible record matches a Pulse; internal numeric weights are not shown to members.
 - **Registration:** A caller-owned, capacity-counted place in a published Session; it can be cancelled but not duplicated.
-- **Attendance record:** A host- or administrator-marked Session outcome for an active registrant, audited privately and not yet eligible for Passport credit.
+- **Attendance record:** A host- or administrator-marked Session outcome for an active registrant; an attended result issues Passport activity and a later correction revokes it without erasing history.
 - **RLS:** Row Level Security—database rules deciding which records a signed-in user may read or change.
 - **Session:** A scheduled experience shared across modules, such as a sprint, game night, workshop, or campaign meeting.
 - **Supabase publishable key:** Browser-safe project identifier whose access is constrained by RLS.
 - **Supabase service-role key:** Highly privileged server secret that bypasses RLS and must never reach a browser.
-- **Verified activity:** Passport credit issued through an authorized, traceable workflow rather than by its recipient.
+- **Verified activity:** A private Passport entry issued through an authorized, traceable source workflow rather than by its recipient.
+- **Passport correction:** A visible revoked entry whose source verification changed or whose platform-admin review documented a required correction.

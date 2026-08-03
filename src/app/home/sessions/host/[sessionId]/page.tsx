@@ -287,8 +287,9 @@ export default async function ManageSessionPage({
               aria-hidden="true"
               className="mt-0.5 size-5 shrink-0 text-emerald-400"
             />
-            Attendance updates are audited. They do not create Passport entries
-            until the separately reviewed Phase 9 workflow exists.
+            Attendance updates are audited. An attended result creates one
+            private Passport entry; correcting that result revokes the entry
+            without erasing its history.
           </div>
         </section>
       </div>

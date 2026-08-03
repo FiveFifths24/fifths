@@ -635,6 +635,48 @@ export type Database = {
         Update: never;
         Relationships: [];
       };
+      passport_entries: {
+        Row: {
+          id: string;
+          user_id: string;
+          activity_kind: Database["public"]["Enums"]["passport_activity_kind"];
+          source_module: Database["public"]["Enums"]["passport_source_module"];
+          source_record_id: string;
+          source_title: string;
+          occurred_at: string;
+          status: Database["public"]["Enums"]["passport_entry_status"];
+          verified_at: string;
+          verified_by: string | null;
+          revoked_at: string | null;
+          revoked_by: string | null;
+          revocation_kind:
+            Database["public"]["Enums"]["passport_revocation_kind"] | null;
+          revocation_reason: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          activity_kind: Database["public"]["Enums"]["passport_activity_kind"];
+          source_module: Database["public"]["Enums"]["passport_source_module"];
+          source_record_id: string;
+          source_title: string;
+          occurred_at: string;
+          status?: Database["public"]["Enums"]["passport_entry_status"];
+          verified_at?: string;
+          verified_by?: string | null;
+          revoked_at?: string | null;
+          revoked_by?: string | null;
+          revocation_kind?:
+            Database["public"]["Enums"]["passport_revocation_kind"] | null;
+          revocation_reason?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: never;
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: {
@@ -1001,6 +1043,10 @@ export type Database = {
         Args: { p_session_id: string; p_campaign_id: string | null };
         Returns: undefined;
       };
+      revoke_passport_entry: {
+        Args: { p_entry_id: string; p_reason: string };
+        Returns: undefined;
+      };
     };
     Enums: {
       app_role:
@@ -1039,6 +1085,16 @@ export type Database = {
         "submitted" | "accepted" | "declined" | "withdrawn";
       campaign_member_role: "game_master" | "player";
       campaign_membership_status: "active" | "left" | "removed";
+      passport_activity_kind:
+        | "attended_session"
+        | "hosted_session"
+        | "completed_opportunity"
+        | "led_opportunity"
+        | "completed_campaign"
+        | "led_campaign";
+      passport_source_module: "sessions" | "circles" | "commons" | "realm";
+      passport_entry_status: "verified" | "revoked";
+      passport_revocation_kind: "source_correction" | "administrative";
     };
     CompositeTypes: Record<string, never>;
   };
@@ -1065,3 +1121,5 @@ export type CampaignApplication =
   Database["public"]["Tables"]["campaign_applications"]["Row"];
 export type CampaignMember =
   Database["public"]["Tables"]["campaign_members"]["Row"];
+export type PassportEntry =
+  Database["public"]["Tables"]["passport_entries"]["Row"];

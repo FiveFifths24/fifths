@@ -379,7 +379,8 @@ export default async function ManageOpportunityPage({
           <CheckCircle2 aria-hidden="true" className="size-5 text-amber-300" />
           <h2 className="mt-4 font-bold text-white">Mutual completion</h2>
           <p className="mt-2 text-sm leading-6 text-neutral-400">
-            Both sides confirm; no Passport entry is issued in Phase 6.
+            Both sides confirm before one duplicate-safe participant entry and
+            one creator-lead entry can reach Passport.
           </p>
         </div>
       </section>

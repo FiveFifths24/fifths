@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import {
   Activity,
   Aperture,
+  BadgeCheck,
   CalendarRange,
   HeartHandshake,
   House,
@@ -39,6 +40,12 @@ const items = [
     href: "/home/realm",
     label: "Realm",
     icon: Orbit,
+    nested: true,
+  },
+  {
+    href: "/home/passport",
+    label: "Passport",
+    icon: BadgeCheck,
     nested: true,
   },
   {

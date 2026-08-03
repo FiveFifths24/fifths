@@ -19,7 +19,7 @@ Server Components are the default. Client Components are used only for interacti
 
 `sessions` is the common scheduled-experience type. Its optional `circle_id`, `campaign_id`, and `organization_id` plus `source_module` let all five products schedule experiences without duplicating event logic.
 
-Pulse reads the latest valid private check-in and ranks eligible records from Sessions, Circles, Commons, and Realm using one deterministic scoring service. Passport receives verified, idempotent entries from completed activity; it never trusts a browser request to award credit.
+Pulse reads the latest valid private check-in and ranks eligible records from Sessions, Circles, Commons, and Realm using one deterministic scoring service. Passport now receives verified, idempotent entries from database-observed activity; it never trusts a browser request to award credit.
 
 ## Proposed folder structure
 
@@ -151,7 +151,7 @@ Phase 4 activates the shared scheduled-experience layer without claiming a produ
 - `supabase/migrations/202608030001_phase_4_sessions_foundation.sql` owns Session lifecycle, capacity, registration, attendance, functions, grants, audit records, and RLS.
 - Hosts create private drafts through a role-authorized RPC. Publishing, cancelling, and completion use constrained status transitions; authenticated clients receive no direct table mutation grants.
 - Registration locks the Session row before checking and incrementing authoritative capacity. Re-registration is idempotent, cancellation decrements capacity safely, and Phase 4 deliberately has no waitlist.
-- Attendance is available only after a Session begins, only for active registrants, and only to the Session host or a platform administrator. Every insert or change is written to a private audit table. It does not issue Passport credit.
+- Attendance is available only after a Session begins, only for active registrants, and only to the Session host or a platform administrator. Every insert or change is written to a private audit table; the later Phase 9 trigger mirrors only `attended` state into Passport.
 
 Published, upcoming Sessions are the first real candidate inventory for the Phase 3 scorer. The adapter supplies mode, energy, stimulation, social pace, format, duration, time, and interests; it does not bypass RLS, publication state, timing, or capacity checks. Personal Home shows at most three matches, while discovery orders the complete eligible result set. Both use reason labels without exposing numeric scores.
 
@@ -204,7 +204,7 @@ Phase 6 activates structured creator opportunities without turning FIFTHS into a
 - A centrally assigned `creator` or `platform_admin` can create an independent draft. Active Circle owners and local hosts can create and manage only opportunities associated with their Circle.
 - Associated private-Circle opportunities remain readable only to active members, authorized managers, savers, and response owners. A Circle with a published opportunity cannot be archived.
 - Response acceptance locks the opportunity row before checking authoritative openings. A participant can withdraw a submitted or accepted response; a filled opportunity reopens only when its deadline is still active.
-- Completion requires the opportunity to be closed plus separate confirmation by the accepted participant and an authorized manager. Completion is audited but does not issue Passport credit.
+- Completion requires the opportunity to be closed plus separate confirmation by the accepted participant and an authorized manager. Completion is audited; the later Phase 9 trigger observes only the final completed state.
 
 Published, RLS-eligible opportunities adapt to the deterministic recommendation service using mode, energy, stimulation, social pace, format, estimated commitment, deadline ordering, and interests. Required skill labels inform the member but do not silently exclude them or expose profile skills to creators.
 
@@ -259,3 +259,24 @@ Phase 8 completes the shared application-code review without changing the databa
 - The interface explains data eligibility, applicable-signal normalization, product balance, score privacy, absence of AI/diagnosis inference, and the member's final choice.
 
 Phase 8 adds no tables, RPCs, policies, grants, roles, mutations, analytics, or background jobs. Phase 9 owns verified Passport issuance and duplicate prevention; recommendation ranking must not award credit or consume unverified browser claims.
+
+## Phase 9 Passport architecture
+
+Phase 9 adds one private outcome layer without moving ownership out of the product workflows that verify participation:
+
+- `public.passport_entries` stores member ownership, activity category, product provenance, source-record identity, a bounded title snapshot, source date, verification state, and correction metadata.
+- The unique `(user_id, activity_kind, source_record_id)` identity makes source replay idempotent while allowing one person to receive distinct leadership and participation categories when both are legitimately verified.
+- Private trigger functions observe only authoritative state: attended Session records, completed Sessions with at least one verified non-host attendee, completed Commons responses/opportunities, and completed Realm campaigns with active membership.
+- Session provenance follows `source_module`, so a Circle-, Commons-, or Realm-owned Session remains visibly connected to that product. Circle membership by itself is never treated as contribution.
+- Commons participant credit requires the existing two-sided completion state. Realm credit is limited to active players and the game master at campaign completion; applications or membership alone do not qualify.
+- Corrected attendance changes the existing entry to `revoked` rather than deleting it. A later source correction can restore that same entry, but an administrative revocation cannot be silently reversed by trigger replay.
+- Only a platform administrator can call the narrow correction RPC, with a bounded reason. There is no issuance RPC available to authenticated members and no direct table mutation grant.
+- Personal Passport reads at most 100 recent entries under caller-owned RLS. The UI shows text status, source, category, and correction reason without points, public sharing, or ranking.
+
+## Phase 9 route
+
+| Area             | Route            | Boundary                                                         |
+| ---------------- | ---------------- | ---------------------------------------------------------------- |
+| Private Passport | `/home/passport` | Caller-owned verified and corrected entries; no client mutations |
+
+Phase 9 does not add public Passport profiles, highlight controls, points, badges, exports, organization issuers, manual claims, self-verification, leaderboards, reports, notifications, moderation queues, or an administrator UI. Phase 10 owns the next trust-and-safety layer.

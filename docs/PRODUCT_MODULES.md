@@ -22,7 +22,7 @@ Owns campaign profiles, game-master ownership, filters, player applications, mem
 
 ## Passport
 
-Owns immutable or revocable verified activity entries and configurable point values. Authorized workflows can issue credit for attendance, hosting, volunteering, collaboration, and campaign participation. No public leaderboard and no self-verification.
+Owns private verified activity entries and transparent corrections. Authorized source workflows issue categories for attendance, hosting, collaboration, and campaign completion. The Phase 9 MVP has no points, public leaderboard, public sharing, or self-verification.
 
 ## Shared platform capabilities
 
@@ -60,7 +60,7 @@ Creator Commons now provides protected opportunity discovery, clear scope and de
 
 Centrally assigned creators and platform administrators can create independent private drafts. Active Circle owners and local hosts can create opportunities scoped only to their Circle. Private-Circle opportunities inherit member-aware visibility; unrelated members cannot discover the opportunity or its taxonomy data.
 
-Opportunity managers review responses privately and accept only while authoritative positions remain. Acceptance is capacity-safe under a row lock. Participants retain a withdrawal path before completion. A closed opportunity completes only after both the accepted participant and an authorized manager confirm the work; that confirmation does not create Passport credit.
+Opportunity managers review responses privately and accept only while authoritative positions remain. Acceptance is capacity-safe under a row lock. Participants retain a withdrawal path before completion. A closed opportunity completes only after both the accepted participant and an authorized manager confirm the work; Phase 9 observes that final state for Passport activity.
 
 Phase 6 does not process payment, escrow, contracts, tax information, uploads, equipment transfers, private links, direct messages, organizations, reports, notifications, Realm campaigns, or Passport entries.
 
@@ -72,7 +72,7 @@ Centrally assigned game masters and platform administrators create private draft
 
 Applications remain private to each applicant and the campaign manager. Acceptance locks the campaign row, verifies seats, changes application state, creates active player membership, and increments authoritative capacity in one transaction. Game masters have a private application queue and active roster; players can leave, and managers can remove players, with all state changes audited.
 
-Campaign meetings reuse shared Sessions. Only compatible private draft Sessions can be associated, and published Realm Sessions are readable only by active campaign members, registrants, or authorized Session managers. Phase 7 does not reproduce rules, host virtual tabletops, collect copyrighted content, add chat or payments, or issue Passport credit.
+Campaign meetings reuse shared Sessions. Only compatible private draft Sessions can be associated, and published Realm Sessions are readable only by active campaign members, registrants, or authorized Session managers. Phase 9 issues campaign completion activity only to active players and the game master. Fifth Realm still does not reproduce rules, host virtual tabletops, collect copyrighted content, add chat, or process payments.
 
 ## Phase 8 unified recommendations
 
@@ -81,6 +81,14 @@ Personal Home now combines eligible Sessions, Circles, Creator Commons opportuni
 Ranking compares the current private Pulse only with fields a candidate actually provides. This applicable-signal normalization avoids favoring a product merely because its schema has more matching fields. The initial feed is softly balanced across available products, then remaining places follow overall fit. Candidates without any truthful match reason are not used as filler.
 
 Members see `strong`, `good`, or `possible` fit and up to three plain-language reasons, never the internal weights. The labels communicate relative rule-based alignment, not eligibility, quality, health, safety, or a guarantee. Phase 8 adds no AI, behavior tracking, diagnosis inference, participation mutation, or Passport credit.
+
+## Phase 9 Passport implementation
+
+Passport now provides a protected private history with verified and corrected entries, product provenance, source title, activity date, contribution category, and explicit text status. Summary counts include only currently verified entries; corrections remain visible for transparency.
+
+The database—not a member form—issues entries from authoritative state. Attended Sessions create participant activity; a completed Session with at least one attended non-host participant creates host activity. Mutual Commons completion creates participant and creator-lead activity, and completed Realm campaigns create activity for active players and the game master. A Circle earns provenance only through a verified Circle-owned Session; membership alone is not contribution.
+
+One unique member/category/source identity prevents duplicate issuance and safely supports backfill. Corrected attendance revokes the same entry. Administrative corrections require a platform-admin role and reason and cannot be silently restored by replay. Phase 9 has no points, public profile highlights, manual claims, organization issuers, exports, leaderboards, reports, notifications, or admin interface.
 
 ## Phase 1 public representation
 
