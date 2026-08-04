@@ -120,3 +120,52 @@ input {
     background-image: none;
   }
 }
+@keyframes join-pulse-ring {
+  0% {
+    opacity: 0.6;
+    transform: scaleX(0.98) scaleY(0.94);
+  }
+
+  65% {
+    opacity: 0;
+    transform: scaleX(1.08) scaleY(1.35);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scaleX(1.08) scaleY(1.35);
+  }
+}
+
+.join-pulse-wrapper {
+  position: relative;
+  isolation: isolate;
+  overflow: visible;
+}
+
+/* Pulse rings appear only at 640px and wider */
+@media (min-width: 640px) {
+  .join-pulse-wrapper::before,
+  .join-pulse-wrapper::after {
+    position: absolute;
+    inset: -2px;
+    z-index: 0;
+    content: "";
+    pointer-events: none;
+    border: 1px solid rgba(243, 89, 210, 0.65);
+    border-radius: 9999px;
+    transform-origin: center;
+    animation: join-pulse-ring 3.4s ease-out infinite;
+  }
+
+  .join-pulse-wrapper::after {
+    animation-delay: 1.7s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .join-pulse-wrapper::before,
+  .join-pulse-wrapper::after {
+    animation: none;
+  }
+}
