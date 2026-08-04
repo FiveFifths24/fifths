@@ -32,14 +32,26 @@ export function SiteHeader() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-neutral-800/90 bg-black/90 backdrop-blur-xl">
-      <Container className="flex min-h-18 items-center justify-between gap-5">
-        <Link
+<header
+  className={cn(
+    "z-50",
+    pathname === "/"
+      ? "absolute inset-x-0 top-0 bg-transparent"
+      : "sticky top-0 border-b border-neutral-800/90 bg-black/90 backdrop-blur-xl",
+  )}
+>
+<Container
+  className={cn(
+    "flex min-h-18 items-center justify-between gap-5",
+    pathname === "/" && "!mx-0 !max-w-none px-5 sm:px-8 lg:px-16",
+  )}
+>
+          <Link
           className="flex min-h-12 items-center text-lg font-black tracking-[0.16em] text-white"
           href="/"
-          aria-label="FIFTHS home"
+          aria-label="PULSE home"
         >
-          FIFTHS<span className="text-red-500">.</span>
+PULSE<span className="text-pink-500">.</span>
         </Link>
 
         <nav
@@ -61,13 +73,11 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-3 md:flex">
-          <ButtonLink href="/login" variant="quiet">
-            Log in
-          </ButtonLink>
-          <ButtonLink href="/signup">Join FIFTHS</ButtonLink>
-        </div>
-
+<div className="hidden items-center md:flex">
+  <ButtonLink href="/login" variant="quiet">
+    Log in
+  </ButtonLink>
+</div>
         <button
           aria-controls={menuId}
           aria-expanded={open}
@@ -108,12 +118,15 @@ export function SiteHeader() {
                   {item.label}
                 </Link>
               ))}
-              <div className="mt-3 grid grid-cols-2 gap-3 border-t border-neutral-800 pt-5">
-                <ButtonLink href="/login" variant="secondary">
-                  Log in
-                </ButtonLink>
-                <ButtonLink href="/signup">Join FIFTHS</ButtonLink>
-              </div>
+<div className="mt-3 border-t border-neutral-800 pt-5">
+  <ButtonLink
+    className="w-full"
+    href="/login"
+    variant="secondary"
+  >
+    Log in
+  </ButtonLink>
+</div>
             </nav>
           </Container>
         </div>
