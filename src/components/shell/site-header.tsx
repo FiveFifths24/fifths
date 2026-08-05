@@ -62,7 +62,7 @@ export function SiteHeader() {
             PULSE<span className="text-[#f359d2]">.</span>
           </span>
 
-          <span className="mt-1 text-[0.42rem] font-bold tracking-[0.18em] text-white/35 uppercase">
+          <span className="mt-1 text-[0.42rem] font-bold tracking-[0.18em] text-white/60 uppercase">
             Powered by FIVE FIFTHS
           </span>
         </Link>
