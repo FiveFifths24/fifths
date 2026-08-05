@@ -4,9 +4,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useState } from "react";
 import { Menu, X } from "lucide-react";
-import { cn } from "@/lib/cn";
-import { Container } from "@/components/ui/container";
+
 import { ButtonLink } from "@/components/ui/button-link";
+import { Container } from "@/components/ui/container";
+import { cn } from "@/lib/cn";
 
 const navigation = [
   { href: "/ecosystem", label: "Ecosystem" },
@@ -25,21 +26,45 @@ export function SiteHeader() {
 
   useEffect(() => {
     function closeOnEscape(event: KeyboardEvent) {
-      if (event.key === "Escape") setOpen(false);
+      if (event.key === "Escape") {
+        setOpen(false);
+      }
     }
+
     document.addEventListener("keydown", closeOnEscape);
-    return () => document.removeEventListener("keydown", closeOnEscape);
+
+    return () => {
+      document.removeEventListener("keydown", closeOnEscape);
+    };
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-neutral-800/90 bg-black/90 backdrop-blur-xl">
-      <Container className="flex min-h-18 items-center justify-between gap-5">
+    <header
+      className={cn(
+        "z-50",
+        pathname === "/"
+          ? "absolute inset-x-0 top-0 bg-transparent"
+          : "sticky top-0 border-b border-neutral-800/90 bg-black/90 backdrop-blur-xl",
+      )}
+    >
+      <Container
+        className={cn(
+          "flex min-h-18 items-center justify-between gap-5",
+          pathname === "/" && "!mx-0 !max-w-none px-5 sm:px-8 lg:px-16",
+        )}
+      >
         <Link
-          className="flex min-h-12 items-center text-lg font-black tracking-[0.16em] text-white"
+          className="flex min-h-12 flex-col justify-center leading-none"
           href="/"
-          aria-label="FIFTHS home"
+          aria-label="PULSE powered by FIVE FIFTHS"
         >
-          FIFTHS<span className="text-red-500">.</span>
+          <span className="text-lg font-black tracking-[0.16em] text-white uppercase">
+            PULSE<span className="text-[#f359d2]">.</span>
+          </span>
+
+          <span className="mt-1 text-[0.42rem] font-bold tracking-[0.18em] text-white/60 uppercase">
+            Powered by FIVE FIFTHS
+          </span>
         </Link>
 
         <nav
@@ -61,11 +86,10 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-3 md:flex">
+        <div className="hidden items-center md:flex">
           <ButtonLink href="/login" variant="quiet">
             Log in
           </ButtonLink>
-          <ButtonLink href="/signup">Join FIFTHS</ButtonLink>
         </div>
 
         <button
@@ -108,11 +132,14 @@ export function SiteHeader() {
                   {item.label}
                 </Link>
               ))}
-              <div className="mt-3 grid grid-cols-2 gap-3 border-t border-neutral-800 pt-5">
-                <ButtonLink href="/login" variant="secondary">
+
+              <div className="mt-3 border-t border-neutral-800 pt-5">
+                <ButtonLink
+                  className="w-full border-0 bg-[linear-gradient(90deg,#1800ad_0%,#6c14ce_36%,#f359d2_70%,#7cff00_100%)] text-white shadow-[0_0_20px_rgba(108,20,206,0.2)] hover:brightness-110"
+                  href="/login"
+                >
                   Log in
                 </ButtonLink>
-                <ButtonLink href="/signup">Join FIFTHS</ButtonLink>
               </div>
             </nav>
           </Container>
