@@ -133,14 +133,14 @@ export function SiteHeader() {
                 </Link>
               ))}
 
-<div className="mt-3 border-t border-neutral-800 pt-5">
-  <ButtonLink
-    className="w-full border-0 bg-[linear-gradient(90deg,#1800ad_0%,#6c14ce_36%,#f359d2_70%,#7cff00_100%)] text-white shadow-[0_0_20px_rgba(108,20,206,0.2)] hover:brightness-110"
-    href="/login"
-  >
-    Log in
-  </ButtonLink>
-</div>
+              <div className="mt-3 border-t border-neutral-800 pt-5">
+                <ButtonLink
+                  className="w-full border-0 bg-[linear-gradient(90deg,#1800ad_0%,#6c14ce_36%,#f359d2_70%,#7cff00_100%)] text-white shadow-[0_0_20px_rgba(108,20,206,0.2)] hover:brightness-110"
+                  href="/login"
+                >
+                  Log in
+                </ButtonLink>
+              </div>
             </nav>
           </Container>
         </div>

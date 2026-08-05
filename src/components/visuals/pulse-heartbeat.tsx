@@ -7,12 +7,12 @@ export function PulseHeartbeat() {
     return value - Math.floor(value);
   };
 
-const glitterParticles = Array.from({ length: 160 }, (_, index) => {
-        const seed = index + 1;
+  const glitterParticles = Array.from({ length: 160 }, (_, index) => {
+    const seed = index + 1;
 
     const x = pseudoRandom(seed * 2) * 1200;
     const y = pseudoRandom(seed * 3) * 320;
-const radius = 0.3 + pseudoRandom(seed * 5) * 0.65; 
+    const radius = 0.3 + pseudoRandom(seed * 5) * 0.65;
     const sparkleDuration = 1.5 + pseudoRandom(seed * 7) * 3.2;
     const sparkleDelay = pseudoRandom(seed * 11) * 5;
 
@@ -43,9 +43,9 @@ const radius = 0.3 + pseudoRandom(seed * 5) * 0.65;
   });
 
   return (
-        <div
+    <div
       aria-hidden="true"
-className="pointer-events-none absolute inset-y-0 right-0 w-full origin-right overflow-hidden lg:w-[72%] lg:scale-[1.12]"
+      className="pointer-events-none absolute inset-y-0 right-0 w-full origin-right overflow-hidden lg:w-[72%] lg:scale-[1.12]"
     >
       <svg
         className="h-full w-full overflow-visible"
@@ -53,16 +53,16 @@ className="pointer-events-none absolute inset-y-0 right-0 w-full origin-right ov
         viewBox="0 0 1200 320"
       >
         <defs>
-            <filter
-  id="soft-glitter-clear"
-  filterUnits="userSpaceOnUse"
-  x="-100"
-  y="-100"
-  width="1400"
-  height="520"
->
-  <feGaussianBlur stdDeviation="22" />
-</filter>
+          <filter
+            id="soft-glitter-clear"
+            filterUnits="userSpaceOnUse"
+            x="-100"
+            y="-100"
+            width="1400"
+            height="520"
+          >
+            <feGaussianBlur stdDeviation="22" />
+          </filter>
           <linearGradient id="pulse-gradient" x1="0%" x2="100%">
             <stop offset="0%" stopColor="#17104f" />
             <stop offset="35%" stopColor="#4c1d95" />
@@ -71,13 +71,7 @@ className="pointer-events-none absolute inset-y-0 right-0 w-full origin-right ov
             <stop offset="100%" stopColor="#22c55e" />
           </linearGradient>
 
-          <filter
-            id="pulse-glow"
-            x="-30%"
-            y="-100%"
-            width="160%"
-            height="300%"
-          >
+          <filter id="pulse-glow" x="-30%" y="-100%" width="160%" height="300%">
             <feGaussianBlur stdDeviation="10" result="blur" />
             <feMerge>
               <feMergeNode in="blur" />
@@ -110,18 +104,18 @@ className="pointer-events-none absolute inset-y-0 right-0 w-full origin-right ov
           >
             <rect width="1200" height="320" fill="white" />
 
-<path
-  d={pulsePath}
-  fill="none"
-  filter="url(#soft-glitter-clear)"
-  pathLength="1200"
-  stroke="black"
-  strokeDasharray="260 940"
-  strokeLinecap="round"
-  strokeLinejoin="round"
-  strokeWidth="70"
->
-                  <animate
+            <path
+              d={pulsePath}
+              fill="none"
+              filter="url(#soft-glitter-clear)"
+              pathLength="1200"
+              stroke="black"
+              strokeDasharray="260 940"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="70"
+            >
+              <animate
                 attributeName="stroke-dashoffset"
                 dur="7s"
                 from="1200"
@@ -132,51 +126,51 @@ className="pointer-events-none absolute inset-y-0 right-0 w-full origin-right ov
           </mask>
         </defs>
 
-{/* Suspended glitter throughout the atmosphere */}
-<g
-  className="motion-reduce:hidden"
-  filter="url(#glitter-glow)"
-  mask="url(#glitter-clear-mask)"
->
-  {glitterParticles.map((particle) => (
-    <circle
-      cx={particle.x}
-      cy={particle.y}
-      fill={particle.color}
-      key={`${particle.x}-${particle.y}`}
-      r={particle.radius}
-    >
-      {/* Slow floating movement */}
-      <animateTransform
-        attributeName="transform"
-        begin={particle.floatDelay}
-        dur={particle.floatDuration}
-        repeatCount="indefinite"
-        type="translate"
-        values={`0 0; ${particle.driftX} ${particle.driftY}; ${particle.driftX * -0.5} ${particle.driftY * 0.5}; 0 0`}
-      />
+        {/* Suspended glitter throughout the atmosphere */}
+        <g
+          className="motion-reduce:hidden"
+          filter="url(#glitter-glow)"
+          mask="url(#glitter-clear-mask)"
+        >
+          {glitterParticles.map((particle) => (
+            <circle
+              cx={particle.x}
+              cy={particle.y}
+              fill={particle.color}
+              key={`${particle.x}-${particle.y}`}
+              r={particle.radius}
+            >
+              {/* Slow floating movement */}
+              <animateTransform
+                attributeName="transform"
+                begin={particle.floatDelay}
+                dur={particle.floatDuration}
+                repeatCount="indefinite"
+                type="translate"
+                values={`0 0; ${particle.driftX} ${particle.driftY}; ${particle.driftX * -0.5} ${particle.driftY * 0.5}; 0 0`}
+              />
 
-      {/* Fading sparkle */}
-      <animate
-        attributeName="opacity"
-        begin={particle.delay}
-        dur={particle.duration}
-        keyTimes="0;0.45;1"
-        repeatCount="indefinite"
-        values="0.08;0.85;0.08"
-      />
+              {/* Fading sparkle */}
+              <animate
+                attributeName="opacity"
+                begin={particle.delay}
+                dur={particle.duration}
+                keyTimes="0;0.45;1"
+                repeatCount="indefinite"
+                values="0.08;0.85;0.08"
+              />
 
-      {/* Gentle glitter twinkle */}
-      <animate
-        attributeName="r"
-        begin={particle.delay}
-        dur={particle.duration}
-        repeatCount="indefinite"
-        values={`${particle.radius * 0.6};${particle.radius * 1.35};${particle.radius * 0.6}`}
-      />
-    </circle>
-  ))}
-</g>
+              {/* Gentle glitter twinkle */}
+              <animate
+                attributeName="r"
+                begin={particle.delay}
+                dur={particle.duration}
+                repeatCount="indefinite"
+                values={`${particle.radius * 0.6};${particle.radius * 1.35};${particle.radius * 0.6}`}
+              />
+            </circle>
+          ))}
+        </g>
         {/* Dim heartbeat that remains visible */}
         <path
           d={pulsePath}
@@ -209,25 +203,25 @@ className="pointer-events-none absolute inset-y-0 right-0 w-full origin-right ov
           />
         </path>
         {/* Crisp neon core inside the traveling glow */}
-<path
-  d={pulsePath}
-  fill="none"
-  opacity="0.70"
-  pathLength="1200"
-stroke="#ffffff"
-  strokeDasharray="260 940"
-  strokeLinecap="round"
-  strokeLinejoin="round"
-  strokeWidth="2"
->
-  <animate
-    attributeName="stroke-dashoffset"
-    dur="7s"
-    from="1200"
-    repeatCount="indefinite"
-    to="0"
-  />
-</path>
+        <path
+          d={pulsePath}
+          fill="none"
+          opacity="0.70"
+          pathLength="1200"
+          stroke="#ffffff"
+          strokeDasharray="260 940"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+        >
+          <animate
+            attributeName="stroke-dashoffset"
+            dur="7s"
+            from="1200"
+            repeatCount="indefinite"
+            to="0"
+          />
+        </path>
       </svg>
     </div>
   );
