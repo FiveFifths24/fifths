@@ -189,3 +189,46 @@ input {
     animation: none;
   }
 }
+
+.ecosystem-gradient-button {
+  position: relative;
+  isolation: isolate;
+  border: 1px solid transparent;
+  background: transparent;
+}
+
+.ecosystem-gradient-button::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  pointer-events: none;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    90deg,
+    #1800ad 0%,
+    #6c14ce 36%,
+    #f359d2 70%,
+    #7cff00 100%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+.ecosystem-gradient-text {
+  display: inline-block;
+  color: transparent;
+  background: linear-gradient(
+    90deg,
+    #1800ad 0%,
+    #6c14ce 36%,
+    #f359d2 70%,
+    #7cff00 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

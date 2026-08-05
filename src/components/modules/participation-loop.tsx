@@ -7,50 +7,170 @@ import {
 } from "lucide-react";
 
 const steps = [
-  [
-    "Check your Pulse",
-    "Name the energy, time, and connection you have room for.",
-    Activity,
-  ],
-  [
-    "Receive recommendations",
-    "See relevant communities, opportunities, campaigns, and sessions.",
-    Compass,
-  ],
-  [
-    "Join an experience",
-    "Choose participation that fits instead of forcing the wrong room.",
-    Sparkles,
-  ],
-  [
-    "Contribute",
-    "Show up, host, volunteer, collaborate, or help a community move.",
-    HandHeart,
-  ],
-  [
-    "Build Passport activity",
-    "Eligible participation becomes verified community history.",
-    BadgeCheck,
-  ],
+  {
+    title: "Check your Pulse",
+    description: "Name your capacity.",
+    icon: Activity,
+    accent:
+      "border-[#665cff] text-[#8f84ff] shadow-[0_0_24px_rgba(102,92,255,0.28)]",
+  },
+  {
+    title: "Get recommendations",
+    description: "See what fits.",
+    icon: Compass,
+    accent:
+      "border-[#9d46ec] text-[#bd7cff] shadow-[0_0_24px_rgba(157,70,236,0.28)]",
+  },
+  {
+    title: "Join an experience",
+    description: "Choose your room.",
+    icon: Sparkles,
+    accent:
+      "border-[#f359d2] text-[#ff79dc] shadow-[0_0_24px_rgba(243,89,210,0.28)]",
+  },
+  {
+    title: "Contribute",
+    description: "Make a difference.",
+    icon: HandHeart,
+    accent:
+      "border-[#ff7a8a] text-[#ff9aa6] shadow-[0_0_24px_rgba(255,122,138,0.25)]",
+  },
+  {
+    title: "Build Passport",
+    description: "Keep the record.",
+    icon: BadgeCheck,
+    accent:
+      "border-[#7cff00] text-[#a8ff55] shadow-[0_0_24px_rgba(124,255,0,0.25)]",
+  },
 ] as const;
 
 export function ParticipationLoop() {
   return (
-    <ol className="mt-12 grid gap-px overflow-hidden rounded-3xl border border-neutral-800 bg-neutral-800 lg:grid-cols-5">
-      {steps.map(([title, description, Icon], index) => (
-        <li className="relative bg-neutral-950 p-6 sm:p-7" key={title}>
-          <div className="flex items-center justify-between">
-            <Icon aria-hidden="true" className="size-5 text-red-400" />
-            <span className="text-xs font-bold text-neutral-400">
+    <div className="relative mt-12 overflow-hidden rounded-[2rem] border border-white/10 bg-[#050509] px-5 py-10 sm:px-8 lg:px-10 lg:py-14">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-[-8rem] left-1/2 size-72 -translate-x-1/2 rounded-full bg-[#6c14ce]/10 blur-[100px]"
+      />
+
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute right-[-8rem] bottom-[-10rem] size-72 rounded-full bg-[#7cff00]/5 blur-[100px]"
+      />
+
+      {/* Desktop heartbeat path */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-[5.4rem] right-[10%] left-[10%] hidden h-12 lg:block"
+      >
+        <svg
+          className="h-full w-full overflow-visible"
+          fill="none"
+          preserveAspectRatio="none"
+          viewBox="0 0 1000 48"
+        >
+          <defs>
+            <linearGradient
+              id="participation-path-gradient"
+              gradientUnits="userSpaceOnUse"
+              x1="0"
+              x2="1000"
+              y1="0"
+              y2="0"
+            >
+              <stop offset="0%" stopColor="#1800ad" />
+              <stop offset="36%" stopColor="#6c14ce" />
+              <stop offset="70%" stopColor="#f359d2" />
+              <stop offset="100%" stopColor="#7cff00" />
+            </linearGradient>
+
+            <filter
+              id="participation-path-glow"
+              height="300%"
+              width="120%"
+              x="-10%"
+              y="-100%"
+            >
+              <feGaussianBlur result="blur" stdDeviation="3" />
+
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+
+          <path
+            d="M0 24H130L145 24L155 10L168 39L182 24H330L345 24L355 10L368 39L382 24H530L545 24L555 10L568 39L582 24H730L745 24L755 10L768 39L782 24H930L945 24L955 10L968 39L982 24H1000"
+            opacity="0.45"
+            stroke="url(#participation-path-gradient)"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+          />
+
+          <path
+            d="M0 24H130L145 24L155 10L168 39L182 24H330L345 24L355 10L368 39L382 24H530L545 24L555 10L568 39L582 24H730L745 24L755 10L768 39L782 24H930L945 24L955 10L968 39L982 24H1000"
+            filter="url(#participation-path-glow)"
+            stroke="url(#participation-path-gradient)"
+            strokeDasharray="100 1100"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="3"
+          >
+            <animate
+              attributeName="stroke-dashoffset"
+              dur="5s"
+              from="1200"
+              repeatCount="indefinite"
+              to="0"
+            />
+          </path>
+        </svg>
+      </div>
+
+      <ol className="relative grid gap-8 lg:grid-cols-5 lg:gap-0">
+        <div
+          aria-hidden="true"
+          className="absolute top-7 bottom-7 left-7 w-px bg-[linear-gradient(180deg,#1800ad_0%,#6c14ce_36%,#f359d2_70%,#7cff00_100%)] lg:hidden"
+        />
+
+        {steps.map(({ title, description, icon: Icon, accent }, index) => (
+          <li
+            className="relative z-10 grid grid-cols-[3.5rem_1fr] items-center gap-4 lg:block lg:px-4 lg:text-center"
+            key={title}
+          >
+            <span className="mb-3 hidden text-xs font-bold tracking-[0.18em] text-white/45 lg:block">
               0{index + 1}
             </span>
-          </div>
-          <h3 className="mt-8 text-lg font-bold text-white">{title}</h3>
-          <p className="mt-3 text-sm leading-6 text-neutral-400">
-            {description}
-          </p>
-        </li>
-      ))}
-    </ol>
+
+            <div
+              className={`relative flex size-14 items-center justify-center rounded-full border bg-[#050509] transition-transform duration-300 hover:scale-105 lg:mx-auto ${accent}`}
+            >
+              <Icon aria-hidden="true" className="size-5" />
+            </div>
+
+            <div>
+              <span className="mb-2 block text-xs font-bold tracking-[0.18em] text-white/45 lg:hidden">
+                0{index + 1}
+              </span>
+
+              <h3 className="text-sm font-bold tracking-[0.08em] text-white uppercase lg:mt-6">
+                {title}
+              </h3>
+
+              <p className="mt-2 text-sm leading-6 text-white/55">
+                {description}
+              </p>
+            </div>
+          </li>
+        ))}
+      </ol>
+
+      <div className="mt-10 flex justify-center lg:mt-14">
+        <p className="rounded-full border border-[#6c14ce]/35 bg-black/40 px-5 py-2.5 text-center text-[0.65rem] font-bold tracking-[0.18em] text-white/75 uppercase backdrop-blur-sm">
+          Show up in the way that fits today.
+        </p>
+      </div>
+    </div>
   );
 }

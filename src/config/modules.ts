@@ -33,7 +33,7 @@ export const platformModules: PlatformModule[] = [
     eyebrow: "Start with your capacity",
     purpose: "Daily capacity and transparent recommendations.",
     summary:
-      "Pulse will help you name the kind of participation you have room for today, then surface experiences that fit your energy instead of competing for it.",
+      "Check in with your energy and choose how you want to engage.",
     audience: [
       "People balancing changing energy",
       "Intentional participants",
@@ -71,7 +71,7 @@ export const platformModules: PlatformModule[] = [
     eyebrow: "Find community with context",
     purpose: "Intentional communities and their shared activity.",
     summary:
-      "Circles makes it easier to discover communities with clear purpose, expectations, hosts, and ways to participate—without trying to replace Discord.",
+      "Connect with communities that match your interests, energy, and social preferences.",
     audience: [
       "Community members",
       "Hosts and organizers",
@@ -109,7 +109,7 @@ export const platformModules: PlatformModule[] = [
     eyebrow: "Make the right collaboration possible",
     purpose: "Creator collaboration and opportunities.",
     summary:
-      "Creator Commons will connect skills, needs, and creative capacity through clearly structured opportunities built for respectful collaboration.",
+      "Create, collaborate, and grow with other creators, producers, and teams.",
     audience: [
       "Creators and producers",
       "People offering skills or equipment",
@@ -147,7 +147,7 @@ export const platformModules: PlatformModule[] = [
     eyebrow: "Enter worlds through people",
     purpose: "Campaign and immersive-story coordination.",
     summary:
-      "Fifth Realm helps players, game masters, and worldbuilders discover compatible original campaigns and coordinate participation around clear expectations.",
+      "Explore immersive worlds and campaigns made by other players, storytellers, and game masters.",
     audience: [
       "Tabletop players",
       "Game masters",
@@ -185,7 +185,7 @@ export const platformModules: PlatformModule[] = [
     eyebrow: "Contribution, made credible",
     purpose: "Verified contribution and participation history.",
     summary:
-      "Passport will give members a structured record of meaningful participation—attendance, hosting, volunteering, collaboration, and campaign activity.",
+      "Keep a record of your participation, contributions, and activity across the ecosystem.",
     audience: [
       "Active community members",
       "Hosts and volunteers",
