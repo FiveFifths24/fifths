@@ -256,15 +256,30 @@ export default function HomePage() {
         </Container>
       </section>
 
-      <section className="py-20 sm:py-28">
-        <Container>
+      <section className="relative overflow-hidden border-y border-white/10 bg-[#020205] py-24 sm:py-32">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute top-0 left-1/2 h-[28rem] w-[48rem] -translate-x-1/2 rounded-full bg-[#6c14ce]/10 blur-[140px]"
+        />
+
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute right-[-10rem] bottom-[-12rem] size-[30rem] rounded-full bg-[#22d3ee]/5 blur-[130px]"
+        />
+
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute bottom-[-14rem] left-[-10rem] size-[30rem] rounded-full bg-[#f359d2]/5 blur-[130px]"
+        />
+        <Container className="relative">
           <SectionHeading
-            eyebrow="Five connected products"
-            title="Different doors. One community identity."
-            description="Each product has a distinct purpose, but they share the same profile, interests, participation context, and trust foundation."
+            align="center"
+            eyebrow="One connected ecosystem"
+            title="Your ecosystem, your way."
+            description="Five experiences. One seamless flow."
           />
 
-          <div className="mt-12 grid gap-5 lg:grid-cols-2">
+          <div className="mt-14 grid gap-5 md:grid-cols-2">
             {platformModules.map((module, index) => (
               <ModuleCard index={index} key={module.slug} module={module} />
             ))}

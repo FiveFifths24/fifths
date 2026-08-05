@@ -2,22 +2,37 @@
 
 :root {
   color-scheme: dark;
-  --color-ink: #080808;
-  --color-panel: #101010;
-  --color-panel-raised: #171717;
-  --color-line: #2a2a2a;
-  --color-muted: #a3a3a3;
-  --color-paper: #f6f4ef;
+
+  --color-ink: #020205;
+  --color-panel: #0b0813;
+  --color-panel-raised: #13101d;
+  --color-line: rgba(255, 255, 255, 0.1);
+
+  --color-muted: #b6b1c2;
+  --color-paper: #f2f0ed;
   --color-white: #ffffff;
-  --color-red: #b91f32;
-  --color-red-bright: #e2344b;
-  --color-red-dark: #6e101d;
+
+  --color-blue: #1800ad;
+  --color-purple: #6c14ce;
+  --color-pink: #f359d2;
+  --color-cyan: #22d3ee;
+  --color-green: #7cff00;
+
+  --gradient-pulse: linear-gradient(
+    90deg,
+    #1800ad 0%,
+    #6c14ce 36%,
+    #f359d2 70%,
+    #7cff00 100%
+  );
+
   --radius-sm: 0.65rem;
   --radius-md: 1rem;
   --radius-lg: 1.5rem;
   --radius-xl: 2rem;
-  --shadow-soft: 0 20px 60px rgba(0, 0, 0, 0.28);
-  --shadow-red: 0 24px 80px rgba(185, 31, 50, 0.14);
+
+  --shadow-soft: 0 20px 60px rgba(0, 0, 0, 0.35);
+  --shadow-pulse: 0 20px 70px rgba(108, 20, 206, 0.18);
 }
 
 * {
@@ -40,8 +55,13 @@ body {
 }
 
 ::selection {
-  background: var(--color-red);
+  background: var(--color-purple);
   color: var(--color-white);
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-pink);
+  outline-offset: 4px;
 }
 
 a,

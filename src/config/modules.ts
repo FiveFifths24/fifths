@@ -60,7 +60,7 @@ export const platformModules: PlatformModule[] = [
       "Following a recommendation does not earn credit by itself. Eligible, verified participation can later appear in Passport.",
     icon: Radio,
     accent: "text-red-400",
-    glow: "from-red-950/80 to-neutral-950",
+    glow: "from-[#6c14ce]/20 to-[#020205]",
     memberHref: "/home/pulse",
   },
   {
@@ -97,7 +97,7 @@ export const platformModules: PlatformModule[] = [
       "Eligible hosted sessions, volunteering, and verified Circle contributions can build a member’s Passport history.",
     icon: HeartHandshake,
     accent: "text-rose-300",
-    glow: "from-rose-950/70 to-neutral-950",
+    glow: "from-[#22d3ee]/15 to-[#020205]",
     memberHref: "/home/circles",
   },
   {
@@ -134,7 +134,7 @@ export const platformModules: PlatformModule[] = [
       "A collaboration can contribute to Passport only after an authorized completion workflow—not through self-issued credit.",
     icon: Aperture,
     accent: "text-amber-200",
-    glow: "from-amber-950/60 to-neutral-950",
+    glow: "from-[#7cff00]/10 to-[#020205]",
     memberHref: "/home/commons",
   },
   {
@@ -171,7 +171,7 @@ export const platformModules: PlatformModule[] = [
       "Verified campaign participation and completion can become part of Passport without turning play into a leaderboard.",
     icon: Gamepad2,
     accent: "text-violet-300",
-    glow: "from-violet-950/70 to-neutral-950",
+    glow: "from-[#1800ad]/25 to-[#020205]",
     memberHref: "/home/realm",
   },
   {
@@ -208,7 +208,7 @@ export const platformModules: PlatformModule[] = [
       "Passport is the shared outcome layer connecting participation across Sessions, Circles, Commons, and Fifth Realm.",
     icon: BadgeCheck,
     accent: "text-emerald-300",
-    glow: "from-emerald-950/60 to-neutral-950",
+    glow: "from-[#7cff00]/12 to-[#020205]",
     memberHref: "/home/passport",
   },
 ];
