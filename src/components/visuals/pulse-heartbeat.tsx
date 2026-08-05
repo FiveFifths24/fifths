@@ -1,72 +1,72 @@
 export function PulseHeartbeat() {
-const pseudoRandom = (seed: number) => {
-  const value = Math.sin(seed * 12.9898) * 43758.5453;
-  return value - Math.floor(value);
-};
+  const pseudoRandom = (seed: number) => {
+    const value = Math.sin(seed * 12.9898) * 43758.5453;
+    return value - Math.floor(value);
+  };
 
-const createPulsePath = () => {
-  const baseline = 175;
-  const commands = [`M 0 ${baseline}`];
+  const createPulsePath = () => {
+    const baseline = 175;
+    const commands = [`M 0 ${baseline}`];
 
-  let x = 0;
-  let beat = 1;
+    let x = 0;
+    let beat = 1;
 
-  while (x < 1080) {
-    const restingSpace = 90 + pseudoRandom(beat * 3) * 55;
-    const pWaveHeight = 9 + pseudoRandom(beat * 5) * 12;
-    const qrsHeight = 65 + pseudoRandom(beat * 7) * 55;
-    const qrsDepth = 70 + pseudoRandom(beat * 11) * 55;
-    const tWaveHeight = 18 + pseudoRandom(beat * 13) * 22;
+    while (x < 1080) {
+      const restingSpace = 90 + pseudoRandom(beat * 3) * 55;
+      const pWaveHeight = 9 + pseudoRandom(beat * 5) * 12;
+      const qrsHeight = 65 + pseudoRandom(beat * 7) * 55;
+      const qrsDepth = 70 + pseudoRandom(beat * 11) * 55;
+      const tWaveHeight = 18 + pseudoRandom(beat * 13) * 22;
 
-    x += restingSpace;
-    commands.push(`L ${x.toFixed(1)} ${baseline}`);
+      x += restingSpace;
+      commands.push(`L ${x.toFixed(1)} ${baseline}`);
 
-    // Small P wave
-    x += 16;
-    commands.push(`L ${x.toFixed(1)} ${(baseline - pWaveHeight).toFixed(1)}`);
+      // Small P wave
+      x += 16;
+      commands.push(`L ${x.toFixed(1)} ${(baseline - pWaveHeight).toFixed(1)}`);
 
-    x += 17;
-    commands.push(`L ${x.toFixed(1)} ${baseline}`);
+      x += 17;
+      commands.push(`L ${x.toFixed(1)} ${baseline}`);
 
-    // Short pause before the main heartbeat spike
-    x += 24 + pseudoRandom(beat * 17) * 18;
-    commands.push(`L ${x.toFixed(1)} ${baseline}`);
+      // Short pause before the main heartbeat spike
+      x += 24 + pseudoRandom(beat * 17) * 18;
+      commands.push(`L ${x.toFixed(1)} ${baseline}`);
 
-    // QRS complex
-    x += 10;
-    commands.push(`L ${x.toFixed(1)} ${(baseline + 14).toFixed(1)}`);
+      // QRS complex
+      x += 10;
+      commands.push(`L ${x.toFixed(1)} ${(baseline + 14).toFixed(1)}`);
 
-    x += 14;
-    commands.push(`L ${x.toFixed(1)} ${(baseline - qrsHeight).toFixed(1)}`);
+      x += 14;
+      commands.push(`L ${x.toFixed(1)} ${(baseline - qrsHeight).toFixed(1)}`);
 
-    x += 17;
-    commands.push(`L ${x.toFixed(1)} ${(baseline + qrsDepth).toFixed(1)}`);
+      x += 17;
+      commands.push(`L ${x.toFixed(1)} ${(baseline + qrsDepth).toFixed(1)}`);
 
-    x += 18;
-    commands.push(`L ${x.toFixed(1)} ${(baseline - 25).toFixed(1)}`);
+      x += 18;
+      commands.push(`L ${x.toFixed(1)} ${(baseline - 25).toFixed(1)}`);
 
-    x += 18;
-    commands.push(`L ${x.toFixed(1)} ${baseline}`);
+      x += 18;
+      commands.push(`L ${x.toFixed(1)} ${baseline}`);
 
-    // Rounded T wave
-    x += 32;
-    commands.push(`L ${x.toFixed(1)} ${baseline}`);
+      // Rounded T wave
+      x += 32;
+      commands.push(`L ${x.toFixed(1)} ${baseline}`);
 
-    x += 20;
-    commands.push(`L ${x.toFixed(1)} ${(baseline - tWaveHeight).toFixed(1)}`);
+      x += 20;
+      commands.push(`L ${x.toFixed(1)} ${(baseline - tWaveHeight).toFixed(1)}`);
 
-    x += 24;
-    commands.push(`L ${x.toFixed(1)} ${baseline}`);
+      x += 24;
+      commands.push(`L ${x.toFixed(1)} ${baseline}`);
 
-    beat += 1;
-  }
+      beat += 1;
+    }
 
-  commands.push(`L 1200 ${baseline}`);
+    commands.push(`L 1200 ${baseline}`);
 
-  return commands.join(" ");
-};
+    return commands.join(" ");
+  };
 
-const pulsePath = createPulsePath();
+  const pulsePath = createPulsePath();
 
   const glitterParticles = Array.from({ length: 160 }, (_, index) => {
     const seed = index + 1;
@@ -106,7 +106,7 @@ const pulsePath = createPulsePath();
   return (
     <div
       aria-hidden="true"
-className="pointer-events-none absolute inset-y-0 right-0 w-full origin-right scale-[1.15] overflow-hidden lg:w-[82%] lg:scale-[1.35]"
+      className="pointer-events-none absolute inset-y-0 right-0 w-full origin-right scale-[1.15] overflow-hidden lg:w-[82%] lg:scale-[1.35]"
     >
       <svg
         className="h-full w-full overflow-visible"
@@ -124,13 +124,13 @@ className="pointer-events-none absolute inset-y-0 right-0 w-full origin-right sc
           >
             <feGaussianBlur stdDeviation="22" />
           </filter>
-<linearGradient id="pulse-gradient" x1="0%" x2="100%">
-  <stop offset="10%" stopColor="#17104f" />
-  <stop offset="30%" stopColor="#1e00c7" />
-  <stop offset="50%" stopColor="#6100cc" />
-  <stop offset="70%" stopColor="#ff3cac" />
-  <stop offset="90%" stopColor="#3ac700" />
-</linearGradient>
+          <linearGradient id="pulse-gradient" x1="0%" x2="100%">
+            <stop offset="10%" stopColor="#17104f" />
+            <stop offset="30%" stopColor="#1e00c7" />
+            <stop offset="50%" stopColor="#6100cc" />
+            <stop offset="70%" stopColor="#ff3cac" />
+            <stop offset="90%" stopColor="#3ac700" />
+          </linearGradient>
           <filter id="pulse-glow" x="-30%" y="-100%" width="160%" height="300%">
             <feGaussianBlur stdDeviation="10" result="blur" />
             <feMerge>
@@ -175,14 +175,14 @@ className="pointer-events-none absolute inset-y-0 right-0 w-full origin-right sc
               strokeLinejoin="round"
               strokeWidth="70"
             >
-<animate
-  attributeName="stroke-dashoffset"
-  calcMode="linear"
-  dur="4.2s"
-  keyTimes="0; 0.36; 0.42; 1"
-  repeatCount="indefinite"
-  values="1200; 760; 620; 0"
-/>
+              <animate
+                attributeName="stroke-dashoffset"
+                calcMode="linear"
+                dur="4.2s"
+                keyTimes="0; 0.36; 0.42; 1"
+                repeatCount="indefinite"
+                values="1200; 760; 620; 0"
+              />
             </path>
           </mask>
         </defs>
@@ -255,14 +255,14 @@ className="pointer-events-none absolute inset-y-0 right-0 w-full origin-right sc
           strokeLinejoin="round"
           strokeWidth="4"
         >
-<animate
-  attributeName="stroke-dashoffset"
-  calcMode="linear"
-  dur="4.2s"
-  keyTimes="0; 0.36; 0.42; 1"
-  repeatCount="indefinite"
-  values="1200; 760; 620; 0"
-/>
+          <animate
+            attributeName="stroke-dashoffset"
+            calcMode="linear"
+            dur="4.2s"
+            keyTimes="0; 0.36; 0.42; 1"
+            repeatCount="indefinite"
+            values="1200; 760; 620; 0"
+          />
         </path>
         {/* Crisp neon core inside the traveling glow */}
         <path
@@ -276,14 +276,14 @@ className="pointer-events-none absolute inset-y-0 right-0 w-full origin-right sc
           strokeLinejoin="round"
           strokeWidth="0.8"
         >
-<animate
-  attributeName="stroke-dashoffset"
-  calcMode="linear"
-  dur="4.2s"
-  keyTimes="0; 0.36; 0.42; 1"
-  repeatCount="indefinite"
-  values="1200; 760; 620; 0"
-/>
+          <animate
+            attributeName="stroke-dashoffset"
+            calcMode="linear"
+            dur="4.2s"
+            keyTimes="0; 0.36; 0.42; 1"
+            repeatCount="indefinite"
+            values="1200; 760; 620; 0"
+          />
         </path>
       </svg>
     </div>

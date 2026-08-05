@@ -32,8 +32,7 @@ export const platformModules: PlatformModule[] = [
     name: "Pulse",
     eyebrow: "Start with your capacity",
     purpose: "Daily capacity and transparent recommendations.",
-    summary:
-      "Check in with your energy and choose how you want to engage.",
+    summary: "Check in with your energy and choose how you want to engage.",
     audience: [
       "People balancing changing energy",
       "Intentional participants",
