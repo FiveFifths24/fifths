@@ -23,69 +23,81 @@ const energyOptions = [
     label: "Play",
     icon: Gamepad2,
     color:
-      "border-[#1800ad]/75 text-[#7f74ff] hover:border-[#4f3cff] hover:bg-[#1800ad]/15",
+      "border-[#ffffff]/75 text-[#ffffff] hover:border-[#4f3cff] hover:bg-[#1800ad]/15",
   },
   {
     label: "Create",
     icon: Pencil,
     color:
-      "border-[#6c14ce]/75 text-[#c18cff] hover:border-[#9d46ec] hover:bg-[#6c14ce]/15",
+      "border-[#ffffff]/75 text-[#ffffff] hover:border-[#9d46ec] hover:bg-[#6c14ce]/15",
   },
   {
     label: "Connect",
     icon: UsersRound,
     color:
-      "border-cyan-500/60 text-cyan-200 hover:border-cyan-400 hover:bg-cyan-500/10",
+      "border-[#ffffff]/60 text-[#ffffff] hover:border-cyan-400 hover:bg-cyan-500/10",
   },
   {
     label: "Focus",
     icon: CircleDot,
     color:
-      "border-[#f359d2]/70 text-[#ff9be8] hover:border-[#f359d2] hover:bg-[#f359d2]/15",
+      "border-[#ffffff]/70 text-[#ffffff] hover:border-[#f359d2] hover:bg-[#f359d2]/15",
   },
   {
     label: "Reset",
     icon: Leaf,
     color:
-      "border-[#7cff00]/70 text-[#b8ff73] hover:border-[#7cff00] hover:bg-[#7cff00]/15",
+      "border-[#ffffff]/70 text-[#ffffff] hover:border-[#7cff00] hover:bg-[#7cff00]/15",
   },
 ];
 
 export default function HomePage() {
   return (
     <>
-      <section className="relative overflow-hidden border-b border-white/10 bg-[#020205] sm:min-h-screen">
-        {/* Full heartbeat remains on tablet and desktop only */}
-        <div className="pointer-events-none absolute inset-0 hidden sm:block">
-          <PulseHeartbeat />
+      <section className="relative overflow-hidden bg-[#020205]">
+        {/* Desktop heartbeat: begins near the middle and stays on the right */}
+        <div className="pointer-events-none absolute inset-y-0 right-0 z-0 hidden w-[90%] overflow-hidden sm:block">
+          <div className="absolute inset-0">
+            <PulseHeartbeat />
+          </div>
         </div>
 
+        {/* Subtle glow behind the heartbeat */}
+
+        {/* Dark transition keeps the heartbeat from competing with the copy */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_46%,rgba(61,0,143,0.16),transparent_48%)] sm:bg-[radial-gradient(circle_at_70%_50%,rgba(55,20,110,0.16),transparent_48%)]"
+          className="pointer-events-none absolute inset-y-0 left-0 z-[1] hidden w-[50%] bg-gradient-to-r from-[#020205] via-[#020205] via-75% to-transparent sm:block"
         />
 
-        <Container className="relative !mx-0 flex !max-w-none flex-col items-center justify-start px-5 pt-32 pb-20 sm:min-h-screen sm:items-start sm:justify-center sm:px-8 sm:py-20 lg:px-16">
-          <div className="relative z-10 w-full max-w-[48rem] text-center sm:text-left">
+        <Container className="relative !mx-0 flex min-h-[46rem] !max-w-none flex-col items-center justify-start px-5 pt-32 pb-20 sm:min-h-[52rem] sm:items-start sm:justify-center sm:px-8 sm:py-20 lg:min-h-[58rem] lg:px-16">
+          <div className="relative z-10 w-full max-w-[62rem] text-center sm:text-left">
             {/* Badge */}
-            <p className="mx-auto inline-flex max-w-[22rem] items-center justify-center gap-2 rounded-full border border-[#6c14ce]/35 bg-black/55 px-4 py-2 text-[0.56rem] leading-4 font-bold tracking-[0.14em] text-white/75 uppercase shadow-[0_0_24px_rgba(108,20,206,0.14)] backdrop-blur-md sm:mx-0 sm:max-w-none sm:justify-start sm:gap-2.5 sm:text-[0.66rem] sm:tracking-[0.18em]">
-              <span
-                aria-hidden="true"
-                className="size-1.5 shrink-0 rounded-full bg-[#b146ff] shadow-[0_0_12px_rgba(177,70,255,0.9)] sm:size-2"
-              />
-              The social operating system for modern community
-            </p>
+<p className="mx-auto inline-flex max-w-[22rem] items-center justify-center gap-2 rounded-full border border-[#6c14ce]/35 bg-black/55 px-4 py-2 text-[0.56rem] leading-4 font-bold tracking-[0.14em] uppercase shadow-[0_0_24px_rgba(108,20,206,0.14)] backdrop-blur-md sm:mx-0 sm:max-w-none sm:justify-start sm:gap-2.5 sm:text-[0.66rem] sm:tracking-[0.18em]">
+  <span
+    aria-hidden="true"
+    className="size-1.5 shrink-0 rounded-full bg-[#ffffff] shadow-[0_0_12px_rgba(177,70,255,0.9)] sm:size-2"
+  />
+  <span className="ecosystem-gradient-text">
+    Community That Meets You Where You Are
+  </span>
+</p>
 
             {/* Hero title */}
-            <h1 className="display-type mx-auto mt-8 max-w-[46rem] text-[clamp(3rem,14vw,4.5rem)] leading-[0.88] tracking-[-0.045em] sm:mx-0 sm:mt-10 sm:text-[clamp(3.6rem,4.65vw,5.7rem)] sm:leading-[0.93] sm:tracking-[-0.04em]">
-              <span className="block text-[0.88em] text-[#f2f0ed] sm:text-[0.92em]">
+<h1 className="display-type mx-auto mt-8 max-w-[48rem] text-center sm:mx-0 sm:mt-10 sm:text-left">
+                <span className="block text-[clamp(1.9rem,3vw,3rem)] leading-none tracking-[-0.035em] text-[#f2f0ed]">
                 Find Your Space.
               </span>
 
-              <span className="mt-1 block bg-[linear-gradient(90deg,#1800ad_0%,#6c14ce_50%,#f359d2_100%)] bg-clip-text text-[0.98em] text-transparent sm:mt-0 sm:text-[1.04em]">
-                Match Your Energy.
-              </span>
+<span className="mt-3 block bg-[linear-gradient(90deg,#1800ad_10%,#6c14ce_30%,#f359d2_50%,#7cff00_70%)] bg-clip-text text-[clamp(3.8rem,6.5vw,7rem)] leading-[0.88] tracking-[-0.055em] text-transparent [-webkit-text-fill-color:transparent]">
+  Match Your Energy.
+</span>
             </h1>
+
+            <p className="mt-6 max-w-[40rem] text-base leading-7 text-[#ffffff] sm:text-lg">
+              PULSE helps you discover ways to participate that fit your energy,
+              interests, and availability.
+            </p>
 
             {/* Dedicated mobile heartbeat divider */}
             <div
@@ -193,7 +205,6 @@ export default function HomePage() {
             </div>
 
             {/* Main actions */}
-            {/* Main actions */}
             <div className="mx-auto mt-8 flex w-full max-w-[22rem] flex-col gap-3 sm:mx-0 sm:mt-7 sm:max-w-none sm:flex-row">
               {/* Static on mobile; pulsing ring appears on desktop only */}
               <div className="join-pulse-wrapper w-full sm:w-auto">
@@ -218,49 +229,23 @@ export default function HomePage() {
 
               {/* Desktop-only ecosystem button */}
               <div className="hidden sm:block">
-                <ButtonLink
-                  arrow
-                  className="min-w-48 border border-white/20 bg-black/45 text-white backdrop-blur-sm hover:border-white/40 hover:bg-white/10"
-                  href="/ecosystem"
-                  variant="secondary"
-                >
-                  Explore the Ecosystem
-                </ButtonLink>
+<ButtonLink
+  arrow
+  className="min-w-48"
+  href="/ecosystem"
+  variant="ecosystem"
+>
+  <span className="ecosystem-gradient-text">
+    Explore the Ecosystem
+  </span>
+</ButtonLink>
               </div>
             </div>
           </div>
         </Container>
       </section>
 
-      <section
-        className="border-b border-neutral-800 py-20 sm:py-28"
-        id="vision"
-      >
-        <Container className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
-          <SectionHeading
-            eyebrow="One ecosystem"
-            title="Community should meet people where they are."
-          />
-
-          <div className="space-y-5 text-lg leading-8 text-neutral-300">
-            <p>
-              Most platforms begin with content. FIFTHS begins with capacity:
-              what kind of room, energy, and participation actually fits today.
-            </p>
-
-            <p className="text-neutral-400">
-              One identity connects discovery, collaboration, play,
-              contribution, and a credible record of showing up.
-            </p>
-          </div>
-        </Container>
-      </section>
-
-      <section className="relative overflow-hidden border-y border-white/10 bg-[#020205] py-24 sm:py-32">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute top-0 left-1/2 h-[28rem] w-[48rem] -translate-x-1/2 rounded-full bg-[#6c14ce]/10 blur-[140px]"
-        />
+      <section className="relative overflow-hidden bg-[#020205] py-24 sm:py-32">
 
         <div
           aria-hidden="true"
@@ -271,12 +256,13 @@ export default function HomePage() {
           aria-hidden="true"
           className="pointer-events-none absolute bottom-[-14rem] left-[-10rem] size-[30rem] rounded-full bg-[#f359d2]/5 blur-[130px]"
         />
+
         <Container className="relative">
           <SectionHeading
             align="center"
             eyebrow="One connected ecosystem"
-            title="Your ecosystem, your way."
-            description="Five experiences. One seamless flow."
+            title="Find Your People, Your Place, Your Pace."
+            description="Explore, connect, create, play, and carry your identity across it all."
           />
 
           <div className="mt-14 grid gap-5 md:grid-cols-2">
