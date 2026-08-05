@@ -245,6 +245,19 @@ export default function HomePage() {
         </Container>
       </section>
 
+<section className="border-y border-neutral-800 bg-neutral-950 py-20 sm:py-28">
+  <Container>
+<SectionHeading
+  align="center"
+  eyebrow="The participation loop"
+  title="Five steps. One lasting record."
+  description="A clear, repeatable path from today’s capacity to lasting contribution."
+/>
+
+    <ParticipationLoop />
+  </Container>
+</section>
+
       <section className="relative overflow-hidden bg-[#020205] py-24 sm:py-32">
 
         <div
@@ -273,17 +286,6 @@ export default function HomePage() {
         </Container>
       </section>
 
-      <section className="border-y border-neutral-800 bg-neutral-950 py-20 sm:py-28">
-        <Container>
-          <SectionHeading
-            eyebrow="The participation loop"
-            title="From today’s capacity to lasting contribution."
-            description="FIFTHS is designed around a clear, repeatable path—not an endless feed."
-          />
-
-          <ParticipationLoop />
-        </Container>
-      </section>
 
       <section className="py-20 sm:py-28">
         <Container className="grid gap-6 lg:grid-cols-3">
