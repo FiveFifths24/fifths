@@ -20,6 +20,7 @@ export type PlatformModule = {
   pulseConnection: string;
   passportConnection: string;
   icon: LucideIcon;
+  artwork: string;
   accent: string;
   glow: string;
   memberHref?: string;
@@ -59,7 +60,8 @@ export const platformModules: PlatformModule[] = [
     passportConnection:
       "Following a recommendation does not earn credit by itself. Eligible, verified participation can later appear in Passport.",
     icon: Radio,
-    accent: "text-red-400",
+    artwork: "/images/modules/pulse-art.png",
+    accent: "text-[#f359d2]",
     glow: "from-[#6c14ce]/20 to-[#020205]",
     memberHref: "/home/pulse",
   },
@@ -96,7 +98,8 @@ export const platformModules: PlatformModule[] = [
     passportConnection:
       "Eligible hosted sessions, volunteering, and verified Circle contributions can build a member’s Passport history.",
     icon: HeartHandshake,
-    accent: "text-rose-300",
+    artwork: "/images/modules/circles-art.png",
+    accent: "text-[#22d3ee]",
     glow: "from-[#22d3ee]/15 to-[#020205]",
     memberHref: "/home/circles",
   },
@@ -133,7 +136,8 @@ export const platformModules: PlatformModule[] = [
     passportConnection:
       "A collaboration can contribute to Passport only after an authorized completion workflow—not through self-issued credit.",
     icon: Aperture,
-    accent: "text-amber-200",
+    artwork: "/images/modules/commons-art.png",
+    accent: "text-[#7cff00]",
     glow: "from-[#7cff00]/10 to-[#020205]",
     memberHref: "/home/commons",
   },
@@ -170,7 +174,8 @@ export const platformModules: PlatformModule[] = [
     passportConnection:
       "Verified campaign participation and completion can become part of Passport without turning play into a leaderboard.",
     icon: Gamepad2,
-    accent: "text-violet-300",
+    artwork: "/images/modules/realm-art.png",
+    accent: "text-[#9d7cff]",
     glow: "from-[#1800ad]/25 to-[#020205]",
     memberHref: "/home/realm",
   },
@@ -207,7 +212,8 @@ export const platformModules: PlatformModule[] = [
     passportConnection:
       "Passport is the shared outcome layer connecting participation across Sessions, Circles, Commons, and Fifth Realm.",
     icon: BadgeCheck,
-    accent: "text-emerald-300",
+    artwork: "/images/modules/passport-art.png",
+    accent: "text-[#b8ff73]",
     glow: "from-[#7cff00]/12 to-[#020205]",
     memberHref: "/home/passport",
   },

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
@@ -86,6 +87,7 @@ export function ModuleCard({
           styles.border,
         )}
       />
+
       <div
         aria-hidden="true"
         className={cn(
@@ -94,10 +96,48 @@ export function ModuleCard({
         )}
       />
 
+      {/* Module artwork */}
+      <div
+        aria-hidden="true"
+        className={cn(
+          "pointer-events-none absolute inset-0 overflow-hidden transition-transform duration-700 group-hover:scale-[1.03]",
+          module.slug === "passport" && "md:left-[35%]",
+        )}
+      >
+        <Image
+          alt=""
+          className={cn(
+            "object-cover opacity-75",
+            module.slug === "passport"
+              ? "object-center md:object-right"
+              : "object-right",
+          )}
+          fill
+          sizes={
+            module.slug === "passport"
+              ? "(min-width: 768px) 65vw, 100vw"
+              : "(min-width: 768px) 50vw, 100vw"
+          }
+          src={module.artwork}
+        />
+      </div>
+
+      {/* Dark overlay for readable text */}
+      <div
+        aria-hidden="true"
+        className={cn(
+          "pointer-events-none absolute inset-0",
+          module.slug === "passport"
+            ? "bg-gradient-to-r from-[#08070e] via-[#08070e]/85 to-transparent"
+            : "bg-gradient-to-r from-[#08070e] via-[#08070e]/80 to-[#08070e]/10",
+        )}
+      />
+
+      {/* Card content */}
       <div className="relative z-10 flex h-full flex-col">
         <div
           className={cn(
-            "inline-flex size-16 items-center justify-center rounded-2xl border shadow-[0_0_28px_rgba(108,20,206,0.14)]",
+            "inline-flex size-16 items-center justify-center rounded-2xl border shadow-[0_0_28px_rgba(108,20,206,0.14)] transition-all duration-300 group-hover:scale-105 group-hover:shadow-[0_0_38px_rgba(243,89,210,0.24)]",
             styles.icon,
           )}
         >
