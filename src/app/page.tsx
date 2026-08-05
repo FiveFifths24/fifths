@@ -73,25 +73,25 @@ export default function HomePage() {
         <Container className="relative !mx-0 flex min-h-[46rem] !max-w-none flex-col items-center justify-start px-5 pt-32 pb-20 sm:min-h-[52rem] sm:items-start sm:justify-center sm:px-8 sm:py-20 lg:min-h-[58rem] lg:px-16">
           <div className="relative z-10 w-full max-w-[62rem] text-center sm:text-left">
             {/* Badge */}
-<p className="mx-auto inline-flex max-w-[22rem] items-center justify-center gap-2 rounded-full border border-[#6c14ce]/35 bg-black/55 px-4 py-2 text-[0.56rem] leading-4 font-bold tracking-[0.14em] uppercase shadow-[0_0_24px_rgba(108,20,206,0.14)] backdrop-blur-md sm:mx-0 sm:max-w-none sm:justify-start sm:gap-2.5 sm:text-[0.66rem] sm:tracking-[0.18em]">
-  <span
-    aria-hidden="true"
-    className="size-1.5 shrink-0 rounded-full bg-[#ffffff] shadow-[0_0_12px_rgba(177,70,255,0.9)] sm:size-2"
-  />
-  <span className="ecosystem-gradient-text">
-    Community That Meets You Where You Are
-  </span>
-</p>
+            <p className="mx-auto inline-flex max-w-[22rem] items-center justify-center gap-2 rounded-full border border-[#6c14ce]/35 bg-black/55 px-4 py-2 text-[0.56rem] leading-4 font-bold tracking-[0.14em] uppercase shadow-[0_0_24px_rgba(108,20,206,0.14)] backdrop-blur-md sm:mx-0 sm:max-w-none sm:justify-start sm:gap-2.5 sm:text-[0.66rem] sm:tracking-[0.18em]">
+              <span
+                aria-hidden="true"
+                className="size-1.5 shrink-0 rounded-full bg-[#ffffff] shadow-[0_0_12px_rgba(177,70,255,0.9)] sm:size-2"
+              />
+              <span className="ecosystem-gradient-text">
+                Community That Meets You Where You Are
+              </span>
+            </p>
 
             {/* Hero title */}
-<h1 className="display-type mx-auto mt-8 max-w-[48rem] text-center sm:mx-0 sm:mt-10 sm:text-left">
-                <span className="block text-[clamp(1.9rem,3vw,3rem)] leading-none tracking-[-0.035em] text-[#f2f0ed]">
+            <h1 className="display-type mx-auto mt-8 max-w-[48rem] text-center sm:mx-0 sm:mt-10 sm:text-left">
+              <span className="block text-[clamp(1.9rem,3vw,3rem)] leading-none tracking-[-0.035em] text-[#f2f0ed]">
                 Find Your Space.
               </span>
 
-<span className="mt-3 block bg-[linear-gradient(90deg,#1800ad_10%,#6c14ce_30%,#f359d2_50%,#7cff00_70%)] bg-clip-text text-[clamp(3.8rem,6.5vw,7rem)] leading-[0.88] tracking-[-0.055em] text-transparent [-webkit-text-fill-color:transparent]">
-  Match Your Energy.
-</span>
+              <span className="mt-3 block bg-[linear-gradient(90deg,#1800ad_10%,#6c14ce_30%,#f359d2_50%,#7cff00_70%)] bg-clip-text text-[clamp(3.8rem,6.5vw,7rem)] leading-[0.88] tracking-[-0.055em] text-transparent [-webkit-text-fill-color:transparent]">
+                Match Your Energy.
+              </span>
             </h1>
 
             <p className="mt-6 max-w-[40rem] text-base leading-7 text-[#ffffff] sm:text-lg">
@@ -229,37 +229,36 @@ export default function HomePage() {
 
               {/* Desktop-only ecosystem button */}
               <div className="hidden sm:block">
-<ButtonLink
-  arrow
-  className="min-w-48"
-  href="/ecosystem"
-  variant="ecosystem"
->
-  <span className="ecosystem-gradient-text">
-    Explore the Ecosystem
-  </span>
-</ButtonLink>
+                <ButtonLink
+                  arrow
+                  className="min-w-48"
+                  href="/ecosystem"
+                  variant="ecosystem"
+                >
+                  <span className="ecosystem-gradient-text">
+                    Explore the Ecosystem
+                  </span>
+                </ButtonLink>
               </div>
             </div>
           </div>
         </Container>
       </section>
 
-<section className="border-y border-neutral-800 bg-neutral-950 py-20 sm:py-28">
-  <Container>
-<SectionHeading
-  align="center"
-  eyebrow="The participation loop"
-  title="Five steps. One lasting record."
-  description="A clear, repeatable path from today’s capacity to lasting contribution."
-/>
+      <section className="border-y border-neutral-800 bg-neutral-950 py-20 sm:py-28">
+        <Container>
+          <SectionHeading
+            align="center"
+            eyebrow="The participation loop"
+            title="Five steps. One lasting record."
+            description="A clear, repeatable path from today’s capacity to lasting contribution."
+          />
 
-    <ParticipationLoop />
-  </Container>
-</section>
+          <ParticipationLoop />
+        </Container>
+      </section>
 
       <section className="relative overflow-hidden bg-[#020205] py-24 sm:py-32">
-
         <div
           aria-hidden="true"
           className="pointer-events-none absolute right-[-10rem] bottom-[-12rem] size-[30rem] rounded-full bg-[#22d3ee]/5 blur-[130px]"
@@ -285,7 +284,6 @@ export default function HomePage() {
           </div>
         </Container>
       </section>
-
 
       <section className="py-20 sm:py-28">
         <Container className="grid gap-6 lg:grid-cols-3">

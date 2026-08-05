@@ -13,7 +13,9 @@ describe("landing page", () => {
       }),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(/the social operating system for modern community/i),
+      screen.getByText(
+        /PULSE helps you discover ways to participate that fit your energy, interests, and availability/i,
+      ),
     ).toBeInTheDocument();
     expect(
       screen.getAllByRole("link", { name: "Join FIFTHS" })[0],

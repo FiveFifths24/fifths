@@ -89,11 +89,11 @@ export function ModuleCard({
   return (
     <article
       className={cn(
-"group relative min-h-[10rem] overflow-hidden rounded-[1.5rem] border bg-[#08070e] p-5 transition-all duration-300 md:min-h-[15rem] md:rounded-[2rem] md:p-9 md:hover:-translate-y-1",
+        "group relative min-h-[10rem] overflow-hidden rounded-[1.5rem] border bg-[#08070e] p-5 transition-all duration-300 md:min-h-[15rem] md:rounded-[2rem] md:p-9 md:hover:-translate-y-1",
         styles.border,
         styles.shadow,
         module.slug === "passport" &&
-"min-h-[10rem] md:min-h-[20rem] md:col-span-2 md:grid md:grid-cols-[0.8fr_1.2fr] md:items-center",
+          "min-h-[10rem] md:col-span-2 md:grid md:min-h-[20rem] md:grid-cols-[0.8fr_1.2fr] md:items-center",
       )}
     >
       {/* Background glow */}
@@ -109,7 +109,7 @@ export function ModuleCard({
       <div
         aria-hidden="true"
         className={cn(
-          "pointer-events-none absolute inset-0 overflow-hidden motion-safe:animate-[pulse_5s_ease-in-out_infinite] transition-transform duration-700 md:group-hover:scale-[1.03]",
+          "pointer-events-none absolute inset-0 overflow-hidden transition-transform duration-700 motion-safe:animate-[pulse_5s_ease-in-out_infinite] md:group-hover:scale-[1.03]",
           module.slug === "passport" && "md:left-[35%]",
         )}
       >
@@ -146,34 +146,34 @@ export function ModuleCard({
       <div className="relative z-10 flex h-full flex-col">
         <div
           className={cn(
-"inline-flex size-12 items-center justify-center rounded-xl border transition-all duration-300 md:size-16 md:rounded-2xl md:group-hover:scale-105",
+            "inline-flex size-12 items-center justify-center rounded-xl border transition-all duration-300 md:size-16 md:rounded-2xl md:group-hover:scale-105",
             styles.icon,
             styles.iconShadow,
           )}
         >
-<Icon aria-hidden="true" className="size-5 md:size-7" />
+          <Icon aria-hidden="true" className="size-5 md:size-7" />
         </div>
 
-<h3 className="display-type mt-4 text-3xl text-white md:mt-8 md:text-4xl">
-            {module.name}
+        <h3 className="display-type mt-4 text-3xl text-white md:mt-8 md:text-4xl">
+          {module.name}
         </h3>
 
-<p className="mt-2 max-w-sm text-sm leading-6 text-[#b6b1c2] md:mt-4 md:pb-20 md:text-base md:leading-7">
-              {module.summary}
+        <p className="mt-2 max-w-sm text-sm leading-6 text-[#b6b1c2] md:mt-4 md:pb-20 md:text-base md:leading-7">
+          {module.summary}
         </p>
       </div>
 
-<Link
-  aria-label={`Explore ${module.name}`}
-  className={cn(
-    "absolute right-5 top-5 bottom-auto z-20 inline-flex size-10 items-center justify-center rounded-full border transition-all duration-300 active:scale-95 md:top-auto md:right-9 md:bottom-9 md:size-12 md:group-hover:translate-x-1",
-    module.slug === "passport" && "md:right-12 md:bottom-12",
-    styles.arrow,
-  )}
-  href={module.memberHref ?? "/ecosystem"}
->
-  <ArrowRight aria-hidden="true" className="size-4 md:size-5" />
-</Link>
+      <Link
+        aria-label={`Explore ${module.name}`}
+        className={cn(
+          "absolute top-5 right-5 bottom-auto z-20 inline-flex size-10 items-center justify-center rounded-full border transition-all duration-300 active:scale-95 md:top-auto md:right-9 md:bottom-9 md:size-12 md:group-hover:translate-x-1",
+          module.slug === "passport" && "md:right-12 md:bottom-12",
+          styles.arrow,
+        )}
+        href={module.memberHref ?? "/ecosystem"}
+      >
+        <ArrowRight aria-hidden="true" className="size-4 md:size-5" />
+      </Link>
     </article>
   );
 }

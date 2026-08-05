@@ -139,7 +139,7 @@ export function ParticipationLoop() {
             className="relative z-10 grid grid-cols-[3.5rem_1fr] items-center gap-4 lg:block lg:px-4 lg:text-center"
             key={title}
           >
-            <span className="mb-3 hidden text-xs font-bold tracking-[0.18em] text-white/45 lg:block">
+            <span className="mb-3 hidden text-xs font-bold tracking-[0.18em] text-white/60 lg:block">
               0{index + 1}
             </span>
 
@@ -150,7 +150,7 @@ export function ParticipationLoop() {
             </div>
 
             <div>
-              <span className="mb-2 block text-xs font-bold tracking-[0.18em] text-white/45 lg:hidden">
+              <span className="mb-2 block text-xs font-bold tracking-[0.18em] text-white/60 lg:hidden">
                 0{index + 1}
               </span>
 
