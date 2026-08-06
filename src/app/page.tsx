@@ -67,7 +67,7 @@ const pseudoRandom = (seed: number) => {
 const glitterColors = ["#ffffff", "#8b5cf6", "#f359d2", "#7cff00"];
 
 const homepageGlitter = Array.from({ length: 150 }, (_, index) => ({
-  left: `${(pseudoRandom(index * 2 + 1) * 100).toFixed(2)}%`,
+    left: `${(pseudoRandom(index * 2 + 1) * 100).toFixed(2)}%`,
   top: `${(pseudoRandom(index * 3 + 2) * 100).toFixed(2)}%`,
   size: 1 + pseudoRandom(index * 5 + 3) * 1.8,
   color: glitterColors[index % glitterColors.length],
@@ -119,7 +119,7 @@ export default function HomePage() {
         className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
       >
         {/* Soft atmospheric color carried through the full page */}
-        <div className="absolute left-[-20rem] top-[4%] size-[46rem] rounded-full bg-[#6c14ce]/10 blur-[170px]" />
+        <div className="absolute left-[-22rem] top-[38%] hidden size-[46rem] rounded-full bg-[#6c14ce]/8 blur-[190px] sm:block" />
         <div className="absolute right-[-18rem] top-[32%] size-[42rem] rounded-full bg-[#f359d2]/6 blur-[170px]" />
         <div className="absolute left-[-16rem] top-[58%] size-[40rem] rounded-full bg-[#1800ad]/7 blur-[170px]" />
         <div className="absolute right-[-18rem] top-[76%] size-[44rem] rounded-full bg-[#7cff00]/5 blur-[180px]" />
@@ -191,4 +191,206 @@ export default function HomePage() {
                 </span>
               </h1>
 
-           ²È="25¹¬(€€€€€€€€€€€€€€€€€€€€€±…ÍÍ9…µ”õíÉ½ÕÀ¥¹±¥¹”µ™±•àµ¥¸µ ´ÄÐ¥Ñ•µÌµ•¹Ñ•È©ÕÍÑ¥™äµ•¹Ñ•È…À´ÌÉ½Õ¹‘•µ™Õ±°‰½É‘•È‰œµ‰±…¬¼ÌÔÁà´ÐÑ•áÐµlÀ¸ØáÉ•µt™½¹Ðµ‰½±ÑÉ…­¥¹œµlÀ¸ÄÙ•µtÕÁÁ•É…Í”‰…­‘É½Àµ‰±ÕÈµÍ´ÑÉ…¹Í¥Ñ¥½¸µ…±°‘ÕÉ…Ñ¥½¸´ÌÀÀÍ´éµ¥¸µ ´ÄÀÍ´é…À´ÈÍ´éÁà´ÔÍ´éÑ•áÐµlÀ¸ØáÉ•µtÍ´éÑÉ…­¥¹œµlÀ¸Äá•µt€‘ì(€€€€€€€€€€€€€€€€€€€€€€€¥¹‘•à€ôôô€Ð€ü€‰½°µÍÁ…¸´ÈÍ´é½°µ…ÕÑ¼ˆ€è€ˆˆ(€€€€€€€€€€€€€€€€€€€€€ô€‘í½ÁÑ¥½¸¹½±½Éõô(€€€€€€€€€€€€€€€€€€€€€¡É•˜ôˆ½ÁÕ±Í”ˆ(€€€€€€€€€€€€€€€€€€€€€­•äõí½ÁÑ¥½¸¹±…‰•±ô(€€€€€€€€€€€€€€€€€€€€ø(€€€€€€€€€€€€€€€€€€€€€€ñ%½¸(€€€€€€€€€€€€€€€€€€€€€€€…É¥„µ¡¥‘‘•¸ô‰ÑÉÕ”ˆ(€€€€€€€€€€€€€€€€€€€€€€€±…ÍÍ9…µ”ô‰Í¥é”´ÔÑÉ…¹Í¥Ñ¥½¸µÑÉ…¹Í™½É´‘ÕÉ…Ñ¥½¸´ÌÀÀÉ½ÕÀµ¡½Ù•ÈéÍ…±”´ÄÄÀÍ´éÍ¥é”´Ðˆ(€€€€€€€€€€€€€€€€€€€€€€¼ø((€€€€€€€€€€€€€€€€€€€€€í½ÁÑ¥½¸¹±…‰•±ô(€€€€€€€€€€€€€€€€€€€€ð½1¥¹¬ø(€€€€€€€€€€€€€€€€€€¤ì(€€€€€€€€€€€€€€€ô¥ô(€€€€€€€€€€€€€€ð½‘¥Øø((€€€€€€€€€€€€€ì¼¨5…¥¸…Ñ¥½¹Ì€¨½ô(€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰µàµ…ÕÑ¼µÐ´à™±•àÜµ™Õ±°µ…àµÜµlÈÉÉ•µt™±•àµ½°…À´ÌÍ´éµà´ÀÍ´éµÐ´ÜÍ´éµ…àµÜµ¹½¹”Í´é™±•àµÉ½Üˆø(€€€€€€€€€€€€€€€ì¼¨MÑ…Ñ¥Œ½¸µ½‰¥±”ìÁÕ±Í¥¹œÉ¥¹œ…ÁÁ•…ÉÌ½¸‘•Í­Ñ½À½¹±ä€¨½ô(€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰©½¥¸µÁÕ±Í”µÝÉ…ÁÁ•ÈÜµ™Õ±°Í´éÜµ…ÕÑ¼ˆø(€€€€€€€€€€€€€€€€€€ñ	ÕÑÑ½¹1¥¹¬(€€€€€€€€€€€€€€€€€€€±…ÍÍ9…µ”ô‰É•±…Ñ¥Ù”è´ÄÀÜµ™Õ±°½Ù•É™±½Üµ¡¥‘‘•¸‰½É‘•È´À‰œµm±¥¹•…ÈµÉ…‘¥•¹Ð äÁ‘•œ°ŒÄàÀÁ…‘|À”°ŒÙŒÄÑ•|ÌØ”°˜ÌÔåÉ|ÜÀ”°ŒÝ™˜ÀÁ|ÄÀÀ”¥tÑ•áÐµÝ¡¥Ñ”Í¡…‘½ÜµlÁ|Á|ÈÑÁá}É‰„ ÄÀà°ÈÀ°ÈÀØ°À¸ÈÈ¥t¡½Ù•Èé‰É¥¡Ñ¹•ÍÌ´ÄÄÀÍ´éµ¥¸µÜ´ÐÀˆ(€€€€€€€€€€€€€€€€€€€¡É•˜ôˆ½Í¥¹ÕÀˆ(€€€€€€€€€€€€€€€€€€ø(€€€€€€€€€€€€€€€€€€€)½¥¸M%90(€€€€€€€€€€€€€€€€€€ð½	ÕÑÑ½¹1¥¹¬ø(€€€€€€€€€€€€€€€€ð½‘¥Øø((€€€€€€€€€€€€€€€ì¼¨5½‰¥±”µ½¹±ä±½¥¸‰ÕÑÑ½¸€¨½ô(€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰Üµ™Õ±°Í´é¡¥‘‘•¸ˆø(€€€€€€€€€€€€€€€€€€ñ	ÕÑÑ½¹1¥¹¬(€€€€€€€€€€€€€€€€€€€±…ÍÍ9…µ”ô‰Üµ™Õ±°‰½É‘•È‰½É‘•ÈµÝ¡¥Ñ”¼ÈÀ‰œµ‰±…¬¼ÐÔÑ•áÐµÝ¡¥Ñ”‰…­‘É½Àµ‰±ÕÈµÍ´¡½Ù•Èé‰½É‘•ÈµÝ¡¥Ñ”¼ÐÀ¡½Ù•Èé‰œµÝ¡¥Ñ”¼ÄÀˆ(€€€€€€€€€€€€€€€€€€€¡É•˜ôˆ½±½¥¸ˆ(€€€€€€€€€€€€€€€€€€€Ù…É¥…¹Ðô‰Í•½¹‘…Éäˆ(€€€€€€€€€€€€€€€€€€ø(€€€€€€€€€€€€€€€€€€€1½œ¥¸(€€€€€€€€€€€€€€€€€€ð½	ÕÑÑ½¹1¥¹¬ø(€€€€€€€€€€€€€€€€ð½‘¥Øø((€€€€€€€€€€€€€€€ì¼¨•Í­Ñ½Àµ½¹±ä•½ÍåÍÑ•´‰ÕÑÑ½¸€¨½ô(€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰¡¥‘‘•¸Í´é‰±½¬ˆø(€€€€€€€€€€€€€€€€€€ñ	ÕÑÑ½¹1¥¹¬(€€€€€€€€€€€€€€€€€€€…ÉÉ½Ü(€€€€€€€€€€€€€€€€€€€±…ÍÍ9…µ”ô‰µ¥¸µÜ´Ðàˆ(€€€€€€€€€€€€€€€€€€€¡É•˜ôˆ½•½ÍåÍÑ•´ˆ(€€€€€€€€€€€€€€€€€€€Ù…É¥…¹Ðô‰•½ÍåÍÑ•´ˆ(€€€€€€€€€€€€€€€€€€ø(€€€€€€€€€€€€€€€€€€€€ñÍÁ…¸±…ÍÍ9…µ”ô‰•½ÍåÍÑ•´µÉ…‘¥•¹ÐµÑ•áÐˆø(€€€€€€€€€€€€€€€€€€€€€áÁ±½É”Ñ¡”½ÍåÍÑ•´(€€€€€€€€€€€€€€€€€€€€ð½ÍÁ…¸ø(€€€€€€€€€€€€€€€€€€ð½	ÕÑÑ½¹1¥¹¬ø(€€€€€€€€€€€€€€€€ð½‘¥Øø(€€€€€€€€€€€€€€ð½‘¥Øø(€€€€€€€€€€€€ð½‘¥Øø(€€€€€€€€€€ð½½¹Ñ…¥¹•Èø(€€€€€€€€ð½Í•Ñ¥½¸ø((€€€€€€€€ñÍ•Ñ¥½¸±…ÍÍ9…µ”ô‰Áä´ÈÀÍ´éÁä´Èàˆø(€€€€€€€€€€ñ½¹Ñ…¥¹•Èø(€€€€€€€€€€€€ñM•Ñ¥½¹!•…‘¥¹œ(€€€€€€€€€€€€€…±¥¸ô‰•¹Ñ•Èˆ(€€€€€€€€€€€€€•å•‰É½Üô‰Q¡”Á…ÉÑ¥¥Á…Ñ¥½¸±½½Àˆ(€€€€€€€€€€€€€Ñ¥Ñ±”ô‰¥Ù”ÍÑ•ÁÌ¸=¹”±…ÍÑ¥¹œÉ•½É¸ˆ(€€€€€€€€€€€€€‘•ÍÉ¥ÁÑ¥½¸ô‰±•…È°É•Á•…Ñ…‰±”Á…Ñ ™É½´Ñ½‘…çŠeÌ…Á…¥ÑäÑ¼±…ÍÑ¥¹œ½¹ÑÉ¥‰ÕÑ¥½¸¸ˆ(€€€€€€€€€€€€¼ø((€€€€€€€€€€€€ñA…ÉÑ¥¥Á…Ñ¥½¹1½½À€¼ø(€€€€€€€€€€ð½½¹Ñ…¥¹•Èø(€€€€€€€€ð½Í•Ñ¥½¸ø((€€€€€€€€ñÍ•Ñ¥½¸±…ÍÍ9…µ”ô‰É•±…Ñ¥Ù”½Ù•É™±½Üµ¡¥‘‘•¸Áä´ÈÐÍ´éÁä´ÌÈˆø(€€€€€€€€€€ñ½¹Ñ…¥¹•È±…ÍÍ9…µ”ô‰É•±…Ñ¥Ù”ˆø(€€€€€€€€€€€€ñM•Ñ¥½¹!•…‘¥¹œ(€€€€€€€€€€€€€…±¥¸ô‰•¹Ñ•Èˆ(€€€€€€€€€€€€€•å•‰É½Üô‰=¹”½¹¹•Ñ••½ÍåÍÑ•´ˆ(€€€€€€€€€€€€€Ñ¥Ñ±”ô‰¥¹e½ÕÈA•½Á±”°e½ÕÈA±…”°e½ÕÈA…”¸ˆ(€€€€€€€€€€€€€‘•ÍÉ¥ÁÑ¥½¸ô‰áÁ±½É”°½¹¹•Ð°É•…Ñ”°Á±…ä°…¹…ÉÉäå½ÕÈ¥‘•¹Ñ¥Ñä…É½ÍÌ¥Ð…±°¸ˆ(€€€€€€€€€€€€¼ø((€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰µÐ´ÄÐÉ¥…À´ÔµéÉ¥µ½±Ì´Èˆø(€€€€€€€€€€€€€íÁ±…Ñ™½Éµ5½‘Õ±•Ì¹µ…À ¡µ½‘Õ±”°¥¹‘•à¤€ôø€ (€€€€€€€€€€€€€€€€ñ5½‘Õ±•…É¥¹‘•àõí¥¹‘•áô­•äõíµ½‘Õ±”¹Í±Õôµ½‘Õ±”õíµ½‘Õ±•ô€¼ø(€€€€€€€€€€€€€€¤¥ô(€€€€€€€€€€€€ð½‘¥Øø(€€€€€€€€€€ð½½¹Ñ…¥¹•Èø(€€€€€€€€ð½Í•Ñ¥½¸ø((€€€€€€€€ñÍ•Ñ¥½¸±…ÍÍ9…µ”ô‰Áä´ÈÀÍ´éÁä´Èàˆø(€€€€€€€€€€ñ½¹Ñ…¥¹•È±…ÍÍ9…µ”ô‰É¥…À´Ø±œéÉ¥µ½±Ì´Ìˆø(€€€€€€€€€€€€ñ…ÉÑ¥±”±…ÍÍ9…µ”ô‰É½Õ¹‘•´Íá°‰½É‘•È‰½É‘•Èµ¹•ÕÑÉ…°´àÀÀ‰œµ¹•ÕÑÉ…°´äÔÀ¼àÀÀ´Ü‰…­‘É½Àµ‰±ÕÈµÍ´Í´éÀ´ä±œé½°µÍÁ…¸´Èˆø(€€€€€€€€€€€€€€ñ	Õ¥±‘¥¹œÈ…É¥„µ¡¥‘‘•¸ô‰ÑÉÕ”ˆ±…ÍÍ9…µ”ô‰Í¥é”´ÜÑ•áÐµÉ•´ÐÀÀˆ€¼ø((€€€€€€€€€€€€€€ñÀ±…ÍÍ9…µ”ô‰µÐ´ÄÀÑ•áÐµáÌ™½¹Ðµ‰½±ÑÉ…­¥¹œµlÀ¸Äá•µtÑ•áÐµÉ•´ÐÀÀÕÁÁ•É…Í”ˆø(€€€€€€€€€€€€€€€‘¥¥Ñ…°±…å•È™½È„Á¡åÍ¥…°™ÕÑÕÉ”(€€€€€€€€€€€€€€ð½Àø((€€€€€€€€€€€€€€ñ È±…ÍÍ9…µ”ô‰‘¥ÍÁ±…äµÑåÁ”µÐ´ÐÑ•áÐ´Ñá°±•…‘¥¹œµÑ¥¡ÐÑ•áÐµ‰…±…¹”Ñ•áÐµÝ¡¥Ñ”Í´éÑ•áÐ´Ùá°ˆø(€€€€€€€€€€€€€€€Q¡”¥Ù”¥™Ñ¡Ì•!ÕˆÝ¥±°‰•½µ”Ñ¡”™±…Í¡¥À%Q!LµÁ½Ý•É•(€€€€€€€€€€€€€€€Ù•¹Õ”¸(€€€€€€€€€€€€€€ð½ Èø((€€€€€€€€€€€€€€ñÀ±…ÍÍ9…µ”ô‰µÐ´Øµ…àµÜ´Éá°Ñ•áÐµ‰…Í”±•…‘¥¹œ´ÜÑ•áÐµ¹•ÕÑÉ…°´ÐÀÀˆø(€€€€€€€€€€€€€€€Q¡”Á±…Ñ™½É´¥Ì‰•¥¹œ‘•Í¥¹•Ñ¼•Ù•¹ÑÕ…±±ä½¹¹•Ð‘¥¥Ñ…°(€€€€€€€€€€€€€€€‘¥Í½Ù•ÉäÝ¥Ñ Á¡åÍ¥…°é½¹•Ì™½ÈÁ±…ä°É•…Ñ¥½¸°™½ÕÌ°(€€€€€€€€€€€€€€€½¹¹•Ñ¥½¸°…¹É•Í•Ð¸Y•¹Õ”…•ÍÌ…¹•ÅÕ¥Áµ•¹Ð½¹ÑÉ½±Ì…É”(€€€€€€€€€€€€€€€¹½ÐÁ…ÉÐ½˜Ñ¡¥Ì5Y@¸(€€€€€€€€€€€€€€ð½Àø(€€€€€€€€€€€€ð½…ÉÑ¥±”ø((€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰É¥…À´Øˆø(€€€€€€€€€€€€€€ñ…ÉÑ¥±”±…ÍÍ9…µ”ô‰É½Õ¹‘•´Íá°‰½É‘•È‰½É‘•Èµ¹•ÕÑÉ…°´àÀÀ‰œµÝ¡¥Ñ”À´ÜÑ•áÐµ‰±…¬ˆø(€€€€€€€€€€€€€€€€ñ•ÍÍ¥‰¥±¥Ñä(€€€€€€€€€€€€€€€€€…É¥„µ¡¥‘‘•¸ô‰ÑÉÕ”ˆ(€€€€€€€€€€€€€€€€€±…ÍÍ9…µ”ô‰Í¥é”´ÜÑ•áÐµÉ•´ÜÀÀˆ(€€€€€€€€€€€€€€€€¼ø((€€€€€€€€€€€€€€€€ñ È±…ÍÍ9…µ”ô‰µÐ´àÑ•áÐµá°™½¹Ðµ‰±…¬ˆø(€€€€€€€€€€€€€€€€€•ÍÌ¥ÌÍÑÉÕÑÕÉ…°¸(€€€€€€€€€€€€€€€€ð½ Èø((€€€€€€€€€€€€€€€€ñÀ±…ÍÍ9…µ”ô‰µÐ´ÌÑ•áÐµÍ´±•…‘¥¹œ´ØÑ•áÐµ¹•ÕÑÉ…°´ÜÀÀˆø(€€€€€€€€€€€€€€€€€±•…È•áÁ•Ñ…Ñ¥½¹Ì°ÍÑ¥µÕ±…Ñ¥½¸½¹Ñ•áÐ°­•å‰½…É…•ÍÌ°(€€€€€€€€€€€€€€€€€É•…‘…‰±”½¹ÑÉ…ÍÐ°…¹µÕ±Ñ¥Á±”Ý…åÌÑ¼Á…ÉÑ¥¥Á…Ñ”‰•±½¹œ¥¸(€€€€€€€€€€€€€€€€€Ñ¡”™½Õ¹‘…Ñ¥½¸¸(€€€€€€€€€€€€€€€€ð½Àø(€€€€€€€€€€€€€€ð½…ÉÑ¥±”ø((€€€€€€€€€€€€€€ñ…ÉÑ¥±”±…ÍÍ9…µ”ô‰É½Õ¹‘•´Íá°‰½É‘•È‰½É‘•ÈµÉ•´äÀÀ¼ÜÀ‰œµÉ•´äÔÀ¼ÌÔÀ´Ü‰…­‘É½Àµ‰±ÕÈµÍ´ˆø(€€€€€€€€€€€€€€€€ñM¡¥•±‘¡•¬(€€€€€€€€€€€€€€€€€…É¥„µ¡¥‘‘•¸ô‰ÑÉÕ”ˆ(€€€€€€€€€€€€€€€€€±…ÍÍ9…µ”ô‰Í¥é”´ÜÑ•áÐµÉ•´ÌÀÀˆ(€€€€€€€€€€€€€€€€¼ø((€€€€€€€€€€€€€€€€ñ È±…ÍÍ9…µ”ô‰µÐ´àÑ•áÐµá°™½¹Ðµ‰±…¬Ñ•áÐµÝ¡¥Ñ”ˆø(€€€€€€€€€€€€€€€€€QÉÕÍÐ¥Ì‘•Í¥¹•¥¸¸(€€€€€€€€€€€€€€€€ð½ Èø((€€€€€€€€€€€€€€€€ñÀ±…ÍÍ9…µ”ô‰µÐ´ÌÑ•áÐµÍ´±•…‘¥¹œ´ØÑ•áÐµÉ•´ÄÀÀ¼ÜÀˆø(€€€€€€€€€€€€€€€€€€Äà¬‰•Ñ„‰½Õ¹‘…É¥•Ì°Ù¥Í¥‰±”½µµÕ¹¥Ñä•áÁ•Ñ…Ñ¥½¹Ì°(€€€€€€€€€€€€€€€€€É•Á½ÉÑ¥¹œ°ÁÉ¥Ù…ä½¹ÑÉ½±Ì°…¹Ù•É¥™¥•½¹ÑÉ¥‰ÕÑ¥½¸(€€€€€€€€€€€€€€€€€Ý½É­™±½ÝÌ…É”‰•¥¹œÁ±…¹¹•‰•™½É”±…Õ¹ ¸(€€€€€€€€€€€€€€€€ð½Àø(€€€€€€€€€€€€€€ð½…ÉÑ¥±”ø(€€€€€€€€€€€€ð½‘¥Øø(€€€€€€€€€€ð½½¹Ñ…¥¹•Èø(€€€€€€€€ð½Í•Ñ¥½¸ø((€€€€€€€€ñÍ•Ñ¥½¸±…ÍÍ9…µ”ô‰Áä´ÈÀÑ•áÐµÝ¡¥Ñ”Í´éÁä´Èàˆø(€€€€€€€€€€ñ½¹Ñ…¥¹•È±…ÍÍ9…µ”ô‰Ñ•áÐµ•¹Ñ•Èˆø(€€€€€€€€€€€€ñÀ±…ÍÍ9…µ”ô‰Ñ•áÐµáÌ™½¹Ðµ‰½±ÑÉ…­¥¹œµlÀ¸É•µtÑ•áÐµl˜ÌÔåÉtÕÁÁ•É…Í”ˆø(€€€€€€€€€€€€€‰•ÑÑ•ÈÝ…ä¥¹Ñ¼½µµÕ¹¥Ñä¥Ì‰•¥¹œ‰Õ¥±Ð(€€€€€€€€€€€€ð½Àø((€€€€€€€€€€€€ñ È±…ÍÍ9…µ”ô‰‘¥ÍÁ±…äµÑåÁ”µàµ…ÕÑ¼µÐ´Ôµ…àµÜ´Ñá°Ñ•áÐ´Õá°±•…‘¥¹œµlÀ¸äÑtÑ•áÐµ‰…±…¹”Í´éÑ•áÐ´Ýá°ˆø(€€€€€€€€€€€€€e½ÕÈ•¹•ÉäÍ¡½Õ±¡•±Àå½Ô™¥¹Ñ¡”É½½·ŠQ¹½Ð­••Àå½Ô½ÕÐ½˜¥Ð¸(€€€€€€€€€€€€ð½ Èø((€€€€€€€€€€€€ñÀ±…ÍÍ9…µ”ô‰µàµ…ÕÑ¼µÐ´Øµ…àµÜ´Éá°Ñ•áÐµ±œ±•…‘¥¹œ´àÑ•áÐµ¹•ÕÑÉ…°´ÌÀÀˆø(€€€€€€€€€€€€€áÁ±½É”¡½ÜÑ¡”•½ÍåÍÑ•´½¹¹•ÑÌ°Ñ¡•¸©½¥¸Ñ¡”™ÕÑÕÉ”‰•Ñ„(€€€€€€€€€€€€€±¥ÍÐÝ¡•¸å½×ŠeÉ”É•…‘ä¸(€€€€€€€€€€€€ð½Àø((€€€€€€€€€€€€ñ‘¥Ø±…ÍÍ9…µ”ô‰µÐ´ä™±•à™±•àµ½°©ÕÍÑ¥™äµ•¹Ñ•È…À´ÌÍ´é™±•àµÉ½Üˆø(€€€€€€€€€€€€€€ñ	ÕÑÑ½¹1¥¹¬¡É•˜ôˆ½Í¥¹ÕÀˆù)½¥¸%Q!Lð½	ÕÑÑ½¹1¥¹¬ø((€€€€€€€€€€€€€€ñ	ÕÑÑ½¹1¥¹¬(€€€€€€€€€€€€€€€±…ÍÍ9…µ”ô‰‰½É‘•ÈµÝ¡¥Ñ”¼ÈÀ‰œµ‰±…¬¼ÐÀÑ•áÐµÝ¡¥Ñ”‰…­‘É½Àµ‰±ÕÈµÍ´¡½Ù•Èé‰½É‘•ÈµÝ¡¥Ñ”¼ÐÀ¡½Ù•Èé‰œµÝ¡¥Ñ”¼ÄÀˆ(€€€€€€€€€€€€€€€¡É•˜ôˆ½•½ÍåÍÑ•´ˆ(€€€€€€€€€€€€€€€Ù…É¥…¹Ðô‰Í•½¹‘…Éäˆ(€€€€€€€€€€€€€€ø(€€€€€€€€€€€€€€€áÁ±½É”Ñ¡”½ÍåÍÑ•´(€€€€€€€€€€€€€€ð½	ÕÑÑ½¹1¥¹¬ø(€€€€€€€€€€€€ð½‘¥Øø(€€€€€€€€€€ð½½¹Ñ…¥¹•Èø(€€€€€€€€ð½Í•Ñ¥½¸ø(€€€€€€ð½‘¥Øø(€€€€ð½µ…¥¸ø(€€¤ì)ô
+              <p className="mt-8 max-w-[40rem] text-base leading-7 text-white sm:text-lg">
+                SIGNAL helps you discover ways to participate that fit your
+                energy, interests, and availability.
+              </p>
+
+              {/* Dedicated mobile signal divider */}
+              <div
+                aria-hidden="true"
+                className="relative mx-auto mt-12 mb-14 h-28 w-full max-w-[28rem] overflow-hidden sm:hidden"
+              >
+                <PulseHeartbeat mobile idPrefix="mobile-signal" />
+              </div>
+
+              {/* Energy options */}
+              <div
+                aria-label="Explore PULSE by energy"
+                className="mx-auto mt-5 hidden w-full max-w-[22rem] grid-cols-2 gap-3 sm:mx-0 sm:mt-7 sm:flex sm:max-w-none sm:flex-wrap sm:gap-2.5"
+              >
+                {energyOptions.map((option, index) => {
+                  const Icon = option.icon;
+
+                  return (
+                    <Link
+                      className={`group inline-flex min-h-14 items-center justify-center gap-3 rounded-full border bg-black/35 px-4 text-[0.68rem] font-bold tracking-[0.16em] uppercase backdrop-blur-sm transition-all duration-300 sm:min-h-10 sm:gap-2 sm:px-5 sm:text-[0.68rem] sm:tracking-[0.18em] ${
+                        index === 4 ? "col-span-2 sm:col-auto" : ""
+                      } ${option.color}`}
+                      href="/pulse"
+                      key={option.label}
+                    >
+                      <Icon
+                        aria-hidden="true"
+                        className="size-5 transition-transform duration-300 group-hover:scale-110 sm:size-4"
+                      />
+
+                      {option.label}
+                    </Link>
+                  );
+                })}
+              </div>
+
+              {/* Main actions */}
+              <div className="mx-auto mt-8 flex w-full max-w-[22rem] flex-col gap-3 sm:mx-0 sm:mt-7 sm:max-w-none sm:flex-row">
+                {/* Static on mobile; pulsing ring appears on desktop only */}
+                <div className="join-pulse-wrapper w-full sm:w-auto">
+                  <ButtonLink
+                    className="relative z-10 w-full overflow-hidden border-0 bg-[linear-gradient(90deg,#1800ad_0%,#6c14ce_36%,#f359d2_70%,#7cff00_100%)] text-white shadow-[0_0_24px_rgba(108,20,206,0.22)] hover:brightness-110 sm:min-w-40"
+                    href="/signup"
+                  >
+                    Join SIGNAL
+                  </ButtonLink>
+                </div>
+
+                {/* Mobile-only login button */}
+                <div className="w-full sm:hidden">
+                  <ButtonLink
+                    className="w-full border border-white/20 bg-black/45 text-white backdrop-blur-sm hover:border-white/40 hover:bg-white/10"
+                    href="/login"
+                    variant="secondary"
+                  >
+                    Log in
+                  </ButtonLink>
+                </div>
+
+                {/* Desktop-only ecosystem button */}
+                <div className="hidden sm:block">
+                  <ButtonLink
+                    arrow
+                    className="min-w-48"
+                    href="/ecosystem"
+                    variant="ecosystem"
+                  >
+                    <span className="ecosystem-gradient-text">
+                      Explore the Ecosystem
+                    </span>
+                  </ButtonLink>
+                </div>
+              </div>
+            </div>
+          </Container>
+        </section>
+
+        <section className="py-20 sm:py-28">
+          <Container>
+            <SectionHeading
+              align="center"
+              eyebrow="The participation loop"
+              title="Five steps. One lasting record."
+              description="A clear, repeatable path from todayâ€™s capacity to lasting contribution."
+            />
+
+            <ParticipationLoop />
+          </Container>
+        </section>
+
+        <section className="relative overflow-hidden py-24 sm:py-32">
+          <Container className="relative">
+            <SectionHeading
+              align="center"
+              eyebrow="One connected ecosystem"
+              title="Find Your People, Your Place, Your Pace."
+              description="Explore, connect, create, play, and carry your identity across it all."
+            />
+
+            <div className="mt-14 grid gap-5 md:grid-cols-2">
+              {platformModules.map((module, index) => (
+                <ModuleCard index={index} key={module.slug} module={module} />
+              ))}
+            </div>
+          </Container>
+        </section>
+
+        <section className="py-20 sm:py-28">
+          <Container className="grid gap-6 lg:grid-cols-3">
+            <article className="rounded-3xl border border-neutral-800 bg-neutral-950/80 p-7 backdrop-blur-sm sm:p-9 lg:col-span-2">
+              <Building2 aria-hidden="true" className="size-7 text-red-400" />
+
+              <p className="mt-10 text-xs font-bold tracking-[0.18em] text-red-400 uppercase">
+                A digital layer for a physical future
+              </p>
+
+              <h2 className="display-type mt-4 text-4xl leading-tight text-balance text-white sm:text-6xl">
+                The Five Fifths eHub will become the flagship FIFTHS-powered
+                venue.
+              </h2>
+
+              <p className="mt-6 max-w-2xl text-base leading-7 text-neutral-400">
+                The platform is being designed to eventually connect digital
+                discovery with physical zones for play, creation, focus,
+                connection, and reset. Venue access and equipment controls are
+                not part of this MVP.
+              </p>
+            </article>
+
+            <div className="grid gap-6">
+              <article className="rounded-3xl border border-neutral-800 bg-white p-7 text-black">
+                <Accessibility
+                  aria-hidden="true"
+                  className="size-7 text-red-700"
+                />
+
+                <h2 className="mt-8 text-xl font-black">
+                  Access is structural.
+                </h2>
+
+                <p className="mt-3 text-sm leading-6 text-neutral-700">
+                  Clear expectations, stimulation context, keyboard access,
+                  readable contrast, and multiple ways to participate belong in
+                  the foundation.
+                </p>
+              </article>
+
+              <article className="rounded-3xl border border-red-900/70 bg-red-950/35 p-7 backdrop-blur-sm">
+                <ShieldCheck
+                  aria-hidden="true"
+                  className="size-7 text-red-300"
+                />
+
+                <h2 className="mt-8 text-xl font-black text-white">
+                  Trust is designed in.
+                </h2>
+
+                <p className="mt-3 text-sm leading-6 text-red-100/70">
+                  18+ beta boundaries, visible community expectations,
+                  reporting, privacy controls, and verified contribution
+                  workflows are being planned before launch.
+                </p>
+              </article>
+            </div>
+          </Container>
+        </section>
+
+        <section className="py-20 text-white sm:py-28">
+          <Container className="text-center">
+            <p className="text-xs font-bold tracking-[0.2em] text-[#f359d2] uppercase">
+              A better way into community is being built
+            </p>
+
+            <h2 className="display-type mx-auto mt-5 max-w-4xl text-5xl leading-[0.94] text-balance sm:text-7xl">
+              Your energy should help you find the roomâ€”not keep you out of it.
+            </h2>
+
+            <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-neutral-300">
+              Explore how the ecosystem connects, then join the future beta
+              list when youâ€™re ready.
+            </p>
+
+            <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
+              <ButtonLink href="/signup">Join FIFTHS</ButtonLink>
+
+              <ButtonLink
+                className="border-white/20 bg-black/40 text-white backdrop-blur-sm hover:border-white/40 hover:bg-white/10"
+                href="/ecosystem"
+                variant="secondary"
+              >
+                Explore the Ecosystem
+              </ButtonLink>
+            </div>
+          </Container>
+        </section>
+      </div>
+    </main>
+  );
+}
