@@ -56,10 +56,10 @@ export function SiteHeader() {
         <Link
           className="flex min-h-12 flex-col justify-center leading-none"
           href="/"
-          aria-label="PULSE powered by FIVE FIFTHS"
+          aria-label="SIGNAL powered by FIVE FIFTHS"
         >
           <span className="text-lg font-black tracking-[0.16em] text-white uppercase">
-            PULSE<span className="text-[#f359d2]">.</span>
+            SIGNAL<span className="text-[#f359d2]">.</span>
           </span>
 
           <span className="mt-1 text-[0.42rem] font-bold tracking-[0.18em] text-white/60 uppercase">
