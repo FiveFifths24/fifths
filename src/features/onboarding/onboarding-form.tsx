@@ -1,12 +1,178 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
+
 import { ActionStatus } from "@/components/forms/action-status";
 import { SubmitButton } from "@/components/forms/submit-button";
 import { TextField } from "@/components/forms/text-field";
-import { firstFieldError, initialActionState } from "@/features/auth/state";
+import {
+  firstFieldError,
+  initialActionState,
+} from "@/features/auth/state";
 import type { Interest, Skill } from "@/types/database";
+
 import { completeOnboardingAction } from "./actions";
+
+const steps = [
+  {
+    number: "01",
+    title: "Your identity",
+    description: "Choose how you will show up across SIGNAL.",
+  },
+  {
+    number: "02",
+    title: "Your location",
+    description: "Help us recommend relevant people and experiences.",
+  },
+  {
+    number: "03",
+    title: "Your interests",
+    description: "Tell us what draws you in and what you bring.",
+  },
+  {
+    number: "04",
+    title: "Your connections",
+    description: "Choose the kinds of connection you are open to.",
+  },
+  {
+    number: "05",
+    title: "Your access needs",
+    description: "Share optional preferences that help experiences fit.",
+  },
+  {
+    number: "06",
+    title: "Review and enter",
+    description: "Confirm your choices and begin exploring SIGNAL.",
+  },
+] as const;
+
+type PreferenceChoice = {
+  name: string;
+  label: string;
+  description?: string;
+  defaultChecked?: boolean;
+};
+
+const connectionChoices: PreferenceChoice[] = [
+  {
+    name: "openToFriends",
+    label: "Making friends",
+    description: "Meet people for genuine social connection.",
+    defaultChecked: true,
+  },
+  {
+    name: "openToActivityPartners",
+    label: "Activity partners",
+    description: "Find people who want to do things together.",
+    defaultChecked: true,
+  },
+  {
+    name: "openToCreativeCollaboration",
+    label: "Creative collaboration",
+    description: "Build, make, write, perform, or create with others.",
+  },
+  {
+    name: "openToProfessionalNetworking",
+    label: "Professional networking",
+    description: "Connect around careers, projects, and opportunities.",
+  },
+  {
+    name: "openToMentorship",
+    label: "Mentorship",
+    description: "Learn from others or share what you know.",
+  },
+  {
+    name: "openToVolunteering",
+    label: "Volunteer service",
+    description: "Contribute to community projects and organizations.",
+  },
+  {
+    name: "openToGaming",
+    label: "Gaming groups",
+    description: "Connect for tabletop, console, PC, or immersive play.",
+  },
+  {
+    name: "openToTravelGroups",
+    label: "Travel and conventions",
+    description: "Find people for trips, conventions, and group outings.",
+  },
+];
+
+const recommendationChoices: PreferenceChoice[] = [
+  {
+    name: "preferLocal",
+    label: "Prioritize local recommendations",
+    defaultChecked: true,
+  },
+  {
+    name: "preferVirtual",
+    label: "Include virtual recommendations",
+    defaultChecked: true,
+  },
+  {
+    name: "allowFriendRequests",
+    label: "Allow friend requests",
+    defaultChecked: true,
+  },
+  {
+    name: "allowCircleInvites",
+    label: "Allow Circle invitations",
+    defaultChecked: true,
+  },
+  {
+    name: "allowEventInvites",
+    label: "Allow event invitations",
+    defaultChecked: true,
+  },
+  {
+    name: "showInMutualConnections",
+    label: "Show me through mutual connections",
+    defaultChecked: true,
+  },
+];
+
+const accessibilityChoices: PreferenceChoice[] = [
+  {
+    name: "stepFreeAccess",
+    label: "Step-free access",
+  },
+  {
+    name: "seatingAvailable",
+    label: "Seating availability",
+  },
+  {
+    name: "lowSensoryEnvironment",
+    label: "Low-sensory environments",
+  },
+  {
+    name: "captioning",
+    label: "Captioning",
+  },
+  {
+    name: "aslInterpretation",
+    label: "ASL interpretation",
+  },
+  {
+    name: "accessibleRestroom",
+    label: "Accessible restrooms",
+  },
+  {
+    name: "mobilityDeviceAccess",
+    label: "Mobility-device access",
+  },
+  {
+    name: "virtualParticipation",
+    label: "Virtual participation",
+  },
+  {
+    name: "writtenInstructions",
+    label: "Clear written instructions",
+  },
+  {
+    name: "breaksAvailable",
+    label: "Additional time or breaks",
+  },
+];
 
 function ChoiceGrid({
   legend,
@@ -21,25 +187,104 @@ function ChoiceGrid({
 }) {
   return (
     <fieldset>
-      <legend className="text-lg font-bold text-white">{legend}</legend>
-      <p className="mt-1 text-sm leading-6 text-neutral-400">{hint}</p>
-      <div className="mt-4 grid gap-3 sm:grid-cols-2">
+      <legend className="text-xl font-bold text-white">{legend}</legend>
+
+      <p className="mt-2 text-sm leading-6 text-white/50">{hint}</p>
+
+      <div className="mt-5 grid gap-3 sm:grid-cols-2">
         {choices.map((choice) => (
           <label
-            className="flex min-h-12 cursor-pointer items-center gap-3 rounded-xl border border-neutral-700 bg-neutral-950 px-4 py-3 text-sm text-neutral-200 has-checked:border-red-600 has-checked:bg-red-950/30"
+            className="flex min-h-14 cursor-pointer items-center gap-3 rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-sm text-white/70 transition hover:border-white/20 hover:bg-white/5 has-checked:border-[#ca9aff]/70 has-checked:bg-[#6c14ce]/15 has-checked:text-white"
             key={choice.id}
           >
             <input
-              className="size-5 accent-red-600"
+              className="size-5 shrink-0 accent-[#a855f7]"
               name={name}
               type="checkbox"
               value={choice.id}
             />
-            {choice.name}
+
+            <span>{choice.name}</span>
           </label>
         ))}
       </div>
     </fieldset>
+  );
+}
+
+function PreferenceGrid({
+  choices,
+}: {
+  choices: PreferenceChoice[];
+}) {
+  return (
+    <div className="grid gap-3 sm:grid-cols-2">
+      {choices.map((choice) => (
+        <label
+          className="flex cursor-pointer items-start gap-3 rounded-2xl border border-white/10 bg-black/30 p-4 transition hover:border-white/20 hover:bg-white/5 has-checked:border-[#ca9aff]/70 has-checked:bg-[#6c14ce]/15"
+          key={choice.name}
+        >
+          <input
+            className="mt-0.5 size-5 shrink-0 accent-[#a855f7]"
+            defaultChecked={choice.defaultChecked}
+            name={choice.name}
+            type="checkbox"
+          />
+
+          <span>
+            <span className="block text-sm font-semibold text-white">
+              {choice.label}
+            </span>
+
+            {choice.description ? (
+              <span className="mt-1 block text-xs leading-5 text-white/45">
+                {choice.description}
+              </span>
+            ) : null}
+          </span>
+        </label>
+      ))}
+    </div>
+  );
+}
+
+function SelectField({
+  id,
+  label,
+  name,
+  defaultValue,
+  children,
+  hint,
+}: {
+  id: string;
+  label: string;
+  name: string;
+  defaultValue: string;
+  children: React.ReactNode;
+  hint?: string;
+}) {
+  return (
+    <div>
+      <label
+        className="mb-2 block text-sm font-bold text-white/85"
+        htmlFor={id}
+      >
+        {label}
+      </label>
+
+      <select
+        className="min-h-12 w-full rounded-xl border border-white/10 bg-black/50 px-4 py-3 text-base text-white outline-none transition hover:border-white/20 focus:border-[#ca9aff]"
+        defaultValue={defaultValue}
+        id={id}
+        name={name}
+      >
+        {children}
+      </select>
+
+      {hint ? (
+        <p className="mt-2 text-xs leading-5 text-white/40">{hint}</p>
+      ) : null}
+    </div>
   );
 }
 
@@ -50,57 +295,112 @@ export function OnboardingForm({
   interests: Array<Pick<Interest, "id" | "name">>;
   skills: Array<Pick<Skill, "id" | "name">>;
 }) {
+  const [currentStep, setCurrentStep] = useState(0);
+
   const [state, action] = useActionState(
     completeOnboardingAction,
     initialActionState,
   );
+
   const ageError = firstFieldError(state, "ageConfirmation");
+  const isFirstStep = currentStep === 0;
+  const isFinalStep = currentStep === steps.length - 1;
+  const progress = ((currentStep + 1) / steps.length) * 100;
+  const activeStep = steps[currentStep] ?? steps[0];
+
+  function goBack() {
+    setCurrentStep((step) => Math.max(0, step - 1));
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function goForward() {
+    setCurrentStep((step) => Math.min(steps.length - 1, step + 1));
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
   return (
     <form
       action={action}
-      aria-label="Complete your FIFTHS profile"
+      aria-label="Complete your SIGNAL profile"
       className="space-y-8"
     >
+      <div>
+        <div className="flex items-center justify-between gap-4">
+          <p className="text-xs font-bold tracking-[0.18em] text-[#ca9aff] uppercase">
+            Step {currentStep + 1} of {steps.length}
+          </p>
+
+          <p className="text-xs text-white/40">
+            You can update these settings later.
+          </p>
+        </div>
+
+        <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-white/10">
+          <div
+            className="h-full rounded-full bg-gradient-to-r from-[#6c14ce] via-[#a855f7] to-[#f359d2] transition-[width] duration-300"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+
+        <div className="mt-7">
+          <p className="text-xs font-bold tracking-[0.16em] text-white/35 uppercase">
+         {activeStep.number}
+          </p>
+
+          <h2 className="mt-2 text-3xl font-black tracking-tight text-white">
+            {activeStep.title}
+          </h2>
+
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-white/50">
+            {activeStep.description}
+          </p>
+        </div>
+      </div>
+
       <ActionStatus state={state} />
-      <div className="grid gap-5 sm:grid-cols-2">
-        <TextField
-          autoComplete="nickname"
-          error={firstFieldError(state, "displayName")}
-          label="Display name"
-          name="displayName"
-          placeholder="How people will know you"
-          required
-        />
-        <TextField
-          autoCapitalize="none"
-          autoComplete="username"
-          error={firstFieldError(state, "username")}
-          hint="Lowercase letters, numbers, and underscores."
-          label="Username"
-          name="username"
-          placeholder="your_name"
-          required
-        />
-        <TextField
-          error={firstFieldError(state, "pronouns")}
-          hint="Optional. You control what you share."
-          label="Pronouns"
-          name="pronouns"
-          placeholder="Optional"
-        />
-        <div>
-          <label
-            className="mb-2 block text-sm font-bold text-neutral-100"
-            htmlFor="timezone"
-          >
-            Time zone
-          </label>
-          <select
-            className="min-h-12 w-full rounded-xl border border-neutral-700 bg-neutral-950 px-4 py-3 text-base text-white hover:border-neutral-500 focus:border-red-500 focus:outline-none"
+
+      <section
+        aria-labelledby="identity-step"
+        className={currentStep === 0 ? "space-y-6" : "hidden"}
+      >
+        <h3 className="sr-only" id="identity-step">
+          Your identity
+        </h3>
+
+        <div className="grid gap-5 sm:grid-cols-2">
+          <TextField
+            autoComplete="nickname"
+            error={firstFieldError(state, "displayName")}
+            label="Display name"
+            name="displayName"
+            placeholder="How people will know you"
+            required
+          />
+
+          <TextField
+            autoCapitalize="none"
+            autoComplete="username"
+            error={firstFieldError(state, "username")}
+            hint="Lowercase letters, numbers, and underscores."
+            label="Username"
+            name="username"
+            placeholder="your_name"
+            required
+          />
+
+          <TextField
+            error={firstFieldError(state, "pronouns")}
+            hint="Optional. You control what you share."
+            label="Pronouns"
+            name="pronouns"
+            placeholder="Optional"
+          />
+
+          <SelectField
             defaultValue="America/New_York"
             id="timezone"
+            label="Time zone"
             name="timezone"
-            required
           >
             <option value="America/New_York">Eastern time</option>
             <option value="America/Chicago">Central time</option>
@@ -108,47 +408,317 @@ export function OnboardingForm({
             <option value="America/Phoenix">Arizona time</option>
             <option value="America/Los_Angeles">Pacific time</option>
             <option value="UTC">UTC</option>
-          </select>
+          </SelectField>
         </div>
-      </div>
 
-      <ChoiceGrid
-        choices={interests}
-        hint="Choose up to 12. These provide broad context; each Pulse can add today's interests."
-        legend="What draws you in?"
-        name="interestIds"
-      />
-      <ChoiceGrid
-        choices={skills}
-        hint="Choose up to 12 skills you practice or want to contribute."
-        legend="What do you bring?"
-        name="skillIds"
-      />
+        <div>
+          <label
+            className="mb-2 block text-sm font-bold text-white/85"
+            htmlFor="bio"
+          >
+            Short bio
+          </label>
 
-      <div>
-        <label className="flex items-start gap-3 rounded-xl border border-neutral-700 bg-neutral-950 p-4 text-sm leading-6 text-neutral-300">
+          <textarea
+            className="min-h-32 w-full resize-y rounded-xl border border-white/10 bg-black/50 px-4 py-3 text-base text-white outline-none transition placeholder:text-white/25 hover:border-white/20 focus:border-[#ca9aff]"
+            id="bio"
+            maxLength={500}
+            name="bio"
+            placeholder="Share a little about yourself, what you enjoy, or what you hope to find here."
+          />
+
+          <p className="mt-2 text-xs text-white/40">
+            Optional · Maximum 500 characters
+          </p>
+        </div>
+
+        <div className="rounded-2xl border border-dashed border-white/15 bg-white/[0.03] p-5">
+          <p className="text-sm font-semibold text-white">
+            Profile photo and customization are coming next
+          </p>
+
+          <p className="mt-2 text-sm leading-6 text-white/45">
+            You will be able to add a profile photo, cover image, favorite
+            song, and custom profile style after media storage is connected.
+          </p>
+        </div>
+      </section>
+
+      <section
+        aria-labelledby="location-step"
+        className={currentStep === 1 ? "space-y-7" : "hidden"}
+      >
+        <h3 className="sr-only" id="location-step">
+          Your location and privacy
+        </h3>
+
+        <div className="grid gap-5 sm:grid-cols-2">
+          <TextField
+            autoComplete="address-level2"
+            error={firstFieldError(state, "city")}
+            label="City"
+            name="city"
+            placeholder="Newark"
+          />
+
+          <TextField
+            autoComplete="address-level1"
+            error={firstFieldError(state, "region")}
+            label="State or region"
+            name="region"
+            placeholder="New Jersey"
+          />
+
+          <TextField
+            autoCapitalize="characters"
+            autoComplete="country"
+            error={firstFieldError(state, "countryCode")}
+            hint="Use a two-letter code, such as US."
+            label="Country code"
+            name="countryCode"
+            placeholder="US"
+          />
+
+          <SelectField
+            defaultValue="hidden"
+            hint="SIGNAL will never ask for your precise home address."
+            id="locationVisibility"
+            label="Location visibility"
+            name="locationVisibility"
+          >
+            <option value="hidden">Keep my location private</option>
+            <option value="city_region">Show my city and region</option>
+            <option value="region_only">Show only my region</option>
+          </SelectField>
+        </div>
+
+        <SelectField
+          defaultValue="friends"
+          id="friendListVisibility"
+          label="Who can see your friend list?"
+          name="friendListVisibility"
+        >
+          <option value="private">Only me</option>
+          <option value="friends">My friends</option>
+          <option value="members">SIGNAL members</option>
+        </SelectField>
+
+        <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-white/10 bg-black/30 p-5 has-checked:border-[#ca9aff]/70 has-checked:bg-[#6c14ce]/15">
           <input
-            aria-describedby={ageError ? "age-confirmation-error" : undefined}
+            className="mt-0.5 size-5 shrink-0 accent-[#a855f7]"
+            defaultChecked
+            name="discoverable"
+            type="checkbox"
+          />
+
+          <span>
+            <span className="block text-sm font-semibold text-white">
+              Include me in recommendations
+            </span>
+
+            <span className="mt-1 block text-xs leading-5 text-white/45">
+              SIGNAL can recommend your profile to compatible members while
+              respecting your privacy and connection settings.
+            </span>
+          </span>
+        </label>
+      </section>
+
+      <section
+        aria-labelledby="interests-step"
+        className={currentStep === 2 ? "space-y-10" : "hidden"}
+      >
+        <h3 className="sr-only" id="interests-step">
+          Interests and skills
+        </h3>
+
+        <ChoiceGrid
+          choices={interests}
+          hint="Choose up to 12. Your Pulse check-in can add what interests you today."
+          legend="What draws you in?"
+          name="interestIds"
+        />
+
+        <ChoiceGrid
+          choices={skills}
+          hint="Choose up to 12 skills you practice, want to develop, or hope to contribute."
+          legend="What do you bring?"
+          name="skillIds"
+        />
+      </section>
+
+      <section
+        aria-labelledby="connections-step"
+        className={currentStep === 3 ? "space-y-10" : "hidden"}
+      >
+        <h3 className="sr-only" id="connections-step">
+          Connection preferences
+        </h3>
+
+        <fieldset>
+          <legend className="text-xl font-bold text-white">
+            What are you open to?
+          </legend>
+
+          <p className="mt-2 text-sm leading-6 text-white/50">
+            These preferences shape your recommendations. They do not create
+            commitments, and you can change them at any time.
+          </p>
+
+          <div className="mt-5">
+            <PreferenceGrid choices={connectionChoices} />
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend className="text-xl font-bold text-white">
+            Invitations and recommendations
+          </legend>
+
+          <p className="mt-2 text-sm leading-6 text-white/50">
+            Decide how other members and SIGNAL can help you discover new
+            connections.
+          </p>
+
+          <div className="mt-5">
+            <PreferenceGrid choices={recommendationChoices} />
+          </div>
+        </fieldset>
+      </section>
+
+      <section
+        aria-labelledby="accessibility-step"
+        className={currentStep === 4 ? "space-y-8" : "hidden"}
+      >
+        <h3 className="sr-only" id="accessibility-step">
+          Accessibility preferences
+        </h3>
+
+        <div className="rounded-2xl border border-[#ca9aff]/20 bg-[#6c14ce]/10 p-5">
+          <p className="text-sm font-semibold text-white">
+            This section is optional and private.
+          </p>
+
+          <p className="mt-2 text-sm leading-6 text-white/50">
+            Choose features that help experiences work for you. SIGNAL does
+            not need a diagnosis, and these preferences will not automatically
+            appear on your public profile.
+          </p>
+        </div>
+
+        <PreferenceGrid choices={accessibilityChoices} />
+
+        <div>
+          <label
+            className="mb-2 block text-sm font-bold text-white/85"
+            htmlFor="accessibilityNotes"
+          >
+            Anything else organizers should consider?
+          </label>
+
+          <textarea
+            className="min-h-28 w-full resize-y rounded-xl border border-white/10 bg-black/50 px-4 py-3 text-base text-white outline-none transition placeholder:text-white/25 hover:border-white/20 focus:border-[#ca9aff]"
+            id="accessibilityNotes"
+            maxLength={500}
+            name="accessibilityNotes"
+            placeholder="Optional private access notes"
+          />
+
+          <p className="mt-2 text-xs leading-5 text-white/40">
+            Keep this focused on practical access needs. Do not include medical
+            diagnoses or sensitive health information.
+          </p>
+        </div>
+      </section>
+
+      <section
+        aria-labelledby="confirmation-step"
+        className={currentStep === 5 ? "space-y-7" : "hidden"}
+      >
+        <h3 className="sr-only" id="confirmation-step">
+          Final confirmation
+        </h3>
+
+        <div className="rounded-3xl border border-white/10 bg-black/30 p-6">
+          <p className="text-lg font-bold text-white">
+            Your SIGNAL foundation is ready.
+          </p>
+
+          <p className="mt-3 text-sm leading-6 text-white/50">
+            Your profile, interests, connection preferences, and private
+            accessibility settings will help SIGNAL recommend people, places,
+            Circles, events, and opportunities that fit you.
+          </p>
+
+          <p className="mt-3 text-sm leading-6 text-white/50">
+            Your daily energy, capacity, and comfort level will be handled
+            separately through your Pulse check-in.
+          </p>
+        </div>
+
+        <label className="flex items-start gap-3 rounded-2xl border border-white/10 bg-black/30 p-5 text-sm leading-6 text-white/65 has-checked:border-[#ca9aff]/70 has-checked:bg-[#6c14ce]/15">
+          <input
+            aria-describedby={
+              ageError ? "age-confirmation-error" : undefined
+            }
             aria-invalid={ageError ? true : undefined}
-            className="mt-1 size-5 shrink-0 accent-red-600"
+            className="mt-1 size-5 shrink-0 accent-[#a855f7]"
             name="ageConfirmation"
             required
             type="checkbox"
           />
+
           <span>
-            I confirm again that I am 18 or older and eligible for the initial
-            FIFTHS beta.
+            I confirm that I am 18 or older and eligible to join the SIGNAL
+            founding beta.
           </span>
         </label>
+
         {ageError ? (
-          <p className="mt-2 text-xs text-red-300" id="age-confirmation-error">
+          <p
+            className="text-xs text-red-300"
+            id="age-confirmation-error"
+          >
             {ageError}
           </p>
         ) : null}
+
+        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+          <p className="text-sm font-semibold text-white">
+            You’re not starting alone.
+          </p>
+
+          <p className="mt-2 text-sm leading-6 text-white/45">
+            Your founder welcome connection will appear after onboarding.
+            You will always be able to remove or manage that connection.
+          </p>
+        </div>
+      </section>
+
+      <div className="flex flex-col-reverse gap-3 border-t border-white/10 pt-7 sm:flex-row sm:items-center sm:justify-between">
+        <button
+          className="min-h-12 rounded-full border border-white/15 px-6 text-sm font-bold text-white/70 transition hover:border-white/30 hover:text-white disabled:cursor-not-allowed disabled:opacity-30"
+          disabled={isFirstStep}
+          onClick={goBack}
+          type="button"
+        >
+          Back
+        </button>
+
+        {isFinalStep ? (
+          <SubmitButton pendingLabel="Creating your SIGNAL profile…">
+            Enter SIGNAL
+          </SubmitButton>
+        ) : (
+          <button
+            className="min-h-12 rounded-full bg-gradient-to-r from-[#6c14ce] via-[#a855f7] to-[#f359d2] px-7 text-sm font-black text-white shadow-lg shadow-[#6c14ce]/20 transition hover:brightness-110"
+            onClick={goForward}
+            type="button"
+          >
+            Continue
+          </button>
+        )}
       </div>
-      <SubmitButton pendingLabel="Saving your foundation…">
-        Complete onboarding
-      </SubmitButton>
     </form>
   );
 }
