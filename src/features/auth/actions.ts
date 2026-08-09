@@ -79,13 +79,14 @@ export async function signupAction(
         data: { age_confirmed: true },
       },
     });
-    if (error) {
-      return {
-        status: "error",
-        message:
-          "We could not create that account. Check the information and try again.",
-      };
-    }
+if (error) {
+  console.error("Supabase signup error:", error);
+
+  return {
+    status: "error",
+    message: error.message,
+  };
+}
     signedInImmediately = Boolean(data.session);
   } catch {
     return { status: "error", message: unavailableMessage };

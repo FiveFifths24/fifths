@@ -23,7 +23,7 @@ export function AuthShell({
       />
       <Container className="relative grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
         <div className="max-w-xl">
-          <p className="text-xs font-bold tracking-[0.2em] text-red-400 uppercase">
+          <p className="text-xs font-bold tracking-[0.2em] text-[#ca9aff] uppercase">
             {eyebrow}
           </p>
           <h1 className="display-type mt-5 text-5xl leading-[0.94] text-balance text-white sm:text-7xl">
@@ -38,15 +38,15 @@ export function AuthShell({
               className="mt-0.5 size-5 shrink-0"
             />
             <p>
-              FIFTHS uses secure, server-validated sessions. Your password is
-              handled by Supabase Auth and is never stored in the FIFTHS
-              application database.
+              SIGNAL uses secure, server-validated sessions. Your password is
+handled securely through Supabase Auth and is never stored directly
+by SIGNAL.
             </p>
           </div>
         </div>
-        <div className="mx-auto w-full max-w-xl rounded-[2rem] border border-neutral-800 bg-neutral-900/90 p-6 shadow-2xl shadow-black sm:p-9">
+        <div className="mx-auto w-full max-w-xl rounded-[2rem] border border-white/10 bg-black/70 p-6 shadow-2xl shadow-[#6c14ce]/10 backdrop-blur-xl sm:p-9">
           {children}
-          <div className="mt-7 border-t border-neutral-800 pt-6 text-center text-sm text-neutral-400">
+          <div className="mt-7 border-t border-white/10 pt-6 text-center text-sm text-white/50">
             {footer}
           </div>
         </div>

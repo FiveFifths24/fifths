@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useState } from "react";
+import { createClient } from "@/lib/supabase/client";
 import { Menu, X } from "lucide-react";
 
 import { ButtonLink } from "@/components/ui/button-link";
@@ -23,6 +24,24 @@ export function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const menuId = useId();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+    useEffect(() => {
+    const supabase = createClient();
+
+    supabase.auth.getUser().then(({ data }) => {
+      setIsLoggedIn(Boolean(data.user));
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsLoggedIn(Boolean(session?.user));
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
 
   useEffect(() => {
     function closeOnEscape(event: KeyboardEvent) {
@@ -87,9 +106,9 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden items-center md:flex">
-          <ButtonLink href="/login" variant="quiet">
-            Log in
-          </ButtonLink>
+<ButtonLink href={isLoggedIn ? "/account" : "/login"} variant="quiet">
+  {isLoggedIn ? "Account" : "Log in"}
+</ButtonLink>
         </div>
 
         <button
@@ -134,12 +153,12 @@ export function SiteHeader() {
               ))}
 
               <div className="mt-3 border-t border-neutral-800 pt-5">
-                <ButtonLink
-                  className="w-full border-0 bg-[linear-gradient(90deg,#1800ad_0%,#6c14ce_36%,#f359d2_70%,#7cff00_100%)] text-white shadow-[0_0_20px_rgba(108,20,206,0.2)] hover:brightness-110"
-                  href="/login"
-                >
-                  Log in
-                </ButtonLink>
+<ButtonLink
+  className="w-full border-0 bg-[linear-gradient(90deg,#1800ad_0%,#6c14ce_36%,#f359d2_70%,#7cff00_100%)] text-white shadow-[0_0_20px_rgba(108,20,206,0.2)] hover:brightness-110"
+  href={isLoggedIn ? "/account" : "/login"}
+>
+  {isLoggedIn ? "Account" : "Log in"}
+</ButtonLink>
               </div>
             </nav>
           </Container>

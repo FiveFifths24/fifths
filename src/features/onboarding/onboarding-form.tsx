@@ -16,33 +16,31 @@ import { completeOnboardingAction } from "./actions";
 const steps = [
   {
     number: "01",
-    title: "Your identity",
-    description: "Choose how you will show up across SIGNAL.",
+    title: "Set Up How You'll Show Up Around SIGNAL.",
   },
   {
     number: "02",
-    title: "Your location",
-    description: "Help us recommend relevant people and experiences.",
+    title: "Where Are You Based?",
+    description: "Your general location helps SIGNAL recommend people, places, and events that make sense for you.",
   },
   {
     number: "03",
-    title: "Your interests",
-    description: "Tell us what draws you in and what you bring.",
+    title: "What Shapes You?",
+    description: "Pick the interests and skills that feel most like you. These help shape what SIGNAL brings your way. ",
   },
   {
     number: "04",
-    title: "Your connections",
-    description: "Choose the kinds of connection you are open to.",
+    title: "How Do You Want To Connect?",
+    description: "Choosing the kinds of relationships you are open to.",
   },
   {
     number: "05",
-    title: "Your access needs",
-    description: "Share optional preferences that help experiences fit.",
+    title: "What Helps You Participate Comfortably?",
+    description: "Share any access preferences that can help SIGNAL recommend experiences that work better for you.",
   },
   {
     number: "06",
-    title: "Review and enter",
-    description: "Confirm your choices and begin exploring SIGNAL.",
+    title: "You're SIGNAL Profile Is Ready",
   },
 ] as const;
 
@@ -56,45 +54,45 @@ type PreferenceChoice = {
 const connectionChoices: PreferenceChoice[] = [
   {
     name: "openToFriends",
-    label: "Making friends",
-    description: "Meet people for genuine social connection.",
+    label: "Friendship",
+    description: "Meet people for genuine social connection and community.",
     defaultChecked: true,
   },
   {
     name: "openToActivityPartners",
-    label: "Activity partners",
-    description: "Find people who want to do things together.",
+    label: "Activity Partners",
+    description: "Find people to explore hobbies, outings, and experiences with.",
     defaultChecked: true,
   },
   {
     name: "openToCreativeCollaboration",
-    label: "Creative collaboration",
-    description: "Build, make, write, perform, or create with others.",
+    label: "Creative Collaboration",
+    description: "Make, build, write, perform, design, or create with others.",
   },
   {
     name: "openToProfessionalNetworking",
-    label: "Professional networking",
-    description: "Connect around careers, projects, and opportunities.",
+    label: "Professional Connections",
+    description: "Connect around careers, projects, ideas, and opportunities.",
   },
   {
     name: "openToMentorship",
     label: "Mentorship",
-    description: "Learn from others or share what you know.",
+    description: "Learn from someone, share what you know, or do both.",
   },
   {
     name: "openToVolunteering",
-    label: "Volunteer service",
-    description: "Contribute to community projects and organizations.",
+    label: "Community & Volunteering",
+    description: "Get involved in service, local projects, and community efforts.",
   },
   {
     name: "openToGaming",
-    label: "Gaming groups",
-    description: "Connect for tabletop, console, PC, or immersive play.",
+    label: "General Gaming & Esports",
+    description: "Connect for video games, tabletop, TTRPGs, and group play.",
   },
   {
     name: "openToTravelGroups",
-    label: "Travel and conventions",
-    description: "Find people for trips, conventions, and group outings.",
+    label: "Travel & Group Experiences",
+    description: "Find people for trips, conventions, day outings, and shared adventures.",
   },
 ];
 
@@ -342,7 +340,7 @@ export function OnboardingForm({
           />
         </div>
 
-        <div className="mt-7">
+        <div className="mt-12 text-center">
           <p className="text-xs font-bold tracking-[0.16em] text-white/35 uppercase">
          {activeStep.number}
           </p>
@@ -351,64 +349,68 @@ export function OnboardingForm({
             {activeStep.title}
           </h2>
 
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-white/50">
-            {activeStep.description}
-          </p>
+{"description" in activeStep ? (
+  <p className="mx-auto mt-2 max-w-2xl text-sm leading-6 text-white/50">
+    {activeStep.description}
+  </p>
+) : null}
         </div>
       </div>
 
       <ActionStatus state={state} />
 
-      <section
-        aria-labelledby="identity-step"
-        className={currentStep === 0 ? "space-y-6" : "hidden"}
-      >
-        <h3 className="sr-only" id="identity-step">
+<section
+  aria-labelledby="identity-step"
+  className={currentStep === 0 ? "pt-5 mt-15 space-y-6" : "hidden"}
+>
+          <h3 className="sr-only" id="identity-step">
           Your identity
         </h3>
 
         <div className="grid gap-5 sm:grid-cols-2">
-          <TextField
-            autoComplete="nickname"
-            error={firstFieldError(state, "displayName")}
-            label="Display name"
-            name="displayName"
-            placeholder="How people will know you"
-            required
-          />
+<TextField
+  autoComplete="nickname"
+  error={firstFieldError(state, "displayName")}
+  hint="Use the name you want people in SIGNAL to call you."
+  label="What Should People Call You?"
+  name="displayName"
+  placeholder="Your name"
+  required
+/>
 
-          <TextField
-            autoCapitalize="none"
-            autoComplete="username"
-            error={firstFieldError(state, "username")}
-            hint="Lowercase letters, numbers, and underscores."
-            label="Username"
-            name="username"
-            placeholder="your_name"
-            required
-          />
+<TextField
+  autoCapitalize="none"
+  autoComplete="username"
+  error={firstFieldError(state, "username")}
+  hint="Your unique SIGNAL @handle. Use lowercase letters, numbers, and underscores."
+  label="Choose Your SIGNAL Handle"
+  name="username"
+  placeholder="your_name"
+  required
+/>
 
-          <TextField
-            error={firstFieldError(state, "pronouns")}
-            hint="Optional. You control what you share."
-            label="Pronouns"
-            name="pronouns"
-            placeholder="Optional"
-          />
+<TextField
+  error={firstFieldError(state, "pronouns")}
+  hint="Optional. Share them if you’d like."
+  label="Pronouns"
+  name="pronouns"
+  placeholder="she/her, he/him, they/them..."
+/>
 
-          <SelectField
-            defaultValue="America/New_York"
-            id="timezone"
-            label="Time zone"
-            name="timezone"
-          >
-            <option value="America/New_York">Eastern time</option>
-            <option value="America/Chicago">Central time</option>
-            <option value="America/Denver">Mountain time</option>
-            <option value="America/Phoenix">Arizona time</option>
-            <option value="America/Los_Angeles">Pacific time</option>
-            <option value="UTC">UTC</option>
-          </SelectField>
+<SelectField
+  defaultValue="America/New_York"
+  hint="This helps SIGNAL show events and plans at the right time."
+  id="timezone"
+  label="Your Time Zone"
+  name="timezone"
+>
+  <option value="America/New_York">Eastern time</option>
+  <option value="America/Chicago">Central time</option>
+  <option value="America/Denver">Mountain time</option>
+  <option value="America/Phoenix">Arizona time</option>
+  <option value="America/Los_Angeles">Pacific time</option>
+  <option value="UTC">UTC</option>
+</SelectField>
         </div>
 
         <div>
@@ -416,7 +418,7 @@ export function OnboardingForm({
             className="mb-2 block text-sm font-bold text-white/85"
             htmlFor="bio"
           >
-            Short bio
+            About You
           </label>
 
           <textarea
@@ -424,7 +426,7 @@ export function OnboardingForm({
             id="bio"
             maxLength={500}
             name="bio"
-            placeholder="Share a little about yourself, what you enjoy, or what you hope to find here."
+            placeholder="A few words about you, what you're into, or what you're helping to find here."
           />
 
           <p className="mt-2 text-xs text-white/40">
@@ -434,12 +436,11 @@ export function OnboardingForm({
 
         <div className="rounded-2xl border border-dashed border-white/15 bg-white/[0.03] p-5">
           <p className="text-sm font-semibold text-white">
-            Profile photo and customization are coming next
+            Make It More Yours Later
           </p>
 
           <p className="mt-2 text-sm leading-6 text-white/45">
-            You will be able to add a profile photo, cover image, favorite
-            song, and custom profile style after media storage is connected.
+            After you're in, you'll be able to add a profile photo, cover image, and more to make your SIGNAL profile feel like you.
           </p>
         </div>
       </section>
@@ -453,49 +454,49 @@ export function OnboardingForm({
         </h3>
 
         <div className="grid gap-5 sm:grid-cols-2">
-          <TextField
-            autoComplete="address-level2"
-            error={firstFieldError(state, "city")}
-            label="City"
-            name="city"
-            placeholder="Newark"
-          />
+<TextField
+  autoComplete="address-level2"
+  error={firstFieldError(state, "city")}
+  label="City"
+  name="city"
+  placeholder="Newark"
+/>
 
-          <TextField
-            autoComplete="address-level1"
-            error={firstFieldError(state, "region")}
-            label="State or region"
-            name="region"
-            placeholder="New Jersey"
-          />
+<TextField
+  autoComplete="address-level1"
+  error={firstFieldError(state, "region")}
+  label="State or region"
+  name="region"
+  placeholder="New Jersey"
+/>
 
-          <TextField
-            autoCapitalize="characters"
-            autoComplete="country"
-            error={firstFieldError(state, "countryCode")}
-            hint="Use a two-letter code, such as US."
-            label="Country code"
-            name="countryCode"
-            placeholder="US"
-          />
+<TextField
+  autoCapitalize="characters"
+  autoComplete="country"
+  error={firstFieldError(state, "countryCode")}
+  hint="Use the two-letter country code, like US."
+  label="Country"
+  name="countryCode"
+  placeholder="US"
+/>
 
-          <SelectField
-            defaultValue="hidden"
-            hint="SIGNAL will never ask for your precise home address."
-            id="locationVisibility"
-            label="Location visibility"
-            name="locationVisibility"
-          >
-            <option value="hidden">Keep my location private</option>
-            <option value="city_region">Show my city and region</option>
-            <option value="region_only">Show only my region</option>
-          </SelectField>
+<SelectField
+  defaultValue="hidden"
+  hint="You choose how much of your general location other members can see. SIGNAL never asks for your home address."
+  id="locationVisibility"
+  label="Who can see where you’re based?"
+  name="locationVisibility"
+>
+  <option value="hidden">Keep it private</option>
+  <option value="city_region">Show my city and region</option>
+  <option value="region_only">Show only my region</option>
+</SelectField>
         </div>
 
         <SelectField
           defaultValue="friends"
           id="friendListVisibility"
-          label="Who can see your friend list?"
+          label="Who can see your connections?"
           name="friendListVisibility"
         >
           <option value="private">Only me</option>
@@ -513,12 +514,11 @@ export function OnboardingForm({
 
           <span>
             <span className="block text-sm font-semibold text-white">
-              Include me in recommendations
+              Help People Find Me
             </span>
 
             <span className="mt-1 block text-xs leading-5 text-white/45">
-              SIGNAL can recommend your profile to compatible members while
-              respecting your privacy and connection settings.
+              SIGNAL can include your profile in relevant people and community recommendations based on your interests, skills, location, and connection preferences.
             </span>
           </span>
         </label>
@@ -534,15 +534,15 @@ export function OnboardingForm({
 
         <ChoiceGrid
           choices={interests}
-          hint="Choose up to 12. Your Pulse check-in can add what interests you today."
-          legend="What draws you in?"
+          hint="Choose the things you genuinely enjoy, want to explore, care about, or want more of in your life."
+          legend="Interests"
           name="interestIds"
         />
 
         <ChoiceGrid
           choices={skills}
-          hint="Choose up to 12 skills you practice, want to develop, or hope to contribute."
-          legend="What do you bring?"
+          hint="Choose skills you already have, are developing, or would be happy to share with others."
+          legend="What Are You Good At - or Growing Into?"
           name="skillIds"
         />
       </section>
@@ -557,12 +557,11 @@ export function OnboardingForm({
 
         <fieldset>
           <legend className="text-xl font-bold text-white">
-            What are you open to?
+            Preferred Connection Types?
           </legend>
 
           <p className="mt-2 text-sm leading-6 text-white/50">
-            These preferences shape your recommendations. They do not create
-            commitments, and you can change them at any time.
+            Choose what feels right for you. These preferences help shape your recommendations, and you can change them anytime.
           </p>
 
           <div className="mt-5">
@@ -572,12 +571,11 @@ export function OnboardingForm({
 
         <fieldset>
           <legend className="text-xl font-bold text-white">
-            Invitations and recommendations
+            How Should People Find and Invite You?
           </legend>
 
           <p className="mt-2 text-sm leading-6 text-white/50">
-            Decide how other members and SIGNAL can help you discover new
-            connections.
+            Choose how SIGNAL and other members can include you in recommendations, invitations, and new connections.
           </p>
 
           <div className="mt-5">
@@ -591,20 +589,20 @@ export function OnboardingForm({
         className={currentStep === 4 ? "space-y-8" : "hidden"}
       >
         <h3 className="sr-only" id="accessibility-step">
-          Accessibility preferences
+          Accessibility Preferences
         </h3>
 
-        <div className="rounded-2xl border border-[#ca9aff]/20 bg-[#6c14ce]/10 p-5">
-          <p className="text-sm font-semibold text-white">
-            This section is optional and private.
-          </p>
+<div className="rounded-2xl border border-[#ca9aff]/20 bg-[#6c14ce]/10 p-5">
+  <p className="text-sm font-semibold text-white">
+    This section is optional and private.
+  </p>
 
-          <p className="mt-2 text-sm leading-6 text-white/50">
-            Choose features that help experiences work for you. SIGNAL does
-            not need a diagnosis, and these preferences will not automatically
-            appear on your public profile.
-          </p>
-        </div>
+  <p className="mt-2 text-sm leading-6 text-white/50">
+    Choose any features that make it easier or more comfortable for you to
+    participate. You do not need to explain why, and these preferences will not
+    appear on your public profile.
+  </p>
+</div>
 
         <PreferenceGrid choices={accessibilityChoices} />
 
@@ -613,7 +611,7 @@ export function OnboardingForm({
             className="mb-2 block text-sm font-bold text-white/85"
             htmlFor="accessibilityNotes"
           >
-            Anything else organizers should consider?
+            Anything else that would help?
           </label>
 
           <textarea
@@ -639,22 +637,21 @@ export function OnboardingForm({
           Final confirmation
         </h3>
 
-        <div className="rounded-3xl border border-white/10 bg-black/30 p-6">
-          <p className="text-lg font-bold text-white">
-            Your SIGNAL foundation is ready.
-          </p>
+<div className="rounded-3xl border border-white/10 bg-black/30 p-6">
+  <p className="text-lg font-bold text-white">
+  </p>
 
-          <p className="mt-3 text-sm leading-6 text-white/50">
-            Your profile, interests, connection preferences, and private
-            accessibility settings will help SIGNAL recommend people, places,
-            Circles, events, and opportunities that fit you.
-          </p>
+  <p className="mt-3 text-sm leading-6 text-white/50">
+    Your interests, skills, connection preferences, and access settings will
+    help SIGNAL surface people, places, Circles, events, and opportunities
+    that fit you.
+  </p>
 
-          <p className="mt-3 text-sm leading-6 text-white/50">
-            Your daily energy, capacity, and comfort level will be handled
-            separately through your Pulse check-in.
-          </p>
-        </div>
+  <p className="mt-3 text-sm leading-6 text-white/50">
+    Your Pulse is separate. It reflects how you’re feeling and what you have
+    capacity for right now, so your recommendations can shift with you.
+  </p>
+</div>
 
         <label className="flex items-start gap-3 rounded-2xl border border-white/10 bg-black/30 p-5 text-sm leading-6 text-white/65 has-checked:border-[#ca9aff]/70 has-checked:bg-[#6c14ce]/15">
           <input
@@ -669,8 +666,7 @@ export function OnboardingForm({
           />
 
           <span>
-            I confirm that I am 18 or older and eligible to join the SIGNAL
-            founding beta.
+            I confirm that I am 18 or older and eligible to join SIGNAL.
           </span>
         </label>
 
@@ -683,16 +679,16 @@ export function OnboardingForm({
           </p>
         ) : null}
 
-        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-          <p className="text-sm font-semibold text-white">
-            You’re not starting alone.
-          </p>
+<div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+  <p className="text-sm font-semibold text-white">
+    You won’t be starting alone.
+  </p>
 
-          <p className="mt-2 text-sm leading-6 text-white/45">
-            Your founder welcome connection will appear after onboarding.
-            You will always be able to remove or manage that connection.
-          </p>
-        </div>
+  <p className="mt-2 text-sm leading-6 text-white/45">
+    You’ll begin with a welcome connection from the SIGNAL community to help
+    you get oriented. You’ll always be able to manage or remove that connection.
+  </p>
+</div>
       </section>
 
       <div className="flex flex-col-reverse gap-3 border-t border-white/10 pt-7 sm:flex-row sm:items-center sm:justify-between">
@@ -706,9 +702,12 @@ export function OnboardingForm({
         </button>
 
         {isFinalStep ? (
-          <SubmitButton pendingLabel="Creating your SIGNAL profile…">
-            Enter SIGNAL
-          </SubmitButton>
+<SubmitButton
+  className="border-transparent bg-gradient-to-r from-[#6c14ce] via-[#a855f7] to-[#f359d2] shadow-lg shadow-[#6c14ce]/20 hover:brightness-110"
+  pendingLabel="Creating your SIGNAL profile…"
+>
+  Enter SIGNAL
+</SubmitButton>
         ) : (
           <button
             className="min-h-12 rounded-full bg-gradient-to-r from-[#6c14ce] via-[#a855f7] to-[#f359d2] px-7 text-sm font-black text-white shadow-lg shadow-[#6c14ce]/20 transition hover:brightness-110"

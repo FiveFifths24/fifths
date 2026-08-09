@@ -81,7 +81,7 @@ if (profileResult.data?.onboarding_completed_at) {
             </p>
 
             <h1 className="display-type mt-5 text-5xl leading-[0.95] text-white sm:text-7xl">
-              Let’s find what fits you.
+              Let’s Find What Fits You.
             </h1>
 
             <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-white/60">
