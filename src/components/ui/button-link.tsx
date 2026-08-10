@@ -21,16 +21,16 @@ export function ButtonLink({
   return (
     <Link
       className={cn(
-        "inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-bold transition-all duration-300",
-        variant === "primary" &&
-          "bg-[linear-gradient(90deg,#1800ad_0%,#6c14ce_36%,#f359d2_70%,#7cff00_100%)] text-white shadow-[0_0_24px_rgba(108,20,206,0.22)] hover:brightness-110",
-        variant === "secondary" &&
-          "border border-[#6100cc]/30 bg-black/45 text-white hover:border-[#6100cc]/40 hover:bg-white/10",
-        variant === "ecosystem" &&
+"inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-6 py-2.5 text-sm font-bold transition-all duration-300",
+variant === "primary" &&
+  "border border-white/10 bg-gradient-to-r from-[#6c14ce] via-[#a855f7] to-[#f359d2] text-white shadow-lg shadow-[#6c14ce]/20 hover:brightness-110 hover:shadow-[#a855f7]/25",
+variant === "secondary" &&
+  "border border-[#6c14ce]/25 bg-white/[0.04] text-white/75 backdrop-blur-sm hover:border-[#ca9aff]/40 hover:bg-[#6c14ce]/10 hover:text-white",
+          variant === "ecosystem" &&
           "ecosystem-gradient-button bg-transparent text-[#f359d2] backdrop-blur-sm",
-        variant === "quiet" &&
-          "px-0 text-[#d8d3df] underline decoration-[#6c14ce]/60 underline-offset-4 hover:text-white",
-        className,
+variant === "quiet" &&
+  "min-h-0 px-0 py-0 text-[#ca9aff] hover:text-[#f359d2]", 
+         className,
       )}
       {...props}
     >

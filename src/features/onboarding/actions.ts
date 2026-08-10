@@ -66,16 +66,19 @@ export async function completeOnboardingAction(
     accessibilityNotes:
       formData.get("accessibilityNotes") || undefined,
 
-    ageConfirmation: formData.get("ageConfirmation"),
   });
 
-  if (!parsed.success) {
-    return {
-      status: "error",
-      message: "Check the highlighted fields and try again.",
-      fieldErrors: parsed.error.flatten().fieldErrors,
-    };
-  }
+if (!parsed.success) {
+  const fieldErrors = parsed.error.flatten().fieldErrors;
+
+  console.error("SIGNAL onboarding validation errors:", fieldErrors);
+
+  return {
+    status: "error",
+    message: `Validation failed: ${Object.keys(fieldErrors).join(", ")}`,
+    fieldErrors,
+  };
+}
 
   try {
     const supabase = await createClient();

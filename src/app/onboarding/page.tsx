@@ -90,10 +90,6 @@ if (profileResult.data?.onboarding_completed_at) {
               that feel right for you.
             </p>
 
-            <p className="mx-auto mt-4 max-w-xl text-sm leading-6 text-white/40">
-              We do not ask for medical diagnoses or a precise home address.
-              You can update your settings later.
-            </p>
           </div>
 
           <div className="mt-12 rounded-[2rem] border border-white/10 bg-white/[0.035] p-6 shadow-2xl shadow-black/60 backdrop-blur-xl sm:p-9">

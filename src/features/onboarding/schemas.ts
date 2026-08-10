@@ -1,6 +1,9 @@
 import { z } from "zod";
 
-const taxonomySelection = z.array(z.uuid()).max(12);
+const taxonomySelection = z
+  .array(z.uuid())
+  .min(1, "Choose at least one option.")
+  .max(12, "Choose no more than 12 options.");
 
 const optionalText = (max: number, message: string) =>
   z
@@ -111,7 +114,4 @@ export const onboardingSchema = z.object({
     "Use no more than 500 characters.",
   ),
 
-  ageConfirmation: z.literal("on", {
-    error: "Confirm that you are 18 or older to continue.",
-  }),
 });

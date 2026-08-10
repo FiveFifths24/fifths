@@ -63,7 +63,7 @@ export function SiteHeader() {
         "z-50",
         pathname === "/"
           ? "absolute inset-x-0 top-0 bg-transparent"
-          : "sticky top-0 border-b border-neutral-800/90 bg-black/90 backdrop-blur-xl",
+          : "sticky top-0 border-b border-[#f359d2]/40 bg-black/90 backdrop-blur-xl",
       )}
     >
       <Container
@@ -105,11 +105,15 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="hidden items-center md:flex">
-<ButtonLink href={isLoggedIn ? "/account" : "/login"} variant="quiet">
-  {isLoggedIn ? "Account" : "Log in"}
-</ButtonLink>
-        </div>
+<div className="hidden items-center md:flex">
+  <ButtonLink
+    className="text-white hover:text-[#f359d2]"
+    href={isLoggedIn ? "/account" : "/login"}
+    variant="quiet"
+  >
+    {isLoggedIn ? "Account" : "Log in"}
+  </ButtonLink>
+</div>
 
         <button
           aria-controls={menuId}

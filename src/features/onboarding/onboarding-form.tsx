@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useRef, useState } from "react";
 
 import { ActionStatus } from "@/components/forms/action-status";
 import { SubmitButton } from "@/components/forms/submit-button";
@@ -40,7 +40,7 @@ const steps = [
   },
   {
     number: "06",
-    title: "You're SIGNAL Profile Is Ready",
+    title: "You're SIGNAL Profile Is Ready.",
   },
 ] as const;
 
@@ -52,17 +52,15 @@ type PreferenceChoice = {
 };
 
 const connectionChoices: PreferenceChoice[] = [
-  {
-    name: "openToFriends",
-    label: "Friendship",
-    description: "Meet people for genuine social connection and community.",
-    defaultChecked: true,
-  },
-  {
+{
+  name: "openToFriends",
+  label: "Friendship",
+  description: "Meet people for genuine social connection and community.",
+}, 
+ {
     name: "openToActivityPartners",
     label: "Activity Partners",
     description: "Find people to explore hobbies, outings, and experiences with.",
-    defaultChecked: true,
   },
   {
     name: "openToCreativeCollaboration",
@@ -253,6 +251,7 @@ function SelectField({
   defaultValue,
   children,
   hint,
+  required = false,
 }: {
   id: string;
   label: string;
@@ -260,8 +259,8 @@ function SelectField({
   defaultValue: string;
   children: React.ReactNode;
   hint?: string;
-}) {
-  return (
+  required?: boolean;
+}) {  return (
     <div>
       <label
         className="mb-2 block text-sm font-bold text-white/85"
@@ -270,13 +269,13 @@ function SelectField({
         {label}
       </label>
 
-      <select
-        className="min-h-12 w-full rounded-xl border border-white/10 bg-black/50 px-4 py-3 text-base text-white outline-none transition hover:border-white/20 focus:border-[#ca9aff]"
-        defaultValue={defaultValue}
-        id={id}
-        name={name}
-      >
-        {children}
+<select
+  className="min-h-12 w-full rounded-xl border border-white/10 bg-black/50 px-4 py-3 text-base text-white outline-none transition hover:border-white/20 focus:border-[#ca9aff]"
+  defaultValue={defaultValue}
+  id={id}
+  name={name}
+  required={required}
+>        {children}
       </select>
 
       {hint ? (
@@ -294,6 +293,8 @@ export function OnboardingForm({
   skills: Array<Pick<Skill, "id" | "name">>;
 }) {
   const [currentStep, setCurrentStep] = useState(0);
+  const [stepError, setStepError] = useState<string | null>(null);
+  const formRef = useRef<HTMLFormElement>(null);
 
   const [state, action] = useActionState(
     completeOnboardingAction,
@@ -311,17 +312,84 @@ export function OnboardingForm({
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  function goForward() {
-    setCurrentStep((step) => Math.min(steps.length - 1, step + 1));
-    window.scrollTo({ top: 0, behavior: "smooth" });
+function goForward() {
+  const form = formRef.current;
+
+  if (!form) return;
+
+  const currentSection = form.querySelector<HTMLElement>(
+    `[data-step="${currentStep}"]`,
+  );
+
+  if (!currentSection) return;
+
+  setStepError(null);
+
+  if (currentStep === 2) {
+    const hasInterest = currentSection.querySelector(
+      'input[name="interestIds"]:checked',
+    );
+
+    const hasSkill = currentSection.querySelector(
+      'input[name="skillIds"]:checked',
+    );
+
+    if (!hasInterest || !hasSkill) {
+      setStepError(
+        "Choose at least one interest and at least one skill to continue.",
+      );
+      return;
+    }
   }
+
+  if (currentStep === 3) {
+    const connectionNames = [
+      "openToFriends",
+      "openToActivityPartners",
+      "openToCreativeCollaboration",
+      "openToProfessionalNetworking",
+      "openToMentorship",
+      "openToVolunteering",
+      "openToGaming",
+      "openToTravelGroups",
+    ];
+
+    const hasConnectionPreference = connectionNames.some((name) =>
+      currentSection.querySelector(`input[name="${name}"]:checked`),
+    );
+
+    if (!hasConnectionPreference) {
+      setStepError(
+        "Choose at least one way you'd like to connect to continue.",
+      );
+      return;
+    }
+  }
+
+  const requiredFields =
+    currentSection.querySelectorAll<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >("input[required], select[required], textarea[required]");
+
+  for (const field of requiredFields) {
+    if (!field.checkValidity()) {
+      field.reportValidity();
+      field.focus();
+      return;
+    }
+  }
+
+  setCurrentStep((step) => Math.min(steps.length - 1, step + 1));
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
 
   return (
     <form
-      action={action}
-      aria-label="Complete your SIGNAL profile"
-      className="space-y-8"
-    >
+  ref={formRef}
+  action={action}
+  aria-label="Complete your SIGNAL profile"
+  className="space-y-8"
+>
       <div>
         <div className="flex items-center justify-between gap-4">
           <p className="text-xs font-bold tracking-[0.18em] text-[#ca9aff] uppercase">
@@ -358,8 +426,17 @@ export function OnboardingForm({
       </div>
 
       <ActionStatus state={state} />
+      {stepError ? (
+  <div
+    className="rounded-2xl border border-[#f359d2]/30 bg-[#f359d2]/10 px-4 py-3 text-sm text-[#f7c4ea]"
+    role="alert"
+  >
+    {stepError}
+  </div>
+) : null}
 
 <section
+  data-step="0"
   aria-labelledby="identity-step"
   className={currentStep === 0 ? "pt-5 mt-15 space-y-6" : "hidden"}
 >
@@ -445,10 +522,11 @@ export function OnboardingForm({
         </div>
       </section>
 
-      <section
-        aria-labelledby="location-step"
-        className={currentStep === 1 ? "space-y-7" : "hidden"}
-      >
+     <section
+  data-step="1"
+  aria-labelledby="location-step"
+  className={currentStep === 1 ? "space-y-7" : "hidden"}
+>
         <h3 className="sr-only" id="location-step">
           Your location and privacy
         </h3>
@@ -460,15 +538,71 @@ export function OnboardingForm({
   label="City"
   name="city"
   placeholder="Newark"
+  required
 />
 
-<TextField
-  autoComplete="address-level1"
-  error={firstFieldError(state, "region")}
-  label="State or region"
+<SelectField
+  defaultValue=""
+  id="region"
+  label="State"
   name="region"
-  placeholder="New Jersey"
-/>
+  required
+>
+  <option disabled value="">
+    Select your state
+  </option>
+  <option value="Alabama">Alabama</option>
+  <option value="Alaska">Alaska</option>
+  <option value="Arizona">Arizona</option>
+  <option value="Arkansas">Arkansas</option>
+  <option value="California">California</option>
+  <option value="Colorado">Colorado</option>
+  <option value="Connecticut">Connecticut</option>
+  <option value="Delaware">Delaware</option>
+  <option value="Florida">Florida</option>
+  <option value="Georgia">Georgia</option>
+  <option value="Hawaii">Hawaii</option>
+  <option value="Idaho">Idaho</option>
+  <option value="Illinois">Illinois</option>
+  <option value="Indiana">Indiana</option>
+  <option value="Iowa">Iowa</option>
+  <option value="Kansas">Kansas</option>
+  <option value="Kentucky">Kentucky</option>
+  <option value="Louisiana">Louisiana</option>
+  <option value="Maine">Maine</option>
+  <option value="Maryland">Maryland</option>
+  <option value="Massachusetts">Massachusetts</option>
+  <option value="Michigan">Michigan</option>
+  <option value="Minnesota">Minnesota</option>
+  <option value="Mississippi">Mississippi</option>
+  <option value="Missouri">Missouri</option>
+  <option value="Montana">Montana</option>
+  <option value="Nebraska">Nebraska</option>
+  <option value="Nevada">Nevada</option>
+  <option value="New Hampshire">New Hampshire</option>
+  <option value="New Jersey">New Jersey</option>
+  <option value="New Mexico">New Mexico</option>
+  <option value="New York">New York</option>
+  <option value="North Carolina">North Carolina</option>
+  <option value="North Dakota">North Dakota</option>
+  <option value="Ohio">Ohio</option>
+  <option value="Oklahoma">Oklahoma</option>
+  <option value="Oregon">Oregon</option>
+  <option value="Pennsylvania">Pennsylvania</option>
+  <option value="Rhode Island">Rhode Island</option>
+  <option value="South Carolina">South Carolina</option>
+  <option value="South Dakota">South Dakota</option>
+  <option value="Tennessee">Tennessee</option>
+  <option value="Texas">Texas</option>
+  <option value="Utah">Utah</option>
+  <option value="Vermont">Vermont</option>
+  <option value="Virginia">Virginia</option>
+  <option value="Washington">Washington</option>
+  <option value="West Virginia">West Virginia</option>
+  <option value="Wisconsin">Wisconsin</option>
+  <option value="Wyoming">Wyoming</option>
+  <option value="District of Columbia">District of Columbia</option>
+</SelectField>
 
 <TextField
   autoCapitalize="characters"
@@ -478,6 +612,7 @@ export function OnboardingForm({
   label="Country"
   name="countryCode"
   placeholder="US"
+  required
 />
 
 <SelectField
@@ -525,9 +660,10 @@ export function OnboardingForm({
       </section>
 
       <section
-        aria-labelledby="interests-step"
-        className={currentStep === 2 ? "space-y-10" : "hidden"}
-      >
+  data-step="2"
+  aria-labelledby="interests-step"
+  className={currentStep === 2 ? "space-y-7" : "hidden"}
+>
         <h3 className="sr-only" id="interests-step">
           Interests and skills
         </h3>
@@ -548,9 +684,10 @@ export function OnboardingForm({
       </section>
 
       <section
-        aria-labelledby="connections-step"
-        className={currentStep === 3 ? "space-y-10" : "hidden"}
-      >
+  data-step="3"
+  aria-labelledby="connections-step"
+  className={currentStep === 3 ? "space-y-7" : "hidden"}
+>
         <h3 className="sr-only" id="connections-step">
           Connection preferences
         </h3>
@@ -584,10 +721,11 @@ export function OnboardingForm({
         </fieldset>
       </section>
 
-      <section
-        aria-labelledby="accessibility-step"
-        className={currentStep === 4 ? "space-y-8" : "hidden"}
-      >
+<section
+  data-step="4"
+  aria-labelledby="accessibility-step"
+  className={currentStep === 4 ? "space-y-7" : "hidden"}
+>
         <h3 className="sr-only" id="accessibility-step">
           Accessibility Preferences
         </h3>
@@ -629,10 +767,11 @@ export function OnboardingForm({
         </div>
       </section>
 
-      <section
-        aria-labelledby="confirmation-step"
-        className={currentStep === 5 ? "space-y-7" : "hidden"}
-      >
+<section
+  data-step="5"
+  aria-labelledby="review-step"
+  className={currentStep === 5 ? "space-y-7" : "hidden"}
+>
         <h3 className="sr-only" id="confirmation-step">
           Final confirmation
         </h3>
@@ -641,45 +780,11 @@ export function OnboardingForm({
   <p className="text-lg font-bold text-white">
   </p>
 
-  <p className="mt-3 text-sm leading-6 text-white/50">
-    Your interests, skills, connection preferences, and access settings will
-    help SIGNAL surface people, places, Circles, events, and opportunities
-    that fit you.
-  </p>
 
-  <p className="mt-3 text-sm leading-6 text-white/50">
-    Your Pulse is separate. It reflects how you’re feeling and what you have
-    capacity for right now, so your recommendations can shift with you.
-  </p>
 </div>
 
-        <label className="flex items-start gap-3 rounded-2xl border border-white/10 bg-black/30 p-5 text-sm leading-6 text-white/65 has-checked:border-[#ca9aff]/70 has-checked:bg-[#6c14ce]/15">
-          <input
-            aria-describedby={
-              ageError ? "age-confirmation-error" : undefined
-            }
-            aria-invalid={ageError ? true : undefined}
-            className="mt-1 size-5 shrink-0 accent-[#a855f7]"
-            name="ageConfirmation"
-            required
-            type="checkbox"
-          />
 
-          <span>
-            I confirm that I am 18 or older and eligible to join SIGNAL.
-          </span>
-        </label>
-
-        {ageError ? (
-          <p
-            className="text-xs text-red-300"
-            id="age-confirmation-error"
-          >
-            {ageError}
-          </p>
-        ) : null}
-
-<div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+<div className="text-center">
   <p className="text-sm font-semibold text-white">
     You won’t be starting alone.
   </p>

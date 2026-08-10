@@ -6,9 +6,10 @@ const validOnboarding = {
   displayName: "FIFTHS Member",
   pronouns: "they/them",
   timezone: "America/New_York",
+  locationVisibility: "hidden",
+  friendListVisibility: "private",
   interestIds: ["aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"],
   skillIds: ["bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb"],
-  ageConfirmation: "on",
 };
 
 describe("onboarding validation", () => {
@@ -20,19 +21,19 @@ describe("onboarding validation", () => {
     expect(result.username).toBe("fifths_member");
   });
 
-  it("rejects unsafe usernames and missing adult confirmation", () => {
-    const result = onboardingSchema.safeParse({
-      ...validOnboarding,
-      username: "not allowed!",
-      ageConfirmation: undefined,
-    });
-    expect(result.success).toBe(false);
-    if (!result.success) {
-      const fields = result.error.flatten().fieldErrors;
-      expect(fields.username).toBeDefined();
-      expect(fields.ageConfirmation).toBeDefined();
-    }
+it("rejects unsafe usernames", () => {
+  const result = onboardingSchema.safeParse({
+    ...validOnboarding,
+    username: "not allowed!",
   });
+
+  expect(result.success).toBe(false);
+
+  if (!result.success) {
+    const fields = result.error.flatten().fieldErrors;
+    expect(fields.username).toBeDefined();
+  }
+});
 
   it("limits taxonomy selections to twelve", () => {
     const interestIds = Array.from(
