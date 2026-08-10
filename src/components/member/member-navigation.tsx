@@ -2,12 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  Bell,
-  CalendarRange,
-  HeartHandshake,
-  House,
-} from "lucide-react";
+import { Bell, CalendarRange, HeartHandshake, House } from "lucide-react";
 
 import { cn } from "@/lib/cn";
 
@@ -40,9 +35,7 @@ const items = [
 function isActive(pathname: string, item: (typeof items)[number]) {
   return (
     pathname === item.href ||
-    ("nested" in item &&
-      item.nested &&
-      pathname.startsWith(`${item.href}/`))
+    ("nested" in item && item.nested && pathname.startsWith(`${item.href}/`))
   );
 }
 

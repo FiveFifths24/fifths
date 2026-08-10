@@ -64,17 +64,9 @@ export const onboardingSchema = z.object({
     .optional()
     .transform((value) => value || undefined),
 
-  locationVisibility: z.enum([
-    "hidden",
-    "city_region",
-    "region_only",
-  ]),
+  locationVisibility: z.enum(["hidden", "city_region", "region_only"]),
 
-  friendListVisibility: z.enum([
-    "private",
-    "friends",
-    "members",
-  ]),
+  friendListVisibility: z.enum(["private", "friends", "members"]),
 
   discoverable: checkbox,
 
@@ -109,9 +101,5 @@ export const onboardingSchema = z.object({
   writtenInstructions: checkbox,
   breaksAvailable: checkbox,
 
-  accessibilityNotes: optionalText(
-    500,
-    "Use no more than 500 characters.",
-  ),
-
+  accessibilityNotes: optionalText(500, "Use no more than 500 characters."),
 });

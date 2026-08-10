@@ -29,8 +29,8 @@ function ChoiceField({
   return (
     <fieldset aria-describedby={descriptionId} aria-invalid={Boolean(error)}>
       <legend className="w-full text-center text-lg font-bold text-white sm:text-left">
-  {legend}
-</legend>
+        {legend}
+      </legend>
       <p
         className={cn(
           "mt-1 text-center text-sm leading-6 text-neutral-400 sm:text-left",
@@ -195,25 +195,25 @@ export function PulseCheckInForm({
         <select
           aria-describedby="maximumTravelMiles-description"
           aria-invalid={Boolean(travelError)}
-className="min-h-12 w-full rounded-2xl border border-[#6c14ce]/25 bg-black/30 px-4 py-3 text-base text-white transition-all hover:border-[#6c14ce]/50 hover:bg-[#6c14ce]/5 focus:border-[#6c14ce]/70 focus:outline-none focus:ring-1 focus:ring-[#6c14ce]/30"
+          className="min-h-12 w-full rounded-2xl border border-[#6c14ce]/25 bg-black/30 px-4 py-3 text-base text-white transition-all hover:border-[#6c14ce]/50 hover:bg-[#6c14ce]/5 focus:border-[#6c14ce]/70 focus:ring-1 focus:ring-[#6c14ce]/30 focus:outline-none"
           id="maximumTravelMiles"
           name="maximumTravelMiles"
         >
-<option className="bg-[#eadcff] text-[#241236]" value="">
-  No Distance Preference
-</option>
-<option className="bg-[#eadcff] text-[#241236]" value="5">
-  Up To 5 Miles
-</option>
-<option className="bg-[#eadcff] text-[#241236]" value="15">
-  Up To 15 Miles
-</option>
-<option className="bg-[#eadcff] text-[#241236]" value="30">
-  Up To 30 Miles
-</option>
-<option className="bg-[#eadcff] text-[#241236]" value="50">
-  Up To 50 Miles
-</option>
+          <option className="bg-[#eadcff] text-[#241236]" value="">
+            No Distance Preference
+          </option>
+          <option className="bg-[#eadcff] text-[#241236]" value="5">
+            Up To 5 Miles
+          </option>
+          <option className="bg-[#eadcff] text-[#241236]" value="15">
+            Up To 15 Miles
+          </option>
+          <option className="bg-[#eadcff] text-[#241236]" value="30">
+            Up To 30 Miles
+          </option>
+          <option className="bg-[#eadcff] text-[#241236]" value="50">
+            Up To 50 Miles
+          </option>
         </select>
       </div>
 

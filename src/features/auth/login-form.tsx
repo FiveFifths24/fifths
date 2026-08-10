@@ -48,12 +48,12 @@ export function LoginForm({ next }: { next?: string }) {
           required
         />
       </div>
-<SubmitButton
-  className="border-transparent bg-gradient-to-r from-[#6c14ce] via-[#a855f7] to-[#f359d2] shadow-lg shadow-[#6c14ce]/20 hover:brightness-110"
-  pendingLabel="Logging in…"
->
-  Log in
-</SubmitButton>
+      <SubmitButton
+        className="border-transparent bg-gradient-to-r from-[#6c14ce] via-[#a855f7] to-[#f359d2] shadow-lg shadow-[#6c14ce]/20 hover:brightness-110"
+        pendingLabel="Logging in…"
+      >
+        Log in
+      </SubmitButton>
     </form>
   );
 }

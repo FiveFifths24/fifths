@@ -25,7 +25,7 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const menuId = useId();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-    useEffect(() => {
+  useEffect(() => {
     const supabase = createClient();
 
     supabase.auth.getUser().then(({ data }) => {
@@ -105,15 +105,15 @@ export function SiteHeader() {
           ))}
         </nav>
 
-<div className="hidden items-center md:flex">
-  <ButtonLink
-    className="text-white hover:text-[#f359d2]"
-    href={isLoggedIn ? "/account" : "/login"}
-    variant="quiet"
-  >
-    {isLoggedIn ? "Account" : "Log in"}
-  </ButtonLink>
-</div>
+        <div className="hidden items-center md:flex">
+          <ButtonLink
+            className="text-white hover:text-[#f359d2]"
+            href={isLoggedIn ? "/account" : "/login"}
+            variant="quiet"
+          >
+            {isLoggedIn ? "Account" : "Log in"}
+          </ButtonLink>
+        </div>
 
         <button
           aria-controls={menuId}
@@ -157,12 +157,12 @@ export function SiteHeader() {
               ))}
 
               <div className="mt-3 border-t border-neutral-800 pt-5">
-<ButtonLink
-  className="w-full border-0 bg-[linear-gradient(90deg,#1800ad_0%,#6c14ce_36%,#f359d2_70%,#7cff00_100%)] text-white shadow-[0_0_20px_rgba(108,20,206,0.2)] hover:brightness-110"
-  href={isLoggedIn ? "/account" : "/login"}
->
-  {isLoggedIn ? "Account" : "Log in"}
-</ButtonLink>
+                <ButtonLink
+                  className="w-full border-0 bg-[linear-gradient(90deg,#1800ad_0%,#6c14ce_36%,#f359d2_70%,#7cff00_100%)] text-white shadow-[0_0_20px_rgba(108,20,206,0.2)] hover:brightness-110"
+                  href={isLoggedIn ? "/account" : "/login"}
+                >
+                  {isLoggedIn ? "Account" : "Log in"}
+                </ButtonLink>
               </div>
             </nav>
           </Container>

@@ -5,10 +5,7 @@ import { useActionState, useRef, useState } from "react";
 import { ActionStatus } from "@/components/forms/action-status";
 import { SubmitButton } from "@/components/forms/submit-button";
 import { TextField } from "@/components/forms/text-field";
-import {
-  firstFieldError,
-  initialActionState,
-} from "@/features/auth/state";
+import { firstFieldError, initialActionState } from "@/features/auth/state";
 import type { Interest, Skill } from "@/types/database";
 
 import { completeOnboardingAction } from "./actions";
@@ -21,12 +18,14 @@ const steps = [
   {
     number: "02",
     title: "Where Are You Based?",
-    description: "Your general location helps SIGNAL recommend people, places, and events that make sense for you.",
+    description:
+      "Your general location helps SIGNAL recommend people, places, and events that make sense for you.",
   },
   {
     number: "03",
     title: "What Shapes You?",
-    description: "Pick the interests and skills that feel most like you. These help shape what SIGNAL brings your way. ",
+    description:
+      "Pick the interests and skills that feel most like you. These help shape what SIGNAL brings your way. ",
   },
   {
     number: "04",
@@ -36,7 +35,8 @@ const steps = [
   {
     number: "05",
     title: "What Helps You Participate Comfortably?",
-    description: "Share any access preferences that can help SIGNAL recommend experiences that work better for you.",
+    description:
+      "Share any access preferences that can help SIGNAL recommend experiences that work better for you.",
   },
   {
     number: "06",
@@ -52,15 +52,16 @@ type PreferenceChoice = {
 };
 
 const connectionChoices: PreferenceChoice[] = [
-{
-  name: "openToFriends",
-  label: "Friendship",
-  description: "Meet people for genuine social connection and community.",
-}, 
- {
+  {
+    name: "openToFriends",
+    label: "Friendship",
+    description: "Meet people for genuine social connection and community.",
+  },
+  {
     name: "openToActivityPartners",
     label: "Activity Partners",
-    description: "Find people to explore hobbies, outings, and experiences with.",
+    description:
+      "Find people to explore hobbies, outings, and experiences with.",
   },
   {
     name: "openToCreativeCollaboration",
@@ -80,7 +81,8 @@ const connectionChoices: PreferenceChoice[] = [
   {
     name: "openToVolunteering",
     label: "Community & Volunteering",
-    description: "Get involved in service, local projects, and community efforts.",
+    description:
+      "Get involved in service, local projects, and community efforts.",
   },
   {
     name: "openToGaming",
@@ -90,7 +92,8 @@ const connectionChoices: PreferenceChoice[] = [
   {
     name: "openToTravelGroups",
     label: "Travel & Group Experiences",
-    description: "Find people for trips, conventions, day outings, and shared adventures.",
+    description:
+      "Find people for trips, conventions, day outings, and shared adventures.",
   },
 ];
 
@@ -208,11 +211,7 @@ function ChoiceGrid({
   );
 }
 
-function PreferenceGrid({
-  choices,
-}: {
-  choices: PreferenceChoice[];
-}) {
+function PreferenceGrid({ choices }: { choices: PreferenceChoice[] }) {
   return (
     <div className="grid gap-3 sm:grid-cols-2">
       {choices.map((choice) => (
@@ -260,7 +259,8 @@ function SelectField({
   children: React.ReactNode;
   hint?: string;
   required?: boolean;
-}) {  return (
+}) {
+  return (
     <div>
       <label
         className="mb-2 block text-sm font-bold text-white/85"
@@ -269,13 +269,15 @@ function SelectField({
         {label}
       </label>
 
-<select
-  className="min-h-12 w-full rounded-xl border border-white/10 bg-black/50 px-4 py-3 text-base text-white outline-none transition hover:border-white/20 focus:border-[#ca9aff]"
-  defaultValue={defaultValue}
-  id={id}
-  name={name}
-  required={required}
->        {children}
+      <select
+        className="min-h-12 w-full rounded-xl border border-white/10 bg-black/50 px-4 py-3 text-base text-white transition outline-none hover:border-white/20 focus:border-[#ca9aff]"
+        defaultValue={defaultValue}
+        id={id}
+        name={name}
+        required={required}
+      >
+        {" "}
+        {children}
       </select>
 
       {hint ? (
@@ -312,84 +314,83 @@ export function OnboardingForm({
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-function goForward() {
-  const form = formRef.current;
+  function goForward() {
+    const form = formRef.current;
 
-  if (!form) return;
+    if (!form) return;
 
-  const currentSection = form.querySelector<HTMLElement>(
-    `[data-step="${currentStep}"]`,
-  );
-
-  if (!currentSection) return;
-
-  setStepError(null);
-
-  if (currentStep === 2) {
-    const hasInterest = currentSection.querySelector(
-      'input[name="interestIds"]:checked',
+    const currentSection = form.querySelector<HTMLElement>(
+      `[data-step="${currentStep}"]`,
     );
 
-    const hasSkill = currentSection.querySelector(
-      'input[name="skillIds"]:checked',
-    );
+    if (!currentSection) return;
 
-    if (!hasInterest || !hasSkill) {
-      setStepError(
-        "Choose at least one interest and at least one skill to continue.",
+    setStepError(null);
+
+    if (currentStep === 2) {
+      const hasInterest = currentSection.querySelector(
+        'input[name="interestIds"]:checked',
       );
-      return;
-    }
-  }
 
-  if (currentStep === 3) {
-    const connectionNames = [
-      "openToFriends",
-      "openToActivityPartners",
-      "openToCreativeCollaboration",
-      "openToProfessionalNetworking",
-      "openToMentorship",
-      "openToVolunteering",
-      "openToGaming",
-      "openToTravelGroups",
-    ];
-
-    const hasConnectionPreference = connectionNames.some((name) =>
-      currentSection.querySelector(`input[name="${name}"]:checked`),
-    );
-
-    if (!hasConnectionPreference) {
-      setStepError(
-        "Choose at least one way you'd like to connect to continue.",
+      const hasSkill = currentSection.querySelector(
+        'input[name="skillIds"]:checked',
       );
-      return;
-    }
-  }
 
-  const requiredFields =
-    currentSection.querySelectorAll<
+      if (!hasInterest || !hasSkill) {
+        setStepError(
+          "Choose at least one interest and at least one skill to continue.",
+        );
+        return;
+      }
+    }
+
+    if (currentStep === 3) {
+      const connectionNames = [
+        "openToFriends",
+        "openToActivityPartners",
+        "openToCreativeCollaboration",
+        "openToProfessionalNetworking",
+        "openToMentorship",
+        "openToVolunteering",
+        "openToGaming",
+        "openToTravelGroups",
+      ];
+
+      const hasConnectionPreference = connectionNames.some((name) =>
+        currentSection.querySelector(`input[name="${name}"]:checked`),
+      );
+
+      if (!hasConnectionPreference) {
+        setStepError(
+          "Choose at least one way you'd like to connect to continue.",
+        );
+        return;
+      }
+    }
+
+    const requiredFields = currentSection.querySelectorAll<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >("input[required], select[required], textarea[required]");
 
-  for (const field of requiredFields) {
-    if (!field.checkValidity()) {
-      field.reportValidity();
-      field.focus();
-      return;
+    for (const field of requiredFields) {
+      if (!field.checkValidity()) {
+        field.reportValidity();
+        field.focus();
+        return;
+      }
     }
-  }
 
-  setCurrentStep((step) => Math.min(steps.length - 1, step + 1));
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}
+    setCurrentStep((step) => Math.min(steps.length - 1, step + 1));
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
 
   return (
     <form
-  ref={formRef}
-  action={action}
-  aria-label="Complete your SIGNAL profile"
-  className="space-y-8"
->
+      ref={formRef}
+      action={action}
+      aria-label="Complete your SIGNAL profile"
+      className="space-y-8"
+    >
       <div>
         <div className="flex items-center justify-between gap-4">
           <p className="text-xs font-bold tracking-[0.18em] text-[#ca9aff] uppercase">
@@ -410,84 +411,84 @@ function goForward() {
 
         <div className="mt-12 text-center">
           <p className="text-xs font-bold tracking-[0.16em] text-white/35 uppercase">
-         {activeStep.number}
+            {activeStep.number}
           </p>
 
           <h2 className="mt-2 text-3xl font-black tracking-tight text-white">
             {activeStep.title}
           </h2>
 
-{"description" in activeStep ? (
-  <p className="mx-auto mt-2 max-w-2xl text-sm leading-6 text-white/50">
-    {activeStep.description}
-  </p>
-) : null}
+          {"description" in activeStep ? (
+            <p className="mx-auto mt-2 max-w-2xl text-sm leading-6 text-white/50">
+              {activeStep.description}
+            </p>
+          ) : null}
         </div>
       </div>
 
       <ActionStatus state={state} />
       {stepError ? (
-  <div
-    className="rounded-2xl border border-[#f359d2]/30 bg-[#f359d2]/10 px-4 py-3 text-sm text-[#f7c4ea]"
-    role="alert"
-  >
-    {stepError}
-  </div>
-) : null}
+        <div
+          className="rounded-2xl border border-[#f359d2]/30 bg-[#f359d2]/10 px-4 py-3 text-sm text-[#f7c4ea]"
+          role="alert"
+        >
+          {stepError}
+        </div>
+      ) : null}
 
-<section
-  data-step="0"
-  aria-labelledby="identity-step"
-  className={currentStep === 0 ? "pt-5 mt-15 space-y-6" : "hidden"}
->
-          <h3 className="sr-only" id="identity-step">
+      <section
+        data-step="0"
+        aria-labelledby="identity-step"
+        className={currentStep === 0 ? "mt-15 space-y-6 pt-5" : "hidden"}
+      >
+        <h3 className="sr-only" id="identity-step">
           Your identity
         </h3>
 
         <div className="grid gap-5 sm:grid-cols-2">
-<TextField
-  autoComplete="nickname"
-  error={firstFieldError(state, "displayName")}
-  hint="Use the name you want people in SIGNAL to call you."
-  label="What Should People Call You?"
-  name="displayName"
-  placeholder="Your name"
-  required
-/>
+          <TextField
+            autoComplete="nickname"
+            error={firstFieldError(state, "displayName")}
+            hint="Use the name you want people in SIGNAL to call you."
+            label="What Should People Call You?"
+            name="displayName"
+            placeholder="Your name"
+            required
+          />
 
-<TextField
-  autoCapitalize="none"
-  autoComplete="username"
-  error={firstFieldError(state, "username")}
-  hint="Your unique SIGNAL @handle. Use lowercase letters, numbers, and underscores."
-  label="Choose Your SIGNAL Handle"
-  name="username"
-  placeholder="your_name"
-  required
-/>
+          <TextField
+            autoCapitalize="none"
+            autoComplete="username"
+            error={firstFieldError(state, "username")}
+            hint="Your unique SIGNAL @handle. Use lowercase letters, numbers, and underscores."
+            label="Choose Your SIGNAL Handle"
+            name="username"
+            placeholder="your_name"
+            required
+          />
 
-<TextField
-  error={firstFieldError(state, "pronouns")}
-  hint="Optional. Share them if you’d like."
-  label="Pronouns"
-  name="pronouns"
-  placeholder="she/her, he/him, they/them..."
-/>
+          <TextField
+            error={firstFieldError(state, "pronouns")}
+            hint="Optional. Share them if you’d like."
+            label="Pronouns"
+            name="pronouns"
+            placeholder="she/her, he/him, they/them..."
+          />
 
-<SelectField
-  defaultValue="America/New_York"
-  hint="This helps SIGNAL show events and plans at the right time."
-  id="timezone"
-  label="Your Time Zone"
-  name="timezone"
->
-  <option value="America/New_York">Eastern time</option>
-  <option value="America/Chicago">Central time</option>
-  <option value="America/Denver">Mountain time</option>
-  <option value="America/Phoenix">Arizona time</option>
-  <option value="America/Los_Angeles">Pacific time</option>
-  <option value="UTC">UTC</option>
-</SelectField>
+          <SelectField
+            defaultValue="America/New_York"
+            hint="This helps SIGNAL show events and plans at the right time."
+            id="timezone"
+            label="Your Time Zone"
+            name="timezone"
+          >
+            <option value="America/New_York">Eastern time</option>
+            <option value="America/Chicago">Central time</option>
+            <option value="America/Denver">Mountain time</option>
+            <option value="America/Phoenix">Arizona time</option>
+            <option value="America/Los_Angeles">Pacific time</option>
+            <option value="UTC">UTC</option>
+          </SelectField>
         </div>
 
         <div>
@@ -499,7 +500,7 @@ function goForward() {
           </label>
 
           <textarea
-            className="min-h-32 w-full resize-y rounded-xl border border-white/10 bg-black/50 px-4 py-3 text-base text-white outline-none transition placeholder:text-white/25 hover:border-white/20 focus:border-[#ca9aff]"
+            className="min-h-32 w-full resize-y rounded-xl border border-white/10 bg-black/50 px-4 py-3 text-base text-white transition outline-none placeholder:text-white/25 hover:border-white/20 focus:border-[#ca9aff]"
             id="bio"
             maxLength={500}
             name="bio"
@@ -517,115 +518,116 @@ function goForward() {
           </p>
 
           <p className="mt-2 text-sm leading-6 text-white/45">
-            After you're in, you'll be able to add a profile photo, cover image, and more to make your SIGNAL profile feel like you.
+            After you're in, you'll be able to add a profile photo, cover image,
+            and more to make your SIGNAL profile feel like you.
           </p>
         </div>
       </section>
 
-     <section
-  data-step="1"
-  aria-labelledby="location-step"
-  className={currentStep === 1 ? "space-y-7" : "hidden"}
->
+      <section
+        data-step="1"
+        aria-labelledby="location-step"
+        className={currentStep === 1 ? "space-y-7" : "hidden"}
+      >
         <h3 className="sr-only" id="location-step">
           Your location and privacy
         </h3>
 
         <div className="grid gap-5 sm:grid-cols-2">
-<TextField
-  autoComplete="address-level2"
-  error={firstFieldError(state, "city")}
-  label="City"
-  name="city"
-  placeholder="Newark"
-  required
-/>
+          <TextField
+            autoComplete="address-level2"
+            error={firstFieldError(state, "city")}
+            label="City"
+            name="city"
+            placeholder="Newark"
+            required
+          />
 
-<SelectField
-  defaultValue=""
-  id="region"
-  label="State"
-  name="region"
-  required
->
-  <option disabled value="">
-    Select your state
-  </option>
-  <option value="Alabama">Alabama</option>
-  <option value="Alaska">Alaska</option>
-  <option value="Arizona">Arizona</option>
-  <option value="Arkansas">Arkansas</option>
-  <option value="California">California</option>
-  <option value="Colorado">Colorado</option>
-  <option value="Connecticut">Connecticut</option>
-  <option value="Delaware">Delaware</option>
-  <option value="Florida">Florida</option>
-  <option value="Georgia">Georgia</option>
-  <option value="Hawaii">Hawaii</option>
-  <option value="Idaho">Idaho</option>
-  <option value="Illinois">Illinois</option>
-  <option value="Indiana">Indiana</option>
-  <option value="Iowa">Iowa</option>
-  <option value="Kansas">Kansas</option>
-  <option value="Kentucky">Kentucky</option>
-  <option value="Louisiana">Louisiana</option>
-  <option value="Maine">Maine</option>
-  <option value="Maryland">Maryland</option>
-  <option value="Massachusetts">Massachusetts</option>
-  <option value="Michigan">Michigan</option>
-  <option value="Minnesota">Minnesota</option>
-  <option value="Mississippi">Mississippi</option>
-  <option value="Missouri">Missouri</option>
-  <option value="Montana">Montana</option>
-  <option value="Nebraska">Nebraska</option>
-  <option value="Nevada">Nevada</option>
-  <option value="New Hampshire">New Hampshire</option>
-  <option value="New Jersey">New Jersey</option>
-  <option value="New Mexico">New Mexico</option>
-  <option value="New York">New York</option>
-  <option value="North Carolina">North Carolina</option>
-  <option value="North Dakota">North Dakota</option>
-  <option value="Ohio">Ohio</option>
-  <option value="Oklahoma">Oklahoma</option>
-  <option value="Oregon">Oregon</option>
-  <option value="Pennsylvania">Pennsylvania</option>
-  <option value="Rhode Island">Rhode Island</option>
-  <option value="South Carolina">South Carolina</option>
-  <option value="South Dakota">South Dakota</option>
-  <option value="Tennessee">Tennessee</option>
-  <option value="Texas">Texas</option>
-  <option value="Utah">Utah</option>
-  <option value="Vermont">Vermont</option>
-  <option value="Virginia">Virginia</option>
-  <option value="Washington">Washington</option>
-  <option value="West Virginia">West Virginia</option>
-  <option value="Wisconsin">Wisconsin</option>
-  <option value="Wyoming">Wyoming</option>
-  <option value="District of Columbia">District of Columbia</option>
-</SelectField>
+          <SelectField
+            defaultValue=""
+            id="region"
+            label="State"
+            name="region"
+            required
+          >
+            <option disabled value="">
+              Select your state
+            </option>
+            <option value="Alabama">Alabama</option>
+            <option value="Alaska">Alaska</option>
+            <option value="Arizona">Arizona</option>
+            <option value="Arkansas">Arkansas</option>
+            <option value="California">California</option>
+            <option value="Colorado">Colorado</option>
+            <option value="Connecticut">Connecticut</option>
+            <option value="Delaware">Delaware</option>
+            <option value="Florida">Florida</option>
+            <option value="Georgia">Georgia</option>
+            <option value="Hawaii">Hawaii</option>
+            <option value="Idaho">Idaho</option>
+            <option value="Illinois">Illinois</option>
+            <option value="Indiana">Indiana</option>
+            <option value="Iowa">Iowa</option>
+            <option value="Kansas">Kansas</option>
+            <option value="Kentucky">Kentucky</option>
+            <option value="Louisiana">Louisiana</option>
+            <option value="Maine">Maine</option>
+            <option value="Maryland">Maryland</option>
+            <option value="Massachusetts">Massachusetts</option>
+            <option value="Michigan">Michigan</option>
+            <option value="Minnesota">Minnesota</option>
+            <option value="Mississippi">Mississippi</option>
+            <option value="Missouri">Missouri</option>
+            <option value="Montana">Montana</option>
+            <option value="Nebraska">Nebraska</option>
+            <option value="Nevada">Nevada</option>
+            <option value="New Hampshire">New Hampshire</option>
+            <option value="New Jersey">New Jersey</option>
+            <option value="New Mexico">New Mexico</option>
+            <option value="New York">New York</option>
+            <option value="North Carolina">North Carolina</option>
+            <option value="North Dakota">North Dakota</option>
+            <option value="Ohio">Ohio</option>
+            <option value="Oklahoma">Oklahoma</option>
+            <option value="Oregon">Oregon</option>
+            <option value="Pennsylvania">Pennsylvania</option>
+            <option value="Rhode Island">Rhode Island</option>
+            <option value="South Carolina">South Carolina</option>
+            <option value="South Dakota">South Dakota</option>
+            <option value="Tennessee">Tennessee</option>
+            <option value="Texas">Texas</option>
+            <option value="Utah">Utah</option>
+            <option value="Vermont">Vermont</option>
+            <option value="Virginia">Virginia</option>
+            <option value="Washington">Washington</option>
+            <option value="West Virginia">West Virginia</option>
+            <option value="Wisconsin">Wisconsin</option>
+            <option value="Wyoming">Wyoming</option>
+            <option value="District of Columbia">District of Columbia</option>
+          </SelectField>
 
-<TextField
-  autoCapitalize="characters"
-  autoComplete="country"
-  error={firstFieldError(state, "countryCode")}
-  hint="Use the two-letter country code, like US."
-  label="Country"
-  name="countryCode"
-  placeholder="US"
-  required
-/>
+          <TextField
+            autoCapitalize="characters"
+            autoComplete="country"
+            error={firstFieldError(state, "countryCode")}
+            hint="Use the two-letter country code, like US."
+            label="Country"
+            name="countryCode"
+            placeholder="US"
+            required
+          />
 
-<SelectField
-  defaultValue="hidden"
-  hint="You choose how much of your general location other members can see. SIGNAL never asks for your home address."
-  id="locationVisibility"
-  label="Who can see where you’re based?"
-  name="locationVisibility"
->
-  <option value="hidden">Keep it private</option>
-  <option value="city_region">Show my city and region</option>
-  <option value="region_only">Show only my region</option>
-</SelectField>
+          <SelectField
+            defaultValue="hidden"
+            hint="You choose how much of your general location other members can see. SIGNAL never asks for your home address."
+            id="locationVisibility"
+            label="Who can see where you’re based?"
+            name="locationVisibility"
+          >
+            <option value="hidden">Keep it private</option>
+            <option value="city_region">Show my city and region</option>
+            <option value="region_only">Show only my region</option>
+          </SelectField>
         </div>
 
         <SelectField
@@ -653,17 +655,19 @@ function goForward() {
             </span>
 
             <span className="mt-1 block text-xs leading-5 text-white/45">
-              SIGNAL can include your profile in relevant people and community recommendations based on your interests, skills, location, and connection preferences.
+              SIGNAL can include your profile in relevant people and community
+              recommendations based on your interests, skills, location, and
+              connection preferences.
             </span>
           </span>
         </label>
       </section>
 
       <section
-  data-step="2"
-  aria-labelledby="interests-step"
-  className={currentStep === 2 ? "space-y-7" : "hidden"}
->
+        data-step="2"
+        aria-labelledby="interests-step"
+        className={currentStep === 2 ? "space-y-7" : "hidden"}
+      >
         <h3 className="sr-only" id="interests-step">
           Interests and skills
         </h3>
@@ -684,10 +688,10 @@ function goForward() {
       </section>
 
       <section
-  data-step="3"
-  aria-labelledby="connections-step"
-  className={currentStep === 3 ? "space-y-7" : "hidden"}
->
+        data-step="3"
+        aria-labelledby="connections-step"
+        className={currentStep === 3 ? "space-y-7" : "hidden"}
+      >
         <h3 className="sr-only" id="connections-step">
           Connection preferences
         </h3>
@@ -698,7 +702,8 @@ function goForward() {
           </legend>
 
           <p className="mt-2 text-sm leading-6 text-white/50">
-            Choose what feels right for you. These preferences help shape your recommendations, and you can change them anytime.
+            Choose what feels right for you. These preferences help shape your
+            recommendations, and you can change them anytime.
           </p>
 
           <div className="mt-5">
@@ -712,7 +717,8 @@ function goForward() {
           </legend>
 
           <p className="mt-2 text-sm leading-6 text-white/50">
-            Choose how SIGNAL and other members can include you in recommendations, invitations, and new connections.
+            Choose how SIGNAL and other members can include you in
+            recommendations, invitations, and new connections.
           </p>
 
           <div className="mt-5">
@@ -721,26 +727,26 @@ function goForward() {
         </fieldset>
       </section>
 
-<section
-  data-step="4"
-  aria-labelledby="accessibility-step"
-  className={currentStep === 4 ? "space-y-7" : "hidden"}
->
+      <section
+        data-step="4"
+        aria-labelledby="accessibility-step"
+        className={currentStep === 4 ? "space-y-7" : "hidden"}
+      >
         <h3 className="sr-only" id="accessibility-step">
           Accessibility Preferences
         </h3>
 
-<div className="rounded-2xl border border-[#ca9aff]/20 bg-[#6c14ce]/10 p-5">
-  <p className="text-sm font-semibold text-white">
-    This section is optional and private.
-  </p>
+        <div className="rounded-2xl border border-[#ca9aff]/20 bg-[#6c14ce]/10 p-5">
+          <p className="text-sm font-semibold text-white">
+            This section is optional and private.
+          </p>
 
-  <p className="mt-2 text-sm leading-6 text-white/50">
-    Choose any features that make it easier or more comfortable for you to
-    participate. You do not need to explain why, and these preferences will not
-    appear on your public profile.
-  </p>
-</div>
+          <p className="mt-2 text-sm leading-6 text-white/50">
+            Choose any features that make it easier or more comfortable for you
+            to participate. You do not need to explain why, and these
+            preferences will not appear on your public profile.
+          </p>
+        </div>
 
         <PreferenceGrid choices={accessibilityChoices} />
 
@@ -753,7 +759,7 @@ function goForward() {
           </label>
 
           <textarea
-            className="min-h-28 w-full resize-y rounded-xl border border-white/10 bg-black/50 px-4 py-3 text-base text-white outline-none transition placeholder:text-white/25 hover:border-white/20 focus:border-[#ca9aff]"
+            className="min-h-28 w-full resize-y rounded-xl border border-white/10 bg-black/50 px-4 py-3 text-base text-white transition outline-none placeholder:text-white/25 hover:border-white/20 focus:border-[#ca9aff]"
             id="accessibilityNotes"
             maxLength={500}
             name="accessibilityNotes"
@@ -767,33 +773,30 @@ function goForward() {
         </div>
       </section>
 
-<section
-  data-step="5"
-  aria-labelledby="review-step"
-  className={currentStep === 5 ? "space-y-7" : "hidden"}
->
+      <section
+        data-step="5"
+        aria-labelledby="review-step"
+        className={currentStep === 5 ? "space-y-7" : "hidden"}
+      >
         <h3 className="sr-only" id="confirmation-step">
           Final confirmation
         </h3>
 
-<div className="rounded-3xl border border-white/10 bg-black/30 p-6">
-  <p className="text-lg font-bold text-white">
-  </p>
+        <div className="rounded-3xl border border-white/10 bg-black/30 p-6">
+          <p className="text-lg font-bold text-white"></p>
+        </div>
 
+        <div className="text-center">
+          <p className="text-sm font-semibold text-white">
+            You won’t be starting alone.
+          </p>
 
-</div>
-
-
-<div className="text-center">
-  <p className="text-sm font-semibold text-white">
-    You won’t be starting alone.
-  </p>
-
-  <p className="mt-2 text-sm leading-6 text-white/45">
-    You’ll begin with a welcome connection from the SIGNAL community to help
-    you get oriented. You’ll always be able to manage or remove that connection.
-  </p>
-</div>
+          <p className="mt-2 text-sm leading-6 text-white/45">
+            You’ll begin with a welcome connection from the SIGNAL community to
+            help you get oriented. You’ll always be able to manage or remove
+            that connection.
+          </p>
+        </div>
       </section>
 
       <div className="flex flex-col-reverse gap-3 border-t border-white/10 pt-7 sm:flex-row sm:items-center sm:justify-between">
@@ -807,12 +810,12 @@ function goForward() {
         </button>
 
         {isFinalStep ? (
-<SubmitButton
-  className="border-transparent bg-gradient-to-r from-[#6c14ce] via-[#a855f7] to-[#f359d2] shadow-lg shadow-[#6c14ce]/20 hover:brightness-110"
-  pendingLabel="Creating your SIGNAL profile…"
->
-  Enter SIGNAL
-</SubmitButton>
+          <SubmitButton
+            className="border-transparent bg-gradient-to-r from-[#6c14ce] via-[#a855f7] to-[#f359d2] shadow-lg shadow-[#6c14ce]/20 hover:brightness-110"
+            pendingLabel="Creating your SIGNAL profile…"
+          >
+            Enter SIGNAL
+          </SubmitButton>
         ) : (
           <button
             className="min-h-12 rounded-full bg-gradient-to-r from-[#6c14ce] via-[#a855f7] to-[#f359d2] px-7 text-sm font-black text-white shadow-lg shadow-[#6c14ce]/20 transition hover:brightness-110"

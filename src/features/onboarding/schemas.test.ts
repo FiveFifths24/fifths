@@ -21,19 +21,19 @@ describe("onboarding validation", () => {
     expect(result.username).toBe("fifths_member");
   });
 
-it("rejects unsafe usernames", () => {
-  const result = onboardingSchema.safeParse({
-    ...validOnboarding,
-    username: "not allowed!",
+  it("rejects unsafe usernames", () => {
+    const result = onboardingSchema.safeParse({
+      ...validOnboarding,
+      username: "not allowed!",
+    });
+
+    expect(result.success).toBe(false);
+
+    if (!result.success) {
+      const fields = result.error.flatten().fieldErrors;
+      expect(fields.username).toBeDefined();
+    }
   });
-
-  expect(result.success).toBe(false);
-
-  if (!result.success) {
-    const fields = result.error.flatten().fieldErrors;
-    expect(fields.username).toBeDefined();
-  }
-});
 
   it("limits taxonomy selections to twelve", () => {
     const interestIds = Array.from(

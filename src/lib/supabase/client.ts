@@ -13,8 +13,5 @@ export function createClient() {
     );
   }
 
-  return createBrowserClient<Database>(
-    supabaseUrl,
-    supabasePublishableKey,
-  );
+  return createBrowserClient<Database>(supabaseUrl, supabasePublishableKey);
 }

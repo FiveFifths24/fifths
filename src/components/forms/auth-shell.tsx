@@ -39,8 +39,8 @@ export function AuthShell({
             />
             <p>
               SIGNAL uses secure, server-validated sessions. Your password is
-handled securely through Supabase Auth and is never stored directly
-by SIGNAL.
+              handled securely through Supabase Auth and is never stored
+              directly by SIGNAL.
             </p>
           </div>
         </div>

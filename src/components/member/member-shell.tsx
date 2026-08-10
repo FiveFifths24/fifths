@@ -35,7 +35,7 @@ export function MemberShell({
   children: ReactNode;
 }) {
   return (
-    <section className="relative isolate min-h-screen overflow-hidden bg-[#020205] pb-16 pt-8 text-white sm:pb-24 sm:pt-10">
+    <section className="relative isolate min-h-screen overflow-hidden bg-[#020205] pt-8 pb-16 text-white sm:pt-10 sm:pb-24">
       <style>{`
         @keyframes member-glitter-float {
           0%,
@@ -72,10 +72,10 @@ export function MemberShell({
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
       >
-        <div className="absolute left-[-22rem] top-[10%] size-[46rem] rounded-full bg-[#6c14ce]/10 blur-[190px]" />
-        <div className="absolute right-[-18rem] top-[30%] size-[42rem] rounded-full bg-[#f359d2]/8 blur-[170px]" />
-        <div className="absolute left-[-16rem] top-[58%] size-[40rem] rounded-full bg-[#1800ad]/8 blur-[170px]" />
-        <div className="absolute right-[-18rem] top-[78%] size-[44rem] rounded-full bg-[#7cff00]/5 blur-[180px]" />
+        <div className="absolute top-[10%] left-[-22rem] size-[46rem] rounded-full bg-[#6c14ce]/10 blur-[190px]" />
+        <div className="absolute top-[30%] right-[-18rem] size-[42rem] rounded-full bg-[#f359d2]/8 blur-[170px]" />
+        <div className="absolute top-[58%] left-[-16rem] size-[40rem] rounded-full bg-[#1800ad]/8 blur-[170px]" />
+        <div className="absolute top-[78%] right-[-18rem] size-[44rem] rounded-full bg-[#7cff00]/5 blur-[180px]" />
 
         {memberGlitter.map((particle, index) => {
           const style: GlitterStyle = {
@@ -103,9 +103,9 @@ export function MemberShell({
         })}
       </div>
 
-<Container className="relative z-10">
-  <div>{children}</div>
-</Container>
+      <Container className="relative z-10">
+        <div>{children}</div>
+      </Container>
     </section>
   );
 }

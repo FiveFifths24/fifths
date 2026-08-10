@@ -48,7 +48,7 @@ export function SiteFooter() {
     <footer className="relative overflow-hidden border-t border-[#f359d2]/40 bg-[#020205]">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -left-32 top-10 size-80 rounded-full bg-[#6c14ce]/10 blur-[130px]"
+        className="pointer-events-none absolute top-10 -left-32 size-80 rounded-full bg-[#6c14ce]/10 blur-[130px]"
       />
 
       <div
@@ -73,10 +73,9 @@ export function SiteFooter() {
           </Link>
 
           <p className="mt-7 max-w-md text-base leading-7 text-white/60">
-            Find people, places, and plans that match your energy, capacity,
-            and comfort level.
+            Find people, places, and plans that match your energy, capacity, and
+            comfort level.
           </p>
-
         </div>
 
         <div className="grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-4">
@@ -121,7 +120,6 @@ export function SiteFooter() {
       <div className="relative border-t border-[#f359d2]/40">
         <Container className="flex flex-col items-center justify-center gap-3 py-6 text-center text-xs text-white/40 sm:flex-row">
           <p>© {new Date().getFullYear()} Five Fifths. All Rights Reserved.</p>
-
         </Container>
       </div>
     </footer>

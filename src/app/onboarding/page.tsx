@@ -40,16 +40,12 @@ export default async function OnboardingPage() {
       .eq("active", true)
       .order("name"),
 
-    supabase
-      .from("skills")
-      .select("id, name")
-      .eq("active", true)
-      .order("name"),
+    supabase.from("skills").select("id, name").eq("active", true).order("name"),
   ]);
 
-if (profileResult.data?.onboarding_completed_at) {
-  redirect("/home");
-}
+  if (profileResult.data?.onboarding_completed_at) {
+    redirect("/home");
+  }
 
   return (
     <section className="relative min-h-screen overflow-hidden bg-[#020205] py-14 sm:py-20">
@@ -65,12 +61,12 @@ if (profileResult.data?.onboarding_completed_at) {
 
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -left-40 top-20 size-96 rounded-full bg-[#6c14ce]/15 blur-[150px]"
+        className="pointer-events-none absolute top-20 -left-40 size-96 rounded-full bg-[#6c14ce]/15 blur-[150px]"
       />
 
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -right-36 top-1/3 size-96 rounded-full bg-[#f359d2]/10 blur-[160px]"
+        className="pointer-events-none absolute top-1/3 -right-36 size-96 rounded-full bg-[#f359d2]/10 blur-[160px]"
       />
 
       <Container className="relative">
@@ -89,7 +85,6 @@ if (profileResult.data?.onboarding_completed_at) {
               preferences that help SIGNAL recommend people, places, and plans
               that feel right for you.
             </p>
-
           </div>
 
           <div className="mt-12 rounded-[2rem] border border-white/10 bg-white/[0.035] p-6 shadow-2xl shadow-black/60 backdrop-blur-xl sm:p-9">
