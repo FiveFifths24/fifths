@@ -15,12 +15,12 @@ export default async function LoginPage({
   const parameters = await searchParams;
   return (
     <AuthShell
-      eyebrow="Welcome back"
-      title="Return to your space."
-      description="One account will connect your Pulse, communities, collaborations, campaigns, and verified participation."
+      eyebrow="Welcome Back"
+      title="Return To Your Space."
+      description="We've missed you! Log in to continue where you left off."
       footer={
         <>
-          New to FIFTHS?{" "}
+          New to SIGNAL?{" "}
           <Link
             className="font-bold text-white underline decoration-neutral-600 underline-offset-4"
             href="/signup"
@@ -37,15 +37,6 @@ export default async function LoginPage({
         </StatusMessage>
       ) : null}
       <LoginForm next={safeRedirectPath(parameters?.next, "/home")} />
-      <div className="mt-7 border-t border-neutral-800 pt-6">
-        <button
-          className="min-h-12 w-full cursor-not-allowed rounded-full border border-neutral-700 px-6 py-3 text-sm font-bold text-neutral-400"
-          disabled
-          type="button"
-        >
-          Social login is intentionally deferred
-        </button>
-      </div>
     </AuthShell>
   );
 }

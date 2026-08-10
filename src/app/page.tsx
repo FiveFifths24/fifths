@@ -67,7 +67,7 @@ const pseudoRandom = (seed: number) => {
 const glitterColors = ["#ffffff", "#8b5cf6", "#f359d2", "#7cff00"];
 
 const homepageGlitter = Array.from({ length: 150 }, (_, index) => ({
-    left: `${(pseudoRandom(index * 2 + 1) * 100).toFixed(2)}%`,
+  left: `${(pseudoRandom(index * 2 + 1) * 100).toFixed(2)}%`,
   top: `${(pseudoRandom(index * 3 + 2) * 100).toFixed(2)}%`,
   size: 1 + pseudoRandom(index * 5 + 3) * 1.8,
   color: glitterColors[index % glitterColors.length],
@@ -119,10 +119,10 @@ export default function HomePage() {
         className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
       >
         {/* Soft atmospheric color carried through the full page */}
-        <div className="absolute left-[-22rem] top-[38%] hidden size-[46rem] rounded-full bg-[#6c14ce]/8 blur-[190px] sm:block" />
-        <div className="absolute right-[-18rem] top-[32%] size-[42rem] rounded-full bg-[#f359d2]/6 blur-[170px]" />
-        <div className="absolute left-[-16rem] top-[58%] size-[40rem] rounded-full bg-[#1800ad]/7 blur-[170px]" />
-        <div className="absolute right-[-18rem] top-[76%] size-[44rem] rounded-full bg-[#7cff00]/5 blur-[180px]" />
+        <div className="absolute top-[38%] left-[-22rem] hidden size-[46rem] rounded-full bg-[#6c14ce]/8 blur-[190px] sm:block" />
+        <div className="absolute top-[32%] right-[-18rem] size-[42rem] rounded-full bg-[#f359d2]/6 blur-[170px]" />
+        <div className="absolute top-[58%] left-[-16rem] size-[40rem] rounded-full bg-[#1800ad]/7 blur-[170px]" />
+        <div className="absolute top-[76%] right-[-18rem] size-[44rem] rounded-full bg-[#7cff00]/5 blur-[180px]" />
 
         {/* Floating glitter behind every homepage section */}
         {homepageGlitter.map((particle, index) => {
@@ -192,7 +192,8 @@ export default function HomePage() {
               </h1>
 
               <p className="mt-8 max-w-[40rem] text-base leading-7 text-white sm:text-lg">
-                Signal helps you find people, places, and plans that match your energy, capacity, and comfort level.
+                Signal helps you find people, places, and plans that match your
+                energy, capacity, and comfort level.
               </p>
 
               {/* Dedicated mobile signal divider */}
@@ -301,119 +302,131 @@ export default function HomePage() {
           </Container>
         </section>
 
-<section className="relative overflow-hidden py-24 sm:py-32">
-  <Container className="relative">
-    <div className="grid gap-5 lg:grid-cols-[1.65fr_0.85fr]">
-      {/* Main eHub feature */}
-      <article className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.035] p-7 shadow-[0_24px_80px_rgba(0,0,0,0.32)] backdrop-blur-xl sm:p-10 lg:p-12">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -right-28 -top-28 size-72 rounded-full bg-[#6c14ce]/15 blur-[110px]"
-        />
+        <section className="relative overflow-hidden py-24 sm:py-32">
+          <Container className="relative">
+            <div className="grid gap-5 lg:grid-cols-[1.65fr_0.85fr]">
+              {/* Main eHub feature */}
+              <article className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.035] p-7 shadow-[0_24px_80px_rgba(0,0,0,0.32)] backdrop-blur-xl sm:p-10 lg:p-12">
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -top-28 -right-28 size-72 rounded-full bg-[#6c14ce]/15 blur-[110px]"
+                />
 
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -bottom-32 left-1/4 size-72 rounded-full bg-[#f359d2]/10 blur-[120px]"
-        />
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -bottom-32 left-1/4 size-72 rounded-full bg-[#f359d2]/10 blur-[120px]"
+                />
 
-<div className="relative flex flex-col items-center text-center">
-            <div className="flex size-12 items-center justify-center rounded-2xl border border-[#f359d2]/25 bg-[#f359d2]/10 shadow-[0_0_30px_rgba(243,89,210,0.1)]">
-            <Building2
-              aria-hidden="true"
-              className="size-5 text-[#f359d2]"
-            />
-          </div>
+                <div className="relative flex flex-col items-center text-center">
+                  <div className="flex size-12 items-center justify-center rounded-2xl border border-[#f359d2]/25 bg-[#f359d2]/10 shadow-[0_0_30px_rgba(243,89,210,0.1)]">
+                    <Building2
+                      aria-hidden="true"
+                      className="size-5 text-[#f359d2]"
+                    />
+                  </div>
 
-          <p className="mt-10 text-[0.68rem] font-bold tracking-[0.2em] uppercase">
-            <span className="ecosystem-gradient-text">
-              Five Fifths Esports & Innovation Hub
-            </span>
-          </p>
+                  <p className="mt-10 text-[0.68rem] font-bold tracking-[0.2em] uppercase">
+                    <span className="ecosystem-gradient-text">
+                      Five Fifths Esports & Innovation Hub
+                    </span>
+                  </p>
 
-          <h2 className="display-type mt-5 max-w-[48rem] text-[clamp(2.8rem,5vw,5.5rem)] leading-[0.98] tracking-[-0.045em] text-balance text-[#f2f0ed]">
-            A Physical Home For Our Digital Communities
-          </h2>
+                  <h2 className="display-type mt-5 max-w-[48rem] text-[clamp(2.8rem,5vw,5.5rem)] leading-[0.98] tracking-[-0.045em] text-balance text-[#f2f0ed]">
+                    A Physical Home For Our Digital Communities
+                  </h2>
 
-          <p className="mt-7 max-w-[42rem] text-base leading-7 text-white/55 sm:text-lg sm:leading-8">
-            Many gamers, cosp[layers, creators, professionals, and community members lack a wlecoming place to gather outside of home and work. This eHub is designed for different energies, capacities, and nervous systems, giving members flexible ways to connect, create, play, focus, and recharge without the need to conform to one standard.
-          </p>
+                  <p className="mt-7 max-w-[42rem] text-base leading-7 text-white/55 sm:text-lg sm:leading-8">
+                    Many gamers, cosp[layers, creators, professionals, and
+                    community members lack a wlecoming place to gather outside
+                    of home and work. This eHub is designed for different
+                    energies, capacities, and nervous systems, giving members
+                    flexible ways to connect, create, play, focus, and recharge
+                    without the need to conform to one standard.
+                  </p>
 
-          <div className="mt-10 flex flex-wrap gap-2.5">
-<div className="mt-1">
-  <a
-    href="https://fivefifthsnp.com/ehub"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="inline-flex min-h-12 items-center justify-center rounded-full border border-[#9d46ec]/40 bg-[linear-gradient(90deg,#1800ad_0%,#6c14ce_42%,#f359d2_100%)] px-7 text-[0.7rem] font-bold tracking-[0.16em] text-white uppercase shadow-[0_0_28px_rgba(108,20,206,0.22)] transition duration-300 hover:scale-[1.02] hover:brightness-110"
-  >
-    Explore the eHub
-  </a>
-</div>
-          </div>
-        </div>
-      </article>
+                  <div className="mt-10 flex flex-wrap gap-2.5">
+                    <div className="mt-1">
+                      <a
+                        href="https://fivefifthsnp.com/ehub"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex min-h-12 items-center justify-center rounded-full border border-[#9d46ec]/40 bg-[linear-gradient(90deg,#1800ad_0%,#6c14ce_42%,#f359d2_100%)] px-7 text-[0.7rem] font-bold tracking-[0.16em] text-white uppercase shadow-[0_0_28px_rgba(108,20,206,0.22)] transition duration-300 hover:scale-[1.02] hover:brightness-110"
+                      >
+                        Explore the eHub
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </article>
 
-      {/* Supporting principles */}
-      <div className="grid gap-5">
-        <article className="group relative overflow-hidden rounded-[2rem] border border-[#6c14ce]/20 bg-[#6c14ce]/[0.06] p-7 backdrop-blur-xl sm:p-8">
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -right-16 -top-16 size-40 rounded-full bg-[#6c14ce]/15 blur-[70px]"
-          />
+              {/* Supporting principles */}
+              <div className="grid gap-5">
+                <article className="group relative overflow-hidden rounded-[2rem] border border-[#6c14ce]/20 bg-[#6c14ce]/[0.06] p-7 backdrop-blur-xl sm:p-8">
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute -top-16 -right-16 size-40 rounded-full bg-[#6c14ce]/15 blur-[70px]"
+                  />
 
-<div className="relative flex flex-col items-center text-center">
-              <div className="flex size-11 items-center justify-center rounded-2xl border border-[#9d46ec]/25 bg-[#6c14ce]/10">
-              <Accessibility
-                aria-hidden="true"
-                className="size-5 text-[#ca9aff]"
-              />
+                  <div className="relative flex flex-col items-center text-center">
+                    <div className="flex size-11 items-center justify-center rounded-2xl border border-[#9d46ec]/25 bg-[#6c14ce]/10">
+                      <Accessibility
+                        aria-hidden="true"
+                        className="size-5 text-[#ca9aff]"
+                      />
+                    </div>
+
+                    <p className="mt-8 text-[0.62rem] font-bold tracking-[0.18em] text-[#ca9aff] uppercase">
+                      Learn. Create. Build.
+                    </p>
+
+                    <h3 className="mt-3 text-2xl font-black tracking-[-0.025em] text-white">
+                      Turning Access Into Opportunity
+                    </h3>
+
+                    <p className="mt-4 text-sm leading-6 text-white/55">
+                      Members will be able to take part in digital-skills
+                      training, content creation, gaming and technology
+                      workshops, entrepreneurship support, and hands-on learning
+                      designed to build confidence, creativity, and career-ready
+                      experience.
+                    </p>
+                  </div>
+                </article>
+
+                <article className="group relative overflow-hidden rounded-[2rem] border border-[#7cff00]/15 bg-[#7cff00]/[0.035] p-7 backdrop-blur-xl sm:p-8">
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute -right-14 -bottom-20 size-44 rounded-full bg-[#7cff00]/10 blur-[80px]"
+                  />
+
+                  <div className="relative flex flex-col items-center text-center">
+                    <div className="flex size-11 items-center justify-center rounded-2xl border border-[#7cff00]/20 bg-[#7cff00]/10">
+                      <ShieldCheck
+                        aria-hidden="true"
+                        className="size-5 text-[#b8ff76]"
+                      />
+                    </div>
+
+                    <p className="mt-8 text-[0.62rem] font-bold tracking-[0.18em] text-[#b8ff76] uppercase">
+                      Gather In Real Life
+                    </p>
+
+                    <h3 className="mt-3 text-2xl font-black tracking-[-0.025em] text-white">
+                      Earn Something You Can Carry Forward.
+                    </h3>
+
+                    <p className="mt-4 text-sm leading-6 text-white/55">
+                      The eHub will host tournaments, screenings, creator
+                      sessions, community meetups, launch events, workshops, and
+                      member-led experiences that bring people together around
+                      shared interests.
+                    </p>
+                  </div>
+                </article>
+              </div>
             </div>
-
-            <p className="mt-8 text-[0.62rem] font-bold tracking-[0.18em] text-[#ca9aff] uppercase">
-              Learn. Create. Build.
-            </p>
-
-            <h3 className="mt-3 text-2xl font-black tracking-[-0.025em] text-white">
-              Turning Access Into Opportunity
-            </h3>
-
-            <p className="mt-4 text-sm leading-6 text-white/55">
-              Members will be able to take part in digital-skills training, content creation, gaming and technology workshops, entrepreneurship support, and hands-on learning designed to build confidence, creativity, and career-ready experience.
-            </p>
-          </div>
-        </article>
-
-        <article className="group relative overflow-hidden rounded-[2rem] border border-[#7cff00]/15 bg-[#7cff00]/[0.035] p-7 backdrop-blur-xl sm:p-8">
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -bottom-20 -right-14 size-44 rounded-full bg-[#7cff00]/10 blur-[80px]"
-          />
-
-<div className="relative flex flex-col items-center text-center">
-              <div className="flex size-11 items-center justify-center rounded-2xl border border-[#7cff00]/20 bg-[#7cff00]/10">
-              <ShieldCheck
-                aria-hidden="true"
-                className="size-5 text-[#b8ff76]"
-              />
-            </div>
-
-            <p className="mt-8 text-[0.62rem] font-bold tracking-[0.18em] text-[#b8ff76] uppercase">
-              Gather In Real Life
-            </p>
-
-            <h3 className="mt-3 text-2xl font-black tracking-[-0.025em] text-white">
-              Earn Something You Can Carry Forward.
-            </h3>
-
-            <p className="mt-4 text-sm leading-6 text-white/55">
-              The eHub will host tournaments, screenings, creator sessions, community meetups, launch events, workshops, and member-led experiences that bring people together around shared interests.
-            </p>
-          </div>
-        </article>
-      </div>
-    </div>
-  </Container>
-</section>
+          </Container>
+        </section>
 
         <section className="py-20 text-white sm:py-28">
           <Container className="text-center">
@@ -426,8 +439,8 @@ export default function HomePage() {
             </h2>
 
             <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-neutral-300">
-              Explore how the ecosystem connects, then join the future beta
-              list when you’re ready.
+              Explore how the ecosystem connects, then join the future beta list
+              when you’re ready.
             </p>
 
             <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">

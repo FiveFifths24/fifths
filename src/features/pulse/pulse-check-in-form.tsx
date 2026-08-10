@@ -28,10 +28,12 @@ function ChoiceField({
   const descriptionId = `${name}-description`;
   return (
     <fieldset aria-describedby={descriptionId} aria-invalid={Boolean(error)}>
-      <legend className="text-lg font-bold text-white">{legend}</legend>
+      <legend className="w-full text-center text-lg font-bold text-white sm:text-left">
+        {legend}
+      </legend>
       <p
         className={cn(
-          "mt-1 text-sm leading-6 text-neutral-400",
+          "mt-1 text-center text-sm leading-6 text-neutral-400 sm:text-left",
           error && "text-red-300",
         )}
         id={descriptionId}
@@ -41,11 +43,11 @@ function ChoiceField({
       <div className={cn("mt-4 grid gap-3", columns)}>
         {choices.map((choice) => (
           <label
-            className="flex min-h-16 cursor-pointer items-start gap-3 rounded-2xl border border-neutral-700 bg-neutral-950 px-4 py-3 text-sm text-neutral-200 transition-colors hover:border-neutral-500 has-checked:border-red-600 has-checked:bg-red-950/30"
+            className="flex min-h-16 cursor-pointer items-start gap-3 rounded-2xl border border-[#6c14ce]/25 bg-black/30 px-4 py-3 text-sm text-white/70 transition-all hover:border-[#ca9aff]/50 hover:bg-[#6c14ce]/5 has-checked:border-[#f359d2]/70 has-checked:bg-[#6c14ce]/15 has-checked:shadow-[0_0_24px_rgba(108,20,206,0.12)]"
             key={choice.value}
           >
             <input
-              className="mt-0.5 size-5 shrink-0 accent-red-600"
+              className="mt-0.5 size-5 shrink-0 accent-[#f359d2]"
               name={name}
               required
               type="radio"
@@ -93,7 +95,7 @@ export function PulseCheckInForm({
         columns="sm:grid-cols-2 lg:grid-cols-3"
         error={firstFieldError(state, "modeId")}
         hint="Choose the direction that feels useful—not the mood you think you should have."
-        legend="What mode fits right now?"
+        legend="What Mode Fits Right Now?"
         name="modeId"
       />
 
@@ -108,7 +110,7 @@ export function PulseCheckInForm({
         columns="grid-cols-2 sm:grid-cols-5"
         error={firstFieldError(state, "energyLevel")}
         hint="A simple capacity signal from 1 to 5. This is not a health assessment."
-        legend="How much energy is available?"
+        legend="How Much Energy Is Available?"
         name="energyLevel"
       />
 
@@ -124,7 +126,7 @@ export function PulseCheckInForm({
         ]}
         error={firstFieldError(state, "stimulationLevel")}
         hint="Choose the sensory pace that feels manageable."
-        legend="Preferred stimulation"
+        legend="Preferred Stimulation"
         name="stimulationLevel"
       />
 
@@ -140,7 +142,7 @@ export function PulseCheckInForm({
         ]}
         error={firstFieldError(state, "socialIntensity")}
         hint="Set the amount of interaction you want—not a permanent preference."
-        legend="Social intensity"
+        legend="Social Intensity"
         name="socialIntensity"
       />
 
@@ -168,41 +170,50 @@ export function PulseCheckInForm({
           columns="grid-cols-2"
           error={firstFieldError(state, "availableMinutes")}
           hint="Recommendations will respect this time window."
-          legend="Time available"
+          legend="Time Available"
           name="availableMinutes"
         />
       </div>
 
       <div>
         <label
-          className="mb-2 block text-lg font-bold text-white"
+          className="mb-2 block text-center text-lg font-bold text-white sm:text-left"
           htmlFor="maximumTravelMiles"
         >
-          Optional travel range
+          Optional Travel Range
         </label>
         <p
           className={cn(
-            "mb-4 text-sm leading-6 text-neutral-400",
+            "mt-1 text-center text-sm leading-6 text-neutral-400 sm:text-left",
             travelError && "text-red-300",
           )}
           id="maximumTravelMiles-description"
         >
           {travelError ??
-            "Choose a broad limit. FIFTHS does not ask for your precise location."}
+            "Choose a broad limit. Signal does not ask for your precise location."}
         </p>
         <select
           aria-describedby="maximumTravelMiles-description"
           aria-invalid={Boolean(travelError)}
-          className="min-h-12 w-full rounded-xl border border-neutral-700 bg-neutral-950 px-4 py-3 text-base text-white hover:border-neutral-500 focus:border-red-500 focus:outline-none"
-          defaultValue=""
+          className="min-h-12 w-full rounded-2xl border border-[#6c14ce]/25 bg-black/30 px-4 py-3 text-base text-white transition-all hover:border-[#6c14ce]/50 hover:bg-[#6c14ce]/5 focus:border-[#6c14ce]/70 focus:ring-1 focus:ring-[#6c14ce]/30 focus:outline-none"
           id="maximumTravelMiles"
           name="maximumTravelMiles"
         >
-          <option value="">No distance preference</option>
-          <option value="5">Up to 5 miles</option>
-          <option value="15">Up to 15 miles</option>
-          <option value="30">Up to 30 miles</option>
-          <option value="50">Up to 50 miles</option>
+          <option className="bg-[#eadcff] text-[#241236]" value="">
+            No Distance Preference
+          </option>
+          <option className="bg-[#eadcff] text-[#241236]" value="5">
+            Up To 5 Miles
+          </option>
+          <option className="bg-[#eadcff] text-[#241236]" value="15">
+            Up To 15 Miles
+          </option>
+          <option className="bg-[#eadcff] text-[#241236]" value="30">
+            Up To 30 Miles
+          </option>
+          <option className="bg-[#eadcff] text-[#241236]" value="50">
+            Up To 50 Miles
+          </option>
         </select>
       </div>
 
@@ -210,27 +221,27 @@ export function PulseCheckInForm({
         aria-describedby="interestIds-description"
         aria-invalid={Boolean(interestError)}
       >
-        <legend className="text-lg font-bold text-white">
-          What sounds interesting today?
+        <legend className="w-full text-center text-lg font-bold text-white sm:text-left">
+          What Sounds Interesting Today?
         </legend>
         <p
           className={cn(
-            "mt-1 text-sm leading-6 text-neutral-400",
+            "mt-1 text-center text-sm leading-6 text-neutral-400 sm:text-left",
             interestError && "text-red-300",
           )}
           id="interestIds-description"
         >
           {interestError ??
-            "Optional. Choose up to five; your broader profile interests stay unchanged."}
+            "Choose up to five; your broader profile interests stay unchanged."}
         </p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {interests.map((interest) => (
             <label
-              className="flex min-h-12 cursor-pointer items-center gap-3 rounded-xl border border-neutral-700 bg-neutral-950 px-4 py-3 text-sm text-neutral-200 hover:border-neutral-500 has-checked:border-red-600 has-checked:bg-red-950/30"
+              className="flex min-h-12 cursor-pointer items-center gap-3 rounded-2xl border border-[#6c14ce]/25 bg-black/30 px-4 py-3 text-sm text-white/70 transition-all hover:border-[#ca9aff]/50 hover:bg-[#6c14ce]/5 has-checked:border-[#f359d2]/70 has-checked:bg-[#6c14ce]/15 has-checked:shadow-[0_0_24px_rgba(108,20,206,0.12)]"
               key={interest.id}
             >
               <input
-                className="size-5 accent-red-600"
+                className="size-5 accent-[#f359d2]"
                 name="interestIds"
                 type="checkbox"
                 value={interest.id}
@@ -241,10 +252,10 @@ export function PulseCheckInForm({
         </div>
       </fieldset>
 
-      <div className="rounded-2xl border border-neutral-800 bg-neutral-950 p-5">
-        <p className="text-sm leading-6 text-neutral-400">
+      <div className="rounded-[1.5rem] border border-[#6c14ce]/25 bg-[#6c14ce]/5 p-5">
+        <p className="text-sm leading-6 text-white/50">
           Your check-in is private, expires for matching after 24 hours, and
-          stays in your private history. FIFTHS does not use Pulse to diagnose
+          stays in your private history. Signal does not use Pulse to diagnose
           or assess health conditions.
         </p>
       </div>

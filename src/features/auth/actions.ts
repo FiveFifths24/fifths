@@ -80,10 +80,11 @@ export async function signupAction(
       },
     });
     if (error) {
+      console.error("Supabase signup error:", error);
+
       return {
         status: "error",
-        message:
-          "We could not create that account. Check the information and try again.",
+        message: error.message,
       };
     }
     signedInImmediately = Boolean(data.session);

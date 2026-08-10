@@ -33,7 +33,7 @@ export function LoginForm({ next }: { next?: string }) {
             Password
           </span>
           <Link
-            className="text-xs font-bold text-red-300 hover:text-red-200"
+            className="text-xs font-bold text-[#ca9aff] hover:text-[#f359d2]"
             href="/forgot-password"
           >
             Forgot password?
@@ -48,7 +48,12 @@ export function LoginForm({ next }: { next?: string }) {
           required
         />
       </div>
-      <SubmitButton pendingLabel="Logging in…">Log in</SubmitButton>
+      <SubmitButton
+        className="border-transparent bg-gradient-to-r from-[#6c14ce] via-[#a855f7] to-[#f359d2] shadow-lg shadow-[#6c14ce]/20 hover:brightness-110"
+        pendingLabel="Logging in…"
+      >
+        Log in
+      </SubmitButton>
     </form>
   );
 }
