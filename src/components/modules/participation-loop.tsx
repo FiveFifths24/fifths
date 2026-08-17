@@ -9,35 +9,39 @@ import {
 const steps = [
   {
     title: "Check your Pulse",
-    description: "Name your capacity.",
+    description: "Name your energy, capacity, and comfort level.",
     icon: Activity,
     accent:
       "border-[#665cff] text-[#8f84ff] shadow-[0_0_24px_rgba(102,92,255,0.28)]",
   },
   {
-    title: "Get recommendations",
-    description: "See what fits.",
+    title: "See What Fits",
+    description:
+      "Get recommendations for people, places, circles and plans that match where you are.",
     icon: Compass,
     accent:
       "border-[#9d46ec] text-[#bd7cff] shadow-[0_0_24px_rgba(157,70,236,0.28)]",
   },
   {
-    title: "Join an experience",
-    description: "Choose your room.",
+    title: "Choose Your Way In",
+    description:
+      "Join an event, conversation, circle, or experience that feels right for you.",
     icon: Sparkles,
     accent:
       "border-[#f359d2] text-[#ff79dc] shadow-[0_0_24px_rgba(243,89,210,0.28)]",
   },
   {
-    title: "Contribute",
-    description: "Make a difference.",
+    title: "Take Part",
+    description:
+      "Play, connect, create, support, learn, or contribute in the way that works for your capacity.",
     icon: HandHeart,
     accent:
       "border-[#ff7a8a] text-[#ff9aa6] shadow-[0_0_24px_rgba(255,122,138,0.25)]",
   },
   {
-    title: "Build Passport",
-    description: "Keep the record.",
+    title: "Keep The Record",
+    description:
+      "Keep a personal record, unlock badges, and earn rewards through your participation and contributions.",
     icon: BadgeCheck,
     accent:
       "border-[#7cff00] text-[#a8ff55] shadow-[0_0_24px_rgba(124,255,0,0.25)]",
@@ -167,7 +171,7 @@ export function ParticipationLoop() {
       </ol>
 
       <div className="mt-10 flex justify-center lg:mt-14">
-        <p className="rounded-full border border-[#6c14ce]/35 bg-black/40 px-5 py-2.5 text-center text-[0.65rem] font-bold tracking-[0.18em] text-white/75 uppercase backdrop-blur-sm">
+        <p className="rounded-full border border-[#992bff]/35 bg-black/40 px-5 py-2.5 text-center text-[0.65rem] font-bold tracking-[0.18em] text-white/75 uppercase backdrop-blur-sm">
           Show up in the way that fits today.
         </p>
       </div>

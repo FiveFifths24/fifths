@@ -11,7 +11,6 @@ import { Container } from "@/components/ui/container";
 import { cn } from "@/lib/cn";
 
 const navigation = [
-  { href: "/ecosystem", label: "Ecosystem" },
   { href: "/about", label: "About" },
   { href: "/community-guidelines", label: "Community" },
 ];

@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
-import { BriefcaseBusiness, ShieldAlert } from "lucide-react";
+import {
+  ArrowLeft,
+  FilePenLine,
+  ShieldCheck,
+} from "lucide-react";
+
 import { AccountUnavailable } from "@/components/account/account-unavailable";
 import { ButtonLink } from "@/components/ui/button-link";
 import { PreviewState } from "@/components/ui/preview-state";
@@ -7,21 +12,30 @@ import { StatusMessage } from "@/components/ui/status-message";
 import { CreateOpportunityForm } from "@/features/creator-commons/create-opportunity-form";
 import { OpportunityCard } from "@/features/creator-commons/opportunity-card";
 import { assembleOpportunityCards } from "@/features/creator-commons/opportunity-data";
-import type { CreatorOpportunity } from "@/types/database";
 import { createClient } from "@/lib/supabase/server";
+import type { CreatorOpportunity } from "@/types/database";
 
-export const metadata: Metadata = { title: "Manage Creator Commons" };
+export const metadata: Metadata = {
+  title: "Manage Creator Commons",
+};
+
 export const dynamic = "force-dynamic";
 
 export default async function ManageCreatorCommonsPage() {
   let supabase;
+
   try {
     supabase = await createClient();
   } catch {
     return <AccountUnavailable />;
   }
-  const { data: userData } = await supabase.auth.getUser();
-  if (!userData.user) return <AccountUnavailable />;
+
+  const { data: userData } =
+    await supabase.auth.getUser();
+
+  if (!userData.user) {
+    return <AccountUnavailable />;
+  }
 
   const [
     roleResult,
@@ -30,180 +44,368 @@ export default async function ManageCreatorCommonsPage() {
     skillResult,
     interestResult,
   ] = await Promise.all([
-    supabase.from("user_roles").select("role"),
+    supabase
+      .from("user_roles")
+      .select("role"),
+
     supabase
       .from("circle_members")
       .select("circle_id, role, status")
       .eq("user_id", userData.user.id)
       .eq("status", "active")
       .in("role", ["owner", "host"]),
+
     supabase
       .from("modes")
       .select("id, name")
       .eq("active", true)
       .order("sort_order"),
-    supabase.from("skills").select("id, name").eq("active", true).order("name"),
+
+    supabase
+      .from("skills")
+      .select("id, name")
+      .eq("active", true)
+      .order("name"),
+
     supabase
       .from("interests")
       .select("id, name")
       .eq("active", true)
       .order("name"),
   ]);
-  const roles = (roleResult.data ?? []).map((item) => item.role);
-  const isAdmin = roles.includes("platform_admin");
-  const isCreator = roles.includes("creator") || isAdmin;
-  const circleIds = (membershipResult.data ?? []).map((item) => item.circle_id);
-  const circleResult = circleIds.length
-    ? await supabase
-        .from("circles")
-        .select("id, name")
-        .in("id", circleIds)
-        .neq("status", "archived")
-        .order("name")
-    : { data: [], error: null };
-  const circles = circleResult.data ?? [];
-  const authorized = isCreator || circles.length > 0;
 
-  let managed: CreatorOpportunity[] = [];
+  const roles =
+    (roleResult.data ?? []).map(
+      (item) => item.role,
+    );
+
+  const isAdmin =
+    roles.includes("platform_admin");
+
+  const isCreator =
+    roles.includes("creator") ||
+    isAdmin;
+
+  const circleIds =
+    (membershipResult.data ?? []).map(
+      (item) => item.circle_id,
+    );
+
+  const circleResult =
+    circleIds.length
+      ? await supabase
+          .from("circles")
+          .select("id, name")
+          .in("id", circleIds)
+          .neq("status", "archived")
+          .order("name")
+      : {
+          data: [],
+          error: null,
+        };
+
+  const circles =
+    circleResult.data ?? [];
+
+  const authorized =
+    isCreator ||
+    circles.length > 0;
+
+  let managed: CreatorOpportunity[] =
+    [];
+
   if (authorized) {
     if (isAdmin) {
-      const result = await supabase
-        .from("creator_opportunities")
-        .select("*")
-        .order("updated_at", { ascending: false })
-        .limit(100);
-      managed = result.data ?? [];
-    } else {
-      const [ownedResult, circleOpportunityResult] = await Promise.all([
-        supabase
-          .from("creator_opportunities")
+      const result =
+        await supabase
+          .from(
+            "creator_opportunities",
+          )
           .select("*")
-          .eq("created_by", userData.user.id)
-          .order("updated_at", { ascending: false }),
+          .order("updated_at", {
+            ascending: false,
+          })
+          .limit(100);
+
+      managed =
+        result.data ?? [];
+    } else {
+      const [
+        ownedResult,
+        circleOpportunityResult,
+      ] = await Promise.all([
+        supabase
+          .from(
+            "creator_opportunities",
+          )
+          .select("*")
+          .eq(
+            "created_by",
+            userData.user.id,
+          )
+          .order("updated_at", {
+            ascending: false,
+          }),
+
         circleIds.length
           ? supabase
-              .from("creator_opportunities")
+              .from(
+                "creator_opportunities",
+              )
               .select("*")
-              .in("circle_id", circleIds)
-              .order("updated_at", { ascending: false })
-          : Promise.resolve({ data: [], error: null }),
+              .in(
+                "circle_id",
+                circleIds,
+              )
+              .order(
+                "updated_at",
+                {
+                  ascending: false,
+                },
+              )
+          : Promise.resolve({
+              data: [],
+              error: null,
+            }),
       ]);
+
       managed = [
         ...new Map(
           [
-            ...(ownedResult.data ?? []),
-            ...(circleOpportunityResult.data ?? []),
-          ].map((item) => [item.id, item]),
+            ...(ownedResult.data ??
+              []),
+            ...(circleOpportunityResult.data ??
+              []),
+          ].map((item) => [
+            item.id,
+            item,
+          ]),
         ).values(),
       ];
     }
   }
 
-  const ids = managed.map((item) => item.id);
-  const [skillLinks, interestLinks] = await Promise.all([
+  const ids =
+    managed.map(
+      (item) => item.id,
+    );
+
+  const [
+    skillLinks,
+    interestLinks,
+  ] = await Promise.all([
     ids.length
       ? supabase
-          .from("opportunity_skills")
-          .select("opportunity_id, skill_id")
-          .in("opportunity_id", ids)
-      : Promise.resolve({ data: [], error: null }),
+          .from(
+            "opportunity_skills",
+          )
+          .select(
+            "opportunity_id, skill_id",
+          )
+          .in(
+            "opportunity_id",
+            ids,
+          )
+      : Promise.resolve({
+          data: [],
+          error: null,
+        }),
+
     ids.length
       ? supabase
-          .from("opportunity_interests")
-          .select("opportunity_id, interest_id")
-          .in("opportunity_id", ids)
-      : Promise.resolve({ data: [], error: null }),
+          .from(
+            "opportunity_interests",
+          )
+          .select(
+            "opportunity_id, interest_id",
+          )
+          .in(
+            "opportunity_id",
+            ids,
+          )
+      : Promise.resolve({
+          data: [],
+          error: null,
+        }),
   ]);
-  const cards = assembleOpportunityCards(
-    managed,
-    modeResult.data ?? [],
-    skillResult.data ?? [],
-    interestResult.data ?? [],
-    skillLinks.data ?? [],
-    interestLinks.data ?? [],
-  );
+
+  const cards =
+    assembleOpportunityCards(
+      managed,
+      modeResult.data ?? [],
+      skillResult.data ?? [],
+      interestResult.data ?? [],
+      skillLinks.data ?? [],
+      interestLinks.data ?? [],
+    );
 
   return (
     <div>
-      <ButtonLink href="/home/commons" variant="quiet">
-        ← Back to Creator Commons
-      </ButtonLink>
-      <div className="mt-7 flex items-center gap-3">
-        <BriefcaseBusiness
+      {/* =====================================================
+          BACK LINK
+      ====================================================== */}
+      <ButtonLink
+        className="text-white/60 hover:text-white"
+        href="/home/commons"
+        variant="quiet"
+      >
+        <ArrowLeft
           aria-hidden="true"
-          className="size-6 text-amber-300"
+          className="size-4"
         />
-        <p className="text-xs font-bold tracking-[0.2em] text-amber-300 uppercase">
-          Creator workspace
+        Back to Creator Commons
+      </ButtonLink>
+
+      {/* =====================================================
+          PAGE INTRO
+      ====================================================== */}
+      <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_0.7fr] lg:items-end lg:gap-16">
+        <div className="max-w-4xl">
+          <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-white">
+            <FilePenLine
+              aria-hidden="true"
+              className="size-4"
+            />
+            Creator Workspace
+          </p>
+
+          <h1 className="display-type mt-4 text-5xl leading-[0.95] text-white sm:text-7xl">
+            Turn An Idea Into An Opportunity.
+          </h1>
+        </div>
+
+        <p className="max-w-xl text-base leading-8 text-white/55 sm:text-lg">
+          Build a clear opportunity, define who and what you need, save it as
+          a private draft, and publish it when you&apos;re ready for people to
+          respond.
         </p>
       </div>
-      <h1 className="display-type mt-4 text-5xl text-white sm:text-7xl">
-        Create clear opportunities.
-      </h1>
-      <p className="mt-5 max-w-3xl text-lg leading-8 text-neutral-300">
-        Authorized creators and scoped Circle hosts can prepare private drafts,
-        publish them intentionally, review private responses, select
-        participants, and confirm completion.
-      </p>
 
+      {/* =====================================================
+          AUTHORIZATION
+      ====================================================== */}
       {!authorized ? (
-        <StatusMessage className="mt-8" tone="error">
+        <StatusMessage
+          className="mt-10"
+          tone="error"
+        >
           <span>
-            <strong>Creator authority required.</strong> A founder-assigned
-            creator or platform-admin role can create independent opportunities.
-            Active Circle owners and hosts can create only for their Circle.
+            <strong>
+              Creator authority required.
+            </strong>{" "}
+            A creator or platform administrator can create independent
+            opportunities. Active Circle owners and hosts can create
+            opportunities for the Circles they manage.
           </span>
         </StatusMessage>
-      ) : modeResult.error || skillResult.error || interestResult.error ? (
-        <StatusMessage className="mt-8" tone="error">
-          Creator taxonomies could not load. Confirm the ordered migrations.
+      ) : modeResult.error ||
+        skillResult.error ||
+        interestResult.error ? (
+        <StatusMessage
+          className="mt-10"
+          tone="error"
+        >
+          Creator options could not load. Confirm that the required migrations
+          have been applied.
         </StatusMessage>
       ) : (
+        /* =================================================
+            CREATE OPPORTUNITY
+        ================================================== */
         <section
-          className="mt-10 rounded-[2rem] border border-amber-950/80 bg-neutral-900 p-6 sm:p-8"
           aria-labelledby="create-opportunity-heading"
+          className="relative mt-10 overflow-hidden rounded-[2rem] border border-white/15 bg-[linear-gradient(145deg,rgba(255,255,255,0.055),rgba(255,255,255,0.015))] p-6 sm:p-8 lg:p-10"
         >
-          <h2
-            className="text-3xl font-bold text-white"
-            id="create-opportunity-heading"
-          >
-            Create a private draft
-          </h2>
-          <div className="mt-7">
-            <CreateOpportunityForm
-              circles={circles}
-              interests={interestResult.data ?? []}
-              modes={modeResult.data ?? []}
-              skills={skillResult.data ?? []}
-            />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -right-24 -top-24 size-72 rounded-full bg-white/[0.04] blur-[100px]"
+          />
+
+          <div className="relative z-10">
+            <p className="font-mono text-[0.6rem] font-bold uppercase tracking-[0.2em] text-white/45">
+              Start With A Blank Page
+            </p>
+
+            <h2
+              className="display-type mt-3 text-3xl text-white sm:text-4xl"
+              id="create-opportunity-heading"
+            >
+              Create a private draft.
+            </h2>
+
+            <p className="mt-3 max-w-2xl text-sm leading-7 text-white/50 sm:text-base">
+              Nothing goes live automatically. Build the opportunity first,
+              review the details, then publish when it is ready for the
+              community.
+            </p>
+
+            <div className="mt-8">
+              <CreateOpportunityForm
+                circles={circles}
+                interests={
+                  interestResult.data ??
+                  []
+                }
+                modes={
+                  modeResult.data ??
+                  []
+                }
+                skills={
+                  skillResult.data ??
+                  []
+                }
+              />
+            </div>
           </div>
         </section>
       )}
 
+      {/* =====================================================
+          MANAGED OPPORTUNITIES
+      ====================================================== */}
       <section
-        className="mt-10"
         aria-labelledby="managed-opportunities-heading"
+        className="mt-12 border-t border-white/10 pt-10"
       >
-        <div className="flex items-center gap-3">
-          <ShieldAlert aria-hidden="true" className="size-5 text-amber-300" />
-          <h2
-            className="text-2xl font-bold text-white"
-            id="managed-opportunities-heading"
-          >
-            Managed opportunities
-          </h2>
+        <div className="flex items-start gap-4">
+          <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-white/15 bg-white/[0.035]">
+            <ShieldCheck
+              aria-hidden="true"
+              className="size-5 text-white"
+            />
+          </div>
+
+          <div>
+            <h2
+              className="text-2xl font-bold text-white"
+              id="managed-opportunities-heading"
+            >
+              Your Opportunities
+            </h2>
+
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-white/45">
+              Drafts and published opportunities you are authorized to manage
+              will appear here.
+            </p>
+          </div>
         </div>
+
         {cards.length ? (
-          <div className="mt-6 grid gap-5 lg:grid-cols-2">
-            {cards.map((card) => (
-              <OpportunityCard item={card} key={card.id} />
-            ))}
+          <div className="mt-7 grid gap-5 lg:grid-cols-2">
+            {cards.map(
+              (card) => (
+                <OpportunityCard
+                  item={card}
+                  key={card.id}
+                />
+              ),
+            )}
           </div>
         ) : (
-          <div className="mt-6">
-            <PreviewState title="No managed opportunities">
-              An authorized creator can create a draft above. Nothing is
-              published automatically.
+          <div className="mt-7">
+            <PreviewState title="Nothing Here Yet">
+              Once you create an opportunity, your drafts and published work
+              will appear here for you to manage.
             </PreviewState>
           </div>
         )}
