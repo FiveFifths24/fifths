@@ -135,12 +135,10 @@ export function EcosystemCarousel() {
     <div className="mx-auto w-full max-w-[88rem] px-5 sm:px-8 lg:px-10">
       {/* Top controls */}
       <div className="mb-6 flex items-center justify-between">
-        <div className="font-mono text-[0.62rem] font-bold tracking-[0.22em] text-white/35 uppercase">
-          <span style={{ color: activeModule.color }}>
-            {activeModule.number}
-          </span>
+        <div className="font-mono text-[0.62rem] font-bold tracking-[0.22em] text-white/60 uppercase">
+          <span className="text-white">{activeModule.number}</span>
 
-          <span className="mx-2 text-white/15">/</span>
+          <span className="mx-2 text-white/60">/</span>
 
           <span>06</span>
         </div>
@@ -292,6 +290,8 @@ export function EcosystemCarousel() {
 
           return (
             <button
+              aria-label={`Show ${module.name}`}
+              aria-pressed={isActive}
               className="flex min-h-16 items-center justify-center gap-2 rounded-2xl border bg-black/30 px-3 transition"
               key={module.slug}
               onClick={() => setActiveIndex(index)}
@@ -302,11 +302,11 @@ export function EcosystemCarousel() {
                 backgroundColor: isActive
                   ? `${module.color}0d`
                   : "rgba(0,0,0,0.25)",
-                color: isActive ? module.color : "rgba(255,255,255,0.52)",
+                color: isActive ? "#ffffff" : "rgba(255,255,255,0.72)",
               }}
               type="button"
             >
-              <ModuleIcon className="size-4 shrink-0" />
+              <ModuleIcon aria-hidden="true" className="size-4 shrink-0" />
 
               <span className="hidden font-mono text-[0.52rem] font-bold tracking-[0.12em] uppercase md:block">
                 {module.name}

@@ -106,7 +106,7 @@ export function PulseHero() {
                 key={feature.href}
                 style={{
                   borderColor: `${feature.color}80`,
-                  color: feature.color,
+                  color: "#ffffff",
                 }}
               >
                 {feature.label}
