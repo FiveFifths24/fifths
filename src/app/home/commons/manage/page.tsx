@@ -1,9 +1,5 @@
 import type { Metadata } from "next";
-import {
-  ArrowLeft,
-  FilePenLine,
-  ShieldCheck,
-} from "lucide-react";
+import { ArrowLeft, FilePenLine, ShieldCheck } from "lucide-react";
 
 import { AccountUnavailable } from "@/components/account/account-unavailable";
 import { ButtonLink } from "@/components/ui/button-link";
@@ -30,8 +26,7 @@ export default async function ManageCreatorCommonsPage() {
     return <AccountUnavailable />;
   }
 
-  const { data: userData } =
-    await supabase.auth.getUser();
+  const { data: userData } = await supabase.auth.getUser();
 
   if (!userData.user) {
     return <AccountUnavailable />;
@@ -44,9 +39,7 @@ export default async function ManageCreatorCommonsPage() {
     skillResult,
     interestResult,
   ] = await Promise.all([
-    supabase
-      .from("user_roles")
-      .select("role"),
+    supabase.from("user_roles").select("role"),
 
     supabase
       .from("circle_members")
@@ -61,11 +54,7 @@ export default async function ManageCreatorCommonsPage() {
       .eq("active", true)
       .order("sort_order"),
 
-    supabase
-      .from("skills")
-      .select("id, name")
-      .eq("active", true)
-      .order("name"),
+    supabase.from("skills").select("id, name").eq("active", true).order("name"),
 
     supabase
       .from("interests")
@@ -74,95 +63,61 @@ export default async function ManageCreatorCommonsPage() {
       .order("name"),
   ]);
 
-  const roles =
-    (roleResult.data ?? []).map(
-      (item) => item.role,
-    );
+  const roles = (roleResult.data ?? []).map((item) => item.role);
 
-  const isAdmin =
-    roles.includes("platform_admin");
+  const isAdmin = roles.includes("platform_admin");
 
-  const isCreator =
-    roles.includes("creator") ||
-    isAdmin;
+  const isCreator = roles.includes("creator") || isAdmin;
 
-  const circleIds =
-    (membershipResult.data ?? []).map(
-      (item) => item.circle_id,
-    );
+  const circleIds = (membershipResult.data ?? []).map((item) => item.circle_id);
 
-  const circleResult =
-    circleIds.length
-      ? await supabase
-          .from("circles")
-          .select("id, name")
-          .in("id", circleIds)
-          .neq("status", "archived")
-          .order("name")
-      : {
-          data: [],
-          error: null,
-        };
+  const circleResult = circleIds.length
+    ? await supabase
+        .from("circles")
+        .select("id, name")
+        .in("id", circleIds)
+        .neq("status", "archived")
+        .order("name")
+    : {
+        data: [],
+        error: null,
+      };
 
-  const circles =
-    circleResult.data ?? [];
+  const circles = circleResult.data ?? [];
 
-  const authorized =
-    isCreator ||
-    circles.length > 0;
+  const authorized = isCreator || circles.length > 0;
 
-  let managed: CreatorOpportunity[] =
-    [];
+  let managed: CreatorOpportunity[] = [];
 
   if (authorized) {
     if (isAdmin) {
-      const result =
-        await supabase
-          .from(
-            "creator_opportunities",
-          )
-          .select("*")
-          .order("updated_at", {
-            ascending: false,
-          })
-          .limit(100);
+      const result = await supabase
+        .from("creator_opportunities")
+        .select("*")
+        .order("updated_at", {
+          ascending: false,
+        })
+        .limit(100);
 
-      managed =
-        result.data ?? [];
+      managed = result.data ?? [];
     } else {
-      const [
-        ownedResult,
-        circleOpportunityResult,
-      ] = await Promise.all([
+      const [ownedResult, circleOpportunityResult] = await Promise.all([
         supabase
-          .from(
-            "creator_opportunities",
-          )
+          .from("creator_opportunities")
           .select("*")
-          .eq(
-            "created_by",
-            userData.user.id,
-          )
+          .eq("created_by", userData.user.id)
           .order("updated_at", {
             ascending: false,
           }),
 
         circleIds.length
           ? supabase
-              .from(
-                "creator_opportunities",
-              )
+              .from("creator_opportunities")
               .select("*")
-              .in(
-                "circle_id",
-                circleIds,
-              )
-              .order(
-                "updated_at",
-                {
-                  ascending: false,
-                },
-              )
+              .in("circle_id", circleIds)
+              .order("updated_at", {
+                ascending: false,
+              })
           : Promise.resolve({
               data: [],
               error: null,
@@ -172,40 +127,22 @@ export default async function ManageCreatorCommonsPage() {
       managed = [
         ...new Map(
           [
-            ...(ownedResult.data ??
-              []),
-            ...(circleOpportunityResult.data ??
-              []),
-          ].map((item) => [
-            item.id,
-            item,
-          ]),
+            ...(ownedResult.data ?? []),
+            ...(circleOpportunityResult.data ?? []),
+          ].map((item) => [item.id, item]),
         ).values(),
       ];
     }
   }
 
-  const ids =
-    managed.map(
-      (item) => item.id,
-    );
+  const ids = managed.map((item) => item.id);
 
-  const [
-    skillLinks,
-    interestLinks,
-  ] = await Promise.all([
+  const [skillLinks, interestLinks] = await Promise.all([
     ids.length
       ? supabase
-          .from(
-            "opportunity_skills",
-          )
-          .select(
-            "opportunity_id, skill_id",
-          )
-          .in(
-            "opportunity_id",
-            ids,
-          )
+          .from("opportunity_skills")
+          .select("opportunity_id, skill_id")
+          .in("opportunity_id", ids)
       : Promise.resolve({
           data: [],
           error: null,
@@ -213,31 +150,23 @@ export default async function ManageCreatorCommonsPage() {
 
     ids.length
       ? supabase
-          .from(
-            "opportunity_interests",
-          )
-          .select(
-            "opportunity_id, interest_id",
-          )
-          .in(
-            "opportunity_id",
-            ids,
-          )
+          .from("opportunity_interests")
+          .select("opportunity_id, interest_id")
+          .in("opportunity_id", ids)
       : Promise.resolve({
           data: [],
           error: null,
         }),
   ]);
 
-  const cards =
-    assembleOpportunityCards(
-      managed,
-      modeResult.data ?? [],
-      skillResult.data ?? [],
-      interestResult.data ?? [],
-      skillLinks.data ?? [],
-      interestLinks.data ?? [],
-    );
+  const cards = assembleOpportunityCards(
+    managed,
+    modeResult.data ?? [],
+    skillResult.data ?? [],
+    interestResult.data ?? [],
+    skillLinks.data ?? [],
+    interestLinks.data ?? [],
+  );
 
   return (
     <div>
@@ -249,10 +178,7 @@ export default async function ManageCreatorCommonsPage() {
         href="/home/commons"
         variant="quiet"
       >
-        <ArrowLeft
-          aria-hidden="true"
-          className="size-4"
-        />
+        <ArrowLeft aria-hidden="true" className="size-4" />
         Back to Creator Commons
       </ButtonLink>
 
@@ -261,11 +187,8 @@ export default async function ManageCreatorCommonsPage() {
       ====================================================== */}
       <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_0.7fr] lg:items-end lg:gap-16">
         <div className="max-w-4xl">
-          <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-white">
-            <FilePenLine
-              aria-hidden="true"
-              className="size-4"
-            />
+          <p className="flex items-center gap-2 text-xs font-bold tracking-[0.2em] text-white uppercase">
+            <FilePenLine aria-hidden="true" className="size-4" />
             Creator Workspace
           </p>
 
@@ -275,8 +198,8 @@ export default async function ManageCreatorCommonsPage() {
         </div>
 
         <p className="max-w-xl text-base leading-8 text-white/55 sm:text-lg">
-          Build a clear opportunity, define who and what you need, save it as
-          a private draft, and publish it when you&apos;re ready for people to
+          Build a clear opportunity, define who and what you need, save it as a
+          private draft, and publish it when you&apos;re ready for people to
           respond.
         </p>
       </div>
@@ -285,26 +208,16 @@ export default async function ManageCreatorCommonsPage() {
           AUTHORIZATION
       ====================================================== */}
       {!authorized ? (
-        <StatusMessage
-          className="mt-10"
-          tone="error"
-        >
+        <StatusMessage className="mt-10" tone="error">
           <span>
-            <strong>
-              Creator authority required.
-            </strong>{" "}
-            A creator or platform administrator can create independent
-            opportunities. Active Circle owners and hosts can create
-            opportunities for the Circles they manage.
+            <strong>Creator authority required.</strong> A creator or platform
+            administrator can create independent opportunities. Active Circle
+            owners and hosts can create opportunities for the Circles they
+            manage.
           </span>
         </StatusMessage>
-      ) : modeResult.error ||
-        skillResult.error ||
-        interestResult.error ? (
-        <StatusMessage
-          className="mt-10"
-          tone="error"
-        >
+      ) : modeResult.error || skillResult.error || interestResult.error ? (
+        <StatusMessage className="mt-10" tone="error">
           Creator options could not load. Confirm that the required migrations
           have been applied.
         </StatusMessage>
@@ -318,11 +231,11 @@ export default async function ManageCreatorCommonsPage() {
         >
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute -right-24 -top-24 size-72 rounded-full bg-white/[0.04] blur-[100px]"
+            className="pointer-events-none absolute -top-24 -right-24 size-72 rounded-full bg-white/[0.04] blur-[100px]"
           />
 
           <div className="relative z-10">
-            <p className="font-mono text-[0.6rem] font-bold uppercase tracking-[0.2em] text-white/45">
+            <p className="font-mono text-[0.6rem] font-bold tracking-[0.2em] text-white/45 uppercase">
               Start With A Blank Page
             </p>
 
@@ -342,18 +255,9 @@ export default async function ManageCreatorCommonsPage() {
             <div className="mt-8">
               <CreateOpportunityForm
                 circles={circles}
-                interests={
-                  interestResult.data ??
-                  []
-                }
-                modes={
-                  modeResult.data ??
-                  []
-                }
-                skills={
-                  skillResult.data ??
-                  []
-                }
+                interests={interestResult.data ?? []}
+                modes={modeResult.data ?? []}
+                skills={skillResult.data ?? []}
               />
             </div>
           </div>
@@ -369,10 +273,7 @@ export default async function ManageCreatorCommonsPage() {
       >
         <div className="flex items-start gap-4">
           <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-white/15 bg-white/[0.035]">
-            <ShieldCheck
-              aria-hidden="true"
-              className="size-5 text-white"
-            />
+            <ShieldCheck aria-hidden="true" className="size-5 text-white" />
           </div>
 
           <div>
@@ -392,14 +293,9 @@ export default async function ManageCreatorCommonsPage() {
 
         {cards.length ? (
           <div className="mt-7 grid gap-5 lg:grid-cols-2">
-            {cards.map(
-              (card) => (
-                <OpportunityCard
-                  item={card}
-                  key={card.id}
-                />
-              ),
-            )}
+            {cards.map((card) => (
+              <OpportunityCard item={card} key={card.id} />
+            ))}
           </div>
         ) : (
           <div className="mt-7">

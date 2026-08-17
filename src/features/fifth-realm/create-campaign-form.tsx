@@ -41,11 +41,7 @@ function SelectField({
 
       <select
         aria-invalid={error ? true : undefined}
-        className={cn(
-          control,
-          "appearance-none",
-          error && "border-red-500",
-        )}
+        className={cn(control, "appearance-none", error && "border-red-500")}
         defaultValue={defaultValue}
         id={name}
         name={name}
@@ -54,9 +50,7 @@ function SelectField({
         {children}
       </select>
 
-      {error ? (
-        <p className="mt-2 text-xs text-red-300">{error}</p>
-      ) : null}
+      {error ? <p className="mt-2 text-xs text-red-300">{error}</p> : null}
     </div>
   );
 }
@@ -129,7 +123,7 @@ function SectionIntro({
 }) {
   return (
     <div className="mb-7">
-      <p className="font-mono text-[0.62rem] font-bold uppercase tracking-[0.2em] text-[#22d3ee]/70">
+      <p className="font-mono text-[0.62rem] font-bold tracking-[0.2em] text-[#22d3ee]/70 uppercase">
         {step}
       </p>
 
@@ -158,16 +152,14 @@ export function CreateCampaignForm({
     initialActionState,
   );
   const value = (name: string, fallback = "") => {
-  const stored = state.values?.[name];
+    const stored = state.values?.[name];
 
-  return typeof stored === "string" ? stored : fallback;
-};
+    return typeof stored === "string" ? stored : fallback;
+  };
 
-const selectedInterests = new Set(
-  Array.isArray(state.values?.interestIds)
-    ? state.values.interestIds
-    : [],
-);
+  const selectedInterests = new Set(
+    Array.isArray(state.values?.interestIds) ? state.values.interestIds : [],
+  );
 
   return (
     <form
@@ -190,44 +182,44 @@ const selectedInterests = new Set(
         />
 
         <div className="grid gap-5 sm:grid-cols-2">
-<TextField
-  defaultValue={value("title")}
-  error={firstFieldError(state, "title")}
-  label="Campaign title"
-  maxLength={120}
-  name="title"
-  placeholder="The Lantern Archive"
-  required
-/>
+          <TextField
+            defaultValue={value("title")}
+            error={firstFieldError(state, "title")}
+            label="Campaign title"
+            maxLength={120}
+            name="title"
+            placeholder="The Lantern Archive"
+            required
+          />
 
-<SelectField
-defaultValue={value("genre")}
-  error={firstFieldError(state, "genre")}
-  label="Genre"
-  name="genre"
->
-  <option value="">Choose A Genre</option>
-  <option value="fantasy">Fantasy</option>
-  <option value="science_fiction">Science Fiction</option>
-  <option value="horror">Horror</option>
-  <option value="mystery">Mystery</option>
-  <option value="adventure">Adventure</option>
-  <option value="superhero">Superhero</option>
-  <option value="anime_inspired">Anime-Inspired</option>
-  <option value="post_apocalyptic">Post-Apocalyptic</option>
-  <option value="cyberpunk">Cyberpunk</option>
-  <option value="steampunk">Steampunk</option>
-  <option value="urban_fantasy">Urban Fantasy</option>
-  <option value="dark_fantasy">Dark Fantasy</option>
-  <option value="historical">Historical</option>
-  <option value="comedy">Comedy</option>
-  <option value="romance">Romance</option>
-  <option value="thriller">Thriller</option>
-  <option value="slice_of_life">Slice of Life</option>
-  <option value="space_opera">Space Opera</option>
-  <option value="western">Western</option>
-  <option value="other">Other</option>
-</SelectField>
+          <SelectField
+            defaultValue={value("genre")}
+            error={firstFieldError(state, "genre")}
+            label="Genre"
+            name="genre"
+          >
+            <option value="">Choose A Genre</option>
+            <option value="fantasy">Fantasy</option>
+            <option value="science_fiction">Science Fiction</option>
+            <option value="horror">Horror</option>
+            <option value="mystery">Mystery</option>
+            <option value="adventure">Adventure</option>
+            <option value="superhero">Superhero</option>
+            <option value="anime_inspired">Anime-Inspired</option>
+            <option value="post_apocalyptic">Post-Apocalyptic</option>
+            <option value="cyberpunk">Cyberpunk</option>
+            <option value="steampunk">Steampunk</option>
+            <option value="urban_fantasy">Urban Fantasy</option>
+            <option value="dark_fantasy">Dark Fantasy</option>
+            <option value="historical">Historical</option>
+            <option value="comedy">Comedy</option>
+            <option value="romance">Romance</option>
+            <option value="thriller">Thriller</option>
+            <option value="slice_of_life">Slice of Life</option>
+            <option value="space_opera">Space Opera</option>
+            <option value="western">Western</option>
+            <option value="other">Other</option>
+          </SelectField>
         </div>
 
         <div className="mt-5">
@@ -258,7 +250,7 @@ defaultValue={value("genre")}
 
         <div className="mt-5">
           <TextField
-          defaultValue={value("genre")}
+            defaultValue={value("genre")}
             error={firstFieldError(state, "tone")}
             hint="For example: hopeful, eerie, comedic, low-conflict, intense."
             label="Tone"
@@ -284,7 +276,7 @@ defaultValue={value("genre")}
 
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           <SelectField
-          defaultValue={value("format")}
+            defaultValue={value("format")}
             error={firstFieldError(state, "format")}
             label="Format"
             name="format"
@@ -296,7 +288,7 @@ defaultValue={value("genre")}
           </SelectField>
 
           <TextField
-          defaultValue={value("estimatedSessionMinutes")}
+            defaultValue={value("estimatedSessionMinutes")}
             error={firstFieldError(state, "estimatedSessionMinutes")}
             hint="30–480 minutes."
             label="Typical Session Length"
@@ -308,7 +300,7 @@ defaultValue={value("genre")}
           />
 
           <TextField
-          defaultValue={value("playerCapacity")}
+            defaultValue={value("playerCapacity")}
             error={firstFieldError(state, "playerCapacity")}
             hint="Maximum Players."
             label="Player seats"
@@ -320,7 +312,7 @@ defaultValue={value("genre")}
           />
 
           <SelectField
-          defaultValue={value("experienceLevel", "new")}
+            defaultValue={value("experienceLevel", "new")}
             defaultValue="new"
             error={firstFieldError(state, "experienceLevel")}
             label="Player Experience"
@@ -333,7 +325,7 @@ defaultValue={value("genre")}
           </SelectField>
 
           <TextField
-          defaultValue={value("applicationDeadlineLocal")}
+            defaultValue={value("applicationDeadlineLocal")}
             error={firstFieldError(state, "applicationDeadlineLocal")}
             label="Application Deadline"
             name="applicationDeadlineLocal"
@@ -342,7 +334,7 @@ defaultValue={value("genre")}
           />
 
           <SelectField
-          defaultValue={value("timezone", "America/New_York")}
+            defaultValue={value("timezone", "America/New_York")}
             defaultValue="America/New_York"
             error={firstFieldError(state, "timezone")}
             label="Campaign timezone"
@@ -412,7 +404,7 @@ defaultValue={value("genre")}
           </SelectField>
 
           <TextField
-          defaultValue={value("locationLabel")}
+            defaultValue={value("locationLabel")}
             error={firstFieldError(state, "locationLabel")}
             hint="Example: Meet at insert-name-here cafe downtown."
             label="Area or Access Label"
@@ -451,7 +443,7 @@ defaultValue={value("genre")}
           </SelectField>
 
           <TextField
-          defaultValue={value("minimumEnergy")}
+            defaultValue={value("minimumEnergy")}
             error={firstFieldError(state, "minimumEnergy")}
             hint="1 = very low, 5 = very high."
             label="Minimum Energy"
@@ -463,7 +455,7 @@ defaultValue={value("genre")}
           />
 
           <TextField
-          defaultValue={value("maximumEnergy")}
+            defaultValue={value("maximumEnergy")}
             error={firstFieldError(state, "maximumEnergy")}
             hint="1 = very low, 5 = very high."
             label="Maximum Energy"
@@ -497,10 +489,7 @@ defaultValue={value("genre")}
           </SelectField>
         </div>
 
-        <fieldset
-          aria-describedby="interestIds-description"
-          className="mt-8"
-        >
+        <fieldset aria-describedby="interestIds-description" className="mt-8">
           <legend className="text-base font-bold text-white">
             Campaign interests
           </legend>
@@ -522,13 +511,13 @@ defaultValue={value("genre")}
                 className="flex min-h-12 cursor-pointer items-center gap-3 rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-sm text-white/70 transition hover:border-[#22d3ee]/30 hover:text-white has-checked:border-[#22d3ee]/60 has-checked:bg-[#22d3ee]/[0.08] has-checked:text-white"
                 key={interest.id}
               >
-<input
-  className="size-5 accent-[#22d3ee]"
-  defaultChecked={selectedInterests.has(interest.id)}
-  name="interestIds"
-  type="checkbox"
-  value={interest.id}
-/>
+                <input
+                  className="size-5 accent-[#22d3ee]"
+                  defaultChecked={selectedInterests.has(interest.id)}
+                  name="interestIds"
+                  type="checkbox"
+                  value={interest.id}
+                />
 
                 {interest.name}
               </label>
@@ -541,12 +530,12 @@ defaultValue={value("genre")}
           SUBMIT
       ====================================================== */}
       <div className="rounded-[1.75rem] border border-[#22d3ee]/15 bg-[#22d3ee]/[0.03] p-5 sm:p-6">
-<SubmitButton
-  className="border border-white/10 bg-gradient-to-r from-[#0891b2] via-[#22d3ee] to-[#7c3aed] text-white shadow-lg shadow-[#0891b2]/20 hover:brightness-110 hover:shadow-[#22d3ee]/25"
-  pendingLabel="Creating campaign draft…"
->
-  Create Realm Campaign
-</SubmitButton>
+        <SubmitButton
+          className="border border-white/10 bg-gradient-to-r from-[#0891b2] via-[#22d3ee] to-[#7c3aed] text-white shadow-lg shadow-[#0891b2]/20 hover:shadow-[#22d3ee]/25 hover:brightness-110"
+          pendingLabel="Creating campaign draft…"
+        >
+          Create Realm Campaign
+        </SubmitButton>
 
         <p className="mt-3 max-w-2xl text-xs leading-5 text-white/35">
           Your campaign starts as a private draft. You can review it before

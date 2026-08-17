@@ -102,22 +102,22 @@ const modules = [
 ] as const;
 
 export function EcosystemCarousel() {
-const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0);
 
-const activeModule = modules[activeIndex];
-const Icon = activeModule.icon;
+  const activeModule = modules[activeIndex];
+  const Icon = activeModule.icon;
 
-useEffect(() => {
-  const interval = window.setInterval(() => {
-    setActiveIndex((current) =>
-      current === modules.length - 1 ? 0 : current + 1,
-    );
-  }, 6000);
+  useEffect(() => {
+    const interval = window.setInterval(() => {
+      setActiveIndex((current) =>
+        current === modules.length - 1 ? 0 : current + 1,
+      );
+    }, 6000);
 
-  return () => {
-    window.clearInterval(interval);
-  };
-}, []);
+    return () => {
+      window.clearInterval(interval);
+    };
+  }, []);
 
   function goPrevious() {
     setActiveIndex((current) =>
@@ -135,7 +135,7 @@ useEffect(() => {
     <div className="mx-auto w-full max-w-[88rem] px-5 sm:px-8 lg:px-10">
       {/* Top controls */}
       <div className="mb-6 flex items-center justify-between">
-        <div className="font-mono text-[0.62rem] font-bold uppercase tracking-[0.22em] text-white/35">
+        <div className="font-mono text-[0.62rem] font-bold tracking-[0.22em] text-white/35 uppercase">
           <span style={{ color: activeModule.color }}>
             {activeModule.number}
           </span>
@@ -190,7 +190,7 @@ useEffect(() => {
           <div className="absolute inset-0 bg-[linear-gradient(90deg,#0d0c14_0%,rgba(13,12,20,0.94)_38%,rgba(13,12,20,0.58)_62%,rgba(13,12,20,0.10)_100%)]" />
 
           <div
-            className="absolute -right-32 -top-32 size-[28rem] rounded-full blur-[150px]"
+            className="absolute -top-32 -right-32 size-[28rem] rounded-full blur-[150px]"
             style={{
               backgroundColor: `${activeModule.color}14`,
             }}
@@ -198,9 +198,9 @@ useEffect(() => {
         </div>
 
         {/* Content */}
-<div className="relative z-10 grid min-h-[25rem] gap-10 p-6 text-center sm:p-9 lg:grid-cols-[1.15fr_0.85fr] lg:p-12 lg:text-left">
-  <div className="mx-auto flex max-w-[43rem] flex-col items-center lg:mx-0 lg:items-start">
-                <div className="flex items-center justify-center gap-4 lg:justify-start">
+        <div className="relative z-10 grid min-h-[25rem] gap-10 p-6 text-center sm:p-9 lg:grid-cols-[1.15fr_0.85fr] lg:p-12 lg:text-left">
+          <div className="mx-auto flex max-w-[43rem] flex-col items-center lg:mx-0 lg:items-start">
+            <div className="flex items-center justify-center gap-4 lg:justify-start">
               <div
                 className="inline-flex size-12 items-center justify-center rounded-2xl border bg-black/45"
                 style={{
@@ -212,7 +212,7 @@ useEffect(() => {
               </div>
 
               <p
-                className="font-mono text-[0.58rem] font-bold uppercase tracking-[0.22em]"
+                className="font-mono text-[0.58rem] font-bold tracking-[0.22em] uppercase"
                 style={{
                   color: activeModule.color,
                 }}
@@ -231,56 +231,56 @@ useEffect(() => {
 
             <div className="mt-7 flex flex-wrap justify-center gap-2 lg:justify-start">
               {activeModule.tags.map((tag) => (
-<span
-  className="rounded-full border bg-black/40 px-4 py-2 font-mono text-[0.6rem] font-bold uppercase tracking-[0.14em] sm:text-[0.65rem]"
-  key={tag}
-  style={{
-    borderColor: `${activeModule.color}45`,
-    color: activeModule.color,
-  }}
->
-  {tag}
-</span>
+                <span
+                  className="rounded-full border bg-black/40 px-4 py-2 font-mono text-[0.6rem] font-bold tracking-[0.14em] uppercase sm:text-[0.65rem]"
+                  key={tag}
+                  style={{
+                    borderColor: `${activeModule.color}45`,
+                    color: activeModule.color,
+                  }}
+                >
+                  {tag}
+                </span>
               ))}
             </div>
 
-<div className="mt-auto pt-10">
-  {/* Mobile: feature name is the link */}
-  <Link
-    className="display-type inline-block text-2xl sm:hidden"
-    href={activeModule.href}
-    style={{
-      color: activeModule.color,
-    }}
-  >
-    {activeModule.name}
-  </Link>
+            <div className="mt-auto pt-10">
+              {/* Mobile: feature name is the link */}
+              <Link
+                className="display-type inline-block text-2xl sm:hidden"
+                href={activeModule.href}
+                style={{
+                  color: activeModule.color,
+                }}
+              >
+                {activeModule.name}
+              </Link>
 
-  {/* Desktop: feature name stays plain text */}
-  <p
-    className="display-type hidden text-2xl sm:block sm:text-3xl"
-    style={{
-      color: activeModule.color,
-    }}
-  >
-    {activeModule.name}
-  </p>
-</div>
+              {/* Desktop: feature name stays plain text */}
+              <p
+                className="display-type hidden text-2xl sm:block sm:text-3xl"
+                style={{
+                  color: activeModule.color,
+                }}
+              >
+                {activeModule.name}
+              </p>
+            </div>
 
-{/* Desktop-only arrow */}
-<Link
-  aria-label={`Explore ${activeModule.name}`}
-  className="absolute bottom-9 right-9 z-20 hidden size-12 items-center justify-center rounded-full border bg-black/50 transition hover:translate-x-1 sm:inline-flex"
-  href={activeModule.href}
-  style={{
-    borderColor: `${activeModule.color}65`,
-    color: activeModule.color,
-    boxShadow: `0 0 22px ${activeModule.color}15`,
-  }}
->
-  <ArrowRight className="size-5" />
-</Link>
-  </div>
+            {/* Desktop-only arrow */}
+            <Link
+              aria-label={`Explore ${activeModule.name}`}
+              className="absolute right-9 bottom-9 z-20 hidden size-12 items-center justify-center rounded-full border bg-black/50 transition hover:translate-x-1 sm:inline-flex"
+              href={activeModule.href}
+              style={{
+                borderColor: `${activeModule.color}65`,
+                color: activeModule.color,
+                boxShadow: `0 0 22px ${activeModule.color}15`,
+              }}
+            >
+              <ArrowRight className="size-5" />
+            </Link>
+          </div>
         </div>
       </article>
 
@@ -302,15 +302,13 @@ useEffect(() => {
                 backgroundColor: isActive
                   ? `${module.color}0d`
                   : "rgba(0,0,0,0.25)",
-                color: isActive
-                  ? module.color
-                  : "rgba(255,255,255,0.52)",
+                color: isActive ? module.color : "rgba(255,255,255,0.52)",
               }}
               type="button"
             >
               <ModuleIcon className="size-4 shrink-0" />
 
-              <span className="hidden font-mono text-[0.52rem] font-bold uppercase tracking-[0.12em] md:block">
+              <span className="hidden font-mono text-[0.52rem] font-bold tracking-[0.12em] uppercase md:block">
                 {module.name}
               </span>
             </button>

@@ -75,8 +75,8 @@ export const onboardingSchema = z.object({
 
   discoverable: checkbox,
 
-interestIds: interestSelection,
-skillIds: skillSelection,
+  interestIds: interestSelection,
+  skillIds: skillSelection,
 
   openToFriends: checkbox,
   openToActivityPartners: checkbox,

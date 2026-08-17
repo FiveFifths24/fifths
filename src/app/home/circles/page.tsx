@@ -1,9 +1,5 @@
 import type { Metadata } from "next";
-import {
-  HeartHandshake,
-  ShieldCheck,
-  UsersRound,
-} from "lucide-react";
+import { HeartHandshake, ShieldCheck, UsersRound } from "lucide-react";
 
 import { AccountUnavailable } from "@/components/account/account-unavailable";
 import { ButtonLink } from "@/components/ui/button-link";
@@ -32,8 +28,7 @@ export default async function CirclesDiscoveryPage() {
     return <AccountUnavailable />;
   }
 
-  const { data: userData } =
-    await supabase.auth.getUser();
+  const { data: userData } = await supabase.auth.getUser();
 
   if (!userData.user) {
     return <AccountUnavailable />;
@@ -60,10 +55,7 @@ export default async function CirclesDiscoveryPage() {
     supabase
       .from("pulse_check_ins")
       .select("*")
-      .gt(
-        "expires_at",
-        new Date().toISOString(),
-      )
+      .gt("expires_at", new Date().toISOString())
       .order("created_at", {
         ascending: false,
       })
@@ -86,158 +78,92 @@ export default async function CirclesDiscoveryPage() {
   if (circleResult.error) {
     return (
       <StatusMessage tone="error">
-        Circle discovery is unavailable. Confirm that the Phase 5 migration
-        has been applied.
+        Circle discovery is unavailable. Confirm that the Phase 5 migration has
+        been applied.
       </StatusMessage>
     );
   }
 
-  const circles =
-    circleResult.data ?? [];
+  const circles = circleResult.data ?? [];
 
-  const links =
-    circles.length
-      ? (
-          (
-            await supabase
-              .from(
-                "circle_interests",
-              )
-              .select(
-                "circle_id, interest_id",
-              )
-              .in(
-                "circle_id",
-                circles.map(
-                  (circle) =>
-                    circle.id,
-                ),
-              )
-          ).data ?? []
-        )
-      : [];
-
-  const pulse =
-    pulseResult.data;
-
-  const modes =
-    modeResult.data ?? [];
-
-  const pulseMode =
-    pulse
-      ? modes.find(
-          (mode) =>
-            mode.id ===
-            pulse.mode_id,
-        )
-      : null;
-
-  const pulseInterestResult =
-    pulse
-      ? await supabase
-          .from(
-            "pulse_check_in_interests",
+  const links = circles.length
+    ? ((
+        await supabase
+          .from("circle_interests")
+          .select("circle_id, interest_id")
+          .in(
+            "circle_id",
+            circles.map((circle) => circle.id),
           )
-          .select("interest_id")
-          .eq(
-            "check_in_id",
-            pulse.id,
-          )
-      : {
-          data: [],
-          error: null,
-        };
+      ).data ?? [])
+    : [];
+
+  const pulse = pulseResult.data;
+
+  const modes = modeResult.data ?? [];
+
+  const pulseMode = pulse
+    ? modes.find((mode) => mode.id === pulse.mode_id)
+    : null;
+
+  const pulseInterestResult = pulse
+    ? await supabase
+        .from("pulse_check_in_interests")
+        .select("interest_id")
+        .eq("check_in_id", pulse.id)
+    : {
+        data: [],
+        error: null,
+      };
 
   const pulseInput: PulseRecommendationInput | null =
     pulse && pulseMode
       ? {
-          modeSlug:
-            pulseMode.slug,
+          modeSlug: pulseMode.slug,
 
-          energyLevel:
-            pulse.energy_level,
+          energyLevel: pulse.energy_level,
 
-          stimulationLevel:
-            pulse.stimulation_level,
+          stimulationLevel: pulse.stimulation_level,
 
-          socialIntensity:
-            pulse.social_intensity,
+          socialIntensity: pulse.social_intensity,
 
-          preferredFormat:
-            pulse.preferred_format,
+          preferredFormat: pulse.preferred_format,
 
-          availableMinutes:
-            pulse.available_minutes,
+          availableMinutes: pulse.available_minutes,
 
-          maximumTravelMiles:
-            pulse.maximum_travel_miles,
+          maximumTravelMiles: pulse.maximum_travel_miles,
 
-          interestIds:
-            (
-              pulseInterestResult.data ??
-              []
-            ).map(
-              (item) =>
-                item.interest_id,
-            ),
+          interestIds: (pulseInterestResult.data ?? []).map(
+            (item) => item.interest_id,
+          ),
         }
       : null;
 
-  const recommendations =
-    pulseInput
-      ? rankCircles(
-          pulseInput,
-          circles,
-          modes,
-          links,
-        )
-      : [];
+  const recommendations = pulseInput
+    ? rankCircles(pulseInput, circles, modes, links)
+    : [];
 
-  const order =
-    new Map(
-      recommendations.map(
-        (
-          recommendation,
-          index,
-        ) => [
-          recommendation
-            .candidate.id,
-          index,
-        ],
-      ),
-    );
+  const order = new Map(
+    recommendations.map((recommendation, index) => [
+      recommendation.candidate.id,
+      index,
+    ]),
+  );
 
-  const orderedCircles =
-    pulseInput
-      ? [...circles].sort(
-          (
-            left,
-            right,
-          ) =>
-            (
-              order.get(
-                left.id,
-              ) ?? 0
-            ) -
-            (
-              order.get(
-                right.id,
-              ) ?? 0
-            ),
-        )
-      : circles;
+  const orderedCircles = pulseInput
+    ? [...circles].sort(
+        (left, right) => (order.get(left.id) ?? 0) - (order.get(right.id) ?? 0),
+      )
+    : circles;
 
-  const cards =
-    assembleCircleCards(
-      orderedCircles,
-      modes,
-      interestResult.data ??
-        [],
-      links,
-      recommendations,
-      membershipResult.data ??
-        [],
-    );
+  const cards = assembleCircleCards(
+    orderedCircles,
+    modes,
+    interestResult.data ?? [],
+    links,
+    recommendations,
+    membershipResult.data ?? [],
+  );
 
   return (
     <div>
@@ -246,11 +172,8 @@ export default async function CirclesDiscoveryPage() {
       ====================================================== */}
       <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-12">
         <div className="max-w-4xl">
-          <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[#ee54a7]">
-            <HeartHandshake
-              aria-hidden="true"
-              className="size-4"
-            />
+          <p className="flex items-center gap-2 text-xs font-bold tracking-[0.2em] text-[#ee54a7] uppercase">
+            <HeartHandshake aria-hidden="true" className="size-4" />
             Circles
           </p>
 
@@ -261,8 +184,8 @@ export default async function CirclesDiscoveryPage() {
           <p className="mt-5 max-w-3xl text-lg leading-8 text-neutral-300">
             Circles are communities built around shared interests, identities,
             goals, experiences, and ways of participating. Find the groups that
-            fit who you are, how you want to connect, and what you have room
-            for right now.
+            fit who you are, how you want to connect, and what you have room for
+            right now.
           </p>
         </div>
 
@@ -271,25 +194,19 @@ export default async function CirclesDiscoveryPage() {
         ================================================== */}
         <div className="flex flex-col gap-3 sm:flex-row lg:flex-col xl:flex-row">
           <ButtonLink
-            className="min-h-12 min-w-[12.5rem] whitespace-nowrap border-[#ee54a7]/35 bg-black/40 px-7 text-sm text-white/85 shadow-none hover:border-[#ee54a7]/65 hover:bg-[#ee54a7]/10 hover:text-white"
+            className="min-h-12 min-w-[12.5rem] border-[#ee54a7]/35 bg-black/40 px-7 text-sm whitespace-nowrap text-white/85 shadow-none hover:border-[#ee54a7]/65 hover:bg-[#ee54a7]/10 hover:text-white"
             href="/home/circles/memberships"
             variant="secondary"
           >
-            <UsersRound
-              aria-hidden="true"
-              className="size-4 text-[#ee54a7]"
-            />
+            <UsersRound aria-hidden="true" className="size-4 text-[#ee54a7]" />
             My Circles
           </ButtonLink>
 
           <ButtonLink
-            className="min-h-12 min-w-[12.5rem] whitespace-nowrap border-0 bg-gradient-to-r from-[#6c14ce] via-[#a855f7] to-[#ee54a7] px-7 text-sm text-white shadow-lg shadow-[#6c14ce]/20 hover:brightness-110"
+            className="min-h-12 min-w-[12.5rem] border-0 bg-gradient-to-r from-[#6c14ce] via-[#a855f7] to-[#ee54a7] px-7 text-sm whitespace-nowrap text-white shadow-lg shadow-[#6c14ce]/20 hover:brightness-110"
             href="/home/circles/manage"
           >
-            <HeartHandshake
-              aria-hidden="true"
-              className="size-4"
-            />
+            <HeartHandshake aria-hidden="true" className="size-4" />
             Manage Circles
           </ButtonLink>
         </div>
@@ -307,10 +224,7 @@ export default async function CirclesDiscoveryPage() {
       {/* =====================================================
           CIRCLE RESULTS
       ====================================================== */}
-      <section
-        aria-labelledby="circle-results-heading"
-        className="mt-10"
-      >
+      <section aria-labelledby="circle-results-heading" className="mt-10">
         <div className="flex items-center gap-3">
           <HeartHandshake
             aria-hidden="true"
@@ -321,29 +235,23 @@ export default async function CirclesDiscoveryPage() {
             className="text-2xl font-bold text-white"
             id="circle-results-heading"
           >
-            {pulseInput
-              ? "Circles that fit right now"
-              : "Explore Circles"}
+            {pulseInput ? "Circles that fit right now" : "Explore Circles"}
           </h2>
         </div>
 
         {cards.length ? (
           <ul className="mt-6 grid gap-6 lg:grid-cols-2">
-            {cards.map(
-              (card) => (
-                <li key={card.id}>
-                  <CircleCard
-                    item={card}
-                  />
-                </li>
-              ),
-            )}
+            {cards.map((card) => (
+              <li key={card.id}>
+                <CircleCard item={card} />
+              </li>
+            ))}
           </ul>
         ) : (
           <div className="mt-6">
             <PreviewState title="No published Circles yet">
-              New Circles will appear here once hosts create and
-              publish real communities.
+              New Circles will appear here once hosts create and publish real
+              communities.
             </PreviewState>
           </div>
         )}
@@ -354,10 +262,7 @@ export default async function CirclesDiscoveryPage() {
       ====================================================== */}
       <aside className="mt-10 flex gap-4 rounded-[1.5rem] border border-[#ee54a7]/15 bg-[#ee54a7]/[0.035] p-5 text-sm leading-7 text-white/50 sm:p-6">
         <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-[#ee54a7]/25 bg-black/30">
-          <ShieldCheck
-            aria-hidden="true"
-            className="size-5 text-[#ee54a7]"
-          />
+          <ShieldCheck aria-hidden="true" className="size-5 text-[#ee54a7]" />
         </div>
 
         <div>

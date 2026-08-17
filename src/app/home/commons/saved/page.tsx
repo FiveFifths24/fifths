@@ -1,9 +1,5 @@
 import type { Metadata } from "next";
-import {
-  ArrowLeft,
-  Bookmark,
-  FileText,
-} from "lucide-react";
+import { ArrowLeft, Bookmark, FileText } from "lucide-react";
 
 import { AccountUnavailable } from "@/components/account/account-unavailable";
 import { ButtonLink } from "@/components/ui/button-link";
@@ -28,24 +24,19 @@ export default async function SavedOpportunitiesPage() {
     return <AccountUnavailable />;
   }
 
-  const { data: userData } =
-    await supabase.auth.getUser();
+  const { data: userData } = await supabase.auth.getUser();
 
   if (!userData.user) {
     return <AccountUnavailable />;
   }
 
-  const savedResult =
-    await supabase
-      .from("saved_opportunities")
-      .select("opportunity_id, created_at")
-      .eq(
-        "user_id",
-        userData.user.id,
-      )
-      .order("created_at", {
-        ascending: false,
-      });
+  const savedResult = await supabase
+    .from("saved_opportunities")
+    .select("opportunity_id, created_at")
+    .eq("user_id", userData.user.id)
+    .order("created_at", {
+      ascending: false,
+    });
 
   if (savedResult.error) {
     return (
@@ -55,127 +46,73 @@ export default async function SavedOpportunitiesPage() {
     );
   }
 
-  const savedIds =
-    (savedResult.data ?? []).map(
-      (item) =>
-        item.opportunity_id,
-    );
+  const savedIds = (savedResult.data ?? []).map((item) => item.opportunity_id);
 
-  const opportunityResult =
-    savedIds.length
-      ? await supabase
-          .from(
-            "creator_opportunities",
-          )
-          .select("*")
-          .in(
-            "id",
-            savedIds,
-          )
-      : {
-          data: [],
-          error: null,
-        };
+  const opportunityResult = savedIds.length
+    ? await supabase
+        .from("creator_opportunities")
+        .select("*")
+        .in("id", savedIds)
+    : {
+        data: [],
+        error: null,
+      };
 
-  const opportunities =
-    opportunityResult.data ?? [];
+  const opportunities = opportunityResult.data ?? [];
 
-  const ids =
-    opportunities.map(
-      (item) => item.id,
-    );
+  const ids = opportunities.map((item) => item.id);
 
-  const [
-    modes,
-    skills,
-    interests,
-    skillLinks,
-    interestLinks,
-    responses,
-  ] = await Promise.all([
-    supabase
-      .from("modes")
-      .select("id, name")
-      .order("sort_order"),
+  const [modes, skills, interests, skillLinks, interestLinks, responses] =
+    await Promise.all([
+      supabase.from("modes").select("id, name").order("sort_order"),
 
-    supabase
-      .from("skills")
-      .select("id, name")
-      .eq("active", true),
+      supabase.from("skills").select("id, name").eq("active", true),
 
-    supabase
-      .from("interests")
-      .select("id, name")
-      .eq("active", true),
+      supabase.from("interests").select("id, name").eq("active", true),
 
-    ids.length
-      ? supabase
-          .from(
-            "opportunity_skills",
-          )
-          .select(
-            "opportunity_id, skill_id",
-          )
-          .in(
-            "opportunity_id",
-            ids,
-          )
-      : Promise.resolve({
-          data: [],
-          error: null,
-        }),
+      ids.length
+        ? supabase
+            .from("opportunity_skills")
+            .select("opportunity_id, skill_id")
+            .in("opportunity_id", ids)
+        : Promise.resolve({
+            data: [],
+            error: null,
+          }),
 
-    ids.length
-      ? supabase
-          .from(
-            "opportunity_interests",
-          )
-          .select(
-            "opportunity_id, interest_id",
-          )
-          .in(
-            "opportunity_id",
-            ids,
-          )
-      : Promise.resolve({
-          data: [],
-          error: null,
-        }),
+      ids.length
+        ? supabase
+            .from("opportunity_interests")
+            .select("opportunity_id, interest_id")
+            .in("opportunity_id", ids)
+        : Promise.resolve({
+            data: [],
+            error: null,
+          }),
 
-    ids.length
-      ? supabase
-          .from(
-            "opportunity_responses",
-          )
-          .select(
-            "opportunity_id, status",
-          )
-          .eq(
-            "user_id",
-            userData.user.id,
-          )
-          .in(
-            "opportunity_id",
-            ids,
-          )
-      : Promise.resolve({
-          data: [],
-          error: null,
-        }),
-  ]);
+      ids.length
+        ? supabase
+            .from("opportunity_responses")
+            .select("opportunity_id, status")
+            .eq("user_id", userData.user.id)
+            .in("opportunity_id", ids)
+        : Promise.resolve({
+            data: [],
+            error: null,
+          }),
+    ]);
 
-  const cards =
-    assembleOpportunityCards(
-      opportunities,
-      modes.data ?? [],
-      skills.data ?? [],
-      interests.data ?? [],
-      skillLinks.data ?? [],
-      interestLinks.data ?? [],
-      [],
-      savedIds,
-      responses.data ?? [],
-    );
+  const cards = assembleOpportunityCards(
+    opportunities,
+    modes.data ?? [],
+    skills.data ?? [],
+    interests.data ?? [],
+    skillLinks.data ?? [],
+    interestLinks.data ?? [],
+    [],
+    savedIds,
+    responses.data ?? [],
+  );
 
   return (
     <div>
@@ -187,10 +124,7 @@ export default async function SavedOpportunitiesPage() {
         href="/home/commons"
         variant="quiet"
       >
-        <ArrowLeft
-          aria-hidden="true"
-          className="size-4"
-        />
+        <ArrowLeft aria-hidden="true" className="size-4" />
         Back to Creator Commons
       </ButtonLink>
 
@@ -199,11 +133,8 @@ export default async function SavedOpportunitiesPage() {
       ====================================================== */}
       <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_0.7fr] lg:items-end lg:gap-16">
         <div className="max-w-4xl">
-          <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-white">
-            <Bookmark
-              aria-hidden="true"
-              className="size-4"
-            />
+          <p className="flex items-center gap-2 text-xs font-bold tracking-[0.2em] text-white uppercase">
+            <Bookmark aria-hidden="true" className="size-4" />
             Private Collection
           </p>
 
@@ -228,10 +159,7 @@ export default async function SavedOpportunitiesPage() {
       >
         <div className="flex items-start gap-4">
           <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-white/15 bg-white/[0.035]">
-            <FileText
-              aria-hidden="true"
-              className="size-5 text-white"
-            />
+            <FileText aria-hidden="true" className="size-5 text-white" />
           </div>
 
           <div>
@@ -251,14 +179,9 @@ export default async function SavedOpportunitiesPage() {
 
         {cards.length ? (
           <div className="mt-7 grid gap-5 lg:grid-cols-2">
-            {cards.map(
-              (card) => (
-                <OpportunityCard
-                  item={card}
-                  key={card.id}
-                />
-              ),
-            )}
+            {cards.map((card) => (
+              <OpportunityCard item={card} key={card.id} />
+            ))}
           </div>
         ) : (
           <div className="mt-7">

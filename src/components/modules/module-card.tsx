@@ -95,7 +95,8 @@ export function ModuleCard({
   return (
     <article
       className={cn(
-"group relative min-h-[12.5rem] overflow-hidden rounded-[2rem] border bg-[#08070e]/90 p-6 transition-all duration-300 md:min-h-[14rem] md:p-8 md:hover:-translate-y-1",        styles.border,
+        "group relative min-h-[12.5rem] overflow-hidden rounded-[2rem] border bg-[#08070e]/90 p-6 transition-all duration-300 md:min-h-[14rem] md:p-8 md:hover:-translate-y-1",
+        styles.border,
         styles.shadow,
       )}
     >
@@ -103,7 +104,7 @@ export function ModuleCard({
       <div
         aria-hidden="true"
         className={cn(
-          "pointer-events-none absolute -bottom-28 -right-28 size-80 rounded-full opacity-45 blur-[100px]",
+          "pointer-events-none absolute -right-28 -bottom-28 size-80 rounded-full opacity-45 blur-[100px]",
           styles.glow,
         )}
       />
@@ -136,10 +137,7 @@ export function ModuleCard({
             styles.icon,
           )}
         >
-          <Icon
-            aria-hidden="true"
-            className="size-5 md:size-6"
-          />
+          <Icon aria-hidden="true" className="size-5 md:size-6" />
         </div>
 
         <h3
@@ -151,24 +149,21 @@ export function ModuleCard({
           {module.name}
         </h3>
 
-<p className="mt-3 max-w-sm text-sm leading-7 text-white/50 md:text-base">
-  {module.summary}
-</p>
+        <p className="mt-3 max-w-sm text-sm leading-7 text-white/50 md:text-base">
+          {module.summary}
+        </p>
       </div>
 
-<Link
-  aria-label={`Explore ${module.name}`}
-  className={cn(
-    "absolute right-5 top-5 z-20 inline-flex size-10 items-center justify-center rounded-full border transition-all duration-300 active:scale-95 md:right-8 md:top-8 md:size-11 md:group-hover:translate-x-1",
-    styles.arrow,
-  )}
-  href={module.memberHref ?? "/ecosystem"}
->
-  <ArrowRight
-    aria-hidden="true"
-    className="size-4"
-  />
-</Link>
+      <Link
+        aria-label={`Explore ${module.name}`}
+        className={cn(
+          "absolute top-5 right-5 z-20 inline-flex size-10 items-center justify-center rounded-full border transition-all duration-300 active:scale-95 md:top-8 md:right-8 md:size-11 md:group-hover:translate-x-1",
+          styles.arrow,
+        )}
+        href={module.memberHref ?? "/ecosystem"}
+      >
+        <ArrowRight aria-hidden="true" className="size-4" />
+      </Link>
     </article>
   );
 }

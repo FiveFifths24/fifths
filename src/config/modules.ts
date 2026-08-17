@@ -9,13 +9,7 @@ import {
 } from "lucide-react";
 
 export type PlatformModule = {
-  slug:
-    | "pulse"
-    | "sessions"
-    | "circles"
-    | "commons"
-    | "realm"
-    | "passport";
+  slug: "pulse" | "sessions" | "circles" | "commons" | "realm" | "passport";
   name: string;
   eyebrow: string;
   purpose: string;
@@ -39,8 +33,7 @@ export const platformModules: PlatformModule[] = [
     name: "Pulse",
     eyebrow: "Start with your capacity",
     purpose: "Daily capacity and transparent recommendations.",
-    summary:
-      "Check in with your energy and choose how you want to engage.",
+    summary: "Check in with your energy and choose how you want to engage.",
     audience: [
       "People balancing changing energy",
       "Intentional participants",
@@ -269,14 +262,8 @@ export const platformModules: PlatformModule[] = [
   },
 ];
 
-export type PlatformModuleSlug =
-  PlatformModule["slug"];
+export type PlatformModuleSlug = PlatformModule["slug"];
 
-export function getPlatformModule(
-  slug: PlatformModuleSlug,
-) {
-  return platformModules.find(
-    (module) =>
-      module.slug === slug,
-  );
+export function getPlatformModule(slug: PlatformModuleSlug) {
+  return platformModules.find((module) => module.slug === slug);
 }

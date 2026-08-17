@@ -327,45 +327,40 @@ export function OnboardingForm({
 
     setStepError(null);
 
-if (currentStep === 2) {
-  const selectedInterests =
-    currentSection.querySelectorAll<HTMLInputElement>(
-      'input[name="interestIds"]:checked',
-    );
+    if (currentStep === 2) {
+      const selectedInterests =
+        currentSection.querySelectorAll<HTMLInputElement>(
+          'input[name="interestIds"]:checked',
+        );
 
-  const selectedSkills =
-    currentSection.querySelectorAll<HTMLInputElement>(
-      'input[name="skillIds"]:checked',
-    );
+      const selectedSkills = currentSection.querySelectorAll<HTMLInputElement>(
+        'input[name="skillIds"]:checked',
+      );
 
-  if (selectedInterests.length === 0) {
-    setStepError(
-      "Choose at least one interest to continue.",
-    );
-    return;
-  }
+      if (selectedInterests.length === 0) {
+        setStepError("Choose at least one interest to continue.");
+        return;
+      }
 
-  if (selectedSkills.length === 0) {
-    setStepError(
-      "Choose at least one skill to continue.",
-    );
-    return;
-  }
+      if (selectedSkills.length === 0) {
+        setStepError("Choose at least one skill to continue.");
+        return;
+      }
 
-if (selectedInterests.length > 12) {
-  setStepError(
-    `Choose no more than 12 interests. You currently have ${selectedInterests.length} selected.`,
-  );
-  return;
-}
+      if (selectedInterests.length > 12) {
+        setStepError(
+          `Choose no more than 12 interests. You currently have ${selectedInterests.length} selected.`,
+        );
+        return;
+      }
 
-if (selectedSkills.length > 12) {
-  setStepError(
-    `Choose no more than 12 skills. You currently have ${selectedSkills.length} selected.`,
-  );
-  return;
-}
-}
+      if (selectedSkills.length > 12) {
+        setStepError(
+          `Choose no more than 12 skills. You currently have ${selectedSkills.length} selected.`,
+        );
+        return;
+      }
+    }
 
     if (currentStep === 3) {
       const connectionNames = [

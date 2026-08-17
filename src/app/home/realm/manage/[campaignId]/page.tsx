@@ -58,7 +58,7 @@ function SectionHeading({
       </div>
 
       <div>
-        <p className="font-mono text-[0.62rem] font-bold uppercase tracking-[0.2em] text-[#22d3ee]/70">
+        <p className="font-mono text-[0.62rem] font-bold tracking-[0.2em] text-[#22d3ee]/70 uppercase">
           {eyebrow}
         </p>
 
@@ -146,17 +146,13 @@ export default async function ManageCampaignPage({
 
     supabase
       .from("sessions")
-      .select(
-        "id, title, status, starts_at, timezone, campaign_id, circle_id",
-      )
+      .select("id, title, status, starts_at, timezone, campaign_id, circle_id")
       .eq("campaign_id", campaign.id)
       .order("starts_at"),
 
     supabase
       .from("sessions")
-      .select(
-        "id, title, status, starts_at, timezone, campaign_id, circle_id",
-      )
+      .select("id, title, status, starts_at, timezone, campaign_id, circle_id")
       .eq("status", "draft")
       .is("campaign_id", null)
       .order("starts_at"),
@@ -193,9 +189,7 @@ export default async function ManageCampaignPage({
         ) : null}
 
         {parameters?.status === "updated" ? (
-          <StatusMessage tone="success">
-            Campaign status updated.
-          </StatusMessage>
+          <StatusMessage tone="success">Campaign status updated.</StatusMessage>
         ) : null}
 
         {parameters?.status === "error" ? (
@@ -213,9 +207,7 @@ export default async function ManageCampaignPage({
         ) : null}
 
         {parameters?.application === "declined" ? (
-          <StatusMessage>
-            Application declined.
-          </StatusMessage>
+          <StatusMessage>Application declined.</StatusMessage>
         ) : null}
 
         {parameters?.application === "error" ? (
@@ -263,19 +255,16 @@ export default async function ManageCampaignPage({
       <header className="relative mt-8 overflow-hidden rounded-[2.25rem] border border-[#22d3ee]/25 bg-[linear-gradient(145deg,rgba(34,211,238,0.08),rgba(9,9,11,0.96)_45%,rgba(34,211,238,0.025))] p-6 shadow-[0_0_60px_rgba(34,211,238,0.04)] sm:p-9 lg:p-10">
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -right-24 -top-24 size-72 rounded-full bg-[#22d3ee]/[0.06] blur-3xl"
+          className="pointer-events-none absolute -top-24 -right-24 size-72 rounded-full bg-[#22d3ee]/[0.06] blur-3xl"
         />
 
         <div className="relative">
           <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
             <div className="max-w-4xl">
               <div className="flex items-center gap-3">
-                <Compass
-                  aria-hidden="true"
-                  className="size-5 text-[#22d3ee]"
-                />
+                <Compass aria-hidden="true" className="size-5 text-[#22d3ee]" />
 
-                <p className="font-mono text-[0.65rem] font-bold uppercase tracking-[0.22em] text-[#22d3ee]/80">
+                <p className="font-mono text-[0.65rem] font-bold tracking-[0.22em] text-[#22d3ee]/80 uppercase">
                   Realm Campaign Control
                 </p>
               </div>
@@ -318,7 +307,7 @@ export default async function ManageCampaignPage({
 
           <dl className="mt-9 grid gap-px overflow-hidden rounded-2xl border border-[#22d3ee]/15 bg-[#22d3ee]/10 sm:grid-cols-3">
             <div className="bg-black/55 p-5">
-              <dt className="text-xs font-medium uppercase tracking-wide text-[#a5f3fc]/45">
+              <dt className="text-xs font-medium tracking-wide text-[#a5f3fc]/45 uppercase">
                 Application deadline
               </dt>
 
@@ -331,17 +320,17 @@ export default async function ManageCampaignPage({
             </div>
 
             <div className="bg-black/55 p-5">
-              <dt className="text-xs font-medium uppercase tracking-wide text-[#a5f3fc]/45">
+              <dt className="text-xs font-medium tracking-wide text-[#a5f3fc]/45 uppercase">
                 Campaign status
               </dt>
 
-              <dd className="mt-2 font-bold capitalize text-white">
+              <dd className="mt-2 font-bold text-white capitalize">
                 {campaign.status}
               </dd>
             </div>
 
             <div className="bg-black/55 p-5">
-              <dt className="text-xs font-medium uppercase tracking-wide text-[#a5f3fc]/45">
+              <dt className="text-xs font-medium tracking-wide text-[#a5f3fc]/45 uppercase">
                 Realm Sessions
               </dt>
 
@@ -356,17 +345,9 @@ export default async function ManageCampaignPage({
           <div className="mt-7 flex flex-wrap gap-3">
             {campaign.status === "draft" ? (
               <form action={setCampaignStatusAction}>
-                <input
-                  name="campaignId"
-                  type="hidden"
-                  value={campaign.id}
-                />
+                <input name="campaignId" type="hidden" value={campaign.id} />
 
-                <input
-                  name="status"
-                  type="hidden"
-                  value="recruiting"
-                />
+                <input name="status" type="hidden" value="recruiting" />
 
                 <button className={buttonClass()} type="submit">
                   Open Recruitment
@@ -376,17 +357,9 @@ export default async function ManageCampaignPage({
 
             {campaign.status === "recruiting" ? (
               <form action={setCampaignStatusAction}>
-                <input
-                  name="campaignId"
-                  type="hidden"
-                  value={campaign.id}
-                />
+                <input name="campaignId" type="hidden" value={campaign.id} />
 
-                <input
-                  name="status"
-                  type="hidden"
-                  value="active"
-                />
+                <input name="status" type="hidden" value="active" />
 
                 <button className={buttonClass()} type="submit">
                   Start Campaign
@@ -396,17 +369,9 @@ export default async function ManageCampaignPage({
 
             {campaign.status === "active" ? (
               <form action={setCampaignStatusAction}>
-                <input
-                  name="campaignId"
-                  type="hidden"
-                  value={campaign.id}
-                />
+                <input name="campaignId" type="hidden" value={campaign.id} />
 
-                <input
-                  name="status"
-                  type="hidden"
-                  value="completed"
-                />
+                <input name="status" type="hidden" value="completed" />
 
                 <button className={buttonClass()} type="submit">
                   Complete Campaign
@@ -418,22 +383,11 @@ export default async function ManageCampaignPage({
               campaign.status as "draft" | "recruiting" | "active",
             ) ? (
               <form action={setCampaignStatusAction}>
-                <input
-                  name="campaignId"
-                  type="hidden"
-                  value={campaign.id}
-                />
+                <input name="campaignId" type="hidden" value={campaign.id} />
 
-                <input
-                  name="status"
-                  type="hidden"
-                  value="cancelled"
-                />
+                <input name="status" type="hidden" value="cancelled" />
 
-                <button
-                  className={buttonClass("danger")}
-                  type="submit"
-                >
+                <button className={buttonClass("danger")} type="submit">
                   Cancel Campaign
                 </button>
               </form>
@@ -456,12 +410,7 @@ export default async function ManageCampaignPage({
           <SectionHeading
             description="Review the people who want to enter this campaign. Application details remain private between campaign managers and the applicant."
             eyebrow="Recruitment"
-            icon={
-              <ClipboardCheck
-                aria-hidden="true"
-                className="size-5"
-              />
-            }
+            icon={<ClipboardCheck aria-hidden="true" className="size-5" />}
             title="Applications"
           />
 
@@ -480,15 +429,11 @@ export default async function ManageCampaignPage({
                     <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
                       <div className="min-w-0 flex-1">
                         <div className="flex flex-wrap gap-2">
-                          <Badge
-                            className={`${realmBadgeClass} capitalize`}
-                          >
+                          <Badge className={`${realmBadgeClass} capitalize`}>
                             {application.application_status}
                           </Badge>
 
-                          <Badge
-                            className={`${realmBadgeClass} capitalize`}
-                          >
+                          <Badge className={`${realmBadgeClass} capitalize`}>
                             {application.experience_level}
                           </Badge>
                         </div>
@@ -505,7 +450,7 @@ export default async function ManageCampaignPage({
 
                         <div className="mt-6 grid gap-5 md:grid-cols-2">
                           <div className="rounded-xl border border-[#22d3ee]/10 bg-[#22d3ee]/[0.025] p-4">
-                            <p className="font-mono text-[0.62rem] font-bold uppercase tracking-[0.18em] text-[#22d3ee]/70">
+                            <p className="font-mono text-[0.62rem] font-bold tracking-[0.18em] text-[#22d3ee]/70 uppercase">
                               Why they want in
                             </p>
 
@@ -515,7 +460,7 @@ export default async function ManageCampaignPage({
                           </div>
 
                           <div className="rounded-xl border border-[#22d3ee]/10 bg-[#22d3ee]/[0.025] p-4">
-                            <p className="font-mono text-[0.62rem] font-bold uppercase tracking-[0.18em] text-[#22d3ee]/70">
+                            <p className="font-mono text-[0.62rem] font-bold tracking-[0.18em] text-[#22d3ee]/70 uppercase">
                               Availability
                             </p>
 
@@ -548,10 +493,7 @@ export default async function ManageCampaignPage({
                               value="accept"
                             />
 
-                            <button
-                              className={buttonClass()}
-                              type="submit"
-                            >
+                            <button className={buttonClass()} type="submit">
                               Accept
                             </button>
                           </form>
@@ -624,9 +566,7 @@ export default async function ManageCampaignPage({
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div>
-                        <Badge
-                          className={`${realmBadgeClass} capitalize`}
-                        >
+                        <Badge className={`${realmBadgeClass} capitalize`}>
                           {member.member_role.replaceAll("_", " ")}
                         </Badge>
 
@@ -688,12 +628,7 @@ export default async function ManageCampaignPage({
         <SectionHeading
           description="Connect private Session drafts to this campaign so meetings can use SIGNAL's existing Session lifecycle."
           eyebrow="Campaign Schedule"
-          icon={
-            <CalendarRange
-              aria-hidden="true"
-              className="size-5"
-            />
-          }
+          icon={<CalendarRange aria-hidden="true" className="size-5" />}
           title="Shared Sessions"
         />
 
@@ -706,9 +641,7 @@ export default async function ManageCampaignPage({
                   key={session.id}
                 >
                   <div>
-                    <Badge
-                      className={`${realmBadgeClass} capitalize`}
-                    >
+                    <Badge className={`${realmBadgeClass} capitalize`}>
                       {session.status}
                     </Badge>
 
@@ -731,16 +664,9 @@ export default async function ManageCampaignPage({
                         value={session.id}
                       />
 
-                      <input
-                        name="associate"
-                        type="hidden"
-                        value="false"
-                      />
+                      <input name="associate" type="hidden" value="false" />
 
-                      <button
-                        className={buttonClass()}
-                        type="submit"
-                      >
+                      <button className={buttonClass()} type="submit">
                         Unlink
                       </button>
                     </form>
@@ -779,9 +705,7 @@ export default async function ManageCampaignPage({
                   className="flex flex-col gap-4 rounded-2xl border border-[#22d3ee]/12 bg-black/30 p-5 transition hover:border-[#22d3ee]/30 sm:flex-row sm:items-center sm:justify-between"
                   key={session.id}
                 >
-                  <p className="font-bold text-white">
-                    {session.title}
-                  </p>
+                  <p className="font-bold text-white">{session.title}</p>
 
                   <form action={setCampaignSessionAction}>
                     <input
@@ -790,22 +714,11 @@ export default async function ManageCampaignPage({
                       value={campaign.id}
                     />
 
-                    <input
-                      name="sessionId"
-                      type="hidden"
-                      value={session.id}
-                    />
+                    <input name="sessionId" type="hidden" value={session.id} />
 
-                    <input
-                      name="associate"
-                      type="hidden"
-                      value="true"
-                    />
+                    <input name="associate" type="hidden" value="true" />
 
-                    <button
-                      className={buttonClass()}
-                      type="submit"
-                    >
+                    <button className={buttonClass()} type="submit">
                       Link Session
                     </button>
                   </form>
@@ -827,9 +740,7 @@ export default async function ManageCampaignPage({
             className="size-5 text-[#22d3ee]/80"
           />
 
-          <h2 className="mt-4 font-bold text-white">
-            Private Applications
-          </h2>
+          <h2 className="mt-4 font-bold text-white">Private Applications</h2>
 
           <p className="mt-2 text-sm leading-6 text-white/40">
             Motivation and availability remain private between applicants and
@@ -843,13 +754,11 @@ export default async function ManageCampaignPage({
             className="size-5 text-[#22d3ee]/80"
           />
 
-          <h2 className="mt-4 font-bold text-white">
-            Capacity Protected
-          </h2>
+          <h2 className="mt-4 font-bold text-white">Capacity Protected</h2>
 
           <p className="mt-2 text-sm leading-6 text-white/40">
-            Accepted players count toward the campaign&apos;s authoritative
-            seat capacity.
+            Accepted players count toward the campaign&apos;s authoritative seat
+            capacity.
           </p>
         </div>
 
@@ -859,9 +768,7 @@ export default async function ManageCampaignPage({
             className="size-5 text-[#22d3ee]/80"
           />
 
-          <h2 className="mt-4 font-bold text-white">
-            Session Connected
-          </h2>
+          <h2 className="mt-4 font-bold text-white">Session Connected</h2>
 
           <p className="mt-2 text-sm leading-6 text-white/40">
             Campaign meetings reuse SIGNAL Sessions rather than duplicating a

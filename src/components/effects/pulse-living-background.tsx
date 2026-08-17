@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  useEffect,
-  useRef,
-} from "react";
+import { useEffect, useRef } from "react";
 
 type Star = {
   baseX: number;
@@ -69,48 +66,31 @@ const STAR_COLORS = [
   "124,255,0",
 ];
 
-const WATER_COLORS = [
-  "108,20,206",
-  "157,70,236",
-  "0,190,255",
-  "190,225,255",
-];
+const WATER_COLORS = ["108,20,206", "157,70,236", "0,190,255", "190,225,255"];
 
 export function PulseLivingBackground() {
-  const canvasRef =
-    useRef<HTMLCanvasElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
-    const canvas =
-      canvasRef.current;
+    const canvas = canvasRef.current;
 
     if (!canvas) {
       return;
     }
 
-    const ctx =
-      canvas.getContext("2d");
+    const ctx = canvas.getContext("2d");
 
     if (!ctx) {
       return;
     }
 
-    const reducedMotion =
-      window.matchMedia(
-        "(prefers-reduced-motion: reduce)",
-      );
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-    let width =
-      window.innerWidth;
+    let width = window.innerWidth;
 
-    let height =
-      window.innerHeight;
+    let height = window.innerHeight;
 
-    let pixelRatio =
-      Math.min(
-        window.devicePixelRatio || 1,
-        2,
-      );
+    let pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
 
     let stars: Star[] = [];
 
@@ -120,141 +100,84 @@ export function PulseLivingBackground() {
 
     let animationFrame = 0;
 
-    let dropTimer:
-      | ReturnType<typeof setInterval>
-      | undefined;
+    let dropTimer: ReturnType<typeof setInterval> | undefined;
 
-    let firstDropTimer:
-      | ReturnType<typeof setTimeout>
-      | undefined;
+    let firstDropTimer: ReturnType<typeof setTimeout> | undefined;
 
-    let isVisible =
-      !document.hidden;
+    let isVisible = !document.hidden;
 
     /* =========================================================
        HELPERS
     ========================================================== */
 
-    const randomStarColor =
-      () =>
-        STAR_COLORS[
-          Math.floor(
-            Math.random() *
-              STAR_COLORS.length,
-          )
-        ];
+    const randomStarColor = () =>
+      STAR_COLORS[Math.floor(Math.random() * STAR_COLORS.length)];
 
     /* =========================================================
        GLITTER FIELD
     ========================================================== */
 
     const createStars = () => {
-      const amount =
-        Math.min(
-          170,
-          Math.max(
-            80,
-            Math.floor(
-              (width * height) /
-                10000,
-            ),
-          ),
-        );
+      const amount = Math.min(
+        170,
+        Math.max(80, Math.floor((width * height) / 10000)),
+      );
 
-      stars =
-        Array.from(
-          {
-            length: amount,
-          },
-          () => {
+      stars = Array.from(
+        {
+          length: amount,
+        },
+        () => {
+          /*
+           * Some stars move only a tiny amount.
+           * Others float farther.
+           *
+           * This prevents the background
+           * from looking like one uniform
+           * particle animation.
+           */
+
+          const driftDistanceX = 5 + Math.random() * 28;
+
+          const driftDistanceY = 4 + Math.random() * 22;
+
+          return {
+            baseX: Math.random() * width,
+
+            baseY: Math.random() * height,
+
+            radius: 0.35 + Math.random() * 1.2,
+
+            opacity: 0.08 + Math.random() * 0.25,
+
+            color: randomStarColor(),
+
             /*
-             * Some stars move only a tiny amount.
-             * Others float farther.
-             *
-             * This prevents the background
-             * from looking like one uniform
-             * particle animation.
+             * Independent flickering.
              */
+            flickerPhase: Math.random() * Math.PI * 2,
 
-            const driftDistanceX =
-              5 +
-              Math.random() *
-                28;
+            flickerSpeed: 0.00035 + Math.random() * 0.0022,
 
-            const driftDistanceY =
-              4 +
-              Math.random() *
-                22;
+            flickerAmount: 0.06 + Math.random() * 0.2,
 
-            return {
-              baseX:
-                Math.random() *
-                width,
+            /*
+             * Independent floating movement.
+             */
+            driftPhaseX: Math.random() * Math.PI * 2,
 
-              baseY:
-                Math.random() *
-                height,
+            driftPhaseY: Math.random() * Math.PI * 2,
 
-              radius:
-                0.35 +
-                Math.random() *
-                  1.2,
+            driftSpeedX: 0.000035 + Math.random() * 0.00009,
 
-              opacity:
-                0.08 +
-                Math.random() *
-                  0.25,
+            driftSpeedY: 0.00003 + Math.random() * 0.000085,
 
-              color:
-                randomStarColor(),
+            driftDistanceX,
 
-              /*
-               * Independent flickering.
-               */
-              flickerPhase:
-                Math.random() *
-                Math.PI *
-                2,
-
-              flickerSpeed:
-                0.00035 +
-                Math.random() *
-                  0.0022,
-
-              flickerAmount:
-                0.06 +
-                Math.random() *
-                  0.2,
-
-              /*
-               * Independent floating movement.
-               */
-              driftPhaseX:
-                Math.random() *
-                Math.PI *
-                2,
-
-              driftPhaseY:
-                Math.random() *
-                Math.PI *
-                2,
-
-              driftSpeedX:
-                0.000035 +
-                Math.random() *
-                  0.00009,
-
-              driftSpeedY:
-                0.00003 +
-                Math.random() *
-                  0.000085,
-
-              driftDistanceX,
-
-              driftDistanceY,
-            };
-          },
-        );
+            driftDistanceY,
+          };
+        },
+      );
     };
 
     /* =========================================================
@@ -262,45 +185,21 @@ export function PulseLivingBackground() {
     ========================================================== */
 
     const resizeCanvas = () => {
-      width =
-        window.innerWidth;
+      width = window.innerWidth;
 
-      height =
-        window.innerHeight;
+      height = window.innerHeight;
 
-      pixelRatio =
-        Math.min(
-          window.devicePixelRatio ||
-            1,
-          2,
-        );
+      pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
 
-      canvas.width =
-        Math.floor(
-          width *
-            pixelRatio,
-        );
+      canvas.width = Math.floor(width * pixelRatio);
 
-      canvas.height =
-        Math.floor(
-          height *
-            pixelRatio,
-        );
+      canvas.height = Math.floor(height * pixelRatio);
 
-      canvas.style.width =
-        `${width}px`;
+      canvas.style.width = `${width}px`;
 
-      canvas.style.height =
-        `${height}px`;
+      canvas.style.height = `${height}px`;
 
-      ctx.setTransform(
-        pixelRatio,
-        0,
-        0,
-        pixelRatio,
-        0,
-        0,
-      );
+      ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
 
       createStars();
     };
@@ -309,86 +208,40 @@ export function PulseLivingBackground() {
        WATER RIPPLE
     ========================================================== */
 
-    const createRipple = (
-      x: number,
-      y: number,
-      strength = 1,
-    ) => {
-      if (
-        reducedMotion.matches
-      ) {
+    const createRipple = (x: number, y: number, strength = 1) => {
+      if (reducedMotion.matches) {
         return;
       }
 
-      if (
-        ripples.length >
-        40
-      ) {
-        ripples =
-          ripples.slice(-30);
+      if (ripples.length > 40) {
+        ripples = ripples.slice(-30);
       }
 
-      const now =
-        performance.now();
+      const now = performance.now();
 
-      const maxRadius =
-        Math.max(
-          width,
-          height,
-        ) *
-        0.42;
+      const maxRadius = Math.max(width, height) * 0.42;
 
       /*
        * Four slow water rings.
        */
-      for (
-        let ring = 0;
-        ring < 4;
-        ring += 1
-      ) {
+      for (let ring = 0; ring < 4; ring += 1) {
         ripples.push({
           x,
           y,
 
-          start:
-            now +
-            ring *
-              300,
+          start: now + ring * 300,
 
-          duration:
-            8500,
+          duration: 8500,
 
-          maxRadius:
-            maxRadius *
-            (
-              0.76 +
-              ring *
-                0.08
-            ),
+          maxRadius: maxRadius * (0.76 + ring * 0.08),
 
-          strength:
-            strength *
-            (
-              1 -
-              ring *
-                0.11
-            ),
+          strength: strength * (1 - ring * 0.11),
 
-          color:
-            WATER_COLORS[
-              ring %
-                WATER_COLORS.length
-            ],
+          color: WATER_COLORS[ring % WATER_COLORS.length],
 
-          thickness:
-            0.75 +
-            ring *
-              0.12,
+          thickness: 0.75 + ring * 0.12,
 
-          phase:
-            Math.random() *
-            Math.PI *
-            2,
+          phase: Math.random() * Math.PI * 2,
         });
       }
     };
@@ -398,16 +251,11 @@ export function PulseLivingBackground() {
     ========================================================== */
 
     const createDrop = () => {
-      if (
-        reducedMotion.matches ||
-        !isVisible
-      ) {
+      if (reducedMotion.matches || !isVisible) {
         return;
       }
 
-      if (
-        drops.length >= 2
-      ) {
+      if (drops.length >= 2) {
         return;
       }
 
@@ -415,47 +263,25 @@ export function PulseLivingBackground() {
        * Drops mostly fall through
        * the center/right area.
        */
-      const x =
-        width *
-        (
-          0.4 +
-          Math.random() *
-            0.45
-        );
+      const x = width * (0.4 + Math.random() * 0.45);
 
       /*
        * Invisible water surface.
        */
-      const impactY =
-        height *
-        (
-          0.5 +
-          Math.random() *
-            0.18
-        );
+      const impactY = height * (0.5 + Math.random() * 0.18);
 
       drops.push({
         x,
 
-        startY:
-          -30 -
-          Math.random() *
-            90,
+        startY: -30 - Math.random() * 90,
 
         impactY,
 
-        start:
-          performance.now(),
+        start: performance.now(),
 
-        duration:
-          2600 +
-          Math.random() *
-            900,
+        duration: 2600 + Math.random() * 900,
 
-        size:
-          2.2 +
-          Math.random() *
-            1.4,
+        size: 2.2 + Math.random() * 1.4,
       });
     };
 
@@ -463,10 +289,7 @@ export function PulseLivingBackground() {
        GET CURRENT STAR POSITION
     ========================================================== */
 
-    const getStarPosition = (
-      star: Star,
-      time: number,
-    ) => {
+    const getStarPosition = (star: Star, time: number) => {
       /*
        * X and Y use different speeds and phases.
        *
@@ -476,20 +299,12 @@ export function PulseLivingBackground() {
 
       const x =
         star.baseX +
-        Math.sin(
-          time *
-            star.driftSpeedX +
-            star.driftPhaseX,
-        ) *
+        Math.sin(time * star.driftSpeedX + star.driftPhaseX) *
           star.driftDistanceX;
 
       const y =
         star.baseY +
-        Math.cos(
-          time *
-            star.driftSpeedY +
-            star.driftPhaseY,
-        ) *
+        Math.cos(time * star.driftSpeedY + star.driftPhaseY) *
           star.driftDistanceY;
 
       return {
@@ -502,158 +317,75 @@ export function PulseLivingBackground() {
        DRAW GLITTER
     ========================================================== */
 
-    const drawStars = (
-      time: number,
-    ) => {
-      for (
-        const star of stars
-      ) {
-        const position =
-          getStarPosition(
-            star,
-            time,
-          );
+    const drawStars = (time: number) => {
+      for (const star of stars) {
+        const position = getStarPosition(star, time);
 
         /*
          * Main flicker.
          */
         const flicker =
-          (
-            Math.sin(
-              time *
-                star.flickerSpeed +
-                star.flickerPhase,
-            ) +
-            1
-          ) /
-          2;
+          (Math.sin(time * star.flickerSpeed + star.flickerPhase) + 1) / 2;
 
         /*
          * Secondary flicker gives the
          * light a less predictable feel.
          */
         const secondaryFlicker =
-          (
-            Math.sin(
-              time *
-                star.flickerSpeed *
-                2.37 +
-                star.flickerPhase *
-                1.73,
-            ) +
-            1
-          ) /
+          (Math.sin(
+            time * star.flickerSpeed * 2.37 + star.flickerPhase * 1.73,
+          ) +
+            1) /
           2;
 
         let opacity =
           star.opacity +
-          flicker *
-            star.flickerAmount +
-          secondaryFlicker *
-            0.045;
+          flicker * star.flickerAmount +
+          secondaryFlicker * 0.045;
 
-        let radiusBoost =
-          flicker *
-          0.25;
+        let radiusBoost = flicker * 0.25;
 
         /*
          * When a ripple passes through a
          * star, the star briefly brightens.
          */
-        for (
-          const ripple of ripples
-        ) {
-          if (
-            time <
-            ripple.start
-          ) {
+        for (const ripple of ripples) {
+          if (time < ripple.start) {
             continue;
           }
 
-          const progress =
-            (
-              time -
-              ripple.start
-            ) /
-            ripple.duration;
+          const progress = (time - ripple.start) / ripple.duration;
 
-          if (
-            progress < 0 ||
-            progress > 1
-          ) {
+          if (progress < 0 || progress > 1) {
             continue;
           }
 
-          const eased =
-            1 -
-            Math.pow(
-              1 -
-                progress,
-              2.2,
-            );
+          const eased = 1 - Math.pow(1 - progress, 2.2);
 
-          const radius =
-            ripple.maxRadius *
-            eased;
+          const radius = ripple.maxRadius * eased;
 
-          const dx =
-            position.x -
-            ripple.x;
+          const dx = position.x - ripple.x;
 
           /*
            * Account for the shallow
            * water perspective.
            */
-          const dy =
-            (
-              position.y -
-              ripple.y
-            ) /
-            0.2;
+          const dy = (position.y - ripple.y) / 0.2;
 
-          const distance =
-            Math.sqrt(
-              dx *
-                dx +
-                dy *
-                  dy,
-            );
+          const distance = Math.sqrt(dx * dx + dy * dy);
 
-          const waveDistance =
-            Math.abs(
-              distance -
-              radius,
-            );
+          const waveDistance = Math.abs(distance - radius);
 
-          if (
-            waveDistance <
-            34
-          ) {
-            const boost =
-              1 -
-              waveDistance /
-                34;
+          if (waveDistance < 34) {
+            const boost = 1 - waveDistance / 34;
 
-            opacity +=
-              boost *
-              0.5 *
-              ripple.strength *
-              (
-                1 -
-                progress
-              );
+            opacity += boost * 0.5 * ripple.strength * (1 - progress);
 
-            radiusBoost +=
-              boost *
-              0.8;
+            radiusBoost += boost * 0.8;
           }
         }
 
-        opacity =
-          Math.min(
-            opacity,
-            0.95,
-          );
+        opacity = Math.min(opacity, 0.95);
 
         /*
          * Core glitter point.
@@ -663,24 +395,16 @@ export function PulseLivingBackground() {
         ctx.arc(
           position.x,
           position.y,
-          star.radius +
-            radiusBoost,
+          star.radius + radiusBoost,
           0,
-          Math.PI *
-            2,
+          Math.PI * 2,
         );
 
-        ctx.fillStyle =
-          `rgba(${star.color}, ${opacity})`;
+        ctx.fillStyle = `rgba(${star.color}, ${opacity})`;
 
-        ctx.shadowBlur =
-          opacity >
-          0.58
-            ? 10
-            : 3;
+        ctx.shadowBlur = opacity > 0.58 ? 10 : 3;
 
-        ctx.shadowColor =
-          `rgba(${star.color}, ${opacity})`;
+        ctx.shadowColor = `rgba(${star.color}, ${opacity})`;
 
         ctx.fill();
 
@@ -692,54 +416,24 @@ export function PulseLivingBackground() {
          * This is subtle and appears only
          * briefly.
          */
-        if (
-          opacity >
-            0.7 &&
-          star.radius >
-            0.75
-        ) {
-          const sparkleSize =
-            1.5 +
-            radiusBoost *
-              0.5;
+        if (opacity > 0.7 && star.radius > 0.75) {
+          const sparkleSize = 1.5 + radiusBoost * 0.5;
 
           ctx.beginPath();
 
-          ctx.moveTo(
-            position.x -
-              sparkleSize,
-            position.y,
-          );
+          ctx.moveTo(position.x - sparkleSize, position.y);
 
-          ctx.lineTo(
-            position.x +
-              sparkleSize,
-            position.y,
-          );
+          ctx.lineTo(position.x + sparkleSize, position.y);
 
-          ctx.moveTo(
-            position.x,
-            position.y -
-              sparkleSize,
-          );
+          ctx.moveTo(position.x, position.y - sparkleSize);
 
-          ctx.lineTo(
-            position.x,
-            position.y +
-              sparkleSize,
-          );
+          ctx.lineTo(position.x, position.y + sparkleSize);
 
-          ctx.strokeStyle =
-            `rgba(${star.color}, ${
-              opacity *
-              0.3
-            })`;
+          ctx.strokeStyle = `rgba(${star.color}, ${opacity * 0.3})`;
 
-          ctx.lineWidth =
-            0.4;
+          ctx.lineWidth = 0.4;
 
-          ctx.shadowBlur =
-            0;
+          ctx.shadowBlur = 0;
 
           ctx.stroke();
         }
@@ -761,66 +455,27 @@ export function PulseLivingBackground() {
 
       ctx.beginPath();
 
-      for (
-        let index = 0;
-        index <=
-        points;
-        index += 1
-      ) {
-        const angle =
-          (
-            index /
-            points
-          ) *
-          Math.PI *
-          2;
+      for (let index = 0; index <= points; index += 1) {
+        const angle = (index / points) * Math.PI * 2;
 
         /*
          * Small organic variation.
          */
         const wobble =
-          Math.sin(
-            angle *
-              4 +
-              ripple.phase +
-              progress *
-                5,
-          ) *
+          Math.sin(angle * 4 + ripple.phase + progress * 5) *
           2.3 *
-          (
-            1 -
-            progress
-          );
+          (1 - progress);
 
-        const ringRadius =
-          radius +
-          wobble;
+        const ringRadius = radius + wobble;
 
-        const pointX =
-          Math.cos(
-            angle,
-          ) *
-          ringRadius;
+        const pointX = Math.cos(angle) * ringRadius;
 
-        const pointY =
-          Math.sin(
-            angle,
-          ) *
-          ringRadius *
-          0.2;
+        const pointY = Math.sin(angle) * ringRadius * 0.2;
 
-        if (
-          index === 0
-        ) {
-          ctx.moveTo(
-            pointX,
-            pointY,
-          );
+        if (index === 0) {
+          ctx.moveTo(pointX, pointY);
         } else {
-          ctx.lineTo(
-            pointX,
-            pointY,
-          );
+          ctx.lineTo(pointX, pointY);
         }
       }
 
@@ -831,192 +486,103 @@ export function PulseLivingBackground() {
        DRAW WATER RIPPLES
     ========================================================== */
 
-    const drawRipples = (
-      time: number,
-    ) => {
-      ripples =
-        ripples.filter(
-          (ripple) => {
-            if (
-              time <
-              ripple.start
-            ) {
-              return true;
-            }
+    const drawRipples = (time: number) => {
+      ripples = ripples.filter((ripple) => {
+        if (time < ripple.start) {
+          return true;
+        }
 
-            const progress =
-              (
-                time -
-                ripple.start
-              ) /
-              ripple.duration;
+        const progress = (time - ripple.start) / ripple.duration;
 
-            if (
-              progress >= 1
-            ) {
-              return false;
-            }
+        if (progress >= 1) {
+          return false;
+        }
 
-            const eased =
-              1 -
-              Math.pow(
-                1 -
-                  progress,
-                2.15,
-              );
+        const eased = 1 - Math.pow(1 - progress, 2.15);
 
-            const radius =
-              ripple.maxRadius *
-              eased;
+        const radius = ripple.maxRadius * eased;
 
-            const fade =
-              Math.pow(
-                1 -
-                  progress,
-                2,
-              );
+        const fade = Math.pow(1 - progress, 2);
 
-            const opacity =
-              fade *
-              0.25 *
-              ripple.strength;
+        const opacity = fade * 0.25 * ripple.strength;
 
-            ctx.save();
+        ctx.save();
 
-            ctx.translate(
-              ripple.x,
-              ripple.y,
-            );
+        ctx.translate(ripple.x, ripple.y);
 
-            /*
-             * Wide soft disturbance.
-             */
-            drawRipplePath(
-              ripple,
-              radius +
-                5,
-              progress,
-            );
+        /*
+         * Wide soft disturbance.
+         */
+        drawRipplePath(ripple, radius + 5, progress);
 
-            ctx.strokeStyle =
-              `rgba(${ripple.color}, ${
-                opacity *
-                0.11
-              })`;
+        ctx.strokeStyle = `rgba(${ripple.color}, ${opacity * 0.11})`;
 
-            ctx.lineWidth =
-              8;
+        ctx.lineWidth = 8;
 
-            ctx.shadowBlur =
-              14;
+        ctx.shadowBlur = 14;
 
-            ctx.shadowColor =
-              `rgba(${ripple.color}, ${
-                opacity *
-                0.3
-              })`;
+        ctx.shadowColor = `rgba(${ripple.color}, ${opacity * 0.3})`;
 
-            ctx.stroke();
+        ctx.stroke();
 
-            /*
-             * Main water wave.
-             */
-            drawRipplePath(
-              ripple,
-              radius,
-              progress,
-            );
+        /*
+         * Main water wave.
+         */
+        drawRipplePath(ripple, radius, progress);
 
-            const waterGradient =
-              ctx.createLinearGradient(
-                0,
-                -radius *
-                  0.2,
-                0,
-                radius *
-                  0.2,
-              );
-
-            waterGradient.addColorStop(
-              0,
-              `rgba(${ripple.color}, ${
-                opacity *
-                0.2
-              })`,
-            );
-
-            waterGradient.addColorStop(
-              0.52,
-              `rgba(${ripple.color}, ${opacity})`,
-            );
-
-            waterGradient.addColorStop(
-              0.72,
-              `rgba(215,240,255, ${
-                opacity *
-                0.32
-              })`,
-            );
-
-            waterGradient.addColorStop(
-              1,
-              `rgba(${ripple.color}, ${
-                opacity *
-                0.12
-              })`,
-            );
-
-            ctx.strokeStyle =
-              waterGradient;
-
-            ctx.lineWidth =
-              ripple.thickness;
-
-            ctx.shadowBlur =
-              7;
-
-            ctx.shadowColor =
-              `rgba(${ripple.color}, ${
-                opacity *
-                0.55
-              })`;
-
-            ctx.stroke();
-
-            /*
-             * Thin water reflection.
-             */
-            if (
-              radius >
-              8
-            ) {
-              drawRipplePath(
-                ripple,
-                radius -
-                  2.5,
-                progress,
-              );
-
-              ctx.strokeStyle =
-                `rgba(220,245,255, ${
-                  opacity *
-                  0.17
-                })`;
-
-              ctx.lineWidth =
-                0.45;
-
-              ctx.shadowBlur =
-                0;
-
-              ctx.stroke();
-            }
-
-            ctx.restore();
-
-            return true;
-          },
+        const waterGradient = ctx.createLinearGradient(
+          0,
+          -radius * 0.2,
+          0,
+          radius * 0.2,
         );
+
+        waterGradient.addColorStop(
+          0,
+          `rgba(${ripple.color}, ${opacity * 0.2})`,
+        );
+
+        waterGradient.addColorStop(0.52, `rgba(${ripple.color}, ${opacity})`);
+
+        waterGradient.addColorStop(
+          0.72,
+          `rgba(215,240,255, ${opacity * 0.32})`,
+        );
+
+        waterGradient.addColorStop(
+          1,
+          `rgba(${ripple.color}, ${opacity * 0.12})`,
+        );
+
+        ctx.strokeStyle = waterGradient;
+
+        ctx.lineWidth = ripple.thickness;
+
+        ctx.shadowBlur = 7;
+
+        ctx.shadowColor = `rgba(${ripple.color}, ${opacity * 0.55})`;
+
+        ctx.stroke();
+
+        /*
+         * Thin water reflection.
+         */
+        if (radius > 8) {
+          drawRipplePath(ripple, radius - 2.5, progress);
+
+          ctx.strokeStyle = `rgba(220,245,255, ${opacity * 0.17})`;
+
+          ctx.lineWidth = 0.45;
+
+          ctx.shadowBlur = 0;
+
+          ctx.stroke();
+        }
+
+        ctx.restore();
+
+        return true;
+      });
 
       ctx.shadowBlur = 0;
     };
@@ -1025,220 +591,137 @@ export function PulseLivingBackground() {
        DRAW FALLING WATER DROPS
     ========================================================== */
 
-    const drawDrops = (
-      time: number,
-    ) => {
-      drops =
-        drops.filter(
-          (drop) => {
-            const progress =
-              (
-                time -
-                drop.start
-              ) /
-              drop.duration;
+    const drawDrops = (time: number) => {
+      drops = drops.filter((drop) => {
+        const progress = (time - drop.start) / drop.duration;
 
-            /*
-             * Drop hits water.
-             */
-            if (
-              progress >= 1
-            ) {
-              createRipple(
-                drop.x,
-                drop.impactY,
-                0.82,
-              );
+        /*
+         * Drop hits water.
+         */
+        if (progress >= 1) {
+          createRipple(drop.x, drop.impactY, 0.82);
 
-              return false;
-            }
+          return false;
+        }
 
-            /*
-             * Gravity.
-             */
-            const gravity =
-              progress *
-              progress;
+        /*
+         * Gravity.
+         */
+        const gravity = progress * progress;
 
-            const y =
-              drop.startY +
-              (
-                drop.impactY -
-                  drop.startY
-              ) *
-                gravity;
+        const y = drop.startY + (drop.impactY - drop.startY) * gravity;
 
-            ctx.save();
+        ctx.save();
 
-            ctx.translate(
-              drop.x,
-              y,
-            );
+        ctx.translate(drop.x, y);
 
-            /*
-             * Teardrop shape.
-             */
-            ctx.beginPath();
+        /*
+         * Teardrop shape.
+         */
+        ctx.beginPath();
 
-            ctx.moveTo(
-              0,
-              -drop.size *
-                1.8,
-            );
+        ctx.moveTo(0, -drop.size * 1.8);
 
-            ctx.bezierCurveTo(
-              drop.size *
-                0.25,
-              -drop.size,
-              drop.size,
-              -drop.size *
-                0.1,
-              drop.size,
-              drop.size *
-                0.55,
-            );
-
-            ctx.bezierCurveTo(
-              drop.size,
-              drop.size *
-                1.3,
-              drop.size *
-                0.5,
-              drop.size *
-                1.75,
-              0,
-              drop.size *
-                1.75,
-            );
-
-            ctx.bezierCurveTo(
-              -drop.size *
-                0.5,
-              drop.size *
-                1.75,
-              -drop.size,
-              drop.size *
-                1.3,
-              -drop.size,
-              drop.size *
-                0.55,
-            );
-
-            ctx.bezierCurveTo(
-              -drop.size,
-              -drop.size *
-                0.1,
-              -drop.size *
-                0.25,
-              -drop.size,
-              0,
-              -drop.size *
-                1.8,
-            );
-
-            ctx.closePath();
-
-            const gradient =
-              ctx.createRadialGradient(
-                -drop.size *
-                  0.3,
-                -drop.size *
-                  0.45,
-                0,
-                0,
-                0,
-                drop.size *
-                  2,
-              );
-
-            gradient.addColorStop(
-              0,
-              "rgba(255,255,255,0.94)",
-            );
-
-            gradient.addColorStop(
-              0.28,
-              "rgba(205,240,255,0.8)",
-            );
-
-            gradient.addColorStop(
-              0.68,
-              "rgba(80,170,255,0.42)",
-            );
-
-            gradient.addColorStop(
-              1,
-              "rgba(110,70,255,0.08)",
-            );
-
-            ctx.fillStyle =
-              gradient;
-
-            ctx.shadowBlur =
-              7;
-
-            ctx.shadowColor =
-              "rgba(160,220,255,0.24)";
-
-            ctx.fill();
-
-            /*
-             * Water reflection.
-             */
-            ctx.beginPath();
-
-            ctx.arc(
-              -drop.size *
-                0.27,
-              -drop.size *
-                0.42,
-              Math.max(
-                0.45,
-                drop.size *
-                  0.16,
-              ),
-              0,
-              Math.PI *
-                2,
-            );
-
-            ctx.fillStyle =
-              "rgba(255,255,255,0.75)";
-
-            ctx.shadowBlur =
-              0;
-
-            ctx.fill();
-
-            ctx.restore();
-
-            return true;
-          },
+        ctx.bezierCurveTo(
+          drop.size * 0.25,
+          -drop.size,
+          drop.size,
+          -drop.size * 0.1,
+          drop.size,
+          drop.size * 0.55,
         );
+
+        ctx.bezierCurveTo(
+          drop.size,
+          drop.size * 1.3,
+          drop.size * 0.5,
+          drop.size * 1.75,
+          0,
+          drop.size * 1.75,
+        );
+
+        ctx.bezierCurveTo(
+          -drop.size * 0.5,
+          drop.size * 1.75,
+          -drop.size,
+          drop.size * 1.3,
+          -drop.size,
+          drop.size * 0.55,
+        );
+
+        ctx.bezierCurveTo(
+          -drop.size,
+          -drop.size * 0.1,
+          -drop.size * 0.25,
+          -drop.size,
+          0,
+          -drop.size * 1.8,
+        );
+
+        ctx.closePath();
+
+        const gradient = ctx.createRadialGradient(
+          -drop.size * 0.3,
+          -drop.size * 0.45,
+          0,
+          0,
+          0,
+          drop.size * 2,
+        );
+
+        gradient.addColorStop(0, "rgba(255,255,255,0.94)");
+
+        gradient.addColorStop(0.28, "rgba(205,240,255,0.8)");
+
+        gradient.addColorStop(0.68, "rgba(80,170,255,0.42)");
+
+        gradient.addColorStop(1, "rgba(110,70,255,0.08)");
+
+        ctx.fillStyle = gradient;
+
+        ctx.shadowBlur = 7;
+
+        ctx.shadowColor = "rgba(160,220,255,0.24)";
+
+        ctx.fill();
+
+        /*
+         * Water reflection.
+         */
+        ctx.beginPath();
+
+        ctx.arc(
+          -drop.size * 0.27,
+          -drop.size * 0.42,
+          Math.max(0.45, drop.size * 0.16),
+          0,
+          Math.PI * 2,
+        );
+
+        ctx.fillStyle = "rgba(255,255,255,0.75)";
+
+        ctx.shadowBlur = 0;
+
+        ctx.fill();
+
+        ctx.restore();
+
+        return true;
+      });
     };
 
     /* =========================================================
        ANIMATION LOOP
     ========================================================== */
 
-    const animate = (
-      time: number,
-    ) => {
+    const animate = (time: number) => {
       if (!isVisible) {
-        animationFrame =
-          requestAnimationFrame(
-            animate,
-          );
+        animationFrame = requestAnimationFrame(animate);
 
         return;
       }
 
-      ctx.clearRect(
-        0,
-        0,
-        width,
-        height,
-      );
+      ctx.clearRect(0, 0, width, height);
 
       drawStars(time);
 
@@ -1246,41 +729,28 @@ export function PulseLivingBackground() {
 
       drawDrops(time);
 
-      animationFrame =
-        requestAnimationFrame(
-          animate,
-        );
+      animationFrame = requestAnimationFrame(animate);
     };
 
     /* =========================================================
        TAP / CLICK RIPPLE
     ========================================================== */
 
-    const handlePointerDown = (
-      event: PointerEvent,
-    ) => {
-      if (
-        reducedMotion.matches
-      ) {
+    const handlePointerDown = (event: PointerEvent) => {
+      if (reducedMotion.matches) {
         return;
       }
 
-      createRipple(
-        event.clientX,
-        event.clientY,
-        0.48,
-      );
+      createRipple(event.clientX, event.clientY, 0.48);
     };
 
     /* =========================================================
        VISIBILITY
     ========================================================== */
 
-    const handleVisibility =
-      () => {
-        isVisible =
-          !document.hidden;
-      };
+    const handleVisibility = () => {
+      isVisible = !document.hidden;
+    };
 
     /* =========================================================
        START
@@ -1288,60 +758,32 @@ export function PulseLivingBackground() {
 
     resizeCanvas();
 
-    window.addEventListener(
-      "resize",
-      resizeCanvas,
-    );
+    window.addEventListener("resize", resizeCanvas);
 
-    window.addEventListener(
-      "pointerdown",
-      handlePointerDown,
-      {
-        passive: true,
-      },
-    );
+    window.addEventListener("pointerdown", handlePointerDown, {
+      passive: true,
+    });
 
-    document.addEventListener(
-      "visibilitychange",
-      handleVisibility,
-    );
+    document.addEventListener("visibilitychange", handleVisibility);
 
-    if (
-      !reducedMotion.matches
-    ) {
-      animationFrame =
-        requestAnimationFrame(
-          animate,
-        );
+    if (!reducedMotion.matches) {
+      animationFrame = requestAnimationFrame(animate);
 
       /*
        * First water drop.
        */
-      firstDropTimer =
-        setTimeout(
-          createDrop,
-          1600,
-        );
+      firstDropTimer = setTimeout(createDrop, 1600);
 
       /*
        * Slow, deliberate water drops.
        */
-      dropTimer =
-        setInterval(
-          createDrop,
-          8000,
-        );
+      dropTimer = setInterval(createDrop, 8000);
     } else {
       /*
        * Static version for reduced-motion
        * accessibility preference.
        */
-      ctx.clearRect(
-        0,
-        0,
-        width,
-        height,
-      );
+      ctx.clearRect(0, 0, width, height);
 
       drawStars(0);
     }
@@ -1351,40 +793,21 @@ export function PulseLivingBackground() {
     ========================================================== */
 
     return () => {
-      cancelAnimationFrame(
-        animationFrame,
-      );
+      cancelAnimationFrame(animationFrame);
 
-      if (
-        dropTimer
-      ) {
-        clearInterval(
-          dropTimer,
-        );
+      if (dropTimer) {
+        clearInterval(dropTimer);
       }
 
-      if (
-        firstDropTimer
-      ) {
-        clearTimeout(
-          firstDropTimer,
-        );
+      if (firstDropTimer) {
+        clearTimeout(firstDropTimer);
       }
 
-      window.removeEventListener(
-        "resize",
-        resizeCanvas,
-      );
+      window.removeEventListener("resize", resizeCanvas);
 
-      window.removeEventListener(
-        "pointerdown",
-        handlePointerDown,
-      );
+      window.removeEventListener("pointerdown", handlePointerDown);
 
-      document.removeEventListener(
-        "visibilitychange",
-        handleVisibility,
-      );
+      document.removeEventListener("visibilitychange", handleVisibility);
     };
   }, []);
 

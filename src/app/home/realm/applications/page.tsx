@@ -24,7 +24,7 @@ const realmBadge =
 
 const realmButton =
   "border border-white/10 bg-gradient-to-r from-[#0891b2] via-[#22d3ee] to-[#7c3aed] text-white shadow-lg shadow-[#0891b2]/20 hover:brightness-110 hover:shadow-[#22d3ee]/25";
-  
+
 export default async function RealmApplicationsPage({
   searchParams,
 }: {
@@ -47,23 +47,22 @@ export default async function RealmApplicationsPage({
     return <AccountUnavailable />;
   }
 
-  const [applicationResult, membershipResult, parameters] =
-    await Promise.all([
-      supabase
-        .from("campaign_applications")
-        .select("*")
-        .eq("user_id", userData.user.id)
-        .order("updated_at", { ascending: false }),
+  const [applicationResult, membershipResult, parameters] = await Promise.all([
+    supabase
+      .from("campaign_applications")
+      .select("*")
+      .eq("user_id", userData.user.id)
+      .order("updated_at", { ascending: false }),
 
-      supabase
-        .from("campaign_members")
-        .select("*")
-        .eq("user_id", userData.user.id)
-        .eq("status", "active")
-        .order("joined_at", { ascending: false }),
+    supabase
+      .from("campaign_members")
+      .select("*")
+      .eq("user_id", userData.user.id)
+      .eq("status", "active")
+      .order("joined_at", { ascending: false }),
 
-      searchParams,
-    ]);
+    searchParams,
+  ]);
 
   if (applicationResult.error || membershipResult.error) {
     return (
@@ -75,27 +74,17 @@ export default async function RealmApplicationsPage({
 
   const campaignIds = [
     ...new Set([
-      ...(applicationResult.data ?? []).map(
-        (item) => item.campaign_id,
-      ),
-      ...(membershipResult.data ?? []).map(
-        (item) => item.campaign_id,
-      ),
+      ...(applicationResult.data ?? []).map((item) => item.campaign_id),
+      ...(membershipResult.data ?? []).map((item) => item.campaign_id),
     ]),
   ];
 
   const campaignResult = campaignIds.length
-    ? await supabase
-        .from("realm_campaigns")
-        .select("*")
-        .in("id", campaignIds)
+    ? await supabase.from("realm_campaigns").select("*").in("id", campaignIds)
     : { data: [], error: null };
 
   const campaigns = new Map(
-    (campaignResult.data ?? []).map((campaign) => [
-      campaign.id,
-      campaign,
-    ]),
+    (campaignResult.data ?? []).map((campaign) => [campaign.id, campaign]),
   );
 
   return (
@@ -127,7 +116,7 @@ export default async function RealmApplicationsPage({
                 />
               </div>
 
-              <p className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-[#22d3ee]/80">
+              <p className="font-mono text-xs font-bold tracking-[0.2em] text-[#22d3ee]/80 uppercase">
                 Your Realm Path
               </p>
             </div>
@@ -138,10 +127,9 @@ export default async function RealmApplicationsPage({
           </div>
 
           <p className="max-w-2xl text-lg leading-8 text-white/45 lg:pb-1">
-            Review the campaigns you&apos;ve joined, follow your
-            applications, and manage where you&apos;re currently
-            participating. Application answers stay private between you
-            and authorized game masters.
+            Review the campaigns you&apos;ve joined, follow your applications,
+            and manage where you&apos;re currently participating. Application
+            answers stay private between you and authorized game masters.
           </p>
         </div>
       </header>
@@ -164,9 +152,7 @@ export default async function RealmApplicationsPage({
         ) : null}
 
         {parameters?.membership === "left" ? (
-          <StatusMessage tone="success">
-            You left the campaign.
-          </StatusMessage>
+          <StatusMessage tone="success">You left the campaign.</StatusMessage>
         ) : null}
 
         {parameters?.membership === "error" ? (
@@ -180,20 +166,14 @@ export default async function RealmApplicationsPage({
           ACTIVE CAMPAIGNS
       ====================================================== */}
 
-      <section
-        className="mt-10"
-        aria-labelledby="active-campaigns-heading"
-      >
+      <section className="mt-10" aria-labelledby="active-campaigns-heading">
         <div className="flex items-center gap-4">
           <div className="flex size-11 items-center justify-center rounded-full border border-[#22d3ee]/25 bg-[#22d3ee]/[0.07]">
-            <Users
-              aria-hidden="true"
-              className="size-5 text-[#22d3ee]"
-            />
+            <Users aria-hidden="true" className="size-5 text-[#22d3ee]" />
           </div>
 
           <div>
-            <p className="font-mono text-[0.62rem] font-bold uppercase tracking-[0.18em] text-[#22d3ee]/65">
+            <p className="font-mono text-[0.62rem] font-bold tracking-[0.18em] text-[#22d3ee]/65 uppercase">
               Current Worlds
             </p>
 
@@ -205,8 +185,8 @@ export default async function RealmApplicationsPage({
             </h2>
 
             <p className="mt-2 text-sm leading-6 text-white/40">
-              Campaigns where you currently have an active seat will
-              appear here.
+              Campaigns where you currently have an active seat will appear
+              here.
             </p>
           </div>
         </div>
@@ -224,15 +204,11 @@ export default async function RealmApplicationsPage({
                   <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                       <div className="flex flex-wrap gap-2">
-                        <Badge
-                          className={`${realmBadge} capitalize`}
-                        >
+                        <Badge className={`${realmBadge} capitalize`}>
                           {membership.role.replaceAll("_", " ")}
                         </Badge>
 
-                        <Badge
-                          className={`${realmBadge} capitalize`}
-                        >
+                        <Badge className={`${realmBadge} capitalize`}>
                           {campaign.status}
                         </Badge>
                       </div>
@@ -242,8 +218,7 @@ export default async function RealmApplicationsPage({
                       </h3>
 
                       <p className="mt-2 text-sm text-white/40">
-                        Game master{" "}
-                        {campaign.game_master_display_name}
+                        Game master {campaign.game_master_display_name}
                       </p>
                     </div>
 
@@ -297,7 +272,7 @@ export default async function RealmApplicationsPage({
         aria-labelledby="application-history-heading"
       >
         <div>
-          <p className="font-mono text-[0.62rem] font-bold uppercase tracking-[0.18em] text-[#22d3ee]/65">
+          <p className="font-mono text-[0.62rem] font-bold tracking-[0.18em] text-[#22d3ee]/65 uppercase">
             Recruitment Trail
           </p>
 
@@ -309,8 +284,8 @@ export default async function RealmApplicationsPage({
           </h2>
 
           <p className="mt-2 max-w-3xl text-sm leading-6 text-white/40">
-            Keep track of the campaigns you&apos;ve applied to and where
-            each application currently stands.
+            Keep track of the campaigns you&apos;ve applied to and where each
+            application currently stands.
           </p>
         </div>
 
@@ -326,9 +301,7 @@ export default async function RealmApplicationsPage({
                 >
                   <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
                     <div>
-                      <Badge
-                        className={`${realmBadge} capitalize`}
-                      >
+                      <Badge className={`${realmBadge} capitalize`}>
                         {application.status}
                       </Badge>
 
@@ -356,11 +329,7 @@ export default async function RealmApplicationsPage({
                       </ButtonLink>
 
                       {application.status === "submitted" ? (
-                        <form
-                          action={
-                            withdrawCampaignApplicationAction
-                          }
-                        >
+                        <form action={withdrawCampaignApplicationAction}>
                           <input
                             name="campaignId"
                             type="hidden"

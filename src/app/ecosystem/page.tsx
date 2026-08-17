@@ -61,7 +61,7 @@ const spaces = [
     float: "-10px",
     duration: "7.2s",
     delay: "-1.4s",
-motion: "sessions-rise",
+    motion: "sessions-rise",
   },
   {
     name: "Circles",
@@ -76,8 +76,8 @@ motion: "sessions-rise",
     position: "left-[12%] top-[31%]",
     float: "-8px",
     duration: "6.4s",
-delay: "-3.2s",
-motion: "circles-connect",
+    delay: "-3.2s",
+    motion: "circles-connect",
   },
   {
     name: "Commons",
@@ -92,8 +92,8 @@ motion: "circles-connect",
     position: "right-[10%] top-[31%]",
     float: "-12px",
     duration: "8s",
-delay: "-4.6s",
-motion: "commons-create",
+    delay: "-4.6s",
+    motion: "commons-create",
   },
   {
     name: "Realm",
@@ -108,8 +108,8 @@ motion: "commons-create",
     position: "left-[20%] bottom-[10%]",
     float: "-9px",
     duration: "7.5s",
-delay: "-2.5s",
-motion: "realm-enter",
+    delay: "-2.5s",
+    motion: "realm-enter",
   },
   {
     name: "Passport",
@@ -124,15 +124,15 @@ motion: "realm-enter",
     position: "right-[17%] bottom-[9%]",
     float: "-11px",
     duration: "6.8s",
-delay: "-5.1s",
-motion: "passport-verify",
+    delay: "-5.1s",
+    motion: "passport-verify",
   },
 ] as const;
 
 export default function EcosystemPage() {
   return (
     <main className="relative isolate min-h-screen overflow-hidden bg-[#020205] text-white">
-<style>{`
+      <style>{`
   @keyframes ecosystem-glitter-float {
     0%,
     100% {
@@ -347,8 +347,8 @@ export default function EcosystemPage() {
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
       >
-        <div className="absolute left-[-18rem] top-[18%] size-[42rem] rounded-full bg-[#1800ad]/8 blur-[180px]" />
-        <div className="absolute right-[-16rem] top-[24%] size-[38rem] rounded-full bg-[#f359d2]/6 blur-[170px]" />
+        <div className="absolute top-[18%] left-[-18rem] size-[42rem] rounded-full bg-[#1800ad]/8 blur-[180px]" />
+        <div className="absolute top-[24%] right-[-16rem] size-[38rem] rounded-full bg-[#f359d2]/6 blur-[170px]" />
         <div className="absolute bottom-[-18rem] left-[35%] size-[46rem] rounded-full bg-[#6c14ce]/8 blur-[190px]" />
 
         {ecosystemGlitter.map((particle, index) => {
@@ -385,89 +385,85 @@ export default function EcosystemPage() {
 
       <Container className="relative z-10 py-12 sm:py-16 lg:py-20">
         <div className="mx-auto max-w-7xl">
-
           {/* Desktop interactive starfield */}
           <section className="relative mt-8 hidden min-h-[780px] lg:block">
             {/* Atmospheric center glow */}
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute left-1/2 top-1/2 size-[38rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#6c14ce]/8 blur-[150px]"
+              className="pointer-events-none absolute top-1/2 left-1/2 size-[38rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#6c14ce]/8 blur-[150px]"
             />
-
 
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute left-1/2 top-1/2 size-[22rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#f359d2]/5 blur-[110px]"
+              className="pointer-events-none absolute top-1/2 left-1/2 size-[22rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#f359d2]/5 blur-[110px]"
             />
-
 
             {/* Pulse */}
             <Link
-              className="group absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2"
+              className="group absolute top-1/2 left-1/2 z-20 -translate-x-1/2 -translate-y-1/2"
               href="/home/pulse"
             >
-<div className="pulse-node relative flex size-48 items-center justify-center">
-  {/* large atmospheric glow */}
-  <div
-    aria-hidden="true"
-    className="absolute inset-[-4rem] rounded-full bg-[radial-gradient(circle,rgba(108,20,206,0.20)_0%,rgba(243,89,210,0.08)_38%,transparent_70%)] blur-[30px]"
-  />
+              <div className="pulse-node relative flex size-48 items-center justify-center">
+                {/* large atmospheric glow */}
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-[-4rem] rounded-full bg-[radial-gradient(circle,rgba(108,20,206,0.20)_0%,rgba(243,89,210,0.08)_38%,transparent_70%)] blur-[30px]"
+                />
 
-  {/* outer signal ring */}
-  <div
- aria-hidden="true"
-  className="absolute inset-0 rounded-full border opacity-30 transition-all duration-500 group-hover:scale-125 group-hover:opacity-70"  /
-  >
+                {/* outer signal ring */}
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0 rounded-full border opacity-30 transition-all duration-500 group-hover:scale-125 group-hover:opacity-70"
+                />
 
-  {/* middle gradient ring */}
-  <div
-    aria-hidden="true"
-    className="absolute inset-[0.55rem] rounded-full bg-[linear-gradient(135deg,#1800ad,#6c14ce,#f359d2)] p-px"
-  >
-    <div className="size-full rounded-full bg-[#020205]/95" />
-  </div>
+                {/* middle gradient ring */}
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-[0.55rem] rounded-full bg-[linear-gradient(135deg,#1800ad,#6c14ce,#f359d2)] p-px"
+                >
+                  <div className="size-full rounded-full bg-[#020205]/95" />
+                </div>
 
-  {/* inner signal ring */}
-  <div
-    aria-hidden="true"
-    className="absolute inset-[1.35rem] rounded-full border border-[#ca9aff]/20"
-  />
+                {/* inner signal ring */}
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-[1.35rem] rounded-full border border-[#ca9aff]/20"
+                />
 
-  {/* pulse core */}
-<div className="relative z-10 flex size-36 flex-col items-center justify-center rounded-full bg-black/80 text-center backdrop-blur-xl">
-  <div className="relative flex size- items-center justify-center">
-    <div
-      aria-hidden="true"
-      className="absolute inset-[-0.5rem] rounded-full bg-[#6c14ce]/25 blur-2xl"
-    />
+                {/* pulse core */}
+                <div className="relative z-10 flex size-36 flex-col items-center justify-center rounded-full bg-black/80 text-center backdrop-blur-xl">
+                  <div className="size- relative flex items-center justify-center">
+                    <div
+                      aria-hidden="true"
+                      className="absolute inset-[-0.5rem] rounded-full bg-[#6c14ce]/25 blur-2xl"
+                    />
 
-<svg
-  aria-hidden="true"
-  className="size-10 text-[#ca9aff]"
-  viewBox="0 0 64 40"
-  fill="none"
->
-  <path
-    d="M2 22H14L19 12L25 32L32 5L39 28L44 18L49 22H62"
-    stroke="currentColor"
-    strokeWidth="3"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  />
-</svg>
-  </div>
+                    <svg
+                      aria-hidden="true"
+                      className="size-10 text-[#ca9aff]"
+                      viewBox="0 0 64 40"
+                      fill="none"
+                    >
+                      <path
+                        d="M2 22H14L19 12L25 32L32 5L39 28L44 18L49 22H62"
+                        stroke="currentColor"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
 
-  <p className="mt-1 text-2xl font-bold tracking-tight text-white">
-    Pulse
-  </p>
-
-</div>
-  {/* signal ticks */}
-  <span className="absolute left-1/2 top-0 h-3 w-px -translate-x-1/2 bg-[#ca9aff]/70" />
-  <span className="absolute bottom-0 left-1/2 h-3 w-px -translate-x-1/2 bg-[#ca9aff]/70" />
-  <span className="absolute left-0 top-1/2 h-px w-3 -translate-y-1/2 bg-[#f359d2]/70" />
-  <span className="absolute right-0 top-1/2 h-px w-3 -translate-y-1/2 bg-[#f359d2]/70" />
-</div>
+                  <p className="mt-1 text-2xl font-bold tracking-tight text-white">
+                    Pulse
+                  </p>
+                </div>
+                {/* signal ticks */}
+                <span className="absolute top-0 left-1/2 h-3 w-px -translate-x-1/2 bg-[#ca9aff]/70" />
+                <span className="absolute bottom-0 left-1/2 h-3 w-px -translate-x-1/2 bg-[#ca9aff]/70" />
+                <span className="absolute top-1/2 left-0 h-px w-3 -translate-y-1/2 bg-[#f359d2]/70" />
+                <span className="absolute top-1/2 right-0 h-px w-3 -translate-y-1/2 bg-[#f359d2]/70" />
+              </div>
             </Link>
 
             {/* Feature stars */}
@@ -494,7 +490,7 @@ export default function EcosystemPage() {
                     {/* outer glow */}
                     <div
                       aria-hidden="true"
-                      className="absolute left-1/2 top-1/2 size-28 -translate-x-1/2 -translate-y-1/2 rounded-full blur-[34px] transition duration-500 group-hover:size-36"
+                      className="absolute top-1/2 left-1/2 size-28 -translate-x-1/2 -translate-y-1/2 rounded-full blur-[34px] transition duration-500 group-hover:size-36"
                       style={{
                         backgroundColor: space.glow,
                       }}
@@ -513,91 +509,90 @@ export default function EcosystemPage() {
                     </div>
 
                     {/* always-visible label */}
-                    <div className="absolute left-1/2 top-[6.8rem] w-44 -translate-x-1/2 text-center">
+                    <div className="absolute top-[6.8rem] left-1/2 w-44 -translate-x-1/2 text-center">
                       <p
                         className="text-lg font-bold"
                         style={{ color: space.accent }}
                       >
                         {space.name}
                       </p>
-
                     </div>
 
-{/* SIGNAL transmission */}
-<div
-  className="pointer-events-none absolute left-1/2 top-[7.2rem] w-72 -translate-x-1/2 translate-y-3 overflow-hidden rounded-[1.4rem] border bg-[#050508]/90 opacity-0 shadow-[0_24px_70px_rgba(0,0,0,0.55)] backdrop-blur-xl transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:translate-y-0 group-focus-within:opacity-100"
-  style={{
-    borderColor: space.border,
-    boxShadow: `0 20px 60px rgba(0,0,0,0.55), 0 0 30px ${space.glow}`,
-  }}
->
-  {/* module-colored signal edge */}
-  <div
-    aria-hidden="true"
-    className="h-px w-full"
-    style={{
-      background: `linear-gradient(90deg, transparent, ${space.accent}, transparent)`,
-    }}
-  />
+                    {/* SIGNAL transmission */}
+                    <div
+                      className="pointer-events-none absolute top-[7.2rem] left-1/2 w-72 -translate-x-1/2 translate-y-3 overflow-hidden rounded-[1.4rem] border bg-[#050508]/90 opacity-0 shadow-[0_24px_70px_rgba(0,0,0,0.55)] backdrop-blur-xl transition-all duration-300 group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:translate-y-0 group-hover:opacity-100"
+                      style={{
+                        borderColor: space.border,
+                        boxShadow: `0 20px 60px rgba(0,0,0,0.55), 0 0 30px ${space.glow}`,
+                      }}
+                    >
+                      {/* module-colored signal edge */}
+                      <div
+                        aria-hidden="true"
+                        className="h-px w-full"
+                        style={{
+                          background: `linear-gradient(90deg, transparent, ${space.accent}, transparent)`,
+                        }}
+                      />
 
-  <div className="p-5">
-    {/* transmission status */}
-    <div className="flex items-center justify-between gap-3">
-      <div className="flex items-center gap-2">
-        <span
-          className="size-1.5 rounded-full"
-          style={{
-            backgroundColor: space.accent,
-            boxShadow: `0 0 10px ${space.accent}`,
-          }}
-        />
+                      <div className="p-5">
+                        {/* transmission status */}
+                        <div className="flex items-center justify-between gap-3">
+                          <div className="flex items-center gap-2">
+                            <span
+                              className="size-1.5 rounded-full"
+                              style={{
+                                backgroundColor: space.accent,
+                                boxShadow: `0 0 10px ${space.accent}`,
+                              }}
+                            />
 
-        <span
-          className="text-[0.6rem] font-bold uppercase tracking-[0.2em]"
-          style={{ color: space.accent }}
-        >
-          SIGNAL / {space.name}
-        </span>
-      </div>
+                            <span
+                              className="text-[0.6rem] font-bold tracking-[0.2em] uppercase"
+                              style={{ color: space.accent }}
+                            >
+                              SIGNAL / {space.name}
+                            </span>
+                          </div>
 
-      <span className="text-[0.55rem] font-semibold uppercase tracking-[0.16em] text-white/30">
-        Active
-      </span>
-    </div>
+                          <span className="text-[0.55rem] font-semibold tracking-[0.16em] text-white/30 uppercase">
+                            Active
+                          </span>
+                        </div>
 
-    {/* title */}
-    <h3 className="mt-4 text-xl font-bold text-white">
-      {space.name}
-    </h3>
+                        {/* title */}
+                        <h3 className="mt-4 text-xl font-bold text-white">
+                          {space.name}
+                        </h3>
 
-    {/* tagline */}
-    <p
-      className="mt-1 text-sm font-semibold"
-      style={{ color: space.accent }}
-    >
-      {space.tagline}
-    </p>
+                        {/* tagline */}
+                        <p
+                          className="mt-1 text-sm font-semibold"
+                          style={{ color: space.accent }}
+                        >
+                          {space.tagline}
+                        </p>
 
-    {/* description */}
-    <p className="mt-3 text-sm leading-6 text-white/50">
-      {space.description}
-    </p>
+                        {/* description */}
+                        <p className="mt-3 text-sm leading-6 text-white/50">
+                          {space.description}
+                        </p>
 
-    {/* CTA */}
-    <div className="mt-4 flex items-center justify-between border-t border-white/10 pt-3">
-      <span className="text-[0.6rem] font-bold uppercase tracking-[0.18em] text-white/30">
-        Transmission received
-      </span>
+                        {/* CTA */}
+                        <div className="mt-4 flex items-center justify-between border-t border-white/10 pt-3">
+                          <span className="text-[0.6rem] font-bold tracking-[0.18em] text-white/30 uppercase">
+                            Transmission received
+                          </span>
 
-      <span
-        className="text-xs font-bold uppercase tracking-[0.14em]"
-        style={{ color: space.accent }}
-      >
-        Enter →
-      </span>
-    </div>
-  </div>
-</div>
+                          <span
+                            className="text-xs font-bold tracking-[0.14em] uppercase"
+                            style={{ color: space.accent }}
+                          >
+                            Enter →
+                          </span>
+                        </div>
+                      </div>
+                    </div>
                   </Link>
                 </div>
               );
@@ -605,35 +600,33 @@ export default function EcosystemPage() {
           </section>
 
           <section className="relative z-20 mx-auto mt-10 max-w-5xl">
-  <div className="overflow-hidden rounded-[2rem] border border-[#6c14ce]/25 bg-black/55 p-6 text-center shadow-[0_20px_70px_rgba(0,0,0,0.45)] backdrop-blur-xl sm:p-8 lg:p-10">
-    <div className="inline-flex items-center gap-2 rounded-full border border-[#6c14ce]/30 bg-black/40 px-4 py-2 backdrop-blur-md">
-      <span className="relative flex size-2">
-        <span className="absolute inline-flex size-full animate-ping rounded-full bg-[#f359d2] opacity-40" />
-        <span className="relative inline-flex size-2 rounded-full bg-[#f359d2] shadow-[0_0_12px_rgba(243,89,210,0.9)]" />
-      </span>
+            <div className="overflow-hidden rounded-[2rem] border border-[#6c14ce]/25 bg-black/55 p-6 text-center shadow-[0_20px_70px_rgba(0,0,0,0.45)] backdrop-blur-xl sm:p-8 lg:p-10">
+              <div className="inline-flex items-center gap-2 rounded-full border border-[#6c14ce]/30 bg-black/40 px-4 py-2 backdrop-blur-md">
+                <span className="relative flex size-2">
+                  <span className="absolute inline-flex size-full animate-ping rounded-full bg-[#f359d2] opacity-40" />
+                  <span className="relative inline-flex size-2 rounded-full bg-[#f359d2] shadow-[0_0_12px_rgba(243,89,210,0.9)]" />
+                </span>
 
-      <span className="bg-[linear-gradient(90deg,#ca9aff,#f359d2)] bg-clip-text text-xs font-bold uppercase tracking-[0.22em] text-transparent">
-        The Ecosystem
-      </span>
-    </div>
+                <span className="bg-[linear-gradient(90deg,#ca9aff,#f359d2)] bg-clip-text text-xs font-bold tracking-[0.22em] text-transparent uppercase">
+                  The Ecosystem
+                </span>
+              </div>
 
-    <h1 className="display-type mx-auto mt-5 max-w-4xl text-4xl leading-[0.95] tracking-[-0.04em] sm:text-5xl lg:text-6xl">
-      <span className="block text-white">
-        Everything Moves
-      </span>
+              <h1 className="display-type mx-auto mt-5 max-w-4xl text-4xl leading-[0.95] tracking-[-0.04em] sm:text-5xl lg:text-6xl">
+                <span className="block text-white">Everything Moves</span>
 
-      <span className="block bg-[linear-gradient(90deg,#1800ad_0%,#6c14ce_30%,#f359d2_62%,#7cff00_100%)] bg-clip-text text-transparent [-webkit-text-fill-color:transparent]">
-        Through Your Signal.
-      </span>
-    </h1>
+                <span className="block bg-[linear-gradient(90deg,#1800ad_0%,#6c14ce_30%,#f359d2_62%,#7cff00_100%)] bg-clip-text text-transparent [-webkit-text-fill-color:transparent]">
+                  Through Your Signal.
+                </span>
+              </h1>
 
-    <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-white/55 sm:text-lg sm:leading-8">
-      Pulse helps shape what rises across Sessions, Circles, Commons,
-      Realm, and Passport—creating one connected participation system
-      that responds to where you are right now.
-    </p>
-  </div>
-</section>
+              <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-white/55 sm:text-lg sm:leading-8">
+                Pulse helps shape what rises across Sessions, Circles, Commons,
+                Realm, and Passport—creating one connected participation system
+                that responds to where you are right now.
+              </p>
+            </div>
+          </section>
 
           {/* Mobile / tablet */}
           <section className="relative mt-12 lg:hidden">
@@ -641,10 +634,9 @@ export default function EcosystemPage() {
               className="mx-auto flex size-40 flex-col items-center justify-center rounded-full border border-[#6c14ce]/40 bg-black/70 text-center shadow-[0_0_50px_rgba(108,20,206,0.20)] backdrop-blur-xl"
               href="/home/pulse"
             >
-<AudioLines className="size-8 text-[#ca9aff]" strokeWidth={2.2} />
+              <AudioLines className="size-8 text-[#ca9aff]" strokeWidth={2.2} />
 
               <p className="mt-2 text-xl font-bold text-white">Pulse</p>
-
             </Link>
 
             <div className="mt-12 grid gap-5 sm:grid-cols-2">
@@ -662,73 +654,73 @@ export default function EcosystemPage() {
                     }}
                   >
                     <div className="flex items-center gap-4">
-{/* SIGNAL beacon */}
-<div className="relative flex size-24 items-center justify-center">
-  {/* outer signal ring */}
-  <div
-aria-hidden="true"
-  className={`absolute inset-0 rounded-full border opacity-30 transition-all duration-500 group-hover:opacity-70 ${space.motion}`}
-      style={{
-      borderColor: space.accent,
-      boxShadow: `0 0 24px ${space.glow}`,
-    }}
-  />
+                      {/* SIGNAL beacon */}
+                      <div className="relative flex size-24 items-center justify-center">
+                        {/* outer signal ring */}
+                        <div
+                          aria-hidden="true"
+                          className={`absolute inset-0 rounded-full border opacity-30 transition-all duration-500 group-hover:opacity-70 ${space.motion}`}
+                          style={{
+                            borderColor: space.accent,
+                            boxShadow: `0 0 24px ${space.glow}`,
+                          }}
+                        />
 
-  {/* second offset ring */}
-  <div
-    aria-hidden="true"
-    className="absolute inset-[0.45rem] rounded-full border opacity-40 transition-all duration-500 group-hover:scale-110 group-hover:opacity-80"
-    style={{
-      borderColor: space.border,
-    }}
-  />
+                        {/* second offset ring */}
+                        <div
+                          aria-hidden="true"
+                          className="absolute inset-[0.45rem] rounded-full border opacity-40 transition-all duration-500 group-hover:scale-110 group-hover:opacity-80"
+                          style={{
+                            borderColor: space.border,
+                          }}
+                        />
 
-  {/* soft beacon glow */}
-  <div
-    aria-hidden="true"
-    className="absolute inset-[0.6rem] rounded-full blur-xl transition-all duration-500 group-hover:scale-125"
-    style={{
-      backgroundColor: space.glow,
-    }}
-  />
+                        {/* soft beacon glow */}
+                        <div
+                          aria-hidden="true"
+                          className="absolute inset-[0.6rem] rounded-full blur-xl transition-all duration-500 group-hover:scale-125"
+                          style={{
+                            backgroundColor: space.glow,
+                          }}
+                        />
 
-  {/* main beacon core */}
-  <div
-    className="relative z-10 flex size-16 items-center justify-center rounded-full border bg-black/80 backdrop-blur-xl transition-all duration-300 group-hover:scale-110"
-    style={{
-      borderColor: space.border,
-      color: space.accent,
-      boxShadow: `0 0 26px ${space.glow}`,
-    }}
-  >
-    <Icon className="size-7" />
-  </div>
+                        {/* main beacon core */}
+                        <div
+                          className="relative z-10 flex size-16 items-center justify-center rounded-full border bg-black/80 backdrop-blur-xl transition-all duration-300 group-hover:scale-110"
+                          style={{
+                            borderColor: space.border,
+                            color: space.accent,
+                            boxShadow: `0 0 26px ${space.glow}`,
+                          }}
+                        >
+                          <Icon className="size-7" />
+                        </div>
 
-  {/* signal ticks */}
-  <span
-    aria-hidden="true"
-    className="absolute left-1/2 top-0 h-2 w-px -translate-x-1/2"
-    style={{ backgroundColor: space.accent }}
-  />
+                        {/* signal ticks */}
+                        <span
+                          aria-hidden="true"
+                          className="absolute top-0 left-1/2 h-2 w-px -translate-x-1/2"
+                          style={{ backgroundColor: space.accent }}
+                        />
 
-  <span
-    aria-hidden="true"
-    className="absolute bottom-0 left-1/2 h-2 w-px -translate-x-1/2"
-    style={{ backgroundColor: space.accent }}
-  />
+                        <span
+                          aria-hidden="true"
+                          className="absolute bottom-0 left-1/2 h-2 w-px -translate-x-1/2"
+                          style={{ backgroundColor: space.accent }}
+                        />
 
-  <span
-    aria-hidden="true"
-    className="absolute left-0 top-1/2 h-px w-2 -translate-y-1/2"
-    style={{ backgroundColor: space.accent }}
-  />
+                        <span
+                          aria-hidden="true"
+                          className="absolute top-1/2 left-0 h-px w-2 -translate-y-1/2"
+                          style={{ backgroundColor: space.accent }}
+                        />
 
-  <span
-    aria-hidden="true"
-    className="absolute right-0 top-1/2 h-px w-2 -translate-y-1/2"
-    style={{ backgroundColor: space.accent }}
-  />
-</div>
+                        <span
+                          aria-hidden="true"
+                          className="absolute top-1/2 right-0 h-px w-2 -translate-y-1/2"
+                          style={{ backgroundColor: space.accent }}
+                        />
+                      </div>
 
                       <div>
                         <p
@@ -752,7 +744,6 @@ aria-hidden="true"
               })}
             </div>
           </section>
-
         </div>
       </Container>
     </main>

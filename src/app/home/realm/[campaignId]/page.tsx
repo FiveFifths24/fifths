@@ -1,11 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import {
-  CalendarRange,
-  Compass,
-  ShieldCheck,
-  Users,
-} from "lucide-react";
+import { CalendarRange, Compass, ShieldCheck, Users } from "lucide-react";
 
 import { AccountUnavailable } from "@/components/account/account-unavailable";
 import { Badge } from "@/components/ui/badge";
@@ -55,37 +50,33 @@ export default async function CampaignDetailPage({
     return <AccountUnavailable />;
   }
 
-  const [
-    campaignResult,
-    managerResult,
-    applicationResult,
-    membershipResult,
-  ] = await Promise.all([
-    supabase
-      .from("realm_campaigns")
-      .select("*")
-      .eq("id", campaignId)
-      .maybeSingle(),
+  const [campaignResult, managerResult, applicationResult, membershipResult] =
+    await Promise.all([
+      supabase
+        .from("realm_campaigns")
+        .select("*")
+        .eq("id", campaignId)
+        .maybeSingle(),
 
-    supabase.rpc("can_manage_realm_campaign", {
-      p_campaign_id: campaignId,
-    }),
+      supabase.rpc("can_manage_realm_campaign", {
+        p_campaign_id: campaignId,
+      }),
 
-    supabase
-      .from("campaign_applications")
-      .select("*")
-      .eq("campaign_id", campaignId)
-      .eq("user_id", userData.user.id)
-      .maybeSingle(),
+      supabase
+        .from("campaign_applications")
+        .select("*")
+        .eq("campaign_id", campaignId)
+        .eq("user_id", userData.user.id)
+        .maybeSingle(),
 
-    supabase
-      .from("campaign_members")
-      .select("*")
-      .eq("campaign_id", campaignId)
-      .eq("user_id", userData.user.id)
-      .eq("status", "active")
-      .maybeSingle(),
-  ]);
+      supabase
+        .from("campaign_members")
+        .select("*")
+        .eq("campaign_id", campaignId)
+        .eq("user_id", userData.user.id)
+        .eq("status", "active")
+        .maybeSingle(),
+    ]);
 
   if (campaignResult.error || !campaignResult.data) {
     notFound();
@@ -93,26 +84,25 @@ export default async function CampaignDetailPage({
 
   const campaign = campaignResult.data;
 
-  const [modeResult, interestLinkResult, sessionsResult] =
-    await Promise.all([
-      supabase
-        .from("modes")
-        .select("id, name")
-        .eq("id", campaign.mode_id)
-        .maybeSingle(),
+  const [modeResult, interestLinkResult, sessionsResult] = await Promise.all([
+    supabase
+      .from("modes")
+      .select("id, name")
+      .eq("id", campaign.mode_id)
+      .maybeSingle(),
 
-      supabase
-        .from("campaign_interests")
-        .select("interest_id")
-        .eq("campaign_id", campaign.id),
+    supabase
+      .from("campaign_interests")
+      .select("interest_id")
+      .eq("campaign_id", campaign.id),
 
-      supabase
-        .from("sessions")
-        .select("*")
-        .eq("campaign_id", campaign.id)
-        .in("status", ["published", "completed"])
-        .order("starts_at"),
-    ]);
+    supabase
+      .from("sessions")
+      .select("*")
+      .eq("campaign_id", campaign.id)
+      .in("status", ["published", "completed"])
+      .order("starts_at"),
+  ]);
 
   const interestIds = (interestLinkResult.data ?? []).map(
     (item) => item.interest_id,
@@ -157,13 +147,13 @@ export default async function CampaignDetailPage({
           BACK
       ====================================================== */}
 
-<ButtonLink
-  className="text-[#22d3ee]/75 hover:text-[#a5f3fc]"
-  href="/home/realm"
-  variant="quiet"
->
-  ← Back to Fifth Realm
-</ButtonLink>
+      <ButtonLink
+        className="text-[#22d3ee]/75 hover:text-[#a5f3fc]"
+        href="/home/realm"
+        variant="quiet"
+      >
+        ← Back to Fifth Realm
+      </ButtonLink>
 
       {/* =====================================================
           CAMPAIGN HERO
@@ -172,7 +162,7 @@ export default async function CampaignDetailPage({
       <header className="relative mt-8 overflow-hidden rounded-[2.25rem] border border-[#22d3ee]/25 bg-[linear-gradient(145deg,rgba(34,211,238,0.07),rgba(10,10,12,0.97)_42%,rgba(34,211,238,0.025))] p-6 shadow-[0_0_60px_rgba(34,211,238,0.035)] sm:p-9 lg:p-10">
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -right-24 -top-24 size-72 rounded-full bg-[#22d3ee]/[0.055] blur-3xl"
+          className="pointer-events-none absolute -top-24 -right-24 size-72 rounded-full bg-[#22d3ee]/[0.055] blur-3xl"
         />
 
         <div className="relative">
@@ -204,20 +194,20 @@ export default async function CampaignDetailPage({
                 {campaign.summary}
               </p>
 
-              <p className="mt-5 font-mono text-[0.65rem] font-bold uppercase tracking-[0.18em] text-[#22d3ee]/55">
+              <p className="mt-5 font-mono text-[0.65rem] font-bold tracking-[0.18em] text-[#22d3ee]/55 uppercase">
                 Game master {campaign.game_master_display_name}
               </p>
             </div>
 
             {isManager ? (
               <div className="shrink-0">
-<ButtonLink
-  className="border-[#22d3ee]/35 bg-[#22d3ee]/[0.06] text-[#cffafe] shadow-[0_0_22px_rgba(34,211,238,0.05)] hover:border-[#22d3ee]/70 hover:bg-[#22d3ee]/10 hover:text-white"
-  href={`/home/realm/manage/${campaign.id}`}
-  variant="secondary"
->
-  Manage Campaign
-</ButtonLink>
+                <ButtonLink
+                  className="border-[#22d3ee]/35 bg-[#22d3ee]/[0.06] text-[#cffafe] shadow-[0_0_22px_rgba(34,211,238,0.05)] hover:border-[#22d3ee]/70 hover:bg-[#22d3ee]/10 hover:text-white"
+                  href={`/home/realm/manage/${campaign.id}`}
+                  variant="secondary"
+                >
+                  Manage Campaign
+                </ButtonLink>
               </div>
             ) : null}
           </div>
@@ -226,20 +216,18 @@ export default async function CampaignDetailPage({
 
           <dl className="mt-9 grid gap-px overflow-hidden rounded-2xl border border-[#22d3ee]/15 bg-[#22d3ee]/10 sm:grid-cols-2 lg:grid-cols-4">
             <div className="bg-black/55 p-5">
-              <dt className="text-xs font-medium uppercase tracking-wide text-[#a5f3fc]/40">
+              <dt className="text-xs font-medium tracking-wide text-[#a5f3fc]/40 uppercase">
                 Format
               </dt>
 
               <dd className="mt-2 font-bold text-white">
                 {formatCampaignFormat(campaign.format)}
-                {campaign.location_label
-                  ? ` · ${campaign.location_label}`
-                  : ""}
+                {campaign.location_label ? ` · ${campaign.location_label}` : ""}
               </dd>
             </div>
 
             <div className="bg-black/55 p-5">
-              <dt className="text-xs font-medium uppercase tracking-wide text-[#a5f3fc]/40">
+              <dt className="text-xs font-medium tracking-wide text-[#a5f3fc]/40 uppercase">
                 Cadence
               </dt>
 
@@ -249,7 +237,7 @@ export default async function CampaignDetailPage({
             </div>
 
             <div className="bg-black/55 p-5">
-              <dt className="text-xs font-medium uppercase tracking-wide text-[#a5f3fc]/40">
+              <dt className="text-xs font-medium tracking-wide text-[#a5f3fc]/40 uppercase">
                 Typical Session
               </dt>
 
@@ -259,7 +247,7 @@ export default async function CampaignDetailPage({
             </div>
 
             <div className="bg-black/55 p-5">
-              <dt className="text-xs font-medium uppercase tracking-wide text-[#a5f3fc]/40">
+              <dt className="text-xs font-medium tracking-wide text-[#a5f3fc]/40 uppercase">
                 Roster
               </dt>
 
@@ -302,14 +290,11 @@ export default async function CampaignDetailPage({
         <section className="rounded-[2rem] border border-[#22d3ee]/15 bg-[linear-gradient(145deg,rgba(34,211,238,0.025),rgba(0,0,0,0.28))] p-6 sm:p-8">
           <div className="flex items-center gap-3">
             <div className="flex size-10 items-center justify-center rounded-full border border-[#22d3ee]/25 bg-[#22d3ee]/[0.07]">
-              <Compass
-                aria-hidden="true"
-                className="size-5 text-[#22d3ee]"
-              />
+              <Compass aria-hidden="true" className="size-5 text-[#22d3ee]" />
             </div>
 
             <div>
-              <p className="font-mono text-[0.62rem] font-bold uppercase tracking-[0.18em] text-[#22d3ee]/65">
+              <p className="font-mono text-[0.62rem] font-bold tracking-[0.18em] text-[#22d3ee]/65 uppercase">
                 The World
               </p>
 
@@ -324,7 +309,7 @@ export default async function CampaignDetailPage({
           </p>
 
           <div className="mt-8 border-t border-[#22d3ee]/10 pt-7">
-            <p className="font-mono text-[0.62rem] font-bold uppercase tracking-[0.18em] text-[#22d3ee]/65">
+            <p className="font-mono text-[0.62rem] font-bold tracking-[0.18em] text-[#22d3ee]/65 uppercase">
               Tone
             </p>
 
@@ -334,16 +319,14 @@ export default async function CampaignDetailPage({
           </div>
 
           <div className="mt-7">
-            <p className="font-mono text-[0.62rem] font-bold uppercase tracking-[0.18em] text-[#22d3ee]/65">
+            <p className="font-mono text-[0.62rem] font-bold tracking-[0.18em] text-[#22d3ee]/65 uppercase">
               Interests
             </p>
 
             <ul className="mt-4 flex flex-wrap gap-2">
               {(interestsResult.data ?? []).map((interest) => (
                 <li key={interest.id}>
-                  <Badge className={realmBadge}>
-                    {interest.name}
-                  </Badge>
+                  <Badge className={realmBadge}>{interest.name}</Badge>
                 </li>
               ))}
             </ul>
@@ -362,7 +345,7 @@ export default async function CampaignDetailPage({
             </div>
 
             <div>
-              <p className="font-mono text-[0.62rem] font-bold uppercase tracking-[0.18em] text-[#22d3ee]/65">
+              <p className="font-mono text-[0.62rem] font-bold tracking-[0.18em] text-[#22d3ee]/65 uppercase">
                 Player Expectations
               </p>
 
@@ -376,13 +359,13 @@ export default async function CampaignDetailPage({
             {campaign.safety_expectations}
           </p>
 
-<ButtonLink
-  className="mt-7 border-[#22d3ee]/35 bg-[#22d3ee]/[0.06] text-[#cffafe] hover:border-[#22d3ee]/70 hover:bg-[#22d3ee]/10 hover:text-white"
-  href="/realm/safety"
-  variant="secondary"
->
-  Read Realm Safety Guidelines
-</ButtonLink>
+          <ButtonLink
+            className="mt-7 border-[#22d3ee]/35 bg-[#22d3ee]/[0.06] text-[#cffafe] hover:border-[#22d3ee]/70 hover:bg-[#22d3ee]/10 hover:text-white"
+            href="/realm/safety"
+            variant="secondary"
+          >
+            Read Realm Safety Guidelines
+          </ButtonLink>
         </section>
       </div>
 
@@ -393,14 +376,11 @@ export default async function CampaignDetailPage({
       <section className="mt-8 rounded-[2rem] border border-[#22d3ee]/15 bg-[linear-gradient(145deg,rgba(34,211,238,0.025),rgba(0,0,0,0.28))] p-6 sm:p-8">
         <div className="flex items-center gap-3">
           <div className="flex size-10 items-center justify-center rounded-full border border-[#22d3ee]/25 bg-[#22d3ee]/[0.07]">
-            <Users
-              aria-hidden="true"
-              className="size-5 text-[#22d3ee]"
-            />
+            <Users aria-hidden="true" className="size-5 text-[#22d3ee]" />
           </div>
 
           <div>
-            <p className="font-mono text-[0.62rem] font-bold uppercase tracking-[0.18em] text-[#22d3ee]/65">
+            <p className="font-mono text-[0.62rem] font-bold tracking-[0.18em] text-[#22d3ee]/65 uppercase">
               Your Place In The World
             </p>
 
@@ -435,17 +415,9 @@ export default async function CampaignDetailPage({
               in this campaign.
             </StatusMessage>
 
-            {membership.role === "player" &&
-            campaign.status !== "completed" ? (
-              <form
-                action={leaveCampaignAction}
-                className="mt-5"
-              >
-                <input
-                  name="campaignId"
-                  type="hidden"
-                  value={campaign.id}
-                />
+            {membership.role === "player" && campaign.status !== "completed" ? (
+              <form action={leaveCampaignAction} className="mt-5">
+                <input name="campaignId" type="hidden" value={campaign.id} />
 
                 <button
                   className="min-h-11 rounded-full border border-red-700/70 bg-red-950/40 px-5 py-2.5 text-sm font-bold text-red-100 transition hover:border-red-500 hover:bg-red-950/70"
@@ -459,29 +431,15 @@ export default async function CampaignDetailPage({
         ) : application ? (
           <div className="mt-6">
             <StatusMessage
-              tone={
-                application.status === "accepted"
-                  ? "success"
-                  : "info"
-              }
+              tone={application.status === "accepted" ? "success" : "info"}
             >
               Your application status is{" "}
-              <strong className="capitalize">
-                {application.status}
-              </strong>
-              .
+              <strong className="capitalize">{application.status}</strong>.
             </StatusMessage>
 
             {application.status === "submitted" ? (
-              <form
-                action={withdrawCampaignApplicationAction}
-                className="mt-5"
-              >
-                <input
-                  name="campaignId"
-                  type="hidden"
-                  value={campaign.id}
-                />
+              <form action={withdrawCampaignApplicationAction} className="mt-5">
+                <input name="campaignId" type="hidden" value={campaign.id} />
 
                 <button
                   className="min-h-11 rounded-full border border-[#22d3ee]/35 bg-[#22d3ee]/[0.06] px-5 py-2.5 text-sm font-bold text-[#cffafe] transition hover:border-[#22d3ee]/70 hover:bg-[#22d3ee]/10"
@@ -494,9 +452,7 @@ export default async function CampaignDetailPage({
           </div>
         ) : accepting ? (
           <div className="mt-6">
-            <CampaignApplicationForm
-              campaignId={campaign.id}
-            />
+            <CampaignApplicationForm campaignId={campaign.id} />
           </div>
         ) : (
           <div className="mt-6">
@@ -511,10 +467,7 @@ export default async function CampaignDetailPage({
           CAMPAIGN SESSIONS
       ====================================================== */}
 
-      <section
-        className="mt-10"
-        aria-labelledby="realm-sessions-heading"
-      >
+      <section className="mt-10" aria-labelledby="realm-sessions-heading">
         <div className="flex items-center gap-3">
           <div className="flex size-10 items-center justify-center rounded-full border border-[#22d3ee]/25 bg-[#22d3ee]/[0.07]">
             <CalendarRange
@@ -524,7 +477,7 @@ export default async function CampaignDetailPage({
           </div>
 
           <div>
-            <p className="font-mono text-[0.62rem] font-bold uppercase tracking-[0.18em] text-[#22d3ee]/65">
+            <p className="font-mono text-[0.62rem] font-bold tracking-[0.18em] text-[#22d3ee]/65 uppercase">
               Shared Meetings
             </p>
 
@@ -549,10 +502,7 @@ export default async function CampaignDetailPage({
         ) : sessionCards.length ? (
           <div className="mt-6 grid gap-5 lg:grid-cols-2">
             {sessionCards.map((card) => (
-              <SessionCard
-                item={card}
-                key={card.id}
-              />
+              <SessionCard item={card} key={card.id} />
             ))}
           </div>
         ) : (

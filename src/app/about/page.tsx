@@ -85,23 +85,19 @@ const ecosystem = [
 const beliefs = [
   {
     title: "Community should have more than one doorway.",
-    copy:
-      "People should be able to participate online or in person, socially or quietly, as beginners or experts, and at a pace that works for them.",
+    copy: "People should be able to participate online or in person, socially or quietly, as beginners or experts, and at a pace that works for them.",
   },
   {
     title: "Interests can become opportunities.",
-    copy:
-      "Gaming, creativity, technology, storytelling, entrepreneurship, learning, and community participation can lead to skills, relationships, collaborations, and careers.",
+    copy: "Gaming, creativity, technology, storytelling, entrepreneurship, learning, and community participation can lead to skills, relationships, collaborations, and careers.",
   },
   {
     title: "Participation matters.",
-    copy:
-      "Showing up, helping, creating, teaching, hosting, collaborating, volunteering, and learning are all meaningful ways to contribute.",
+    copy: "Showing up, helping, creating, teaching, hosting, collaborating, volunteering, and learning are all meaningful ways to contribute.",
   },
   {
     title: "Digital should lead somewhere real.",
-    copy:
-      "The goal is not to keep people scrolling forever. The goal is to help people find experiences worth joining and people worth meeting.",
+    copy: "The goal is not to keep people scrolling forever. The goal is to help people find experiences worth joining and people worth meeting.",
   },
 ];
 
@@ -116,14 +112,14 @@ export default function AboutPage() {
           aria-hidden="true"
           className="pointer-events-none absolute inset-0"
         >
-          <div className="absolute -left-48 top-10 h-[34rem] w-[34rem] rounded-full bg-[#6c14ce]/10 blur-[170px]" />
+          <div className="absolute top-10 -left-48 h-[34rem] w-[34rem] rounded-full bg-[#6c14ce]/10 blur-[170px]" />
 
-          <div className="absolute right-[-14rem] top-[20%] h-[36rem] w-[36rem] rounded-full bg-[#f359d2]/[0.06] blur-[180px]" />
+          <div className="absolute top-[20%] right-[-14rem] h-[36rem] w-[36rem] rounded-full bg-[#f359d2]/[0.06] blur-[180px]" />
         </div>
 
         <Container className="relative py-24 sm:py-32 lg:py-40">
           <div className="max-w-5xl">
-            <p className="font-mono text-[0.65rem] font-bold uppercase tracking-[0.24em] text-[#ca9aff]">
+            <p className="font-mono text-[0.65rem] font-bold tracking-[0.24em] text-[#ca9aff] uppercase">
               About PULSE // Built By Five Fifths
             </p>
 
@@ -133,16 +129,14 @@ export default function AboutPage() {
             </h1>
 
             <p className="mt-8 max-w-3xl text-lg leading-8 text-white/60 sm:text-xl sm:leading-9">
-               is a connected community platform being built by Five
-              Fifths to help people find experiences, communities,
-              opportunities, and ways to participate that actually fit who
-              they are and what they have room for.
+              is a connected community platform being built by Five Fifths to
+              help people find experiences, communities, opportunities, and ways
+              to participate that actually fit who they are and what they have
+              room for.
             </p>
 
             <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-              <ButtonLink href="/ecosystem">
-                Explore the Ecosystem
-              </ButtonLink>
+              <ButtonLink href="/ecosystem">Explore the Ecosystem</ButtonLink>
 
               <a
                 className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/15 bg-black/30 px-7 text-sm font-bold text-white/85 transition hover:border-white/30 hover:bg-white/[0.05]"
@@ -164,7 +158,7 @@ export default function AboutPage() {
         <Container>
           <div className="grid gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
             <div>
-              <p className="font-mono text-[0.62rem] font-bold uppercase tracking-[0.22em] text-[#f359d2]">
+              <p className="font-mono text-[0.62rem] font-bold tracking-[0.22em] text-[#f359d2] uppercase">
                 Why We Built It
               </p>
 
@@ -179,8 +173,8 @@ export default function AboutPage() {
 
             <div className="space-y-7 text-lg leading-8 text-white/60">
               <p>
-                Most platforms begin by asking what you like, who you follow,
-                or what category you belong to. But real participation is more
+                Most platforms begin by asking what you like, who you follow, or
+                what category you belong to. But real participation is more
                 complicated than that.
               </p>
 
@@ -191,12 +185,12 @@ export default function AboutPage() {
               </p>
 
               <p>
-                And what you want can change from one day to the next.
-                Sometimes you want a tournament. Sometimes you want a quiet
-                coworking session. Sometimes you want to meet another creator,
-                learn something new, find a tabletop campaign, volunteer,
-                network, collaborate, or simply be around people without
-                needing to perform socially.
+                And what you want can change from one day to the next. Sometimes
+                you want a tournament. Sometimes you want a quiet coworking
+                session. Sometimes you want to meet another creator, learn
+                something new, find a tabletop campaign, volunteer, network,
+                collaborate, or simply be around people without needing to
+                perform socially.
               </p>
 
               <p className="font-semibold text-white/85">
@@ -215,7 +209,7 @@ export default function AboutPage() {
         <Container>
           <div className="grid gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:items-start lg:gap-20">
             <div>
-              <p className="font-mono text-[0.62rem] font-bold uppercase tracking-[0.22em] text-[#7cff00]">
+              <p className="font-mono text-[0.62rem] font-bold tracking-[0.22em] text-[#7cff00] uppercase">
                 Who It&apos;s For
               </p>
 
@@ -257,18 +251,18 @@ export default function AboutPage() {
       <section className="py-24 sm:py-32">
         <Container>
           <div className="max-w-4xl">
-            <p className="font-mono text-[0.62rem] font-bold uppercase tracking-[0.22em] text-[#ca9aff]">
+            <p className="font-mono text-[0.62rem] font-bold tracking-[0.22em] text-[#ca9aff] uppercase">
               One Ecosystem // Different Ways In
             </p>
 
             <h2 className="display-type mt-5 text-[clamp(3rem,5vw,5.6rem)] leading-[0.94] tracking-[-0.045em] text-[#f2f0ed]">
-              Community, creativity, opportunity, and participation shouldn&apos;t
-              need six different platforms.
+              Community, creativity, opportunity, and participation
+              shouldn&apos;t need six different platforms.
             </h2>
 
             <p className="mt-7 max-w-3xl text-lg leading-8 text-white/55">
-              PULSE connects several different kinds of participation under
-              one account and one community identity.
+              PULSE connects several different kinds of participation under one
+              account and one community identity.
             </p>
           </div>
 
@@ -322,7 +316,7 @@ export default function AboutPage() {
         <Container>
           <div className="grid gap-14 lg:grid-cols-[1.15fr_0.85fr] lg:gap-20">
             <div>
-              <p className="font-mono text-[0.62rem] font-bold uppercase tracking-[0.22em] text-[#22d3ee]">
+              <p className="font-mono text-[0.62rem] font-bold tracking-[0.22em] text-[#22d3ee] uppercase">
                 The Five Fifths eHub
               </p>
 
@@ -345,8 +339,8 @@ export default function AboutPage() {
                 <p>
                   When it is open and operating, members will use the platform
                   to discover activities, join communities, register for
-                  Sessions, find collaborators, explore opportunities, and
-                  carry eligible participation forward through their Passport.
+                  Sessions, find collaborators, explore opportunities, and carry
+                  eligible participation forward through their Passport.
                 </p>
               </div>
             </div>
@@ -380,10 +374,9 @@ export default function AboutPage() {
                 </h3>
 
                 <p className="mt-3 text-sm leading-7 text-white/50">
-                  Tournaments, workshops, screenings, creator sessions,
-                  meetups, coworking, community events, and member-led
-                  experiences can move from digital discovery into physical
-                  participation.
+                  Tournaments, workshops, screenings, creator sessions, meetups,
+                  coworking, community events, and member-led experiences can
+                  move from digital discovery into physical participation.
                 </p>
               </article>
 
@@ -416,11 +409,11 @@ export default function AboutPage() {
           <div className="relative overflow-hidden rounded-[2.5rem] border border-[#9d46ec]/25 bg-[linear-gradient(135deg,rgba(108,20,206,0.12),rgba(243,89,210,0.05),rgba(124,255,0,0.025))] p-8 sm:p-12 lg:p-16">
             <div
               aria-hidden="true"
-              className="absolute -right-24 -top-24 size-80 rounded-full bg-[#6c14ce]/15 blur-[120px]"
+              className="absolute -top-24 -right-24 size-80 rounded-full bg-[#6c14ce]/15 blur-[120px]"
             />
 
             <div className="relative max-w-5xl">
-              <p className="font-mono text-[0.62rem] font-bold uppercase tracking-[0.22em] text-[#ca9aff]">
+              <p className="font-mono text-[0.62rem] font-bold tracking-[0.22em] text-[#ca9aff] uppercase">
                 Built With Community
               </p>
 
@@ -474,7 +467,7 @@ export default function AboutPage() {
       <section className="border-y border-white/10 bg-white/[0.015] py-24 sm:py-32">
         <Container>
           <div className="max-w-4xl">
-            <p className="font-mono text-[0.62rem] font-bold uppercase tracking-[0.22em] text-[#7cff00]">
+            <p className="font-mono text-[0.62rem] font-bold tracking-[0.22em] text-[#7cff00] uppercase">
               What We Believe
             </p>
 
@@ -493,7 +486,7 @@ export default function AboutPage() {
                   0{index + 1}
                 </span>
 
-                <h3 className="text-2xl font-black leading-tight text-white">
+                <h3 className="text-2xl leading-tight font-black text-white">
                   {belief.title}
                 </h3>
 
@@ -513,7 +506,7 @@ export default function AboutPage() {
         <Container>
           <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
             <div>
-              <p className="font-mono text-[0.62rem] font-bold uppercase tracking-[0.22em] text-[#f359d2]">
+              <p className="font-mono text-[0.62rem] font-bold tracking-[0.22em] text-[#f359d2] uppercase">
                 Built By Five Fifths
               </p>
 
@@ -551,7 +544,7 @@ export default function AboutPage() {
       ========================================================== */}
       <section className="border-t border-white/10 py-20 sm:py-28">
         <Container className="text-center">
-          <p className="font-mono text-[0.62rem] font-bold uppercase tracking-[0.22em] text-[#ca9aff]">
+          <p className="font-mono text-[0.62rem] font-bold tracking-[0.22em] text-[#ca9aff] uppercase">
             Find Your Way In
           </p>
 
@@ -560,14 +553,12 @@ export default function AboutPage() {
           </h2>
 
           <p className="mx-auto mt-7 max-w-2xl text-lg leading-8 text-white/55">
-            Explore the ecosystem now, and follow the eHub as the physical
-            side of the Five Fifths community takes shape.
+            Explore the ecosystem now, and follow the eHub as the physical side
+            of the Five Fifths community takes shape.
           </p>
 
           <div className="mt-10 flex flex-col justify-center gap-3 sm:flex-row">
-            <ButtonLink href="/ecosystem">
-              Explore PULSE
-            </ButtonLink>
+            <ButtonLink href="/ecosystem">Explore PULSE</ButtonLink>
 
             <a
               className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/15 bg-black/30 px-7 text-sm font-bold text-white/85 transition hover:border-white/30 hover:bg-white/[0.05]"

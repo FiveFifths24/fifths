@@ -35,8 +35,7 @@ export default async function CreatorCommonsPage() {
     return <AccountUnavailable />;
   }
 
-  const { data: userData } =
-    await supabase.auth.getUser();
+  const { data: userData } = await supabase.auth.getUser();
 
   if (!userData.user) {
     return <AccountUnavailable />;
@@ -53,23 +52,13 @@ export default async function CreatorCommonsPage() {
       .from("creator_opportunities")
       .select("*")
       .eq("status", "published")
-      .gt(
-        "response_deadline",
-        new Date().toISOString(),
-      )
+      .gt("response_deadline", new Date().toISOString())
       .order("response_deadline")
       .limit(50),
 
-    supabase
-      .from("modes")
-      .select("id, slug, name")
-      .order("sort_order"),
+    supabase.from("modes").select("id, slug, name").order("sort_order"),
 
-    supabase
-      .from("skills")
-      .select("id, name")
-      .eq("active", true)
-      .order("name"),
+    supabase.from("skills").select("id, name").eq("active", true).order("name"),
 
     supabase
       .from("interests")
@@ -97,14 +86,9 @@ export default async function CreatorCommonsPage() {
     );
   }
 
-  const opportunities =
-    opportunityResult.data ?? [];
+  const opportunities = opportunityResult.data ?? [];
 
-  const ids =
-    opportunities.map(
-      (opportunity) =>
-        opportunity.id,
-    );
+  const ids = opportunities.map((opportunity) => opportunity.id);
 
   const [
     skillLinkResult,
@@ -116,13 +100,8 @@ export default async function CreatorCommonsPage() {
     ids.length
       ? supabase
           .from("opportunity_skills")
-          .select(
-            "opportunity_id, skill_id",
-          )
-          .in(
-            "opportunity_id",
-            ids,
-          )
+          .select("opportunity_id, skill_id")
+          .in("opportunity_id", ids)
       : Promise.resolve({
           data: [],
           error: null,
@@ -130,16 +109,9 @@ export default async function CreatorCommonsPage() {
 
     ids.length
       ? supabase
-          .from(
-            "opportunity_interests",
-          )
-          .select(
-            "opportunity_id, interest_id",
-          )
-          .in(
-            "opportunity_id",
-            ids,
-          )
+          .from("opportunity_interests")
+          .select("opportunity_id, interest_id")
+          .in("opportunity_id", ids)
       : Promise.resolve({
           data: [],
           error: null,
@@ -147,18 +119,10 @@ export default async function CreatorCommonsPage() {
 
     ids.length
       ? supabase
-          .from(
-            "saved_opportunities",
-          )
+          .from("saved_opportunities")
           .select("opportunity_id")
-          .eq(
-            "user_id",
-            userData.user.id,
-          )
-          .in(
-            "opportunity_id",
-            ids,
-          )
+          .eq("user_id", userData.user.id)
+          .in("opportunity_id", ids)
       : Promise.resolve({
           data: [],
           error: null,
@@ -166,20 +130,10 @@ export default async function CreatorCommonsPage() {
 
     ids.length
       ? supabase
-          .from(
-            "opportunity_responses",
-          )
-          .select(
-            "opportunity_id, status",
-          )
-          .eq(
-            "user_id",
-            userData.user.id,
-          )
-          .in(
-            "opportunity_id",
-            ids,
-          )
+          .from("opportunity_responses")
+          .select("opportunity_id, status")
+          .eq("user_id", userData.user.id)
+          .in("opportunity_id", ids)
       : Promise.resolve({
           data: [],
           error: null,
@@ -187,139 +141,74 @@ export default async function CreatorCommonsPage() {
 
     pulseResult.data
       ? supabase
-          .from(
-            "pulse_check_in_interests",
-          )
+          .from("pulse_check_in_interests")
           .select("interest_id")
-          .eq(
-            "check_in_id",
-            pulseResult.data.id,
-          )
+          .eq("check_in_id", pulseResult.data.id)
       : Promise.resolve({
           data: [],
           error: null,
         }),
   ]);
 
-  const modes =
-    modeResult.data ?? [];
+  const modes = modeResult.data ?? [];
 
-  const pulseMode =
-    pulseResult.data
-      ? modes.find(
-          (mode) =>
-            mode.id ===
-            pulseResult.data?.mode_id,
-        )
-      : null;
+  const pulseMode = pulseResult.data
+    ? modes.find((mode) => mode.id === pulseResult.data?.mode_id)
+    : null;
 
   const pulseInput: PulseRecommendationInput | null =
-    pulseResult.data &&
-    pulseMode
+    pulseResult.data && pulseMode
       ? {
-          modeSlug:
-            pulseMode.slug,
+          modeSlug: pulseMode.slug,
 
-          energyLevel:
-            pulseResult.data
-              .energy_level,
+          energyLevel: pulseResult.data.energy_level,
 
-          stimulationLevel:
-            pulseResult.data
-              .stimulation_level,
+          stimulationLevel: pulseResult.data.stimulation_level,
 
-          socialIntensity:
-            pulseResult.data
-              .social_intensity,
+          socialIntensity: pulseResult.data.social_intensity,
 
-          preferredFormat:
-            pulseResult.data
-              .preferred_format,
+          preferredFormat: pulseResult.data.preferred_format,
 
-          availableMinutes:
-            pulseResult.data
-              .available_minutes,
+          availableMinutes: pulseResult.data.available_minutes,
 
-          maximumTravelMiles:
-            pulseResult.data
-              .maximum_travel_miles,
+          maximumTravelMiles: pulseResult.data.maximum_travel_miles,
 
-          interestIds:
-            (
-              pulseInterestResult.data ??
-              []
-            ).map(
-              (item) =>
-                item.interest_id,
-            ),
+          interestIds: (pulseInterestResult.data ?? []).map(
+            (item) => item.interest_id,
+          ),
         }
       : null;
 
-  const recommendations =
-    pulseInput
-      ? rankOpportunities(
-          pulseInput,
-          opportunities,
-          modes,
-          interestLinkResult.data ??
-            [],
-        )
-      : [];
+  const recommendations = pulseInput
+    ? rankOpportunities(
+        pulseInput,
+        opportunities,
+        modes,
+        interestLinkResult.data ?? [],
+      )
+    : [];
 
-  const order =
-    new Map(
-      recommendations.map(
-        (
-          item,
-          index,
-        ) => [
-          item.candidate.id,
-          index,
-        ],
-      ),
-    );
+  const order = new Map(
+    recommendations.map((item, index) => [item.candidate.id, index]),
+  );
 
   if (pulseInput) {
     opportunities.sort(
-      (
-        left,
-        right,
-      ) =>
-        (
-          order.get(
-            left.id,
-          ) ?? 0
-        ) -
-        (
-          order.get(
-            right.id,
-          ) ?? 0
-        ),
+      (left, right) => (order.get(left.id) ?? 0) - (order.get(right.id) ?? 0),
     );
   }
 
-  const cards =
-    assembleOpportunityCards(
-      opportunities,
-      modes,
-      skillResult.data ??
-        [],
-      interestResult.data ??
-        [],
-      skillLinkResult.data ??
-        [],
-      interestLinkResult.data ??
-        [],
-      recommendations,
-      (
-        savedResult.data ?? []
-      ).map(
-        (item) =>
-          item.opportunity_id,
-      ),
-      responseResult.data ??
-        [],
-    );
+  const cards = assembleOpportunityCards(
+    opportunities,
+    modes,
+    skillResult.data ?? [],
+    interestResult.data ?? [],
+    skillLinkResult.data ?? [],
+    interestLinkResult.data ?? [],
+    recommendations,
+    (savedResult.data ?? []).map((item) => item.opportunity_id),
+    responseResult.data ?? [],
+  );
 
   return (
     <div>
@@ -328,11 +217,8 @@ export default async function CreatorCommonsPage() {
       ====================================================== */}
       <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-12">
         <div className="max-w-4xl">
-          <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-white">
-            <FilePenLine
-              aria-hidden="true"
-              className="size-4"
-            />
+          <p className="flex items-center gap-2 text-xs font-bold tracking-[0.2em] text-white uppercase">
+            <FilePenLine aria-hidden="true" className="size-4" />
             Creator Commons
           </p>
 
@@ -343,8 +229,8 @@ export default async function CreatorCommonsPage() {
           <p className="mt-5 max-w-3xl text-lg leading-8 text-neutral-300">
             Creator Commons is where ideas become collaborations. Find projects,
             creative opportunities, professional partnerships, and people
-            looking for the skills you bring — or create an opportunity of
-            your own.
+            looking for the skills you bring — or create an opportunity of your
+            own.
           </p>
         </div>
 
@@ -352,13 +238,10 @@ export default async function CreatorCommonsPage() {
             PRIMARY ACTION
         ================================================== */}
         <ButtonLink
-          className="min-h-12 min-w-[13rem] whitespace-nowrap border border-white/35 bg-white px-7 text-sm text-black shadow-[0_0_28px_rgba(255,255,255,0.12)] hover:bg-white/90 hover:shadow-[0_0_36px_rgba(255,255,255,0.18)]"
+          className="min-h-12 min-w-[13rem] border border-white/35 bg-white px-7 text-sm whitespace-nowrap text-black shadow-[0_0_28px_rgba(255,255,255,0.12)] hover:bg-white/90 hover:shadow-[0_0_36px_rgba(255,255,255,0.18)]"
           href="/home/commons/manage"
         >
-          <Sparkles
-            aria-hidden="true"
-            className="size-4"
-          />
+          <Sparkles aria-hidden="true" className="size-4" />
           Create Opportunity
         </ButtonLink>
       </div>
@@ -375,10 +258,7 @@ export default async function CreatorCommonsPage() {
           href="/home/commons/saved"
           variant="secondary"
         >
-          <Bookmark
-            aria-hidden="true"
-            className="size-4 text-white"
-          />
+          <Bookmark aria-hidden="true" className="size-4 text-white" />
           Saved
         </ButtonLink>
 
@@ -387,10 +267,7 @@ export default async function CreatorCommonsPage() {
           href="/home/commons/responses"
           variant="secondary"
         >
-          <ClipboardList
-            aria-hidden="true"
-            className="size-4 text-white"
-          />
+          <ClipboardList aria-hidden="true" className="size-4 text-white" />
           My Responses
         </ButtonLink>
 
@@ -399,10 +276,7 @@ export default async function CreatorCommonsPage() {
           href="/home/commons/manage"
           variant="secondary"
         >
-          <Settings2
-            aria-hidden="true"
-            className="size-4 text-white"
-          />
+          <Settings2 aria-hidden="true" className="size-4 text-white" />
           Manage
         </ButtonLink>
       </nav>
@@ -412,22 +286,16 @@ export default async function CreatorCommonsPage() {
       ====================================================== */}
       <StatusMessage className="mt-8">
         Responses are private to you and authorized opportunity managers.
-        Creator Commons currently keeps payments, contracts, file exchange,
-        and direct messaging outside the platform.
+        Creator Commons currently keeps payments, contracts, file exchange, and
+        direct messaging outside the platform.
       </StatusMessage>
 
       {/* =====================================================
           OPPORTUNITIES
       ====================================================== */}
-      <section
-        aria-labelledby="opportunity-discovery"
-        className="mt-10"
-      >
+      <section aria-labelledby="opportunity-discovery" className="mt-10">
         <div className="flex items-center gap-3">
-          <BriefcaseBusiness
-            aria-hidden="true"
-            className="size-5 text-white"
-          />
+          <BriefcaseBusiness aria-hidden="true" className="size-5 text-white" />
 
           <h2
             className="text-2xl font-bold text-white"
@@ -447,14 +315,9 @@ export default async function CreatorCommonsPage() {
 
         {cards.length ? (
           <div className="mt-6 grid gap-5 lg:grid-cols-2">
-            {cards.map(
-              (card) => (
-                <OpportunityCard
-                  item={card}
-                  key={card.id}
-                />
-              ),
-            )}
+            {cards.map((card) => (
+              <OpportunityCard item={card} key={card.id} />
+            ))}
           </div>
         ) : (
           <div className="mt-6">
