@@ -18,6 +18,33 @@ export async function createCampaignAction(
   _previousState: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
+  const submittedValues: Record<string, string | string[]> = {
+    circleId: String(formData.get("circleId") ?? ""),
+    title: String(formData.get("title") ?? ""),
+    summary: String(formData.get("summary") ?? ""),
+    premise: String(formData.get("premise") ?? ""),
+    genre: String(formData.get("genre") ?? ""),
+    tone: String(formData.get("tone") ?? ""),
+    safetyExpectations: String(formData.get("safetyExpectations") ?? ""),
+    format: String(formData.get("format") ?? ""),
+    locationLabel: String(formData.get("locationLabel") ?? ""),
+    scheduleSummary: String(formData.get("scheduleSummary") ?? ""),
+    timezone: String(formData.get("timezone") ?? ""),
+    estimatedSessionMinutes: String(
+      formData.get("estimatedSessionMinutes") ?? "",
+    ),
+    applicationDeadlineLocal: String(
+      formData.get("applicationDeadlineLocal") ?? "",
+    ),
+    playerCapacity: String(formData.get("playerCapacity") ?? ""),
+    experienceLevel: String(formData.get("experienceLevel") ?? ""),
+    modeId: String(formData.get("modeId") ?? ""),
+    minimumEnergy: String(formData.get("minimumEnergy") ?? ""),
+    maximumEnergy: String(formData.get("maximumEnergy") ?? ""),
+    stimulationLevel: String(formData.get("stimulationLevel") ?? ""),
+    socialIntensity: String(formData.get("socialIntensity") ?? ""),
+    interestIds: formData.getAll("interestIds").map(String),
+  };
   const parsed = createCampaignSchema.safeParse({
     circleId: formData.get("circleId"),
     title: formData.get("title"),
@@ -46,6 +73,7 @@ export async function createCampaignAction(
       status: "error",
       message: "Check the highlighted campaign details and try again.",
       fieldErrors: parsed.error.flatten().fieldErrors,
+      values: submittedValues,
     };
   }
 
@@ -76,10 +104,26 @@ export async function createCampaignAction(
       p_interest_ids: parsed.data.interestIds,
     });
     if (error || !data) {
+      console.error("create_realm_campaign failed:", error);
+
+      const fieldErrors: Record<string, string[]> = {};
+
+      if (error?.message.includes("Invalid application deadline")) {
+        fieldErrors.applicationDeadlineLocal = [
+          "Choose a future application deadline.",
+        ];
+      }
+
       return {
         status: "error",
         message:
-          "The campaign could not be created. Confirm your game-master and scoped Circle authority.",
+          Object.keys(fieldErrors).length > 0
+            ? "Check the highlighted campaign details and try again."
+            : error?.message
+              ? `Campaign creation failed: ${error.message}`
+              : "Campaign creation failed because no campaign ID was returned.",
+        fieldErrors,
+        values: submittedValues,
       };
     }
     campaignId = data;

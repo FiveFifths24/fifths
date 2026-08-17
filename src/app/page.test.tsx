@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import HomePage from "./page";
 
@@ -9,27 +9,34 @@ describe("landing page", () => {
     expect(
       screen.getByRole("heading", {
         level: 1,
-        name: /find your space.+match your energy/i,
+        name: /broadcast your\s*signal\.\s*find your people\./i,
       }),
     ).toBeInTheDocument();
+
     expect(
       screen.getByText(
-        /PULSE helps you discover ways to participate that fit your energy, interests, and availability/i,
+        /find communities, creators, events, collaborations, and experiences worth doing/i,
       ),
     ).toBeInTheDocument();
+
     expect(
-      screen.getAllByRole("link", { name: "Join FIFTHS" })[0],
+      screen.getAllByRole("link", { name: "Join SIGNAL" })[0],
     ).toHaveAttribute("href", "/signup");
+
+    const featureNavigation = screen.getByRole("navigation", {
+      name: "SIGNAL features",
+    });
 
     for (const moduleName of [
       "Pulse",
+      "Sessions",
       "Circles",
-      "Creator Commons",
-      "Fifth Realm",
+      "Commons",
+      "Realm",
       "Passport",
     ]) {
       expect(
-        screen.getByRole("heading", { name: moduleName }),
+        within(featureNavigation).getByRole("link", { name: moduleName }),
       ).toBeInTheDocument();
     }
   });

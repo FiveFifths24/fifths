@@ -67,7 +67,7 @@ export function SiteFooter() {
               SIGNAL<span className="text-[#f359d2]">.</span>
             </span>
 
-            <span className="mt-2 text-[0.48rem] font-bold tracking-[0.2em] text-white/45 uppercase">
+            <span className="mt-2 text-[0.48rem] font-bold tracking-[0.2em] text-white/60 uppercase">
               Powered by Five Fifths
             </span>
           </Link>
@@ -81,7 +81,7 @@ export function SiteFooter() {
         <div className="grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-4">
           {footerGroups.map((group) => (
             <div key={group.title}>
-              <h2 className="text-[0.68rem] font-bold tracking-[0.2em] text-white/45 uppercase">
+              <h2 className="text-[0.68rem] font-bold tracking-[0.2em] text-white/60 uppercase">
                 {group.title}
               </h2>
 
@@ -118,7 +118,7 @@ export function SiteFooter() {
       </Container>
 
       <div className="relative border-t border-[#f359d2]/40">
-        <Container className="flex flex-col items-center justify-center gap-3 py-6 text-center text-xs text-white/40 sm:flex-row">
+        <Container className="flex flex-col items-center justify-center gap-3 py-6 text-center text-xs text-white/60 sm:flex-row">
           <p>© {new Date().getFullYear()} Five Fifths. All Rights Reserved.</p>
         </Container>
       </div>

@@ -50,17 +50,26 @@ jobs:
     steps:
       - name: Check out source
         uses: actions/checkout@v7
+
       - name: Use Node.js 24
         uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: npm
+
       - name: Install locked dependencies
         run: npm ci
+
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
+
       - name: Run browser tests
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ vars.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ vars.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
+          NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL }}
         run: npm run test:e2e
+
       - name: Preserve browser diagnostics
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v7

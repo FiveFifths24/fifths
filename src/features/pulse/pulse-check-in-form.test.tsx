@@ -24,17 +24,17 @@ describe("PulseCheckInForm", () => {
       screen.getByRole("form", { name: "Check your Pulse" }),
     ).toBeInTheDocument();
     for (const group of [
-      "What mode fits right now?",
-      "How much energy is available?",
-      "Preferred stimulation",
-      "Social intensity",
+      "What Mode Fits Right Now?",
+      "How Much Energy Is Available?",
+      "Preferred Stimulation",
+      "Social Intensity",
       "Format",
-      "Time available",
-      "What sounds interesting today?",
+      "Time Available",
+      "What Sounds Interesting Today?",
     ]) {
       expect(screen.getByRole("group", { name: group })).toBeInTheDocument();
     }
-    expect(screen.getByLabelText("Optional travel range")).toBeInTheDocument();
+    expect(screen.getByLabelText("Optional Travel Range")).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: "Save this Pulse" }),
     ).toBeEnabled();

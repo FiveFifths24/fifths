@@ -24,6 +24,29 @@ const uniqueInterests = z
     message: "Choose each interest only once.",
   });
 
+export const campaignGenres = [
+  "fantasy",
+  "science_fiction",
+  "horror",
+  "mystery",
+  "adventure",
+  "superhero",
+  "anime_inspired",
+  "post_apocalyptic",
+  "cyberpunk",
+  "steampunk",
+  "urban_fantasy",
+  "dark_fantasy",
+  "historical",
+  "comedy",
+  "romance",
+  "thriller",
+  "slice_of_life",
+  "space_opera",
+  "western",
+  "other",
+] as const;
+
 export const campaignTimezones = [
   "UTC",
   "America/New_York",
@@ -39,7 +62,7 @@ export const createCampaignSchema = z
     title: z.string().trim().min(5).max(120),
     summary: z.string().trim().min(10).max(280),
     premise: z.string().trim().min(20).max(5000),
-    genre: z.string().trim().min(2).max(80),
+    genre: z.enum(campaignGenres),
     tone: z.string().trim().min(2).max(160),
     safetyExpectations: z.string().trim().min(20).max(2000),
     format: z.enum(["in_person", "online", "either"]),

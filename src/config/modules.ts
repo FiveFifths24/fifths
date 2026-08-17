@@ -1,6 +1,7 @@
 import {
   Aperture,
   BadgeCheck,
+  CalendarDays,
   Gamepad2,
   HeartHandshake,
   Radio,
@@ -8,7 +9,7 @@ import {
 } from "lucide-react";
 
 export type PlatformModule = {
-  slug: "pulse" | "circles" | "commons" | "realm" | "passport";
+  slug: "pulse" | "sessions" | "circles" | "commons" | "realm" | "passport";
   name: string;
   eyebrow: string;
   purpose: string;
@@ -60,10 +61,50 @@ export const platformModules: PlatformModule[] = [
       "Following a recommendation does not earn credit by itself. Eligible, verified participation can later appear in Passport.",
     icon: Radio,
     artwork: "/images/modules/pulse-art.png",
-    accent: "text-[#f359d2]",
-    glow: "from-[#6c14ce]/20 to-[#020205]",
+    accent: "text-[#1800ad]",
+    glow: "from-[#1800ad]/20 to-[#020205]",
     memberHref: "/home/pulse",
   },
+
+  {
+    slug: "sessions",
+    name: "Sessions",
+    eyebrow: "Find something worth showing up for",
+    purpose: "Scheduled experiences across the community.",
+    summary:
+      "Discover events, workshops, game nights, meetups, and experiences that fit your interests and capacity.",
+    audience: [
+      "Community members",
+      "Event participants",
+      "Hosts and organizers",
+    ],
+    capabilities: [
+      "Discover upcoming Sessions",
+      "Filter by format and participation style",
+      "Register for experiences",
+    ],
+    mvpIncludes: [
+      "Session discovery",
+      "Session profiles",
+      "Registration",
+      "Online, in-person, and hybrid formats",
+    ],
+    notIncluded: [
+      "Open-ended social feeds",
+      "Unstructured event listings",
+      "Hidden recommendation scoring",
+    ],
+    pulseConnection:
+      "Pulse helps surface Sessions that match your interests, available time, social intensity, format, and current capacity.",
+    passportConnection:
+      "Eligible verified attendance and hosting activity can become part of Passport.",
+    icon: CalendarDays,
+    artwork: "/images/modules/sessions-art.png",
+    accent: "text-[#4c1e92]",
+    glow: "from-[#4c1e92]/20 to-[#020205]",
+    memberHref: "/home/sessions",
+  },
+
   {
     slug: "circles",
     name: "Circles",
@@ -95,23 +136,24 @@ export const platformModules: PlatformModule[] = [
     pulseConnection:
       "A Connect, Play, Create, Focus, or Reset Pulse can lead to Circles whose purpose and participation style match the day.",
     passportConnection:
-      "Eligible hosted sessions, volunteering, and verified Circle contributions can build a member’s Passport history.",
+      "Eligible hosted Sessions, volunteering, and verified Circle contributions can build a member’s Passport history.",
     icon: HeartHandshake,
     artwork: "/images/modules/circles-art.png",
-    accent: "text-[#22d3ee]",
-    glow: "from-[#22d3ee]/15 to-[#020205]",
+    accent: "text-[#f359d2]",
+    glow: "from-[#f359d2]/15 to-[#020205]",
     memberHref: "/home/circles",
   },
+
   {
     slug: "commons",
     name: "Creator Commons",
     eyebrow: "Make the right collaboration possible",
     purpose: "Creator collaboration and opportunities.",
     summary:
-      "Create, collaborate, and grow with other creators, producers, and teams.",
+      "Create, collaborate, and grow with other creators, producers, professionals, and teams.",
     audience: [
       "Creators and producers",
-      "People offering skills or equipment",
+      "Professionals and businesses",
       "Teams forming around a project",
     ],
     capabilities: [
@@ -136,10 +178,11 @@ export const platformModules: PlatformModule[] = [
       "A collaboration can contribute to Passport only after an authorized completion workflow—not through self-issued credit.",
     icon: Aperture,
     artwork: "/images/modules/commons-art.png",
-    accent: "text-[#7cff00]",
-    glow: "from-[#7cff00]/10 to-[#020205]",
+    accent: "text-white",
+    glow: "from-white/10 to-[#020205]",
     memberHref: "/home/commons",
   },
+
   {
     slug: "realm",
     name: "Fifth Realm",
@@ -155,13 +198,13 @@ export const platformModules: PlatformModule[] = [
     capabilities: [
       "Discover campaigns",
       "Understand genre, tone, cadence, and experience welcome",
-      "Apply and coordinate campaign sessions",
+      "Apply and coordinate campaign Sessions",
     ],
     mvpIncludes: [
       "Campaign profiles",
       "Player applications",
       "Game-master tools",
-      "Associated sessions",
+      "Associated Sessions",
     ],
     notIncluded: [
       "Virtual tabletop tools",
@@ -174,10 +217,11 @@ export const platformModules: PlatformModule[] = [
       "Verified campaign participation and completion can become part of Passport without turning play into a leaderboard.",
     icon: Gamepad2,
     artwork: "/images/modules/realm-art.png",
-    accent: "text-[#9d7cff]",
-    glow: "from-[#1800ad]/25 to-[#020205]",
+    accent: "text-[#22d3ee]",
+    glow: "from-[#22d3ee]/15 to-[#020205]",
     memberHref: "/home/realm",
   },
+
   {
     slug: "passport",
     name: "Passport",
@@ -212,7 +256,7 @@ export const platformModules: PlatformModule[] = [
       "Passport is the shared outcome layer connecting participation across Sessions, Circles, Commons, and Fifth Realm.",
     icon: BadgeCheck,
     artwork: "/images/modules/passport-art.png",
-    accent: "text-[#b8ff73]",
+    accent: "text-[#7cff00]",
     glow: "from-[#7cff00]/12 to-[#020205]",
     memberHref: "/home/passport",
   },
