@@ -150,7 +150,7 @@ export function PulseLivingBackground() {
 
             opacity: 0.08 + Math.random() * 0.25,
 
-            color: randomStarColor(),
+            color: randomStarColor()!,
 
             /*
              * Independent flickering.
@@ -237,7 +237,7 @@ export function PulseLivingBackground() {
 
           strength: strength * (1 - ring * 0.11),
 
-          color: WATER_COLORS[ring % WATER_COLORS.length],
+          color: WATER_COLORS[ring % WATER_COLORS.length]!,
 
           thickness: 0.75 + ring * 0.12,
 

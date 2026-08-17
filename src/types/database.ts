@@ -62,6 +62,7 @@ export type Database = {
           name: string;
           description: string | null;
           active: boolean;
+          realm_enabled: boolean;
           created_at: string;
         };
         Insert: {
@@ -70,6 +71,7 @@ export type Database = {
           name: string;
           description?: string | null;
           active?: boolean;
+          realm_enabled?: boolean;
           created_at?: string;
         };
         Update: Partial<Database["public"]["Tables"]["interests"]["Insert"]>;

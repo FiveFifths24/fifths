@@ -2,7 +2,26 @@ import { fireEvent, render, screen, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { SiteHeader } from "./site-header";
 
-vi.mock("next/navigation", () => ({ usePathname: () => "/ecosystem" }));
+vi.mock("next/navigation", () => ({ usePathname: () => "/about" }));
+
+vi.mock("@/lib/supabase/client", () => ({
+  createClient: () => ({
+    auth: {
+      getUser: vi.fn().mockResolvedValue({
+        data: {
+          user: null,
+        },
+      }),
+      onAuthStateChange: vi.fn(() => ({
+        data: {
+          subscription: {
+            unsubscribe: vi.fn(),
+          },
+        },
+      })),
+    },
+  }),
+}));
 
 describe("SiteHeader", () => {
   beforeEach(() => render(<SiteHeader />));
@@ -12,7 +31,7 @@ describe("SiteHeader", () => {
       name: "Primary navigation",
     });
     expect(
-      within(navigation).getByRole("link", { name: "Ecosystem" }),
+      within(navigation).getByRole("link", { name: "About" }),
     ).toHaveAttribute("aria-current", "page");
   });
 

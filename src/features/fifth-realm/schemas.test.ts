@@ -11,7 +11,7 @@ const validCampaign = {
   summary: "An original collaborative mystery about a changing archive.",
   premise:
     "Participants explore an original world and decide together what the archive should preserve.",
-  genre: "Collaborative mystery",
+  genre: "mystery",
   tone: "Hopeful, curious, and low-conflict",
   safetyExpectations:
     "Use regular check-ins, respect stated boundaries, and allow anyone to pause without explanation.",

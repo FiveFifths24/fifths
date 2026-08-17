@@ -28,7 +28,6 @@ const memberGlitter = Array.from({ length: 120 }, (_, index) => ({
 }));
 
 export function MemberShell({
-  displayName,
   children,
 }: {
   displayName: string;

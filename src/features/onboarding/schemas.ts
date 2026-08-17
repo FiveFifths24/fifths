@@ -3,12 +3,12 @@ import { z } from "zod";
 const interestSelection = z
   .array(z.uuid())
   .min(1, "Choose at least one interest.")
-  .max(30, "Choose no more than 12 interests.");
+  .max(12, "Choose no more than 12 interests.");
 
 const skillSelection = z
   .array(z.uuid())
   .min(1, "Choose at least one skill.")
-  .max(20, "Choose no more than 12 skills.");
+  .max(12, "Choose no more than 12 skills.");
 
 const optionalText = (max: number, message: string) =>
   z

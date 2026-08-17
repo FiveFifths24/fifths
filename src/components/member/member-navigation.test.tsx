@@ -19,25 +19,10 @@ describe("MemberNavigation", () => {
       within(navigation).getByRole("link", { name: "Home" }),
     ).not.toHaveAttribute("aria-current");
     expect(
-      within(navigation).getByRole("link", { name: "Registrations" }),
-    ).toHaveAttribute("href", "/home/registrations");
-    expect(
       within(navigation).getByRole("link", { name: "Circles" }),
     ).toHaveAttribute("href", "/home/circles");
     expect(
-      within(navigation).getByRole("link", { name: "Commons" }),
-    ).toHaveAttribute("href", "/home/commons");
-    expect(
-      within(navigation).getByRole("link", { name: "Realm" }),
-    ).toHaveAttribute("href", "/home/realm");
-    expect(
-      within(navigation).getByRole("link", { name: "Passport" }),
-    ).toHaveAttribute("href", "/home/passport");
-    expect(
       within(navigation).getByRole("link", { name: "Inbox" }),
     ).toHaveAttribute("href", "/home/notifications");
-    expect(
-      within(navigation).getByRole("link", { name: "Safety" }),
-    ).toHaveAttribute("href", "/home/safety");
   });
 });

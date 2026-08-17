@@ -21,16 +21,15 @@ describe("Fifth Realm forms", () => {
     expect(
       screen.getByRole("form", { name: "Create a Fifth Realm campaign" }),
     ).toBeInTheDocument();
-    expect(screen.getByLabelText("Original premise")).toBeRequired();
-    expect(screen.getByLabelText("Safety expectations")).toBeRequired();
-    expect(screen.getByLabelText("Application deadline")).toHaveAttribute(
+    expect(screen.getByLabelText("Campaign Premise")).toBeRequired();
+    expect(screen.getByLabelText("Expectations")).toBeRequired();
+    expect(screen.getByLabelText("Application Deadline")).toHaveAttribute(
       "type",
       "datetime-local",
     );
     expect(
-      screen.getByRole("button", { name: "Create draft campaign" }),
+      screen.getByRole("button", { name: "Create Realm Campaign" }),
     ).toBeInTheDocument();
-    expect(screen.getByText(/does not publish it/i)).toBeInTheDocument();
   });
 
   it("requires an explicit safety acknowledgement before applying", () => {

@@ -68,13 +68,16 @@ export function SignalReceiver() {
   const [isTuning, setIsTuning] = useState(false);
 
   useEffect(() => {
-    setIsTuning(true);
+    const startTimer = window.setTimeout(() => {
+      setIsTuning(true);
+    }, 0);
 
     const timer = window.setTimeout(() => {
       setIsTuning(false);
     }, 450);
 
     return () => window.clearTimeout(timer);
+    window.clearTimeout(startTimer);
   }, [stationIndex]);
 
   return (

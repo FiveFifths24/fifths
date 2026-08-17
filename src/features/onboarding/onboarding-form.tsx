@@ -303,7 +303,6 @@ export function OnboardingForm({
     initialActionState,
   );
 
-  const ageError = firstFieldError(state, "ageConfirmation");
   const isFirstStep = currentStep === 0;
   const isFinalStep = currentStep === steps.length - 1;
   const progress = ((currentStep + 1) / steps.length) * 100;
@@ -536,8 +535,8 @@ export function OnboardingForm({
           </p>
 
           <p className="mt-2 text-sm leading-6 text-white/45">
-            After you're in, you'll be able to add a profile photo, cover image,
-            and more to make your SIGNAL profile feel like you.
+            After You&apos;re in, you&apos;ll be able to add a profile photo,
+            cover image, and more to make your SIGNAL profile feel like you.
           </p>
         </div>
       </section>

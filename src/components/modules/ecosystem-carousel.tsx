@@ -104,7 +104,7 @@ const modules = [
 export function EcosystemCarousel() {
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const activeModule = modules[activeIndex];
+  const activeModule = modules[activeIndex]!;
   const Icon = activeModule.icon;
 
   useEffect(() => {

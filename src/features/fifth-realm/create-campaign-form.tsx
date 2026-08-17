@@ -62,7 +62,6 @@ function TextAreaField({
   error,
   maxLength,
   placeholder,
-  defaultValue,
   minHeight = "min-h-32",
 }: {
   label: string;
@@ -91,7 +90,6 @@ function TextAreaField({
           "resize-y",
           error && "border-red-500",
         )}
-        defaultValue={defaultValue}
         id={name}
         maxLength={maxLength}
         name={name}
@@ -225,7 +223,6 @@ export function CreateCampaignForm({
         <div className="mt-5">
           <TextAreaField
             error={firstFieldError(state, "summary")}
-            defaultValue={value("summary")}
             hint="10–280 characters. This appears on campaign discovery cards."
             label="Short Summary"
             maxLength={280}
@@ -238,7 +235,6 @@ export function CreateCampaignForm({
         <div className="mt-5">
           <TextAreaField
             error={firstFieldError(state, "premise")}
-            defaultValue={value("premise")}
             hint="Describe the world, player role, and shared objective using original, system-neutral language."
             label="Campaign Premise"
             maxLength={5000}
@@ -313,7 +309,6 @@ export function CreateCampaignForm({
 
           <SelectField
             defaultValue={value("experienceLevel", "new")}
-            defaultValue="new"
             error={firstFieldError(state, "experienceLevel")}
             label="Player Experience"
             name="experienceLevel"
@@ -335,7 +330,6 @@ export function CreateCampaignForm({
 
           <SelectField
             defaultValue={value("timezone", "America/New_York")}
-            defaultValue="America/New_York"
             error={firstFieldError(state, "timezone")}
             label="Campaign timezone"
             name="timezone"
@@ -351,7 +345,6 @@ export function CreateCampaignForm({
         <div className="mt-5">
           <TextAreaField
             error={firstFieldError(state, "scheduleSummary")}
-            defaultValue={value("scheduleSummary")}
             hint="Let participants know if this is recurring, and for how long."
             label="Schedule"
             maxLength={500}
@@ -377,7 +370,6 @@ export function CreateCampaignForm({
         <div>
           <TextAreaField
             error={firstFieldError(state, "safetyExpectations")}
-            defaultValue={value("safetyExpectations")}
             hint="Explain boundaries, consent tools, check-ins, conduct expectations, and how participant wellbeing will be respected."
             label="Expectations"
             maxLength={2000}

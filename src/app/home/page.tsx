@@ -1,11 +1,5 @@
 import type { Metadata } from "next";
-import {
-  Activity,
-  ArrowRight,
-  Clock3,
-  ShieldCheck,
-  Sparkles,
-} from "lucide-react";
+import { Activity, Sparkles } from "lucide-react";
 import { AccountUnavailable } from "@/components/account/account-unavailable";
 import { ButtonLink } from "@/components/ui/button-link";
 import { PreviewState } from "@/components/ui/preview-state";
