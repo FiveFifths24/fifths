@@ -74,22 +74,24 @@ export function SessionCard({ item }: { item: SessionCardItem }) {
         <Badge>{remaining === 0 ? "Full" : `${remaining} spots left`}</Badge>
       </div>
 
-      <h2 className="mt-5 text-2xl font-bold text-white">
-        <Link
-          className="rounded-sm underline decoration-neutral-700 underline-offset-4 hover:decoration-red-500"
-          href={`/home/sessions/${item.id}`}
-        >
-          {item.title}
-        </Link>
-      </h2>
-      <p className="mt-3 flex-1 text-sm leading-6 text-neutral-400">
-        {item.summary}
-      </p>
-      <p className="mt-4 text-xs font-bold tracking-wide text-neutral-500 uppercase">
-        Hosted by {item.host_display_name}
-      </p>
+<h2 className="mt-5 min-w-0 max-w-full text-2xl font-bold text-white break-words">
+  <Link
+    className="block max-w-full break-all rounded-sm underline decoration-neutral-700 underline-offset-4 hover:decoration-red-500"
+    href={`/home/sessions/${item.id}`}
+  >
+    {item.title}
+  </Link>
+</h2>
 
-      <dl className="mt-6 grid gap-3 text-sm text-neutral-300 sm:grid-cols-2">
+<p className="mt-3 min-w-0 max-w-full flex-1 text-sm leading-6 break-words text-neutral-400">
+  {item.summary}
+</p>
+
+<p className="mt-4 min-w-0 max-w-full text-xs font-bold tracking-wide break-words text-neutral-500 uppercase">
+  Hosted by {item.host_display_name}
+</p>
+
+      <dl className="mt-6 grid min-w-0 grid-cols-1 gap-3 text-sm text-neutral-300 sm:grid-cols-2">
         <div className="flex justify-center gap-2 sm:justify-start">
           <CalendarDays
             aria-hidden="true"

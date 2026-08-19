@@ -8,7 +8,7 @@ const email = z
 
 const password = z
   .string()
-  .min(12, "Use at least 12 characters.")
+  .min(8, "Use at least 8 characters.")
   .max(72, "Use no more than 72 characters.");
 
 export const loginSchema = z.object({

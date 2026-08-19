@@ -1,16 +1,17 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+
 import { AuthShell } from "@/components/forms/auth-shell";
 import { SignupForm } from "@/features/auth/signup-form";
 
-export const metadata: Metadata = { title: "Join FIFTHS" };
+export const metadata: Metadata = { title: "Join Signal" };
 
 export default function SignupPage() {
   return (
     <AuthShell
-      eyebrow="Join FIFTHS"
-      title="One identity. Every way you participate."
-      description="Create the account that will eventually connect your daily capacity, communities, creative work, campaigns, and Passport."
+      eyebrow="Join Signal"
+      title="One Account For Every Way You Show Up."
+      description="Create your Signal account to bring your daily capacity, communities, creative work, campaigns, and Passport together in one place."
       footer={
         <>
           Already have an account?{" "}

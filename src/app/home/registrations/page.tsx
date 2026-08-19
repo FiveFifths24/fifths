@@ -113,19 +113,19 @@ export default async function RegistrationsPage() {
       ====================================================== */}
       <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
         <div className="mx-auto max-w-4xl sm:mx-0">
-          <p className="flex items-center justify-center gap-2 text-xs font-bold tracking-[0.2em] text-[#992bff] uppercase sm:justify-start">
-            <TicketCheck aria-hidden="true" className="size-4" />
-            Private Registrations
-          </p>
+<p className="flex items-center justify-center gap-2 text-xs font-bold tracking-[0.2em] text-[#992bff] uppercase sm:justify-start">
+  <TicketCheck aria-hidden="true" className="size-4" />
+  My
+</p>
 
-          <h1 className="display-type mt-4 text-5xl text-white sm:text-7xl">
-            Your Session Places.
-          </h1>
+<h1 className="display-type mt-4 text-center text-5xl text-white sm:text-left sm:text-7xl">
+  Your Registered Sessions.
+</h1>
 
-          <p className="mx-auto mt-5 max-w-3xl text-lg leading-8 text-neutral-300 sm:mx-0">
-            Keep track of the Sessions you&apos;ve registered for and review
-            your current participation.
-          </p>
+<p className="mx-auto mt-5 max-w-3xl text-center text-lg leading-8 text-neutral-300 sm:mx-0 sm:text-left">
+  See the Sessions you&apos;ve joined, check your registration status,
+  and review attendance details in one place.
+</p>
         </div>
 
         <ButtonLink
@@ -140,7 +140,7 @@ export default async function RegistrationsPage() {
           REGISTRATIONS
       ====================================================== */}
       {registrations.length ? (
-        <ol className="mt-10 grid gap-6 lg:grid-cols-2">
+        <ol className="mt-10 grid min-w-0 grid-cols-1 gap-6 lg:grid-cols-2">
           {registrations.map((registration) => {
             const card = cardsById.get(registration.session_id);
 
@@ -151,7 +151,10 @@ export default async function RegistrationsPage() {
             const attendance = attendanceById.get(registration.session_id);
 
             return (
-              <li className="space-y-3" key={registration.session_id}>
+              <li
+  className="w-full min-w-0 max-w-full space-y-3"
+  key={registration.session_id}
+>
                 <div className="flex flex-wrap items-center justify-center gap-2 px-1 sm:justify-start">
                   <Badge
                     className={

@@ -18,7 +18,7 @@ export function LoginForm({ next }: { next?: string }) {
       <TextField
         autoComplete="email"
         error={firstFieldError(state, "email")}
-        label="Email address"
+        label="Email Address"
         name="email"
         placeholder="you@example.com"
         required
