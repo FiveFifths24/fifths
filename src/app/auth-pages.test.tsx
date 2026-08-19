@@ -10,7 +10,7 @@ describe("authentication interfaces", () => {
     expect(
       screen.getByRole("form", { name: "Log in to FIFTHS" }),
     ).toBeInTheDocument();
-    expect(screen.getByLabelText("Email address")).toHaveAttribute(
+    expect(screen.getByLabelText(/email address/i)).toHaveAttribute(
       "type",
       "email",
     );
@@ -34,7 +34,7 @@ describe("authentication interfaces", () => {
     ).toHaveLength(2);
     expect(screen.getByRole("checkbox")).toBeRequired();
     expect(
-      screen.getByRole("button", { name: "Create account" }),
+      screen.getByRole("button", { name: /create account/i }),
     ).toBeEnabled();
   });
 
@@ -43,6 +43,6 @@ describe("authentication interfaces", () => {
     expect(
       screen.getByRole("form", { name: "Request a password reset" }),
     ).toBeInTheDocument();
-    expect(screen.getByLabelText("Email address")).toBeRequired();
+    expect(screen.getByLabelText(/email address/i)).toBeRequired();
   });
 });

@@ -26,7 +26,7 @@ export function SignupForm() {
       <TextField
         autoComplete="email"
         error={firstFieldError(state, "email")}
-        label="Email Address"
+        label="Email address"
         name="email"
         placeholder="you@example.com"
         required
@@ -102,7 +102,7 @@ export function SignupForm() {
       </div>
 
       <SubmitButton pendingLabel="Creating account…">
-        Create Account
+        Create account
       </SubmitButton>
     </form>
   );
