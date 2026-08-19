@@ -113,19 +113,19 @@ export default async function RegistrationsPage() {
       ====================================================== */}
       <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
         <div className="mx-auto max-w-4xl sm:mx-0">
-<p className="flex items-center justify-center gap-2 text-xs font-bold tracking-[0.2em] text-[#992bff] uppercase sm:justify-start">
-  <TicketCheck aria-hidden="true" className="size-4" />
-  My
-</p>
+          <p className="flex items-center justify-center gap-2 text-xs font-bold tracking-[0.2em] text-[#992bff] uppercase sm:justify-start">
+            <TicketCheck aria-hidden="true" className="size-4" />
+            My
+          </p>
 
-<h1 className="display-type mt-4 text-center text-5xl text-white sm:text-left sm:text-7xl">
-  Your Registered Sessions.
-</h1>
+          <h1 className="display-type mt-4 text-center text-5xl text-white sm:text-left sm:text-7xl">
+            Your Registered Sessions.
+          </h1>
 
-<p className="mx-auto mt-5 max-w-3xl text-center text-lg leading-8 text-neutral-300 sm:mx-0 sm:text-left">
-  See the Sessions you&apos;ve joined, check your registration status,
-  and review attendance details in one place.
-</p>
+          <p className="mx-auto mt-5 max-w-3xl text-center text-lg leading-8 text-neutral-300 sm:mx-0 sm:text-left">
+            See the Sessions you&apos;ve joined, check your registration status,
+            and review attendance details in one place.
+          </p>
         </div>
 
         <ButtonLink
@@ -152,9 +152,9 @@ export default async function RegistrationsPage() {
 
             return (
               <li
-  className="w-full min-w-0 max-w-full space-y-3"
-  key={registration.session_id}
->
+                className="w-full max-w-full min-w-0 space-y-3"
+                key={registration.session_id}
+              >
                 <div className="flex flex-wrap items-center justify-center gap-2 px-1 sm:justify-start">
                   <Badge
                     className={

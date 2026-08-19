@@ -205,8 +205,10 @@ export default async function SessionsPage() {
           PULSE MATCH STATUS
       ====================================================== */}
       {pulseInput ? (
-        <StatusMessage className="mt-8 justify-center text-center lg:mx-auto lg:max-w-3xl"
-        tone="success">
+        <StatusMessage
+          className="mt-8 justify-center text-center lg:mx-auto lg:max-w-3xl"
+          tone="success"
+        >
           <span className="font-bold">Matched To Your Current Pulse.</span>{" "}
         </StatusMessage>
       ) : (
@@ -235,15 +237,15 @@ export default async function SessionsPage() {
           </h2>
         </div>
 
-{cards.length ? (
-  <div className="mt-6 grid min-w-0 grid-cols-1 gap-5 lg:grid-cols-2">
-    {cards.map((card) => (
-      <div className="min-w-0" key={card.id}>
-        <SessionCard item={card} />
-      </div>
-    ))}
-  </div>
-          ) : (
+        {cards.length ? (
+          <div className="mt-6 grid min-w-0 grid-cols-1 gap-5 lg:grid-cols-2">
+            {cards.map((card) => (
+              <div className="min-w-0" key={card.id}>
+                <SessionCard item={card} />
+              </div>
+            ))}
+          </div>
+        ) : (
           <div className="mt-6 rounded-[1.75rem] border border-[#992bff]/20 bg-[#992bff]/[0.035] px-6 py-10 text-center">
             <div className="mx-auto flex max-w-xl flex-col items-center">
               <Sparkles aria-hidden="true" className="size-6 text-[#992bff]" />

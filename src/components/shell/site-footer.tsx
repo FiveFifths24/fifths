@@ -58,9 +58,9 @@ export function SiteFooter() {
       />
 
       <Container className="relative grid gap-14 py-16 text-center lg:grid-cols-[1.15fr_2fr] lg:gap-20 lg:py-20 lg:text-left">
-<div className="text-center lg:pt-20">
-        <Link
-              aria-label="SIGNAL powered by Five Fifths"
+        <div className="text-center lg:pt-20">
+          <Link
+            aria-label="SIGNAL powered by Five Fifths"
             className="inline-flex flex-col leading-none"
             href="/"
           >
@@ -88,9 +88,9 @@ export function SiteFooter() {
                 className={isExplore ? "col-span-2 sm:col-span-1" : ""}
                 key={group.title}
               >
-<h2 className="text-[0.68rem] font-bold tracking-[0.2em] text-[#f359d2] uppercase">
-  {group.title}
-</h2>
+                <h2 className="text-[0.68rem] font-bold tracking-[0.2em] text-[#f359d2] uppercase">
+                  {group.title}
+                </h2>
 
                 <ul
                   className={
@@ -102,8 +102,8 @@ export function SiteFooter() {
                   {group.links.map(([label, href]) => {
                     const external = href.startsWith("http");
 
-const linkClassName =
-  "inline-flex min-h-8 items-center text-sm text-[#ffffff] transition-colors hover:text-[#f359d2]";
+                    const linkClassName =
+                      "inline-flex min-h-8 items-center text-sm text-[#ffffff] transition-colors hover:text-[#f359d2]";
 
                     return (
                       <li key={`${group.title}-${label}`}>

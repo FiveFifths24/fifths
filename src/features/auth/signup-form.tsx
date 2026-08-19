@@ -33,26 +33,26 @@ export function SignupForm() {
         type="email"
       />
 
-<PasswordField
-  autoComplete="new-password"
-  error={firstFieldError(state, "password")}
-  hint="Use 8–72 characters. A password manager is recommended."
-  label="Create a password"
-  maxLength={72}
-  minLength={8}
-  name="password"
-  required
-/>
+      <PasswordField
+        autoComplete="new-password"
+        error={firstFieldError(state, "password")}
+        hint="Use 8–72 characters. A password manager is recommended."
+        label="Create a password"
+        maxLength={72}
+        minLength={8}
+        name="password"
+        required
+      />
 
-<PasswordField
-  autoComplete="new-password"
-  error={firstFieldError(state, "confirmPassword")}
-  label="Confirm password"
-  maxLength={72}
-  minLength={8}
-  name="confirmPassword"
-  required
-/>
+      <PasswordField
+        autoComplete="new-password"
+        error={firstFieldError(state, "confirmPassword")}
+        label="Confirm password"
+        maxLength={72}
+        minLength={8}
+        name="confirmPassword"
+        required
+      />
 
       <div>
         <label className="group flex items-start gap-3 rounded-2xl border border-[#992bff]/25 bg-gradient-to-br from-[#992bff]/10 via-black to-[#f359d2]/5 p-5 text-sm leading-6 text-white/70 shadow-inner shadow-[#992bff]/5 transition-colors hover:border-[#f359d2]/40">

@@ -24,9 +24,9 @@ export function AuthShell({
 
       <Container className="relative grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
         <div className="max-w-xl">
-<p className="text-center text-xs font-bold tracking-[0.2em] text-[#f359d2] uppercase sm:text-left">
-  {eyebrow}
-</p>
+          <p className="text-center text-xs font-bold tracking-[0.2em] text-[#f359d2] uppercase sm:text-left">
+            {eyebrow}
+          </p>
 
           <h1 className="display-type mt-5 text-center text-5xl leading-[0.94] text-balance text-white sm:text-left sm:text-7xl">
             {title}
