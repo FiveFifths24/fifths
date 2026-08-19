@@ -24,7 +24,7 @@ const item: OpportunityCardItem = {
   skillNames: ["Production"],
   interestNames: ["Media"],
   saved: true,
-  reasons: ["Fits your current mode"],
+  reasons: ["Fits Your Current Mode"],
 };
 
 describe("OpportunityCard", () => {
@@ -36,6 +36,6 @@ describe("OpportunityCard", () => {
     expect(screen.getByText("Created by Avery")).toBeInTheDocument();
     expect(screen.getByText("1 opening")).toBeInTheDocument();
     expect(screen.getByText("Production")).toBeInTheDocument();
-    expect(screen.getByText("Fits your current mode")).toBeInTheDocument();
+    expect(screen.getByText("Fits Your Current Mode")).toBeInTheDocument();
   });
 });

@@ -187,7 +187,7 @@ export function CreateOpportunityForm({
           <TextField
             error={firstFieldError(state, "title")}
             label="Title"
-            maxLength={120}
+            maxLength={40}
             name="title"
             placeholder="Produce a launch interview series"
             required

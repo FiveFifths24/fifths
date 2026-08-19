@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { createSessionSchema } from "./schemas";
 
 const validSession = {
-  title: "Community design studio",
+  title: "Design Studio",
   summary: "A focused session for shaping a neighborhood creative project.",
   description:
     "Bring one idea and leave with a practical next step, peer context, and time to reflect.",

@@ -41,7 +41,7 @@ function scoreCandidate(
     availableWeight += weights.mode;
     if (candidate.modeSlugs.includes(pulse.modeSlug)) {
       matchedWeight += weights.mode;
-      reasons.push("Fits your current mode");
+      reasons.push("Fits Your Current Mode");
     }
   }
 
@@ -52,7 +52,7 @@ function scoreCandidate(
       pulse.energyLevel <= candidate.energyRange.maximum
     ) {
       matchedWeight += weights.energy;
-      reasons.push("Matches your available energy");
+      reasons.push("Matches Your Available Energy");
     }
   }
 
@@ -60,7 +60,7 @@ function scoreCandidate(
     availableWeight += weights.stimulation;
     if (candidate.stimulationLevels.includes(pulse.stimulationLevel)) {
       matchedWeight += weights.stimulation;
-      reasons.push("Matches your preferred stimulation");
+      reasons.push("Matches Your Preferred Stimulation");
     }
   }
 
@@ -68,7 +68,7 @@ function scoreCandidate(
     availableWeight += weights.social;
     if (candidate.socialIntensities.includes(pulse.socialIntensity)) {
       matchedWeight += weights.social;
-      reasons.push("Matches your social pace");
+      reasons.push("Matches Your Social Pace");
     }
   }
 
@@ -80,7 +80,7 @@ function scoreCandidate(
       candidate.format === pulse.preferredFormat
     ) {
       matchedWeight += weights.format;
-      reasons.push("Works with your preferred format");
+      reasons.push("Works With Your Preferred Platform");
     }
   }
 
@@ -88,7 +88,7 @@ function scoreCandidate(
     availableWeight += weights.time;
     if (candidate.durationMinutes <= pulse.availableMinutes) {
       matchedWeight += weights.time;
-      reasons.push("Fits your available time");
+      reasons.push("Fits Your Available Time");
     }
   }
 
@@ -102,7 +102,7 @@ function scoreCandidate(
     if (interestMatchCount > 0) {
       matchedWeight +=
         weights.interests * (interestMatchCount / candidateInterests.size);
-      reasons.push("Connects with today's interests");
+      reasons.push("Connects With Today's Interests");
     }
   }
 
@@ -110,7 +110,7 @@ function scoreCandidate(
     availableWeight += weights.travel;
     if (candidate.distanceMiles <= pulse.maximumTravelMiles) {
       matchedWeight += weights.travel;
-      reasons.push("Within your travel range");
+      reasons.push("Within Your Travel Range");
     }
   }
 

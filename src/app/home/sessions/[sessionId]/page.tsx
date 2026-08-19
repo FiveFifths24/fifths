@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CalendarDays, Clock3, MapPin, ShieldCheck, Users } from "lucide-react";
+
 import { AccountUnavailable } from "@/components/account/account-unavailable";
 import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button-link";
@@ -22,6 +23,7 @@ export default async function SessionDetailsPage({
   params: Promise<{ sessionId: string }>;
 }) {
   let supabase;
+
   try {
     supabase = await createClient();
   } catch {
@@ -29,174 +31,228 @@ export default async function SessionDetailsPage({
   }
 
   const { sessionId } = await params;
+
   const { data: userData } = await supabase.auth.getUser();
+
   const [sessionResult, registrationResult, attendanceResult, manageResult] =
     await Promise.all([
       supabase.from("sessions").select("*").eq("id", sessionId).maybeSingle(),
+
       supabase
         .from("registrations")
         .select("status")
         .eq("session_id", sessionId)
         .eq("user_id", userData.user?.id ?? "")
         .maybeSingle(),
+
       supabase
         .from("attendance_records")
         .select("status")
         .eq("session_id", sessionId)
         .eq("user_id", userData.user?.id ?? "")
         .maybeSingle(),
-      supabase.rpc("can_manage_session", { p_session_id: sessionId }),
+
+      supabase.rpc("can_manage_session", {
+        p_session_id: sessionId,
+      }),
     ]);
 
   if (sessionResult.error) {
     return (
       <StatusMessage tone="error">
-        This Session could not load. Confirm the Phase 4 migration and your
-        access to the record.
+        This Session is currently unavailable.
       </StatusMessage>
     );
   }
-  if (!sessionResult.data) notFound();
+
+  if (!sessionResult.data) {
+    notFound();
+  }
 
   const session = sessionResult.data;
+
   const [modeResult, linkResult, interestResult, circleResult] =
     await Promise.all([
       supabase.from("modes").select("id, name").eq("id", session.mode_id),
+
       supabase
         .from("session_interests")
         .select("session_id, interest_id")
         .eq("session_id", session.id),
+
       supabase
         .from("interests")
         .select("id, name")
         .eq("active", true)
         .order("name"),
+
       session.circle_id
         ? supabase
             .from("circles")
             .select("id, name")
             .eq("id", session.circle_id)
             .maybeSingle()
-        : Promise.resolve({ data: null, error: null }),
+        : Promise.resolve({
+            data: null,
+            error: null,
+          }),
     ]);
+
   const card = assembleSessionCards(
     [session],
     modeResult.data ?? [],
     interestResult.data ?? [],
     linkResult.data ?? [],
   )[0];
-  if (!card) notFound();
+
+  if (!card) {
+    notFound();
+  }
 
   const isRegistered = registrationResult.data?.status === "registered";
+
   const registrationOpen =
     session.status === "published" &&
     Date.parse(session.starts_at) > new Date().getTime();
+
   const isFull = session.confirmed_registration_count >= session.capacity;
 
   return (
-    <div className="mx-auto max-w-5xl">
-      <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-        <div>
-          <div className="flex flex-wrap gap-2">
-            <Badge className="border-red-900 bg-red-950/40 text-red-200">
+    <div className="mx-auto max-w-5xl text-center sm:text-left">
+      {/* =====================================================
+          SESSION INTRO
+      ====================================================== */}
+      <div className="flex min-w-0 flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+        <div className="mx-auto max-w-full min-w-0 lg:mx-0 lg:max-w-4xl">
+          <div className="flex flex-wrap justify-center gap-2 sm:justify-start">
+            <Badge className="border-[#992bff]/35 bg-[#992bff]/10 text-[#d8b4fe]">
               {card.modeName}
             </Badge>
-            <Badge>{session.status}</Badge>
-            <Badge>
+
+            <Badge className="border-[#992bff]/35 bg-[#992bff]/10 text-[#d8b4fe] capitalize">
+              {session.status}
+            </Badge>
+
+            <Badge className="border-[#992bff]/35 bg-[#992bff]/10 text-[#d8b4fe]">
               {session.confirmed_registration_count}/{session.capacity}{" "}
               registered
             </Badge>
           </div>
-          <h1 className="display-type mt-5 max-w-4xl text-5xl leading-[0.95] text-white sm:text-7xl">
+
+          <h1 className="display-type mt-5 max-w-full text-4xl leading-[0.95] [overflow-wrap:anywhere] break-words text-white sm:text-7xl">
             {session.title}
           </h1>
-          <p className="mt-5 max-w-3xl text-lg leading-8 text-neutral-300">
+
+          <p className="mx-auto mt-5 max-w-3xl text-base leading-7 break-words text-neutral-300 sm:mx-0 sm:text-lg sm:leading-8">
             {session.summary}
           </p>
-          <p className="mt-4 text-sm font-bold text-neutral-500">
+
+          <p className="mt-4 text-sm font-bold text-white/40">
             Hosted by {session.host_display_name}
           </p>
+
           {circleResult.data ? (
-            <p className="mt-4 text-sm text-neutral-300">
-              Associated with{" "}
+            <div className="mt-4 flex flex-col items-center gap-2 text-sm text-neutral-300 sm:flex-row sm:justify-start">
+              <span>Associated with</span>
+
               <ButtonLink
-                className="ml-2 min-h-0 px-4 py-2"
+                className="min-h-0 border-[#992bff]/35 bg-[#992bff]/10 px-4 py-2 text-white hover:border-[#992bff]/60 hover:bg-[#992bff]/15"
                 href={`/home/circles/${circleResult.data.id}`}
                 variant="secondary"
               >
                 {circleResult.data.name}
               </ButtonLink>
-            </p>
+            </div>
           ) : null}
         </div>
+
         {manageResult.data ? (
           <ButtonLink
+            className="mx-auto min-h-12 min-w-[12.5rem] border-0 bg-gradient-to-r from-[#6c14ce] via-[#a855f7] to-[#992bff] px-7 text-sm whitespace-nowrap text-white shadow-lg shadow-[#6c14ce]/20 hover:brightness-110 lg:mx-0"
             href={`/home/sessions/host/${session.id}`}
-            variant="secondary"
           >
             Manage Session
           </ButtonLink>
         ) : null}
       </div>
 
+      {/* =====================================================
+          STATUS
+      ====================================================== */}
       {session.status === "cancelled" ? (
-        <StatusMessage className="mt-8" tone="error">
-          This Session was cancelled. It remains visible to its host and
-          registered members for clarity.
-        </StatusMessage>
-      ) : null}
-      {attendanceResult.data ? (
-        <StatusMessage className="mt-8" tone="success">
-          Your attendance record is marked as {attendanceResult.data.status}.
-          {attendanceResult.data.status === "attended"
-            ? " Verified Passport activity is issued automatically."
-            : " Only attended participation creates verified Passport activity."}
+        <StatusMessage className="mt-8 text-center sm:text-left" tone="error">
+          This Session has been cancelled.
         </StatusMessage>
       ) : null}
 
+      {attendanceResult.data ? (
+        <StatusMessage className="mt-8 text-center sm:text-left" tone="success">
+          Your attendance is marked as {attendanceResult.data.status}.
+        </StatusMessage>
+      ) : null}
+
+      {/* =====================================================
+          SESSION CONTENT
+      ====================================================== */}
       <div className="mt-10 grid gap-6 lg:grid-cols-[1fr_22rem]">
         <div className="space-y-6">
-          <section className="rounded-[2rem] border border-neutral-800 bg-neutral-900 p-6 sm:p-8">
-            <h2 className="text-2xl font-bold text-white">What to expect</h2>
-            <p className="mt-4 text-base leading-8 whitespace-pre-wrap text-neutral-300">
+          {/* =================================================
+              DESCRIPTION
+          ================================================== */}
+          <section className="rounded-[2rem] border border-[#992bff]/20 bg-[#992bff]/[0.035] p-6 sm:p-8">
+            <h2 className="text-2xl font-bold text-white">What to Expect</h2>
+
+            <p className="mt-4 text-base leading-8 [overflow-wrap:anywhere] break-words whitespace-pre-wrap text-white/60">
               {session.description}
             </p>
           </section>
 
-          <section className="rounded-[2rem] border border-neutral-800 bg-neutral-950 p-6 sm:p-8">
-            <h2 className="text-2xl font-bold text-white">Session details</h2>
-            <dl className="mt-6 grid gap-5 text-sm sm:grid-cols-2">
-              <div className="flex gap-3">
+          {/* =================================================
+              DETAILS
+          ================================================== */}
+          <section className="rounded-[2rem] border border-[#992bff]/20 bg-black/35 p-6 sm:p-8">
+            <h2 className="text-2xl font-bold text-white">Session Details</h2>
+
+            <dl className="mt-6 grid gap-6 text-sm sm:grid-cols-2">
+              <div className="flex justify-center gap-3 text-left sm:justify-start">
                 <CalendarDays
                   aria-hidden="true"
-                  className="mt-0.5 size-5 shrink-0 text-red-400"
+                  className="mt-0.5 size-5 shrink-0 text-[#992bff]"
                 />
+
                 <div>
-                  <dt className="text-neutral-500">Starts</dt>
+                  <dt className="text-white/40">Starts</dt>
+
                   <dd className="mt-1 font-bold text-white">
                     {formatSessionDate(session.starts_at, session.timezone)}
                   </dd>
                 </div>
               </div>
-              <div className="flex gap-3">
+
+              <div className="flex justify-center gap-3 text-left sm:justify-start">
                 <Clock3
                   aria-hidden="true"
-                  className="mt-0.5 size-5 shrink-0 text-red-400"
+                  className="mt-0.5 size-5 shrink-0 text-[#992bff]"
                 />
+
                 <div>
-                  <dt className="text-neutral-500">Ends</dt>
+                  <dt className="text-white/40">Ends</dt>
+
                   <dd className="mt-1 font-bold text-white">
                     {formatSessionDate(session.ends_at, session.timezone)}
                   </dd>
                 </div>
               </div>
-              <div className="flex gap-3">
+
+              <div className="flex justify-center gap-3 text-left sm:justify-start">
                 <MapPin
                   aria-hidden="true"
-                  className="mt-0.5 size-5 shrink-0 text-red-400"
+                  className="mt-0.5 size-5 shrink-0 text-[#992bff]"
                 />
+
                 <div>
-                  <dt className="text-neutral-500">Access</dt>
+                  <dt className="text-white/40">Access</dt>
+
                   <dd className="mt-1 font-bold text-white">
                     {formatSessionFormat(session.format)}
                     {session.location_label
@@ -205,13 +261,16 @@ export default async function SessionDetailsPage({
                   </dd>
                 </div>
               </div>
-              <div className="flex gap-3">
+
+              <div className="flex justify-center gap-3 text-left sm:justify-start">
                 <Users
                   aria-hidden="true"
-                  className="mt-0.5 size-5 shrink-0 text-red-400"
+                  className="mt-0.5 size-5 shrink-0 text-[#992bff]"
                 />
+
                 <div>
-                  <dt className="text-neutral-500">Capacity</dt>
+                  <dt className="text-white/40">Capacity</dt>
+
                   <dd className="mt-1 font-bold text-white">
                     {Math.max(
                       0,
@@ -225,12 +284,14 @@ export default async function SessionDetailsPage({
 
             {card.interestNames.length ? (
               <ul
-                className="mt-6 flex flex-wrap gap-2"
                 aria-label="Session interests"
+                className="mt-6 flex flex-wrap justify-center gap-2 sm:justify-start"
               >
                 {card.interestNames.map((interest) => (
                   <li key={interest}>
-                    <Badge>{interest}</Badge>
+                    <Badge className="border-[#992bff]/35 bg-[#992bff]/10 text-[#d8b4fe]">
+                      {interest}
+                    </Badge>
                   </li>
                 ))}
               </ul>
@@ -238,14 +299,20 @@ export default async function SessionDetailsPage({
           </section>
         </div>
 
-        <aside className="h-fit rounded-[2rem] border border-neutral-800 bg-neutral-900 p-6">
-          <div className="flex items-center gap-3">
-            <ShieldCheck
-              aria-hidden="true"
-              className="size-5 text-emerald-400"
-            />
-            <h2 className="text-xl font-bold text-white">Your place</h2>
+        {/* =================================================
+            REGISTRATION
+        ================================================== */}
+        <aside className="h-fit rounded-[2rem] border border-[#992bff]/20 bg-[#992bff]/[0.035] p-6">
+          <div className="flex items-center justify-center gap-3 sm:justify-start">
+            <ShieldCheck aria-hidden="true" className="size-5 text-[#992bff]" />
+
+            <h2 className="text-xl font-bold text-white">Your Place</h2>
           </div>
+
+          <p className="mx-auto mt-4 max-w-sm text-sm leading-6 text-white/50 sm:mx-0">
+            Register to save your place in this Session.
+          </p>
+
           <div className="mt-5">
             <SessionRegistrationForm
               isFull={isFull}
@@ -254,10 +321,10 @@ export default async function SessionDetailsPage({
               sessionId={session.id}
             />
           </div>
-          <p className="mt-5 border-t border-neutral-800 pt-5 text-xs leading-5 text-neutral-500">
-            Registration enforces capacity in the database. Circle association
-            changes visibility but does not add payment, waitlist, messaging, or
-            Passport issuance.
+
+          <p className="mt-5 border-t border-[#992bff]/15 pt-5 text-xs leading-5 text-white/40">
+            Your registration stays connected to your account and respects
+            Session capacity.
           </p>
         </aside>
       </div>

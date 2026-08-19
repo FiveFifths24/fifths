@@ -1,16 +1,18 @@
 "use client";
 
 import { useActionState } from "react";
+
 import { ActionStatus } from "@/components/forms/action-status";
 import { SubmitButton } from "@/components/forms/submit-button";
 import { TextField } from "@/components/forms/text-field";
 import { firstFieldError, initialActionState } from "@/features/auth/state";
 import { cn } from "@/lib/cn";
 import type { Interest, Mode } from "@/types/database";
+
 import { createCircleAction } from "./actions";
 
 const controlClassName =
-  "min-h-12 w-full rounded-xl border border-neutral-700 bg-neutral-950 px-4 py-3 text-base text-white hover:border-neutral-500 focus:border-rose-400 focus:outline-none";
+  "min-h-12 w-full rounded-xl border border-[#ee54a7]/20 bg-black/35 px-4 py-3 text-base text-white transition hover:border-[#ee54a7]/40 focus:border-[#ee54a7]/70 focus:outline-none focus:ring-2 focus:ring-[#ee54a7]/15";
 
 function FieldMessage({
   error,
@@ -21,11 +23,14 @@ function FieldMessage({
   hint?: string;
   id?: string;
 }) {
-  if (!error && !hint) return null;
+  if (!error && !hint) {
+    return null;
+  }
+
   return (
     <p
       className={cn(
-        "mt-2 text-xs leading-5 text-neutral-500",
+        "mt-2 text-xs leading-5 text-white/45",
         error && "text-red-300",
       )}
       id={id}
@@ -49,14 +54,13 @@ function SelectField({
   children: React.ReactNode;
 }) {
   const descriptionId = error ? `${name}-description` : undefined;
+
   return (
     <div>
-      <label
-        className="mb-2 block text-sm font-bold text-neutral-100"
-        htmlFor={name}
-      >
+      <label className="mb-2 block text-sm font-bold text-white" htmlFor={name}>
         {label}
       </label>
+
       <select
         aria-describedby={descriptionId}
         aria-invalid={error ? true : undefined}
@@ -68,6 +72,7 @@ function SelectField({
       >
         {children}
       </select>
+
       <FieldMessage error={error} id={descriptionId} />
     </div>
   );
@@ -79,32 +84,39 @@ function TextAreaField({
   error,
   hint,
   placeholder,
+  defaultValue,
 }: {
   label: string;
   name: string;
   error?: string;
   hint?: string;
   placeholder: string;
+  defaultValue?: string;
 }) {
   const descriptionId = error || hint ? `${name}-description` : undefined;
+
   return (
     <div>
-      <label
-        className="mb-2 block text-sm font-bold text-neutral-100"
-        htmlFor={name}
-      >
+      <label className="mb-2 block text-sm font-bold text-white" htmlFor={name}>
         {label}
       </label>
+
       <textarea
         aria-describedby={descriptionId}
         aria-invalid={error ? true : undefined}
-        className={cn(controlClassName, "min-h-36", error && "border-red-500")}
+        className={cn(
+          controlClassName,
+          "min-h-36 resize-y",
+          error && "border-red-500",
+        )}
+        defaultValue={defaultValue}
         id={name}
         maxLength={4000}
         name={name}
         placeholder={placeholder}
         required
       />
+
       <FieldMessage error={error} hint={hint} id={descriptionId} />
     </div>
   );
@@ -122,74 +134,157 @@ export function CreateCircleForm({
     initialActionState,
   );
 
+  function previousValue(name: string) {
+    const value = state.values?.[name];
+
+    return typeof value === "string" ? value : undefined;
+  }
+
+  const topicError = firstFieldError(state, "interestIds");
   return (
-    <form action={action} aria-label="Create a Circle" className="space-y-9">
+    <form action={action} aria-label="Create a Circle" className="space-y-10">
       <ActionStatus state={state} />
 
-      <fieldset>
-        <legend className="text-xl font-bold text-white">
-          Community identity
+      {/* =====================================================
+          COMMUNITY IDENTITY
+      ====================================================== */}
+      <fieldset className="rounded-[1.5rem] border border-[#ee54a7]/15 bg-black/20 p-5 sm:p-6">
+        <legend className="px-2 text-xl font-bold text-white">
+          Community Identity
         </legend>
-        <p className="mt-2 text-sm leading-6 text-neutral-400">
-          The Circle stays a private draft until its purpose, expectations, and
-          membership boundary are ready.
+
+        <p className="mt-2 max-w-3xl text-sm leading-7 text-white/55">
+          Every Circle centers on one clear topic. Give the community a distinct
+          name, purpose, and set of expectations around that topic.
         </p>
-        <div className="mt-5 grid gap-5 sm:grid-cols-2">
+
+        <div className="mt-6 grid gap-5 sm:grid-cols-2">
           <TextField
+            defaultValue={previousValue("name")}
             error={firstFieldError(state, "name")}
-            label="Circle name"
-            maxLength={80}
+            label="Circle Name"
+            maxLength={40}
             name="name"
-            placeholder="North Jersey Creator Circle"
+            placeholder="North Jersey Horror Fans"
             required
           />
+
           <TextField
+            defaultValue={previousValue("slug")}
             error={firstFieldError(state, "slug")}
             hint="Lowercase letters, numbers, and hyphens. This must be unique."
-            label="URL name"
+            label="URL Name"
             maxLength={60}
             name="slug"
-            placeholder="north-jersey-creators"
+            placeholder="north-jersey-horror-fans"
             required
           />
         </div>
+
         <div className="mt-5">
           <TextAreaField
             error={firstFieldError(state, "summary")}
             hint="10–240 characters. This appears on discovery cards."
-            label="Short summary"
+            label="Short Summary"
             name="summary"
-            placeholder="Explain the shared purpose and who will feel welcome."
+            placeholder="Describe what this Circle is about and who will feel at home here."
+            defaultValue={previousValue("summary")}
           />
         </div>
+
         <div className="mt-5 grid gap-5 lg:grid-cols-2">
           <TextAreaField
             error={firstFieldError(state, "description")}
-            label="Full description"
+            label="Full Description"
             name="description"
-            placeholder="Describe the community, its rhythm, and how members participate."
+            placeholder="Explain what members gather around, what people can talk about,
+             and what makes this Circle distinct."
+            defaultValue={previousValue("description")}
           />
+
           <TextAreaField
             error={firstFieldError(state, "rules")}
             hint="Members review these expectations before joining."
-            label="Community rules"
+            label="Community Rules"
             name="rules"
-            placeholder="State clear participation, respect, privacy, and safety expectations."
+            placeholder="Set expectations for participation, respect, privacy, safety,
+             and staying on topic."
+            defaultValue={previousValue("rules")}
           />
         </div>
       </fieldset>
 
-      <fieldset>
-        <legend className="text-xl font-bold text-white">
-          Access boundary
+      {/* =====================================================
+          SINGLE CIRCLE TOPIC
+      ====================================================== */}
+      <fieldset
+        aria-describedby="interestIds-description"
+        className="rounded-[1.5rem] border border-[#ee54a7]/20 bg-[#ee54a7]/[0.035] p-5 sm:p-6"
+      >
+        <legend className="px-2 text-xl font-bold text-white">
+          Circle Topic
         </legend>
-        <p className="mt-2 text-sm leading-6 text-neutral-400">
-          Public Circles appear in discovery. Private Circles are visible only
-          to invited or active members and must remain invite only.
+
+        <p
+          className={cn(
+            "mt-2 max-w-3xl text-sm leading-7 text-white/55",
+            topicError && "text-red-300",
+          )}
+          id="interestIds-description"
+        >
+          {topicError ??
+            "Choose the one topic this Circle is centered around. A focused topic makes Circles easier to search, understand, and discover."}
         </p>
-        <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+
+        <div className="mt-6 max-w-xl">
+          <label
+            className="mb-2 block text-sm font-bold text-white"
+            htmlFor="interestIds"
+          >
+            Topic
+          </label>
+
+          <select
+            aria-describedby="interestIds-description"
+            aria-invalid={topicError ? true : undefined}
+            className={cn(controlClassName, topicError && "border-red-500")}
+            defaultValue={previousValue("interestIds") ?? ""}
+            id="interestIds"
+            name="interestIds"
+            required
+          >
+            <option value="">Choose One Topic</option>
+
+            {interests.map((interest) => (
+              <option key={interest.id} value={interest.id}>
+                {interest.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="mt-5 rounded-2xl border border-[#ee54a7]/15 bg-black/25 p-4 text-sm leading-6 text-white/50">
+          Choose one clear topic so people can easily understand and discover
+          this Circle.
+        </div>
+      </fieldset>
+
+      {/* =====================================================
+          ACCESS
+      ====================================================== */}
+      <fieldset className="rounded-[1.5rem] border border-[#ee54a7]/15 bg-black/20 p-5 sm:p-6">
+        <legend className="px-2 text-xl font-bold text-white">
+          Access and Participation
+        </legend>
+
+        <p className="mt-1 max-w-3xl text-sm leading-7 text-white/55">
+          Decide who can discover the Circle, how new members enter, and where
+          the community primarily gathers.
+        </p>
+
+        <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           <SelectField
-            defaultValue="public"
+            defaultValue={previousValue("visibility") ?? "public"}
             error={firstFieldError(state, "visibility")}
             label="Visibility"
             name="visibility"
@@ -197,59 +292,72 @@ export function CreateCircleForm({
             <option value="public">Public</option>
             <option value="private">Private</option>
           </SelectField>
+
           <SelectField
-            defaultValue="request"
+            defaultValue={previousValue("joinPolicy") ?? "request"}
             error={firstFieldError(state, "joinPolicy")}
             label="Membership"
             name="joinPolicy"
           >
-            <option value="open">Open membership</option>
-            <option value="request">Request and review</option>
-            <option value="invite_only">Invite only</option>
+            <option value="open">Open Membership</option>
+            <option value="request">Request and Review</option>
+            <option value="invite_only">Invite Only</option>
           </SelectField>
+
           <SelectField
+            defaultValue={previousValue("format") ?? ""}
             error={firstFieldError(state, "format")}
             label="Format"
             name="format"
           >
-            <option value="">Choose a format</option>
-            <option value="in_person">In person</option>
+            <option value="">Choose A Format</option>
+            <option value="in_person">In Person</option>
             <option value="online">Online</option>
             <option value="either">Hybrid</option>
           </SelectField>
+
           <TextField
             error={firstFieldError(state, "locationLabel")}
             hint="Optional broad area or access label—never a precise address or private link."
-            label="Area or access label"
+            label="Area or Access Label"
             maxLength={120}
             name="locationLabel"
           />
         </div>
       </fieldset>
 
-      <fieldset>
-        <legend className="text-xl font-bold text-white">Pulse fit</legend>
-        <p className="mt-2 text-sm leading-6 text-neutral-400">
-          Bounded matching signals help members understand why a Circle may fit
-          today. They do not profile health.
+      {/* =====================================================
+          PULSE FIT
+      ====================================================== */}
+      <fieldset className="rounded-[1.5rem] border border-[#ee54a7]/15 bg-black/20 p-5 sm:p-6">
+        <legend className="px-2 text-xl font-bold text-white">Pulse Fit</legend>
+
+        <p className="mt-1 max-w-3xl text-sm leading-7 text-white/55">
+          These signals describe the typical rhythm of participating in this
+          Circle. They help SIGNAL surface communities that fit someone&apos;s
+          current capacity without changing what the Circle is about.
         </p>
-        <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+
+        <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           <SelectField
+            defaultValue={previousValue("joinPolicy") ?? "request"}
             error={firstFieldError(state, "modeId")}
             label="Primary mode"
             name="modeId"
           >
-            <option value="">Choose a mode</option>
+            <option value="">Choose A Mode</option>
+
             {modes.map((mode) => (
               <option key={mode.id} value={mode.id}>
                 {mode.name}
               </option>
             ))}
           </SelectField>
+
           <SelectField
-            defaultValue="1"
+            defaultValue={previousValue("minimumEnergy") ?? "1"}
             error={firstFieldError(state, "minimumEnergy")}
-            label="Minimum energy"
+            label="Minimum Energy"
             name="minimumEnergy"
           >
             {[1, 2, 3, 4, 5].map((value) => (
@@ -258,10 +366,11 @@ export function CreateCircleForm({
               </option>
             ))}
           </SelectField>
+
           <SelectField
-            defaultValue="5"
+            defaultValue={previousValue("maximumEnergy") ?? "5"}
             error={firstFieldError(state, "maximumEnergy")}
-            label="Maximum energy"
+            label="Maximum Energy"
             name="maximumEnergy"
           >
             {[1, 2, 3, 4, 5].map((value) => (
@@ -270,66 +379,47 @@ export function CreateCircleForm({
               </option>
             ))}
           </SelectField>
+
           <SelectField
+            defaultValue={previousValue("stimulationLevel") ?? ""}
             error={firstFieldError(state, "stimulationLevel")}
             label="Stimulation"
             name="stimulationLevel"
           >
-            <option value="">Choose a level</option>
+            <option value="">Choose A Level</option>
             <option value="low">Low</option>
             <option value="moderate">Moderate</option>
             <option value="high">High</option>
           </SelectField>
-          <SelectField
-            error={firstFieldError(state, "socialIntensity")}
-            label="Social pace"
-            name="socialIntensity"
-          >
-            <option value="">Choose a pace</option>
-            <option value="solo">Solo-friendly</option>
-            <option value="light">Light interaction</option>
-            <option value="social">Social</option>
-          </SelectField>
         </div>
-      </fieldset>
 
-      <fieldset aria-describedby="interestIds-description">
-        <legend className="text-xl font-bold text-white">Interests</legend>
-        <p
-          className={cn(
-            "mt-2 text-sm leading-6 text-neutral-400",
-            firstFieldError(state, "interestIds") && "text-red-300",
-          )}
-          id="interestIds-description"
+        <SelectField
+          defaultValue={previousValue("socialIntensity") ?? ""}
+          error={firstFieldError(state, "socialIntensity")}
+          label="Participation Style"
+          name="socialIntensity"
         >
-          {firstFieldError(state, "interestIds") ??
-            "Optional. Choose up to eight active interests."}
-        </p>
-        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {interests.map((interest) => (
-            <label
-              className="flex min-h-12 cursor-pointer items-center gap-3 rounded-xl border border-neutral-700 bg-neutral-950 px-4 py-3 text-sm text-neutral-200 hover:border-neutral-500 has-checked:border-rose-600 has-checked:bg-rose-950/30"
-              key={interest.id}
-            >
-              <input
-                className="size-5 accent-rose-600"
-                name="interestIds"
-                type="checkbox"
-                value={interest.id}
-              />
-              {interest.name}
-            </label>
-          ))}
-        </div>
+          <option value="">Choose A Participation Style</option>
+          <option value="solo">Browse</option>
+          <option value="light">Conversational</option>
+          <option value="social">Active Discussions</option>
+        </SelectField>
       </fieldset>
 
-      <div className="rounded-2xl border border-neutral-800 bg-neutral-950 p-5 text-sm leading-6 text-neutral-400">
-        Creating a Circle does not publish it or issue Passport activity. Review
-        the draft and its membership policy before publishing.
+      {/* =====================================================
+          CREATION NOTE
+      ====================================================== */}
+      <div className="rounded-[1.5rem] border border-[#ee54a7]/15 bg-[#ee54a7]/[0.035] p-5 text-sm leading-7 text-white/55">
+        Creating a Circle starts a community draft. Review its topic,
+        description, rules, membership settings, and participation signals
+        before publishing it for discovery.
       </div>
 
-      <SubmitButton pendingLabel="Creating draft…">
-        Create draft Circle
+      <SubmitButton
+        className="shadow-lg shadow-[#6c14ce]/20 hover:brightness-110"
+        pendingLabel="Creating Circle…"
+      >
+        Create Circle
       </SubmitButton>
     </form>
   );

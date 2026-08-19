@@ -39,16 +39,11 @@ export const createSessionSchema = z
       .string()
       .trim()
       .min(3, "Use at least three characters.")
-      .max(100, "Keep the title under 100 characters."),
-    summary: z
-      .string()
-      .trim()
-      .min(10, "Use at least ten characters.")
-      .max(240, "Keep the summary under 240 characters."),
+      .max(40, "Keep the Session title to 40 characters or fewer."),
     description: z
       .string()
       .trim()
-      .min(20, "Use at least 20 characters.")
+      .min(20, "Tell people a little more about the Session.")
       .max(4000, "Keep the description under 4,000 characters."),
     format: z.enum(["in_person", "online", "either"], {
       error: "Choose a session format.",
@@ -76,7 +71,10 @@ export const createSessionSchema = z
     interestIds,
   })
   .superRefine((value, context) => {
-    if (value.endsAtLocal <= value.startsAtLocal) {
+    const startTime = new Date(value.startsAtLocal).getTime();
+    const endTime = new Date(value.endsAtLocal).getTime();
+
+    if (endTime <= startTime) {
       context.addIssue({
         code: "custom",
         path: ["endsAtLocal"],

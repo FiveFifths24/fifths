@@ -25,24 +25,28 @@ describe("CreateSessionForm", () => {
     expect(
       screen.getByRole("form", { name: "Create a Session" }),
     ).toBeInTheDocument();
+
     for (const label of [
-      "Title",
-      "Short summary",
-      "Full description",
+      "Session Title",
+      "Description",
       "Starts",
       "Ends",
       "Timezone",
       "Format",
-      "Capacity",
-      "Primary mode",
-      "Minimum energy",
-      "Maximum energy",
+      "Session Member Capacity",
+      "Mode",
+      "Energy From",
+      "Energy To",
       "Stimulation",
-      "Social pace",
-      "Arts & culture",
+      "Social Pace",
     ]) {
       expect(screen.getByLabelText(label)).toBeInTheDocument();
     }
-    expect(screen.getByText(/does not publish it/i)).toBeInTheDocument();
+
+    expect(screen.getByText("Arts & culture")).toBeInTheDocument();
+
+    expect(
+      screen.getByText(/Your Session will start as a draft/i),
+    ).toBeInTheDocument();
   });
 });

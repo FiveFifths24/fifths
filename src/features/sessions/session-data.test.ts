@@ -60,9 +60,9 @@ describe("rankSessions", () => {
     expect(ranked[0]?.candidate.id).toBe(base.id);
     expect(ranked[0]?.reasons).toEqual(
       expect.arrayContaining([
-        "Fits your current mode",
-        "Matches your available energy",
-        "Connects with today's interests",
+        "Fits Your Current Mode",
+        "Matches Your Available Energy",
+        "Connects With Today's Interests",
       ]),
     );
     expect(ranked[0]).not.toHaveProperty("score");

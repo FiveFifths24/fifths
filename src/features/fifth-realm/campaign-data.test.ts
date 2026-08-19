@@ -59,7 +59,7 @@ describe("Fifth Realm campaign data", () => {
       ],
     );
     expect(ranked[0]?.candidate.module).toBe("realm");
-    expect(ranked[0]?.reasons).toContain("Connects with today's interests");
+    expect(ranked[0]?.reasons).toContain("Connects With Today's Interests");
     expect(ranked[0]).not.toHaveProperty("score");
   });
 

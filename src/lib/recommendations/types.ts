@@ -33,14 +33,14 @@ export type RecommendationCandidate = {
 };
 
 export type RecommendationReason =
-  | "Fits your current mode"
-  | "Matches your available energy"
-  | "Matches your preferred stimulation"
-  | "Matches your social pace"
-  | "Works with your preferred format"
-  | "Fits your available time"
-  | "Connects with today's interests"
-  | "Within your travel range";
+  | "Fits Your Current Mode"
+  | "Matches Your Available Energy"
+  | "Matches Your Preferred Stimulation"
+  | "Matches Your Social Pace"
+  | "Works With Your Preferred Platform"
+  | "Fits Your Available Time"
+  | "Connects With Today's Interests"
+  | "Within Your Travel Range";
 
 export type RankedRecommendation = {
   candidate: RecommendationCandidate;

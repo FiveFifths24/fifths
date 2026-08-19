@@ -184,7 +184,7 @@ export function CreateCampaignForm({
             defaultValue={value("title")}
             error={firstFieldError(state, "title")}
             label="Campaign title"
-            maxLength={120}
+            maxLength={40}
             name="title"
             placeholder="The Lantern Archive"
             required

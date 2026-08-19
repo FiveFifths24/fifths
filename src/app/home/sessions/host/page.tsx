@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { CalendarPlus, ShieldAlert } from "lucide-react";
+import { CalendarPlus, Sparkles } from "lucide-react";
+
 import { AccountUnavailable } from "@/components/account/account-unavailable";
 import { ButtonLink } from "@/components/ui/button-link";
-import { PreviewState } from "@/components/ui/preview-state";
 import { StatusMessage } from "@/components/ui/status-message";
 import { CreateSessionForm } from "@/features/sessions/create-session-form";
 import { assembleSessionCards } from "@/features/sessions/session-data";
@@ -14,6 +14,7 @@ export const dynamic = "force-dynamic";
 
 export default async function HostSessionsPage() {
   let supabase;
+
   try {
     supabase = await createClient();
   } catch {
@@ -21,26 +22,31 @@ export default async function HostSessionsPage() {
   }
 
   const { data: userData } = await supabase.auth.getUser();
-  if (!userData.user) return <AccountUnavailable />;
 
-  const [roleResult, profileResult, modeResult, interestResult, sessionResult] =
+  if (!userData.user) {
+    return <AccountUnavailable />;
+  }
+
+  const [profileResult, modeResult, interestResult, sessionResult] =
     await Promise.all([
-      supabase.from("user_roles").select("role"),
       supabase
         .from("profiles")
         .select("timezone")
         .eq("id", userData.user.id)
         .maybeSingle(),
+
       supabase
         .from("modes")
         .select("id, name")
         .eq("active", true)
         .order("sort_order"),
+
       supabase
         .from("interests")
         .select("id, name")
         .eq("active", true)
         .order("name"),
+
       supabase
         .from("sessions")
         .select("*")
@@ -49,40 +55,16 @@ export default async function HostSessionsPage() {
         .limit(30),
     ]);
 
-  const roles = new Set((roleResult.data ?? []).map((item) => item.role));
-  const canHost = roles.has("host") || roles.has("platform_admin");
-
-  if (!canHost) {
-    return (
-      <div className="mx-auto max-w-3xl">
-        <p className="flex items-center gap-2 text-xs font-bold tracking-[0.2em] text-red-400 uppercase">
-          <ShieldAlert aria-hidden="true" className="size-4" /> Host access
-        </p>
-        <h1 className="display-type mt-4 text-5xl text-white sm:text-7xl">
-          Hosting requires a trusted role.
-        </h1>
-        <StatusMessage className="mt-8">
-          A platform administrator must assign the host role after an offline
-          trust review. Members cannot elevate themselves, and Phase 4 does not
-          add an administrator interface.
-        </StatusMessage>
-        <ButtonLink className="mt-7" href="/home/sessions">
-          Explore Sessions
-        </ButtonLink>
-      </div>
-    );
-  }
-
   if (sessionResult.error) {
     return (
       <StatusMessage tone="error">
-        Hosting is unavailable. Confirm that the Phase 4 migration has been
-        applied to the connected Supabase project.
+        Hosting is currently unavailable.
       </StatusMessage>
     );
   }
 
   const sessions = sessionResult.data ?? [];
+
   const links = sessions.length
     ? ((
         await supabase
@@ -94,6 +76,7 @@ export default async function HostSessionsPage() {
           )
       ).data ?? [])
     : [];
+
   const cards = assembleSessionCards(
     sessions,
     modeResult.data ?? [],
@@ -102,29 +85,50 @@ export default async function HostSessionsPage() {
   );
 
   return (
-    <div>
-      <p className="flex items-center gap-2 text-xs font-bold tracking-[0.2em] text-red-400 uppercase">
-        <CalendarPlus aria-hidden="true" className="size-4" /> Host tools
-      </p>
-      <h1 className="display-type mt-4 max-w-4xl text-5xl leading-[0.95] text-white sm:text-7xl">
-        Create with clear boundaries.
-      </h1>
-      <p className="mt-5 max-w-3xl text-lg leading-8 text-neutral-300">
-        Build a shared Session, review it as a draft, then publish it for member
-        discovery. Capacity and attendance remain database-authorized.
-      </p>
+    <div className="text-center sm:text-left">
+      {/* =====================================================
+          PAGE INTRO
+      ====================================================== */}
+      <div className="mx-auto max-w-4xl sm:mx-0">
+        <p className="flex items-center justify-center gap-2 text-xs font-bold tracking-[0.2em] text-[#992bff] uppercase sm:justify-start">
+          <CalendarPlus aria-hidden="true" className="size-4" />
+          Host Sessions
+        </p>
 
+        <h1 className="display-type mt-4 text-5xl leading-[0.95] text-white sm:text-7xl">
+          Bring People Together.
+        </h1>
+
+        <p className="mx-auto mt-5 max-w-3xl text-lg leading-8 text-neutral-300 sm:mx-0">
+          Create a Session around something worth doing together. Shape the
+          details, and publish it when you&apos;re ready.
+        </p>
+      </div>
+
+      {/* =====================================================
+          CREATE SESSION
+      ====================================================== */}
       <section
-        className="mt-10 rounded-[2rem] border border-neutral-800 bg-neutral-900 p-6 sm:p-9"
         aria-labelledby="create-session-heading"
+        className="mt-10 rounded-[2rem] border border-[#992bff]/20 bg-[#992bff]/[0.035] p-6 shadow-[0_24px_80px_rgba(0,0,0,0.25)] sm:p-9"
       >
-        <h2
-          className="text-3xl font-bold text-white"
-          id="create-session-heading"
-        >
-          New Session draft
-        </h2>
-        <div className="mt-8">
+        <div className="flex flex-col items-center sm:items-start">
+          <CalendarPlus aria-hidden="true" className="size-6 text-[#992bff]" />
+
+          <h2
+            className="mt-4 text-3xl font-bold text-white"
+            id="create-session-heading"
+          >
+            Create A New Session
+          </h2>
+
+          <p className="mt-3 max-w-2xl text-sm leading-6 text-white/50">
+            Add the details people need to understand what you&apos;re hosting
+            and decide whether it&apos;s right for them.
+          </p>
+        </div>
+
+        <div className="mt-8 text-left">
           <CreateSessionForm
             defaultTimezone={profileResult.data?.timezone ?? "UTC"}
             interests={interestResult.data ?? []}
@@ -133,20 +137,29 @@ export default async function HostSessionsPage() {
         </div>
       </section>
 
+      {/* =====================================================
+          HOSTED SESSIONS
+      ====================================================== */}
       <section className="mt-12" aria-labelledby="hosted-sessions-heading">
-        <h2
-          className="text-3xl font-bold text-white"
-          id="hosted-sessions-heading"
-        >
-          Your hosted Sessions
-        </h2>
+        <div className="flex items-center justify-center gap-3 sm:justify-start">
+          <Sparkles aria-hidden="true" className="size-5 text-[#992bff]" />
+
+          <h2
+            className="text-3xl font-bold text-white"
+            id="hosted-sessions-heading"
+          >
+            Your Hosted Sessions
+          </h2>
+        </div>
+
         {cards.length ? (
           <ul className="mt-6 grid gap-6 lg:grid-cols-2">
             {cards.map((card) => (
               <li className="space-y-3" key={card.id}>
                 <SessionCard item={card} />
+
                 <ButtonLink
-                  className="w-full"
+                  className="w-full border-[#992bff]/35 bg-[#992bff]/10 text-white hover:border-[#992bff]/60 hover:bg-[#992bff]/15"
                   href={`/home/sessions/host/${card.id}`}
                   variant="secondary"
                 >
@@ -156,11 +169,21 @@ export default async function HostSessionsPage() {
             ))}
           </ul>
         ) : (
-          <div className="mt-6">
-            <PreviewState title="No hosted Sessions yet">
-              Your first draft will appear here. Nothing is published until you
-              explicitly review and publish it.
-            </PreviewState>
+          <div className="mt-6 rounded-[1.75rem] border border-[#992bff]/20 bg-[#992bff]/[0.035] px-6 py-10 text-center">
+            <div className="mx-auto flex max-w-xl flex-col items-center">
+              <CalendarPlus
+                aria-hidden="true"
+                className="size-6 text-[#992bff]"
+              />
+
+              <h3 className="mt-4 text-xl font-bold text-white">
+                No Hosted Sessions Yet
+              </h3>
+
+              <p className="mt-3 max-w-md text-sm leading-6 text-white/50">
+                Sessions you create will appear here.
+              </p>
+            </div>
           </div>
         )}
       </section>

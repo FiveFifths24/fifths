@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import {
   Link2,
-  Settings2,
+  MessagesSquare,
   ShieldCheck,
   UserRoundPlus,
   UsersRound,
@@ -25,9 +25,10 @@ export const metadata: Metadata = { title: "Manage Circle" };
 export const dynamic = "force-dynamic";
 
 const buttonClass =
-  "min-h-12 rounded-full border px-5 py-3 text-sm font-bold transition-colors";
+  "min-h-12 rounded-full border px-5 py-3 text-sm font-bold transition";
+
 const selectClass =
-  "min-h-12 rounded-xl border border-neutral-700 bg-neutral-950 px-4 text-white focus:border-rose-400 focus:outline-none";
+  "min-h-12 rounded-xl border border-[#ee54a7]/20 bg-black/35 px-4 text-white transition hover:border-[#ee54a7]/40 focus:border-[#ee54a7]/70 focus:outline-none focus:ring-2 focus:ring-[#ee54a7]/15";
 
 export default async function ManageCirclePage({
   params,
@@ -136,26 +137,36 @@ export default async function ManageCirclePage({
   const associatedSessions = associatedSessionResult.data ?? [];
 
   return (
-    <div className="mx-auto max-w-6xl">
-      <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-        <div>
-          <p className="flex items-center gap-2 text-xs font-bold tracking-[0.2em] text-rose-300 uppercase">
-            <Settings2 aria-hidden="true" className="size-4" /> Circle
-            management
+    <div className="mx-auto max-w-6xl text-center sm:text-left">
+      <div className="grid gap-7 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-12">
+        <div className="mx-auto max-w-4xl sm:mx-0">
+          <p className="flex items-center justify-center gap-2 text-xs font-bold tracking-[0.2em] text-[#ee54a7] uppercase sm:justify-start">
+            <MessagesSquare aria-hidden="true" className="size-4" />
+            Circle Management
           </p>
-          <div className="mt-4 flex flex-wrap items-center gap-3">
-            <h1 className="display-type text-5xl text-white sm:text-7xl">
+
+          <div className="mt-4">
+            <h1 className="display-type text-5xl leading-[0.95] text-white sm:text-7xl">
               {circle.name}
             </h1>
-            <Badge>{circle.status}</Badge>
-            <Badge>{circle.visibility}</Badge>
+
+            <div className="mt-4 flex flex-wrap justify-center gap-2 sm:justify-start">
+              <Badge className="capitalize">{circle.status}</Badge>
+              <Badge className="capitalize">{circle.visibility}</Badge>
+            </div>
           </div>
-          <p className="mt-5 max-w-3xl text-lg leading-8 text-neutral-300">
+
+          <p className="mx-auto mt-5 max-w-3xl text-lg leading-8 text-neutral-300 sm:mx-0">
             {circle.summary}
           </p>
         </div>
-        <ButtonLink href={`/home/circles/${circle.id}`} variant="secondary">
-          View Circle details
+
+        <ButtonLink
+          className="mx-auto min-h-12 min-w-[11.5rem] border-0 bg-gradient-to-r from-[#6c14ce] via-[#a855f7] to-[#ee54a7] px-7 text-sm text-white shadow-lg shadow-[#6c14ce]/20 hover:brightness-110 sm:mx-0"
+          href={`/home/circles/${circle.id}`}
+          variant="secondary"
+        >
+          View Circle Details
         </ButtonLink>
       </div>
 
@@ -220,24 +231,26 @@ export default async function ManageCirclePage({
       <div className="mt-10 grid gap-6 lg:grid-cols-2">
         {canManage ? (
           <section
-            className="h-fit rounded-[2rem] border border-neutral-800 bg-neutral-900 p-6 sm:p-8"
+            className="h-fit rounded-[2rem] border border-[#ee54a7]/15 bg-[#ee54a7]/[0.035] p-6 sm:p-8"
             aria-labelledby="circle-lifecycle-heading"
           >
-            <div className="flex items-center gap-3">
+            <div className="flex items-center justify-center gap-3 sm:justify-start">
               <ShieldCheck
                 aria-hidden="true"
-                className="size-5 text-emerald-400"
+                className="size-5 text-[#ee54a7]"
               />
+
               <h2
                 className="text-2xl font-bold text-white"
                 id="circle-lifecycle-heading"
               >
-                Lifecycle controls
+                Lifecycle Controls
               </h2>
             </div>
             <p className="mt-4 text-sm leading-6 text-neutral-400">
-              Drafts are manager-only. Publishing opens eligible discovery.
-              Archiving is final in Phase 5 and prevents new joins.
+              Keep this Circle private while it&apos;s a draft, publish it when
+              the community is ready, or archive it when the space is no longer
+              active.
             </p>
             <div className="mt-6 flex flex-col gap-3">
               {circle.status === "draft" ? (
@@ -245,7 +258,7 @@ export default async function ManageCirclePage({
                   <input name="circleId" type="hidden" value={circle.id} />
                   <input name="status" type="hidden" value="published" />
                   <button
-                    className={`${buttonClass} w-full border-red-700 bg-red-700 text-white hover:bg-red-600`}
+                    className={`${buttonClass} w-full border-0 bg-gradient-to-r from-[#6c14ce] via-[#a855f7] to-[#ee54a7] text-white shadow-lg shadow-[#6c14ce]/20 hover:brightness-110`}
                     type="submit"
                   >
                     Publish Circle
@@ -257,7 +270,7 @@ export default async function ManageCirclePage({
                   <input name="circleId" type="hidden" value={circle.id} />
                   <input name="status" type="hidden" value="archived" />
                   <button
-                    className={`${buttonClass} w-full border-red-900 bg-red-950/40 text-red-100 hover:border-red-700`}
+                    className={`${buttonClass} w-full border-red-900/60 bg-red-950/20 text-red-200 hover:border-red-700 hover:bg-red-950/35`}
                     type="submit"
                   >
                     Archive Circle
@@ -275,21 +288,22 @@ export default async function ManageCirclePage({
 
         {canReviewIntake ? (
           <section
-            className="rounded-[2rem] border border-neutral-800 bg-neutral-900 p-6 sm:p-8"
+            className="rounded-[2rem] border border-[#ee54a7]/15 bg-[#ee54a7]/[0.035] p-6 sm:p-8"
             aria-labelledby="invite-heading"
           >
-            <div className="flex items-center gap-3">
+            <div className="flex items-center justify-center gap-3 sm:justify-start">
               <UserRoundPlus
                 aria-hidden="true"
-                className="size-5 text-rose-300"
+                className="size-5 text-[#ee54a7]"
               />
+
               <h2 className="text-2xl font-bold text-white" id="invite-heading">
-                Invite a member
+                Invite A Member
               </h2>
             </div>
-            <p className="mt-4 text-sm leading-6 text-neutral-400">
-              Use an exact onboarded username. The invitation reveals no email
-              address and creates a private in-app notification, not a message.
+            <p className="mt-4 text-sm leading-7 text-white/55">
+              Invite an onboarded member by username. Invitations stay private
+              and appear directly in their Circle memberships.
             </p>
             <form
               action={inviteCircleMemberAction}
@@ -298,10 +312,10 @@ export default async function ManageCirclePage({
               <input name="circleId" type="hidden" value={circle.id} />
               <div className="flex-1">
                 <label className="sr-only" htmlFor="username">
-                  Member username
+                  Member Username
                 </label>
                 <input
-                  className="min-h-12 w-full rounded-xl border border-neutral-700 bg-neutral-950 px-4 text-white placeholder:text-neutral-600 focus:border-rose-400 focus:outline-none"
+                  className="min-h-12 w-full rounded-xl border border-[#ee54a7]/20 bg-black/35 px-4 text-white transition placeholder:text-white/30 hover:border-[#ee54a7]/40 focus:border-[#ee54a7]/70 focus:ring-2 focus:ring-[#ee54a7]/15 focus:outline-none"
                   id="username"
                   name="username"
                   placeholder="member_username"
@@ -309,10 +323,10 @@ export default async function ManageCirclePage({
                 />
               </div>
               <button
-                className={`${buttonClass} border-rose-800 bg-rose-950/50 text-rose-100 hover:border-rose-600`}
+                className={`${buttonClass} border-[#ee54a7]/35 bg-[#ee54a7]/10 text-white hover:border-[#ee54a7]/60 hover:bg-[#ee54a7]/15`}
                 type="submit"
               >
-                Send invitation
+                Send Invitation
               </button>
             </form>
           </section>
@@ -321,11 +335,12 @@ export default async function ManageCirclePage({
 
       {canHost ? (
         <section
-          className="mt-6 rounded-[2rem] border border-neutral-800 bg-neutral-900 p-6 sm:p-8"
+          className="mt-6 rounded-[2rem] border border-[#ee54a7]/15 bg-[#ee54a7]/[0.035] p-6 sm:p-8"
           aria-labelledby="session-association-heading"
         >
-          <div className="flex items-center gap-3">
-            <Link2 aria-hidden="true" className="size-5 text-rose-300" />
+          <div className="flex items-center justify-center gap-3 sm:justify-start">
+            <Link2 aria-hidden="true" className="size-5 text-[#ee54a7]" />
+
             <h2
               className="text-2xl font-bold text-white"
               id="session-association-heading"
@@ -333,7 +348,7 @@ export default async function ManageCirclePage({
               Associated Sessions
             </h2>
           </div>
-          <p className="mt-4 text-sm leading-6 text-neutral-400">
+          <p className="mt-4 text-sm leading-7 text-white/55">
             Link only a draft Session you are authorized to manage.
             Private-Circle Sessions remain restricted to active members after
             publication.
@@ -368,11 +383,19 @@ export default async function ManageCirclePage({
               </button>
             </form>
           ) : (
-            <div className="mt-5">
-              <PreviewState title="No eligible draft Sessions">
+            <div className="mt-5 rounded-2xl border border-dashed border-[#ee54a7]/25 bg-black/25 p-6 text-center">
+              <div className="flex items-center justify-center gap-2">
+                <Link2 aria-hidden="true" className="size-4 text-[#ee54a7]" />
+
+                <p className="font-bold text-white">
+                  No Eligible Draft Sessions
+                </p>
+              </div>
+
+              <p className="mx-auto mt-3 max-w-lg text-sm leading-7 text-white/55">
                 Create a Session draft from the trusted host tools, then return
                 here before publishing it.
-              </PreviewState>
+              </p>
             </div>
           )}
           {associatedSessions.length ? (
@@ -418,26 +441,27 @@ export default async function ManageCirclePage({
 
       {canModerate ? (
         <section
-          className="mt-6 rounded-[2rem] border border-neutral-800 bg-neutral-900 p-6 sm:p-8"
+          className="mt-6 rounded-[2rem] border border-[#ee54a7]/15 bg-[#ee54a7]/[0.035] p-6 sm:p-8"
           aria-labelledby="membership-queue-heading"
         >
-          <div className="flex items-center gap-3">
-            <UsersRound aria-hidden="true" className="size-5 text-rose-300" />
+          <div className="flex items-center justify-center gap-3 sm:justify-start">
+            <UsersRound aria-hidden="true" className="size-5 text-[#ee54a7]" />
+
             <h2
               className="text-2xl font-bold text-white"
               id="membership-queue-heading"
             >
-              Membership moderation
+              Membership Moderation
             </h2>
           </div>
-          <p className="mt-4 text-sm leading-6 text-neutral-400">
-            Only authorized Circle moderators can view this roster. Role and
-            status changes are recorded in a private audit log.
+          <p className="mt-4 text-sm leading-7 text-white/55">
+            Review membership requests, manage active members, and assign
+            community roles from one place.
           </p>
 
           <h3 className="mt-7 text-lg font-bold text-white">Requests</h3>
           {requests.length ? (
-            <ul className="mt-4 space-y-3">
+            <ul className="mt-5 space-y-4">
               {requests.map((member) => (
                 <li
                   className="rounded-2xl border border-neutral-800 bg-neutral-950 p-5"
@@ -514,59 +538,84 @@ export default async function ManageCirclePage({
               ))}
             </ul>
           ) : (
-            <div className="mt-4">
-              <PreviewState title="No pending requests">
+            <div className="mt-4 rounded-2xl border border-dashed border-[#ee54a7]/25 bg-black/25 p-6 text-center">
+              <div className="flex items-center justify-center gap-2">
+                <UsersRound
+                  aria-hidden="true"
+                  className="size-4 text-[#ee54a7]"
+                />
+
+                <p className="font-bold text-white">No Pending Requests</p>
+              </div>
+
+              <p className="mx-auto mt-3 max-w-lg text-sm leading-7 text-white/55">
                 New requests will appear here without exposing them to other
                 members.
-              </PreviewState>
+              </p>
             </div>
           )}
 
-          <h3 className="mt-8 text-lg font-bold text-white">Active roster</h3>
+          <h3 className="mt-8 text-center text-lg font-bold text-white sm:text-left">
+            Active Roster
+          </h3>
           {activeMembers.length ? (
-            <ul className="mt-4 space-y-3">
+            <ul className="mt-5 space-y-4">
               {activeMembers.map((member) => (
                 <li
-                  className="rounded-2xl border border-neutral-800 bg-neutral-950 p-5"
+                  className="rounded-[1.5rem] border border-[#ee54a7]/15 bg-black/30 p-5 sm:p-6"
                   key={member.user_id}
                 >
-                  <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-                    <div>
-                      <p className="font-bold text-white">
+                  <div className="flex flex-col items-center gap-5 text-center sm:items-start sm:text-left lg:flex-row lg:items-center lg:justify-between">
+                    <div className="min-w-0">
+                      <p className="text-lg font-bold text-white">
                         {member.display_name}
                       </p>
-                      <div className="mt-2 flex gap-2">
-                        <Badge className="capitalize">
+
+                      <div className="mt-3 flex flex-wrap justify-center gap-2 sm:justify-start">
+                        <Badge className="border-[#ee54a7]/35 bg-[#ee54a7]/10 text-[#ffb4dc] capitalize">
                           {member.member_role}
                         </Badge>
+
                         {member.username ? (
-                          <Badge>@{member.username}</Badge>
+                          <Badge className="border-[#ee54a7]/35 bg-[#ee54a7]/10 text-[#ffb4dc]">
+                            @{member.username}
+                          </Badge>
                         ) : null}
                       </div>
+
+                      {member.member_role === "owner" ? (
+                        <p className="mt-4 text-sm leading-6 text-white/45">
+                          Circle owner · full management access
+                        </p>
+                      ) : null}
                     </div>
+
                     {member.member_role !== "owner" ? (
-                      <div className="flex flex-col gap-3 sm:flex-row">
+                      <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
                         {canManage ? (
                           <form
                             action={setCircleMemberRoleAction}
-                            className="flex gap-2"
+                            className="flex flex-col gap-2 sm:flex-row"
                           >
                             <input
                               name="circleId"
                               type="hidden"
                               value={circle.id}
                             />
+
                             <input
                               name="userId"
                               type="hidden"
                               value={member.user_id}
                             />
+
                             <label
                               className="sr-only"
                               htmlFor={`role-${member.user_id}`}
                             >
                               Role for {member.display_name}
                             </label>
+
                             <select
                               className={selectClass}
                               defaultValue={member.member_role}
@@ -577,39 +626,40 @@ export default async function ManageCirclePage({
                               <option value="host">Host</option>
                               <option value="moderator">Moderator</option>
                             </select>
+
                             <button
-                              className={`${buttonClass} border-neutral-600 bg-neutral-900 text-white hover:border-neutral-400`}
+                              className={`${buttonClass} border-[#ee54a7]/30 bg-[#ee54a7]/10 text-white hover:border-[#ee54a7]/60 hover:bg-[#ee54a7]/15`}
                               type="submit"
                             >
-                              Save role
+                              Save Role
                             </button>
                           </form>
                         ) : null}
+
                         <form action={reviewCircleMembershipAction}>
                           <input
                             name="circleId"
                             type="hidden"
                             value={circle.id}
                           />
+
                           <input
                             name="userId"
                             type="hidden"
                             value={member.user_id}
                           />
+
                           <input name="decision" type="hidden" value="remove" />
+
                           <button
-                            className={`${buttonClass} w-full border-red-900 bg-red-950/40 text-red-100 hover:border-red-700`}
+                            className={`${buttonClass} w-full border-red-900/60 bg-red-950/20 text-red-200 hover:border-red-700 hover:bg-red-950/35`}
                             type="submit"
                           >
                             Remove
                           </button>
                         </form>
                       </div>
-                    ) : (
-                      <p className="text-xs text-neutral-500">
-                        Owner role is fixed in Phase 5.
-                      </p>
-                    )}
+                    ) : null}
                   </div>
                 </li>
               ))}

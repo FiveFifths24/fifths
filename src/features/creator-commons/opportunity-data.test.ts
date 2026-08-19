@@ -60,7 +60,7 @@ describe("Creator Commons opportunity data", () => {
     );
 
     expect(ranked[0]?.candidate.module).toBe("commons");
-    expect(ranked[0]?.reasons).toContain("Connects with today's interests");
+    expect(ranked[0]?.reasons).toContain("Connects With Today's Interests");
     expect(ranked[0]).not.toHaveProperty("score");
   });
 

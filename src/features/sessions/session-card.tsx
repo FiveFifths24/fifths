@@ -62,10 +62,10 @@ export function SessionCard({ item }: { item: SessionCardItem }) {
   const duration = durationMinutes(item.starts_at, item.ends_at);
 
   return (
-    <article className="flex h-full flex-col rounded-[1.75rem] border border-neutral-800 bg-neutral-900 p-6">
-      <div className="flex flex-wrap items-center gap-2">
+    <article className="flex h-full max-w-full min-w-0 flex-col overflow-hidden rounded-[1.75rem] border border-neutral-800 bg-neutral-900 p-5 sm:p-6">
+      <div className="flex flex-wrap items-center justify-center gap-2 sm:justify-start">
         <Badge>Session</Badge>
-        <Badge className="border-red-900 bg-red-950/40 text-red-200">
+        <Badge className="border-[#992bff]/35 bg-[#992bff]/10 text-[#d8b4fe]">
           {item.modeName}
         </Badge>
         {item.status !== "published" ? (
@@ -90,20 +90,20 @@ export function SessionCard({ item }: { item: SessionCardItem }) {
       </p>
 
       <dl className="mt-6 grid gap-3 text-sm text-neutral-300 sm:grid-cols-2">
-        <div className="flex gap-2">
+        <div className="flex justify-center gap-2 sm:justify-start">
           <CalendarDays
             aria-hidden="true"
-            className="mt-0.5 size-4 shrink-0 text-red-400"
+            className="mt-0.5 size-4 shrink-0 text-[#992bff]"
           />
           <div>
             <dt className="sr-only">Starts</dt>
             <dd>{formatSessionDate(item.starts_at, item.timezone)}</dd>
           </div>
         </div>
-        <div className="flex gap-2">
+        <div className="flex justify-center gap-2 sm:justify-start">
           <Clock3
             aria-hidden="true"
-            className="mt-0.5 size-4 shrink-0 text-red-400"
+            className="mt-0.5 size-4 shrink-0 text-[#992bff]"
           />
           <div>
             <dt className="sr-only">Duration</dt>
@@ -112,24 +112,24 @@ export function SessionCard({ item }: { item: SessionCardItem }) {
             </dd>
           </div>
         </div>
-        <div className="flex gap-2">
+        <div className="flex justify-center gap-2 sm:justify-start">
           <MapPin
             aria-hidden="true"
-            className="mt-0.5 size-4 shrink-0 text-red-400"
+            className="mt-0.5 size-4 shrink-0 text-[#992bff]"
           />
           <div>
-            <dt className="sr-only">Format and location</dt>
+            <dt className="sr-only">Format and Location</dt>
             <dd>
               {formatSessionFormat(item.format)}
               {item.location_label ? ` · ${item.location_label}` : ""}
             </dd>
           </div>
         </div>
-        <div className="flex gap-2">
+        <div className="flex justify-center gap-2 sm:justify-start">
           <Users
             aria-hidden="true"
-            className="mt-0.5 size-4 shrink-0 text-red-400"
-          />
+            className="mt-0.5 size-4 shrink-0 text-[#992bff]"
+          />{" "}
           <div>
             <dt className="sr-only">Social pace and energy</dt>
             <dd>
@@ -143,34 +143,45 @@ export function SessionCard({ item }: { item: SessionCardItem }) {
       {item.interestNames.length > 0 ? (
         <ul
           aria-label="Session interests"
-          className="mt-5 flex flex-wrap gap-2"
+          className="mt-5 flex w-full min-w-0 flex-wrap justify-center gap-2 sm:justify-start"
         >
           {item.interestNames.map((interest) => (
             <li key={interest}>
-              <Badge>{interest}</Badge>
+              <Badge className="max-w-full text-center break-words whitespace-normal">
+                {interest}
+              </Badge>
             </li>
           ))}
         </ul>
       ) : null}
 
       {item.reasons?.length ? (
-        <div className="mt-5 border-t border-neutral-800 pt-5">
-          <p className="flex items-center gap-2 text-xs font-bold tracking-wide text-emerald-300 uppercase">
-            <Zap aria-hidden="true" className="size-4" />
-            {item.fit ? `${item.fit} fit · ` : ""}Why this may fit
-          </p>
-          <ul
-            className="mt-3 flex flex-wrap gap-2"
-            aria-label="Why this matches your Pulse"
-          >
-            {item.reasons.slice(0, 3).map((reason) => (
-              <li key={reason}>
-                <Badge className="border-emerald-900 bg-emerald-950/30 text-emerald-100">
-                  {reason}
-                </Badge>
-              </li>
-            ))}
-          </ul>
+        <div className="mt-5 border-t border-[#f359d2]/15 pt-5">
+          <div className="flex flex-col items-center text-center sm:items-start sm:text-left">
+            <p className="flex items-center justify-center gap-2 text-xs font-bold tracking-wide text-[#f359d2] uppercase sm:justify-start">
+              <Zap aria-hidden="true" className="size-4 text-[#f359d2]" />
+              Your Signal Sync
+            </p>
+
+            {item.fit ? (
+              <p className="mt-2 text-xs font-bold text-neutral-500 capitalize">
+                {item.fit} Match
+              </p>
+            ) : null}
+
+            <ul
+              aria-label="Why This Syncs With Your Pulse"
+              className="mt-3 flex w-full min-w-0 flex-wrap justify-center gap-2 sm:justify-start"
+            >
+              {item.reasons.slice(0, 3).map((reason) => (
+                <li key={reason}>
+                  <Badge className="max-w-full border-[#f359d2]/30 bg-[#f359d2]/[0.08] text-center leading-5 break-words whitespace-normal text-[#ffc2ef]">
+                    {reason}
+                  </Badge>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       ) : null}
     </article>

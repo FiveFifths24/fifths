@@ -176,23 +176,30 @@ export function CampaignCard({ item }: { item: CampaignCardItem }) {
       ) : null}
 
       {item.reasons?.length ? (
-        <div className="mt-5 border-t border-[#22d3ee]/12 pt-5">
-          <p className="flex items-center gap-2 text-xs font-bold tracking-wide text-[#a5f3fc]/80 uppercase">
-            <Zap aria-hidden="true" className="size-4 text-[#22d3ee]" />
-            {item.fit ? `${item.fit} fit · ` : ""}
-            Why this may fit
-          </p>
+        <div className="mt-5 border-t border-[#22d3ee]/12 pt-5 text-center sm:text-left">
+          <div className="flex flex-col items-center sm:items-start">
+            <p className="flex items-center justify-center gap-2 text-xs font-bold tracking-wide text-[#a5f3fc]/80 uppercase sm:justify-start">
+              <Zap aria-hidden="true" className="size-4 text-[#22d3ee]" />
+              Your Signal Sync
+            </p>
 
-          <ul
-            aria-label="Why This Matches Your Pulse"
-            className="mt-3 flex flex-wrap gap-2"
-          >
-            {item.reasons.slice(0, 3).map((reason) => (
-              <li key={reason}>
-                <Badge className={realmBadge}>{reason}</Badge>
-              </li>
-            ))}
-          </ul>
+            {item.fit ? (
+              <p className="mt-2 text-xs font-bold text-white/40 capitalize">
+                {item.fit} Match
+              </p>
+            ) : null}
+
+            <ul
+              aria-label="Why This Matches Your Signal"
+              className="mt-3 flex w-full flex-wrap justify-center gap-2 sm:justify-start"
+            >
+              {item.reasons.slice(0, 3).map((reason) => (
+                <li key={reason}>
+                  <Badge className={realmBadge}>{reason}</Badge>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       ) : null}
     </article>

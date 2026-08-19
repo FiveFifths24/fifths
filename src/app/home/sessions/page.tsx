@@ -4,7 +4,6 @@ import { CalendarRange, Plus, Sparkles, TicketCheck } from "lucide-react";
 
 import { AccountUnavailable } from "@/components/account/account-unavailable";
 import { ButtonLink } from "@/components/ui/button-link";
-import { PreviewState } from "@/components/ui/preview-state";
 import { StatusMessage } from "@/components/ui/status-message";
 import {
   assembleSessionCards,
@@ -155,18 +154,18 @@ export default async function SessionsPage() {
   );
 
   return (
-    <div>
+    <div className="text-center sm:text-left">
       {/* =====================================================
           PAGE INTRO
       ====================================================== */}
       <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <p className="flex items-center gap-2 text-xs font-bold tracking-[0.2em] text-[#992bff] uppercase">
+          <p className="flex items-center justify-center gap-2 text-xs font-bold tracking-[0.2em] text-[#992bff] uppercase sm:justify-start">
             <CalendarRange aria-hidden="true" className="size-4" />
             Shared Sessions
           </p>
 
-          <h1 className="display-type mt-4 max-w-4xl text-5xl leading-[0.95] text-white sm:text-7xl">
+          <h1 className="display-type mt-8 max-w-4xl text-5xl leading-[0.95] text-white sm:text-7xl">
             Find Something Worth Showing Up For.
           </h1>
 
@@ -182,9 +181,9 @@ export default async function SessionsPage() {
         {/* =================================================
             PAGE ACTIONS
         ================================================== */}
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+        <div className="flex flex-col items-center gap-3 sm:flex-row sm:items-center sm:justify-start">
           <ButtonLink
-            className="min-h-12 min-w-[12.5rem] border-[#992bff]/35 bg-black/40 px-7 text-sm whitespace-nowrap text-white/85 shadow-none hover:border-[#992bff]/65 hover:bg-[#992bff]/10 hover:text-white"
+            className="mx-auto min-h-12 min-w-[12.5rem] border-[#992bff]/35 bg-black/40 px-7 text-sm whitespace-nowrap text-white/85 shadow-none hover:border-[#992bff]/65 hover:bg-[#992bff]/10 hover:text-white sm:mx-0"
             href="/home/registrations"
             variant="secondary"
           >
@@ -193,7 +192,7 @@ export default async function SessionsPage() {
           </ButtonLink>
 
           <ButtonLink
-            className="min-h-12 min-w-[12.5rem] border-0 bg-gradient-to-r from-[#6c14ce] via-[#a855f7] to-[#992bff] px-7 text-sm whitespace-nowrap text-white shadow-lg shadow-[#6c14ce]/20 hover:brightness-110"
+            className="mx-auto min-h-12 min-w-[12.5rem] border-0 bg-gradient-to-r from-[#6c14ce] via-[#a855f7] to-[#992bff] px-7 text-sm whitespace-nowrap text-white shadow-lg shadow-[#6c14ce]/20 hover:brightness-110 sm:mx-0"
             href="/home/sessions/host"
           >
             <Plus aria-hidden="true" className="size-4" />
@@ -206,10 +205,8 @@ export default async function SessionsPage() {
           PULSE MATCH STATUS
       ====================================================== */}
       {pulseInput ? (
-        <StatusMessage className="mt-8" tone="success">
-          <span className="font-bold">Matched to your current Pulse.</span>{" "}
-          Sessions are ordered with the documented Phase 3 rules and show
-          plain-language reasons, never a raw score.
+        <StatusMessage className="mt-8 text-center sm:text-left" tone="success">
+          <span className="font-bold">Matched To Your Current Pulse.</span>{" "}
         </StatusMessage>
       ) : (
         <StatusMessage className="mt-8">
@@ -226,14 +223,14 @@ export default async function SessionsPage() {
           SESSION RESULTS
       ====================================================== */}
       <section aria-labelledby="session-results-heading" className="mt-10">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center justify-center gap-3 sm:justify-start">
           <Sparkles aria-hidden="true" className="size-5 text-[#992bff]" />
 
           <h2
             className="text-2xl font-bold text-white"
             id="session-results-heading"
           >
-            {pulseInput ? "Your Session matches" : "Upcoming Sessions"}
+            {pulseInput ? "Sessions In Sync" : "Upcoming Sessions"}
           </h2>
         </div>
 
@@ -244,11 +241,18 @@ export default async function SessionsPage() {
             ))}
           </div>
         ) : (
-          <div className="mt-6">
-            <PreviewState title="No published Sessions yet">
-              Authorized hosts can create a draft and publish it after review.
-              FIFTHS does not seed invented events into member discovery.
-            </PreviewState>
+          <div className="mt-6 rounded-[1.75rem] border border-[#992bff]/20 bg-[#992bff]/[0.035] px-6 py-10 text-center">
+            <div className="mx-auto flex max-w-xl flex-col items-center">
+              <Sparkles aria-hidden="true" className="size-6 text-[#992bff]" />
+
+              <h3 className="mt-4 text-xl font-bold text-white">
+                No Published Sessions Yet
+              </h3>
+
+              <p className="mt-3 max-w-md text-sm leading-6 text-white/50">
+                New Sessions will appear here as they become available.
+              </p>
+            </div>
           </div>
         )}
       </section>

@@ -25,7 +25,7 @@ const item: CampaignCardItem = {
   social_intensity: "social",
   modeName: "Immerse",
   interestNames: ["Storytelling"],
-  reasons: ["Fits your current mode"],
+  reasons: ["Fits Your Current Mode"],
   applicationStatus: "submitted",
 };
 
@@ -38,6 +38,6 @@ describe("CampaignCard", () => {
     expect(screen.getByText("Game master Avery")).toBeInTheDocument();
     expect(screen.getByText("4 seats")).toBeInTheDocument();
     expect(screen.getByText("Application: submitted")).toBeInTheDocument();
-    expect(screen.getByText("Fits your current mode")).toBeInTheDocument();
+    expect(screen.getByText("Fits Your Current Mode")).toBeInTheDocument();
   });
 });

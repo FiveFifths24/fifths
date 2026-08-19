@@ -17,7 +17,7 @@ const circle: CircleCardItem = {
   social_intensity: "light",
   modeName: "Create",
   interestNames: ["Creative technology"],
-  reasons: ["Fits your current mode", "Connects with today's interests"],
+  reasons: ["Fits Your Current Mode", "Connects With Today's Interests"],
   membership: { role: "member", status: "requested" },
 };
 
@@ -27,9 +27,8 @@ describe("CircleCard", () => {
     expect(
       screen.getByRole("link", { name: "North Jersey Creator Circle" }),
     ).toHaveAttribute("href", `/home/circles/${circle.id}`);
-    expect(screen.getByText("Request to join")).toBeInTheDocument();
     expect(screen.getByText("requested")).toBeInTheDocument();
-    expect(screen.getByText("Fits your current mode")).toBeInTheDocument();
+    expect(screen.getByText("Fits Your Current Mode")).toBeInTheDocument();
   });
 
   it("communicates private visibility with text", () => {
@@ -39,6 +38,5 @@ describe("CircleCard", () => {
       />,
     );
     expect(screen.getByText("Private")).toBeInTheDocument();
-    expect(screen.getByText("Invite only")).toBeInTheDocument();
   });
 });

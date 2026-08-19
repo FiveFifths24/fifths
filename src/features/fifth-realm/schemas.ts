@@ -59,7 +59,11 @@ export const campaignTimezones = [
 export const createCampaignSchema = z
   .object({
     circleId: optionalUuid,
-    title: z.string().trim().min(5).max(120),
+    title: z
+      .string()
+      .trim()
+      .min(3, "Use at least three characters.")
+      .max(40, "Keep the campaign title to 40 characters or fewer."),
     summary: z.string().trim().min(10).max(280),
     premise: z.string().trim().min(20).max(5000),
     genre: z.enum(campaignGenres),

@@ -56,11 +56,11 @@ describe("deterministic recommendation ranking", () => {
     expect(first.fit).toBe("strong");
     expect(first.reasons).toEqual(
       expect.arrayContaining([
-        "Fits your current mode",
-        "Matches your available energy",
-        "Works with your preferred format",
-        "Fits your available time",
-        "Connects with today's interests",
+        "Fits Your Current Mode",
+        "Matches Your Available Energy",
+        "Works With Your Preferred Platform",
+        "Fits Your Available Time",
+        "Connects With Today's Interests",
       ]),
     );
   });

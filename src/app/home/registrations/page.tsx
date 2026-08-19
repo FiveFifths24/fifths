@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { CheckCircle2, TicketCheck } from "lucide-react";
+
 import { AccountUnavailable } from "@/components/account/account-unavailable";
 import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button-link";
-import { PreviewState } from "@/components/ui/preview-state";
 import { StatusMessage } from "@/components/ui/status-message";
 import { assembleSessionCards } from "@/features/sessions/session-data";
 import { SessionCard } from "@/features/sessions/session-card";
@@ -14,6 +14,7 @@ export const dynamic = "force-dynamic";
 
 export default async function RegistrationsPage() {
   let supabase;
+
   try {
     supabase = await createClient();
   } catch {
@@ -21,7 +22,10 @@ export default async function RegistrationsPage() {
   }
 
   const { data: userData } = await supabase.auth.getUser();
-  if (!userData.user) return <AccountUnavailable />;
+
+  if (!userData.user) {
+    return <AccountUnavailable />;
+  }
 
   const registrationResult = await supabase
     .from("registrations")
@@ -33,16 +37,17 @@ export default async function RegistrationsPage() {
   if (registrationResult.error) {
     return (
       <StatusMessage tone="error">
-        Registrations are unavailable. Confirm that the Phase 4 migration has
-        been applied to the connected Supabase project.
+        Registrations are currently unavailable.
       </StatusMessage>
     );
   }
 
   const registrations = registrationResult.data ?? [];
+
   const sessionIds = registrations.map(
     (registration) => registration.session_id,
   );
+
   const [
     sessionResult,
     modeResult,
@@ -52,16 +57,20 @@ export default async function RegistrationsPage() {
   ] = sessionIds.length
     ? await Promise.all([
         supabase.from("sessions").select("*").in("id", sessionIds),
+
         supabase.from("modes").select("id, name").order("sort_order"),
+
         supabase
           .from("interests")
           .select("id, name")
           .eq("active", true)
           .order("name"),
+
         supabase
           .from("session_interests")
           .select("session_id, interest_id")
           .in("session_id", sessionIds),
+
         supabase
           .from("attendance_records")
           .select("session_id, status")
@@ -79,8 +88,7 @@ export default async function RegistrationsPage() {
   if (sessionResult.error) {
     return (
       <StatusMessage tone="error">
-        Registered Session details could not load. Check the Phase 4 policies
-        and migration state.
+        Your registered Session details are currently unavailable.
       </StatusMessage>
     );
   }
@@ -91,50 +99,72 @@ export default async function RegistrationsPage() {
     interestResult.data ?? [],
     linkResult.data ?? [],
   );
+
   const cardsById = new Map(cards.map((card) => [card.id, card]));
+
   const attendanceById = new Map(
     (attendanceResult.data ?? []).map((item) => [item.session_id, item.status]),
   );
 
   return (
-    <div>
+    <div className="text-center sm:text-left">
+      {/* =====================================================
+          PAGE INTRO
+      ====================================================== */}
       <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <p className="flex items-center gap-2 text-xs font-bold tracking-[0.2em] text-red-400 uppercase">
-            <TicketCheck aria-hidden="true" className="size-4" /> Private
-            registrations
+        <div className="mx-auto max-w-4xl sm:mx-0">
+          <p className="flex items-center justify-center gap-2 text-xs font-bold tracking-[0.2em] text-[#992bff] uppercase sm:justify-start">
+            <TicketCheck aria-hidden="true" className="size-4" />
+            Private Registrations
           </p>
+
           <h1 className="display-type mt-4 text-5xl text-white sm:text-7xl">
-            Your Session places.
+            Your Session Places.
           </h1>
-          <p className="mt-5 max-w-3xl text-lg leading-8 text-neutral-300">
-            Review active and cancelled registrations tied to your account.
-            Hosts can see only the roster for Sessions they manage.
+
+          <p className="mx-auto mt-5 max-w-3xl text-lg leading-8 text-neutral-300 sm:mx-0">
+            Keep track of the Sessions you&apos;ve registered for and review
+            your current participation.
           </p>
         </div>
-        <ButtonLink href="/home/sessions">Discover Sessions</ButtonLink>
+
+        <ButtonLink
+          className="mx-auto min-h-12 min-w-[12.5rem] border-0 bg-gradient-to-r from-[#6c14ce] via-[#a855f7] to-[#992bff] px-7 text-sm whitespace-nowrap text-white shadow-lg shadow-[#6c14ce]/20 hover:brightness-110 sm:mx-0"
+          href="/home/sessions"
+        >
+          Discover Sessions
+        </ButtonLink>
       </div>
 
+      {/* =====================================================
+          REGISTRATIONS
+      ====================================================== */}
       {registrations.length ? (
         <ol className="mt-10 grid gap-6 lg:grid-cols-2">
           {registrations.map((registration) => {
             const card = cardsById.get(registration.session_id);
-            if (!card) return null;
+
+            if (!card) {
+              return null;
+            }
+
             const attendance = attendanceById.get(registration.session_id);
+
             return (
               <li className="space-y-3" key={registration.session_id}>
-                <div className="flex flex-wrap items-center gap-2 px-1">
+                <div className="flex flex-wrap items-center justify-center gap-2 px-1 sm:justify-start">
                   <Badge
                     className={
                       registration.status === "registered"
-                        ? "border-emerald-900 bg-emerald-950/30 text-emerald-100"
-                        : "border-neutral-700 text-neutral-400"
+                        ? "border-[#992bff]/35 bg-[#992bff]/10 text-[#d8b4fe]"
+                        : "border-neutral-700 bg-neutral-900/50 text-neutral-400"
                     }
                   >
                     Registration: {registration.status}
                   </Badge>
+
                   {attendance ? (
-                    <Badge className="border-blue-900 bg-blue-950/30 text-blue-100">
+                    <Badge className="border-[#992bff]/35 bg-[#992bff]/10 text-[#d8b4fe]">
                       <CheckCircle2
                         aria-hidden="true"
                         className="mr-1 size-3"
@@ -143,17 +173,32 @@ export default async function RegistrationsPage() {
                     </Badge>
                   ) : null}
                 </div>
+
                 <SessionCard item={card} />
               </li>
             );
           })}
         </ol>
       ) : (
-        <div className="mt-10">
-          <PreviewState title="No registrations yet">
-            Published Sessions will appear here only after you register. No
-            sample participation is added to your private account.
-          </PreviewState>
+        <div className="mt-10 rounded-[1.75rem] border border-[#992bff]/20 bg-[#992bff]/[0.035] px-6 py-10 text-center">
+          <div className="mx-auto flex max-w-xl flex-col items-center">
+            <TicketCheck aria-hidden="true" className="size-6 text-[#992bff]" />
+
+            <h2 className="mt-4 text-xl font-bold text-white">
+              No Registrations Yet
+            </h2>
+
+            <p className="mt-3 max-w-md text-sm leading-6 text-white/50">
+              Sessions you register for will appear here.
+            </p>
+
+            <ButtonLink
+              className="mt-6 min-h-12 min-w-[12.5rem] border-0 bg-gradient-to-r from-[#6c14ce] via-[#a855f7] to-[#992bff] px-7 text-sm whitespace-nowrap text-white shadow-lg shadow-[#6c14ce]/20 hover:brightness-110"
+              href="/home/sessions"
+            >
+              Discover Sessions
+            </ButtonLink>
+          </div>
         </div>
       )}
     </div>

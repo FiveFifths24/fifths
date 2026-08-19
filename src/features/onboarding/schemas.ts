@@ -29,7 +29,7 @@ export const onboardingSchema = z.object({
     .trim()
     .toLowerCase()
     .min(3, "Use at least 3 characters.")
-    .max(30, "Use no more than 30 characters.")
+    .max(12, "Use no more than 12 characters.")
     .regex(
       /^[a-z0-9](?:[a-z0-9_]*[a-z0-9])?$/,
       "Use lowercase letters, numbers, and underscores only.",
@@ -38,8 +38,8 @@ export const onboardingSchema = z.object({
   displayName: z
     .string()
     .trim()
-    .min(1, "Enter the name you want people to see.")
-    .max(80, "Use no more than 80 characters."),
+    .min(2, "Use at least 2 characters.")
+    .max(12, "Use no more than 12 characters."),
 
   pronouns: optionalText(40, "Use no more than 40 characters."),
 

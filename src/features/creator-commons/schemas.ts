@@ -46,8 +46,8 @@ export const createOpportunitySchema = z
     title: z
       .string()
       .trim()
-      .min(5, "Use at least five characters.")
-      .max(120, "Keep the title under 120 characters."),
+      .min(3, "Use at least three characters.")
+      .max(40, "Keep the Commons title to 40 characters or fewer."),
     summary: z
       .string()
       .trim()

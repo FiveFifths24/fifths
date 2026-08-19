@@ -19,6 +19,22 @@ export async function createCircleAction(
   _previousState: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
+  const values: Record<string, string | string[]> = {};
+
+  for (const [key, value] of formData.entries()) {
+    if (typeof value !== "string") continue;
+
+    const existing = values[key];
+
+    if (existing === undefined) {
+      values[key] = value;
+    } else if (Array.isArray(existing)) {
+      values[key] = [...existing, value];
+    } else {
+      values[key] = [existing, value];
+    }
+  }
+
   const parsed = createCircleSchema.safeParse({
     name: formData.get("name"),
     slug: formData.get("slug"),
@@ -42,12 +58,15 @@ export async function createCircleAction(
       status: "error",
       message: "Check the highlighted Circle details and try again.",
       fieldErrors: parsed.error.flatten().fieldErrors,
+      values,
     };
   }
 
   let circleId: string | null = null;
+
   try {
     const supabase = await createClient();
+
     const { data, error } = await supabase.rpc("create_circle", {
       p_name: parsed.data.name,
       p_slug: parsed.data.slug,
@@ -67,18 +86,30 @@ export async function createCircleAction(
     });
 
     if (error || !data) {
+      if (error?.code === "23505") {
+        return {
+          status: "error",
+          message: "That URL name is already taken.",
+          fieldErrors: {
+            slug: ["That URL name is already in use. Choose a different one."],
+          },
+          values,
+        };
+      }
+
       return {
         status: "error",
-        message:
-          "The Circle could not be created. Confirm your host role and use a unique URL name.",
+        message: "The Circle could not be created. Check the details below.",
+        values,
       };
     }
+
     circleId = data;
   } catch {
     return {
       status: "error",
-      message:
-        "Circles are not connected yet. The founder must apply the Phase 5 migration.",
+      message: "The Circle could not be created. Please try again.",
+      values,
     };
   }
 

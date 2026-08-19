@@ -51,9 +51,9 @@ describe("rankCircles", () => {
     expect(ranked[0]?.candidate.module).toBe("circles");
     expect(ranked[0]?.reasons).toEqual(
       expect.arrayContaining([
-        "Fits your current mode",
-        "Matches your preferred stimulation",
-        "Connects with today's interests",
+        "Fits Your Current Mode",
+        "Matches Your Preferred Stimulation",
+        "Connects With Today's Interests",
       ]),
     );
     expect(ranked[0]).not.toHaveProperty("score");

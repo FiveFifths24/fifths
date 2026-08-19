@@ -2,8 +2,10 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+
 import type { ActionState } from "@/features/auth/state";
 import { createClient } from "@/lib/supabase/server";
+
 import {
   attendanceSchema,
   createSessionSchema,
@@ -17,7 +19,6 @@ export async function createSessionAction(
 ): Promise<ActionState> {
   const parsed = createSessionSchema.safeParse({
     title: formData.get("title"),
-    summary: formData.get("summary"),
     description: formData.get("description"),
     format: formData.get("format"),
     startsAtLocal: formData.get("startsAtLocal"),
@@ -36,15 +37,23 @@ export async function createSessionAction(
   if (!parsed.success) {
     return {
       status: "error",
-      message: "Check the highlighted session details and try again.",
+      message: "Check the highlighted Session details and try again.",
       fieldErrors: parsed.error.flatten().fieldErrors,
     };
   }
 
+  const summary =
+    parsed.data.description.length > 240
+      ? `${parsed.data.description.slice(0, 237).trimEnd()}...`
+      : parsed.data.description;
+
   let sessionId: string | null = null;
+
   try {
     const supabase = await createClient();
+
     const { data: userData } = await supabase.auth.getUser();
+
     if (!userData.user) {
       return {
         status: "error",
@@ -54,7 +63,7 @@ export async function createSessionAction(
 
     const { data, error } = await supabase.rpc("create_session", {
       p_title: parsed.data.title,
-      p_summary: parsed.data.summary,
+      p_summary: summary,
       p_description: parsed.data.description,
       p_format: parsed.data.format,
       p_starts_local: parsed.data.startsAtLocal,
@@ -74,15 +83,15 @@ export async function createSessionAction(
       return {
         status: "error",
         message:
-          "The Session could not be created. Confirm your host role and review the details.",
+          "The Session could not be created. Review the details and try again.",
       };
     }
+
     sessionId = data;
   } catch {
     return {
       status: "error",
-      message:
-        "Sessions are not connected yet. The founder must apply the Phase 4 migration.",
+      message: "The Session could not be created right now. Try again shortly.",
     };
   }
 
@@ -96,16 +105,23 @@ export async function registerForSessionAction(
 ): Promise<ActionState> {
   void _previousState;
   void _formData;
+
   const parsed = sessionRegistrationSchema.safeParse({ sessionId });
+
   if (!parsed.success) {
-    return { status: "error", message: "This Session link is not valid." };
+    return {
+      status: "error",
+      message: "This Session link is not valid.",
+    };
   }
 
   try {
     const supabase = await createClient();
+
     const { error } = await supabase.rpc("register_for_session", {
       p_session_id: parsed.data.sessionId,
     });
+
     if (error) {
       return {
         status: "error",
@@ -116,14 +132,17 @@ export async function registerForSessionAction(
   } catch {
     return {
       status: "error",
-      message:
-        "Registration is unavailable until the Phase 4 migration is connected.",
+      message: "Registration is currently unavailable. Try again shortly.",
     };
   }
 
   revalidatePath(`/home/sessions/${parsed.data.sessionId}`);
   revalidatePath("/home/registrations");
-  return { status: "success", message: "You are registered for this Session." };
+
+  return {
+    status: "success",
+    message: "You are registered for this Session.",
+  };
 }
 
 export async function cancelSessionRegistrationAction(
@@ -133,16 +152,23 @@ export async function cancelSessionRegistrationAction(
 ): Promise<ActionState> {
   void _previousState;
   void _formData;
+
   const parsed = sessionRegistrationSchema.safeParse({ sessionId });
+
   if (!parsed.success) {
-    return { status: "error", message: "This Session link is not valid." };
+    return {
+      status: "error",
+      message: "This Session link is not valid.",
+    };
   }
 
   try {
     const supabase = await createClient();
+
     const { error } = await supabase.rpc("cancel_session_registration", {
       p_session_id: parsed.data.sessionId,
     });
+
     if (error) {
       return {
         status: "error",
@@ -153,14 +179,17 @@ export async function cancelSessionRegistrationAction(
   } catch {
     return {
       status: "error",
-      message:
-        "Registration is unavailable until the Phase 4 migration is connected.",
+      message: "Registration is currently unavailable. Try again shortly.",
     };
   }
 
   revalidatePath(`/home/sessions/${parsed.data.sessionId}`);
   revalidatePath("/home/registrations");
-  return { status: "success", message: "Your registration was cancelled." };
+
+  return {
+    status: "success",
+    message: "Your registration was cancelled.",
+  };
 }
 
 export async function setSessionStatusAction(formData: FormData) {
@@ -168,16 +197,24 @@ export async function setSessionStatusAction(formData: FormData) {
     sessionId: formData.get("sessionId"),
     status: formData.get("status"),
   });
-  if (!parsed.success) redirect("/home/sessions/host?status=invalid");
+
+  if (!parsed.success) {
+    redirect("/home/sessions/host?status=invalid");
+  }
 
   let outcome = "updated";
+
   try {
     const supabase = await createClient();
+
     const { error } = await supabase.rpc("set_session_status", {
       p_session_id: parsed.data.sessionId,
       p_status: parsed.data.status,
     });
-    if (error) outcome = "error";
+
+    if (error) {
+      outcome = "error";
+    }
   } catch {
     outcome = "error";
   }
@@ -185,6 +222,7 @@ export async function setSessionStatusAction(formData: FormData) {
   revalidatePath(`/home/sessions/host/${parsed.data.sessionId}`);
   revalidatePath(`/home/sessions/${parsed.data.sessionId}`);
   revalidatePath("/home/sessions");
+
   redirect(`/home/sessions/host/${parsed.data.sessionId}?status=${outcome}`);
 }
 
@@ -194,22 +232,31 @@ export async function markSessionAttendanceAction(formData: FormData) {
     userId: formData.get("userId"),
     status: formData.get("status"),
   });
-  if (!parsed.success) redirect("/home/sessions/host?attendance=invalid");
+
+  if (!parsed.success) {
+    redirect("/home/sessions/host?attendance=invalid");
+  }
 
   let outcome = "updated";
+
   try {
     const supabase = await createClient();
+
     const { error } = await supabase.rpc("mark_session_attendance", {
       p_session_id: parsed.data.sessionId,
       p_user_id: parsed.data.userId,
       p_status: parsed.data.status,
     });
-    if (error) outcome = "error";
+
+    if (error) {
+      outcome = "error";
+    }
   } catch {
     outcome = "error";
   }
 
   revalidatePath(`/home/sessions/host/${parsed.data.sessionId}`);
+
   redirect(
     `/home/sessions/host/${parsed.data.sessionId}?attendance=${outcome}`,
   );

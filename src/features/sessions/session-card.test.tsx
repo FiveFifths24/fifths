@@ -21,33 +21,43 @@ const session: SessionCardItem = {
   social_intensity: "social",
   modeName: "Create",
   interestNames: ["Arts & culture"],
-  reasons: ["Fits your current mode", "Matches your available energy"],
+  reasons: ["Fits Your Current Mode", "Matches Your Available Energy"],
   fit: "strong",
 };
 
 describe("SessionCard", () => {
   it("shows honest capacity, access, and Pulse-match context", () => {
     render(<SessionCard item={session} />);
+
     expect(
       screen.getByRole("link", { name: "Community design studio" }),
     ).toHaveAttribute("href", `/home/sessions/${session.id}`);
+
     expect(screen.getByText("13 spots left")).toBeInTheDocument();
+
     expect(screen.getByText(/In person · Downtown studio/)).toBeInTheDocument();
+
     const reasons = screen.getByRole("list", {
-      name: "Why this matches your Pulse",
+      name: "Why This Syncs With Your Pulse",
     });
+
     expect(within(reasons).getAllByRole("listitem")).toHaveLength(2);
-    expect(
-      screen.getByText(/strong fit · Why this may fit/i),
-    ).toBeInTheDocument();
+
+    expect(screen.getByText(/Your Signal Sync/i)).toBeInTheDocument();
+
+    expect(screen.getByText(/Strong Match/i)).toBeInTheDocument();
   });
 
   it("communicates a full Session with text", () => {
     render(
       <SessionCard
-        item={{ ...session, confirmed_registration_count: session.capacity }}
+        item={{
+          ...session,
+          confirmed_registration_count: session.capacity,
+        }}
       />,
     );
+
     expect(screen.getByText("Full")).toBeInTheDocument();
   });
 });

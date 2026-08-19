@@ -40,18 +40,60 @@
 }
 
 html {
+  max-width: 100%;
+  overflow-x: clip;
   background: var(--color-ink);
   scroll-behavior: smooth;
 }
 
 body {
   min-height: 100vh;
+  max-width: 100%;
   margin: 0;
-  overflow-x: hidden;
+  overflow-x: clip;
   background: var(--color-ink);
   color: var(--color-paper);
   font-family: Arial, Helvetica, sans-serif;
   text-rendering: optimizeLegibility;
+}
+
+main,
+section,
+article,
+header,
+footer,
+nav,
+form,
+fieldset,
+div,
+ul,
+ol,
+li,
+dl,
+dt,
+dd {
+  min-width: 0;
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a,
+dd {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+img,
+video,
+canvas {
+  max-width: 100%;
+  height: auto;
 }
 
 ::selection {

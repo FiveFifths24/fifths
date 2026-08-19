@@ -11,7 +11,7 @@ import { createSessionAction } from "./actions";
 import { sessionTimezones } from "./schemas";
 
 const selectClassName =
-  "min-h-12 w-full rounded-xl border border-neutral-700 bg-neutral-950 px-4 py-3 text-base text-white hover:border-neutral-500 focus:border-red-500 focus:outline-none";
+  "min-h-12 w-full rounded-xl border border-[#992bff]/25 bg-black/40 px-4 py-3 text-base text-white transition hover:border-[#992bff]/45 focus:border-[#992bff] focus:outline-none focus:ring-1 focus:ring-[#992bff]/30";
 
 function FieldMessage({
   error,
@@ -93,70 +93,48 @@ export function CreateSessionForm({
       <ActionStatus state={state} />
 
       <fieldset>
-        <legend className="text-xl font-bold text-white">Session story</legend>
-        <p className="mt-2 text-sm leading-6 text-neutral-400">
-          Use clear, welcoming language. The Session will remain a private draft
-          until you publish it.
+        <legend className="text-xl font-bold text-white">
+          Session Details
+        </legend>
+
+        <p className="mt-2 text-sm leading-6 text-white/45">
+          Give people a clear sense of what you&apos;re inviting them into.
         </p>
+
         <div className="mt-5 space-y-5">
           <TextField
             error={firstFieldError(state, "title")}
-            label="Title"
-            maxLength={100}
+            label="Session Title"
+            maxLength={40}
             name="title"
             placeholder="Community design studio"
             required
           />
-          <div>
-            <label
-              className="mb-2 block text-sm font-bold text-neutral-100"
-              htmlFor="summary"
-            >
-              Short summary
-            </label>
-            <textarea
-              aria-describedby="summary-description"
-              aria-invalid={
-                firstFieldError(state, "summary") ? true : undefined
-              }
-              className="min-h-28 w-full rounded-xl border border-neutral-700 bg-neutral-950 px-4 py-3 text-base text-white placeholder:text-neutral-600 hover:border-neutral-500 focus:border-red-500 focus:outline-none"
-              id="summary"
-              maxLength={240}
-              name="summary"
-              placeholder="Explain the purpose and who will feel welcome."
-              required
-            />
-            <FieldMessage
-              error={firstFieldError(state, "summary")}
-              hint="10–240 characters. This appears on discovery cards."
-              id="summary-description"
-            />
-          </div>
+
           <div>
             <label
               className="mb-2 block text-sm font-bold text-neutral-100"
               htmlFor="description"
             >
-              Full description
+              Description
             </label>
+
             <textarea
-              aria-describedby={
-                firstFieldError(state, "description")
-                  ? "description-description"
-                  : undefined
-              }
+              aria-describedby="description-description"
               aria-invalid={
                 firstFieldError(state, "description") ? true : undefined
               }
-              className="min-h-44 w-full rounded-xl border border-neutral-700 bg-neutral-950 px-4 py-3 text-base text-white placeholder:text-neutral-600 hover:border-neutral-500 focus:border-red-500 focus:outline-none"
+              className="min-h-40 w-full rounded-xl border border-[#992bff]/25 bg-black/40 px-4 py-3 text-base text-white transition placeholder:text-white/25 hover:border-[#992bff]/45 focus:border-[#992bff] focus:ring-1 focus:ring-[#992bff]/30 focus:outline-none"
               id="description"
               maxLength={4000}
               name="description"
-              placeholder="Describe the flow, expectations, and what participants should bring."
+              placeholder="What are you doing together? What should people expect, and is there anything they should bring or know before joining?"
               required
             />
+
             <FieldMessage
               error={firstFieldError(state, "description")}
+              hint="This description also creates the short preview shown on Session cards."
               id="description-description"
             />
           </div>
@@ -164,13 +142,9 @@ export function CreateSessionForm({
       </fieldset>
 
       <fieldset>
-        <legend className="text-xl font-bold text-white">
-          Time and access
-        </legend>
+        <legend className="text-xl font-bold text-white">When & Where</legend>
         <p className="mt-2 text-sm leading-6 text-neutral-400">
-          Times are interpreted in the selected timezone. Phase 4 stores only a
-          broad venue or access label—not a precise address or private meeting
-          link.
+          Set when the Session happens and how people will participate.
         </p>
         <div className="mt-5 grid gap-5 sm:grid-cols-2">
           <TextField
@@ -210,14 +184,14 @@ export function CreateSessionForm({
             label="Format"
             name="format"
           >
-            <option value="">Choose a format</option>
-            <option value="in_person">In person</option>
+            <option value="">Choose A Format</option>
+            <option value="in_person">In Person</option>
             <option value="online">Online</option>
             <option value="either">Hybrid</option>
           </SelectField>
           <TextField
             error={firstFieldError(state, "capacity")}
-            label="Capacity"
+            label="Session Member Capacity"
             max={100}
             min={1}
             name="capacity"
@@ -226,8 +200,8 @@ export function CreateSessionForm({
           />
           <TextField
             error={firstFieldError(state, "locationLabel")}
-            hint="Optional. Examples: Downtown studio; Online—details from host."
-            label="Venue or access label"
+            hint="Examples: Downtown studio; Online—details from host."
+            label="Location Or Access"
             maxLength={120}
             name="locationLabel"
           />
@@ -235,18 +209,18 @@ export function CreateSessionForm({
       </fieldset>
 
       <fieldset>
-        <legend className="text-xl font-bold text-white">Pulse fit</legend>
+        <legend className="text-xl font-bold text-white">Signal Sync</legend>
         <p className="mt-2 text-sm leading-6 text-neutral-400">
-          These bounded signals support transparent recommendations. They do not
-          describe participant health or diagnose anyone.
+          Help SIGNAL understand when this Session is most likely to feel right
+          for someone.
         </p>
         <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           <SelectField
             error={firstFieldError(state, "modeId")}
-            label="Primary mode"
+            label="Mode"
             name="modeId"
           >
-            <option value="">Choose a mode</option>
+            <option value="">Choose A Mode</option>
             {modes.map((mode) => (
               <option key={mode.id} value={mode.id}>
                 {mode.name}
@@ -256,7 +230,7 @@ export function CreateSessionForm({
           <SelectField
             defaultValue="1"
             error={firstFieldError(state, "minimumEnergy")}
-            label="Minimum energy"
+            label="Energy From"
             name="minimumEnergy"
           >
             {[1, 2, 3, 4, 5].map((value) => (
@@ -268,7 +242,7 @@ export function CreateSessionForm({
           <SelectField
             defaultValue="5"
             error={firstFieldError(state, "maximumEnergy")}
-            label="Maximum energy"
+            label="Energy To"
             name="maximumEnergy"
           >
             {[1, 2, 3, 4, 5].map((value) => (
@@ -282,19 +256,19 @@ export function CreateSessionForm({
             label="Stimulation"
             name="stimulationLevel"
           >
-            <option value="">Choose a level</option>
+            <option value="">Choose A Level</option>
             <option value="low">Low</option>
             <option value="moderate">Moderate</option>
             <option value="high">High</option>
           </SelectField>
           <SelectField
             error={firstFieldError(state, "socialIntensity")}
-            label="Social pace"
+            label="Social Pace"
             name="socialIntensity"
           >
-            <option value="">Choose a pace</option>
-            <option value="solo">Solo-friendly</option>
-            <option value="light">Light interaction</option>
+            <option value="">Choose A Pace</option>
+            <option value="solo">One-On-One</option>
+            <option value="light">Light Interaction</option>
             <option value="social">Social</option>
           </SelectField>
         </div>
@@ -310,16 +284,16 @@ export function CreateSessionForm({
           id="interestIds-description"
         >
           {firstFieldError(state, "interestIds") ??
-            "Optional. Choose up to eight active interests."}
+            "Choose the interests that best describe this Session."}
         </p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {interests.map((interest) => (
             <label
-              className="flex min-h-12 cursor-pointer items-center gap-3 rounded-xl border border-neutral-700 bg-neutral-950 px-4 py-3 text-sm text-neutral-200 hover:border-neutral-500 has-checked:border-red-600 has-checked:bg-red-950/30"
+              className="flex min-h-12 cursor-pointer items-center gap-3 rounded-xl border border-[#992bff]/20 bg-black/40 px-4 py-3 text-sm text-neutral-200 transition hover:border-[#992bff]/45 has-checked:border-[#992bff]/60 has-checked:bg-[#992bff]/10"
               key={interest.id}
             >
               <input
-                className="size-5 accent-red-600"
+                className="size-5 accent-[#992bff]"
                 name="interestIds"
                 type="checkbox"
                 value={interest.id}
@@ -331,12 +305,15 @@ export function CreateSessionForm({
       </fieldset>
 
       <div className="rounded-2xl border border-neutral-800 bg-neutral-950 p-5 text-sm leading-6 text-neutral-400">
-        Creating this record does not publish it. Review the draft on the next
-        screen, then publish only when the details and capacity are ready.
+        Your Session will start as a draft. You can review everything before
+        making it visible to members.
       </div>
 
-      <SubmitButton pendingLabel="Creating draft…">
-        Create draft Session
+      <SubmitButton
+        className="border-0 bg-gradient-to-r from-[#6c14ce] via-[#a855f7] to-[#992bff] shadow-lg shadow-[#6c14ce]/20 hover:brightness-110"
+        pendingLabel="Creating Session…"
+      >
+        Create Session Draft
       </SubmitButton>
     </form>
   );

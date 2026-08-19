@@ -39,9 +39,9 @@ export function formatCircleFormat(format: Circle["format"]) {
 }
 
 export function formatJoinPolicy(policy: Circle["join_policy"]) {
-  if (policy === "open") return "Open membership";
-  if (policy === "request") return "Request to join";
-  return "Invite only";
+  if (policy === "open") return "Open Membership";
+  if (policy === "request") return "Request To Join";
+  return "Invite Only";
 }
 
 export function CircleCard({ item }: { item: CircleCardItem }) {
@@ -100,7 +100,7 @@ export function CircleCard({ item }: { item: CircleCardItem }) {
             className="mt-0.5 size-4 shrink-0 text-rose-300"
           />
           <div>
-            <dt className="sr-only">Social pace</dt>
+            <dt className="sr-only">Social Pace</dt>
             <dd className="capitalize">
               {item.social_intensity === "solo"
                 ? "Solo-friendly"
@@ -117,7 +117,7 @@ export function CircleCard({ item }: { item: CircleCardItem }) {
             <dt className="sr-only">Energy</dt>
             <dd>
               Energy {item.minimum_energy}–{item.maximum_energy} ·{" "}
-              {item.stimulation_level} stimulation
+              {item.stimulation_level} Stimulation
             </dd>
           </div>
         </div>
@@ -136,20 +136,32 @@ export function CircleCard({ item }: { item: CircleCardItem }) {
       </dl>
 
       {item.reasons?.length ? (
-        <div className="mt-6 border-t border-neutral-800 pt-5">
-          <p className="text-xs font-bold tracking-[0.14em] text-rose-300 uppercase">
-            {item.fit ? `${item.fit} fit · ` : ""}Why it may fit
-          </p>
-          <ul className="mt-3 space-y-2 text-sm text-neutral-300">
-            {item.reasons.slice(0, 3).map((reason) => (
-              <li className="flex gap-2" key={reason}>
-                <span aria-hidden="true" className="text-rose-300">
-                  •
-                </span>
-                {reason}
-              </li>
-            ))}
-          </ul>
+        <div className="mt-6 border-t border-[#ee54a7]/15 pt-5">
+          <div className="flex flex-col items-center text-center sm:items-start sm:text-left">
+            <p className="flex items-center justify-center gap-2 text-xs font-bold tracking-[0.14em] text-[#ee54a7] uppercase sm:justify-start">
+              <Zap aria-hidden="true" className="size-4" />
+              Your Signal Sync
+            </p>
+
+            {item.fit ? (
+              <p className="mt-2 text-xs font-bold text-white/40 capitalize">
+                {item.fit} Match
+              </p>
+            ) : null}
+
+            <ul
+              aria-label="Why this syncs with your Pulse"
+              className="mt-3 flex w-full flex-wrap justify-center gap-2 sm:justify-start"
+            >
+              {item.reasons.slice(0, 3).map((reason) => (
+                <li key={reason}>
+                  <Badge className="border-[#ee54a7]/35 bg-[#ee54a7]/10 text-[#ffb4dc]">
+                    {reason}
+                  </Badge>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       ) : null}
     </article>

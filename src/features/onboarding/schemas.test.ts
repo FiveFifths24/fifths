@@ -2,8 +2,8 @@ import { describe, expect, it } from "vitest";
 import { onboardingSchema } from "./schemas";
 
 const validOnboarding = {
-  username: "fifths_member",
-  displayName: "FIFTHS Member",
+  username: "fifthsuser",
+  displayName: "FIFTHS User",
   pronouns: "they/them",
   timezone: "America/New_York",
   locationVisibility: "hidden",
@@ -16,9 +16,9 @@ describe("onboarding validation", () => {
   it("normalizes valid profile data", () => {
     const result = onboardingSchema.parse({
       ...validOnboarding,
-      username: "  FIFTHS_member  ",
+      username: "  FIFTHSuser  ",
     });
-    expect(result.username).toBe("fifths_member");
+    expect(result.username).toBe("fifthsuser");
   });
 
   it("rejects unsafe usernames", () => {

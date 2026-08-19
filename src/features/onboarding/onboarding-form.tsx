@@ -470,6 +470,7 @@ export function OnboardingForm({
             label="What Should People Call You?"
             name="displayName"
             placeholder="Your name"
+            maxLength={12}
             required
           />
 
@@ -481,6 +482,7 @@ export function OnboardingForm({
             label="Choose Your SIGNAL Handle"
             name="username"
             placeholder="your_name"
+            maxLength={12}
             required
           />
 

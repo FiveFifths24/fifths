@@ -24,24 +24,28 @@ describe("CreateCircleForm", () => {
     expect(
       screen.getByRole("form", { name: "Create a Circle" }),
     ).toBeInTheDocument();
+
     for (const label of [
-      "Circle name",
-      "URL name",
-      "Short summary",
-      "Full description",
-      "Community rules",
+      "Circle Name",
+      "URL Name",
+      "Short Summary",
+      "Full Description",
+      "Community Rules",
       "Visibility",
       "Membership",
       "Format",
       "Primary mode",
-      "Minimum energy",
-      "Maximum energy",
+      "Minimum Energy",
+      "Maximum Energy",
       "Stimulation",
-      "Social pace",
-      "Creative technology",
+      "Participation Style",
     ]) {
       expect(screen.getByLabelText(label)).toBeInTheDocument();
     }
-    expect(screen.getByText(/does not publish it/i)).toBeInTheDocument();
+
+    expect(screen.getByText("Creative technology")).toBeInTheDocument();
+    expect(
+      screen.getByText(/Creating a Circle starts a community draft/i),
+    ).toBeInTheDocument();
   });
 });

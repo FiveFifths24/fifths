@@ -12,10 +12,7 @@ const optionalLabel = z.preprocess(
 
 const interestIds = z
   .array(z.uuid())
-  .max(8, "Choose no more than eight interests.")
-  .refine((ids) => new Set(ids).size === ids.length, {
-    message: "Choose each interest only once.",
-  });
+  .length(1, "Choose one topic for this Circle.");
 
 export const createCircleSchema = z
   .object({
@@ -23,7 +20,7 @@ export const createCircleSchema = z
       .string()
       .trim()
       .min(3, "Use at least three characters.")
-      .max(80, "Keep the name under 80 characters."),
+      .max(40, "Keep the Circle name to 40 characters or fewer."),
     slug: z
       .string()
       .trim()
