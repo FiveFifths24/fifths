@@ -176,28 +176,32 @@ export function PulseHero() {
       <div className="relative mx-auto w-full max-w-[86rem]">
         <div className="grid items-center gap-10 lg:grid-cols-[0.92fr_1.08fr] xl:gap-16">
           <div className="text-center lg:text-left">
-            <h1 className="display-type mx-auto max-w-[44rem] text-[clamp(3rem,11vw,5rem)] leading-[0.96] tracking-[-0.045em] text-[#f4f2ef] lg:mx-0 lg:text-[clamp(3rem,3.4vw,4.25rem)]">
+            <p className="mx-auto mb-5 w-fit bg-[linear-gradient(90deg,#1800ad_0%,#6c14ce_32%,#f359d2_68%,#7cff00_100%)] bg-clip-text font-mono text-[0.62rem] font-black tracking-[0.24em] text-transparent uppercase drop-shadow-[0_0_12px_rgba(243,89,210,0.25)] [-webkit-text-fill-color:transparent] sm:text-[0.68rem] lg:mx-0">
+              No Ads. No Algorithmic Feed.
+            </p>
+            <h1 className="display-type mx-auto max-w-[44rem] text-[clamp(2rem,11vw,5rem)] leading-[0.96] tracking-[-0.045em] text-[#f4f2ef] lg:mx-0 lg:text-[clamp(3.8rem,4.2vw,4.85rem)]">
               <span className="block">
-                <span className="text-[#f359d2]">Your Energy</span> Changes.
+                <span className="text-[#ffffff]">
+                  Real-Time Capacity Meets Real-World
+                </span>
               </span>
 
-              <span className="mt-2 block">
-                Your{" "}
+              <span className="mt-1 block">
+                {" "}
                 <span className="bg-[linear-gradient(90deg,#1800ad,#6c14ce,#f359d2)] bg-clip-text text-transparent [-webkit-text-fill-color:transparent]">
-                  Options
+                  Connections
                 </span>{" "}
-                Should Too.
               </span>
             </h1>
 
             <p className="mx-auto mt-7 max-w-[38rem] text-base leading-7 text-white/65 sm:text-lg sm:leading-8 lg:mx-0">
-              Find people, places, and plans that match your energy, time,
-              interests, and comfort level.
+              SIGNAL converts your real-time mental, emotional, and physical
+              capacity into meaningful ways to connect, create, and participate.
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center lg:justify-start">
               <Link
-                className="inline-flex min-h-14 w-full items-center justify-center gap-3 rounded-full bg-[linear-gradient(90deg,#1800ad_0%,#6c14ce_34%,#f359d2_70%,#7cff00_120%)] px-8 text-sm font-black text-white shadow-[0_0_34px_rgba(108,20,206,0.28)] transition hover:scale-[1.02] hover:brightness-110 sm:w-auto sm:min-w-52"
+                className="inline-flex min-h-14 w-full items-center justify-center gap-3 rounded-full bg-[linear-gradient(90deg,#1800ad_0%,#6c14ce_34%,#f359d2_70%,#7cff00_100%)] px-8 text-sm font-black text-white shadow-[0_0_34px_rgba(108,20,206,0.28)] transition hover:scale-[1.02] hover:brightness-110 sm:w-auto sm:min-w-52"
                 href="/home/pulse"
               >
                 <Activity className="size-5" />
@@ -209,7 +213,7 @@ export function PulseHero() {
                 href="/home/sessions"
               >
                 <Compass className="size-5" />
-                Explore What&apos;s Happening
+                Explore The Network
               </Link>
             </div>
 

@@ -22,33 +22,33 @@ import { Container } from "@/components/ui/container";
 const signalJourney = [
   {
     number: "01",
-    title: "Check your Pulse",
+    title: "Tune Your Signal",
     description:
-      "Tell SIGNAL what your energy, time, and capacity look like right now.",
+      "Transmit your current energy, availability, and capacity to the network.",
     color: "#1800ad",
     icon: Activity,
   },
   {
     number: "02",
-    title: "See what fits",
+    title: "Ping The Network",
     description:
-      "Discover people, plans, and experiences aligned with the way you want to participate.",
+      "Detect people, projects, and experiences matching your broadcast.",
     color: "#6c14ce",
     icon: RadioTower,
   },
   {
     number: "03",
-    title: "Participate your way",
+    title: "Follow The Frequency",
     description:
-      "Join online, meet in person, create with others, or explore independently.",
+      "Engage digitally, meet physically, create with others, or explore on your own terms.",
     color: "#f359d2",
     icon: UsersRound,
   },
   {
     number: "04",
-    title: "Build your Passport",
+    title: "Log The Connection",
     description:
-      "Carry your verified participation, access, and benefits forward as you grow.",
+      "Preserve your verified contributions to access tiers, rewards, and your reputation as you evolve.",
     color: "#7cff00",
     icon: Globe2,
   },
@@ -58,79 +58,79 @@ const features = [
   {
     number: "01",
     name: "Sessions",
-    eyebrow: "Find something worth doing",
+    eyebrow: "Live Broadcasts & Events",
     description:
       "Discover curated events, workshops, game nights, gatherings, and experiences that fit your current Pulse.",
     href: "/home/sessions",
     color: "#f359d2",
     icon: CalendarDays,
-    layout: "lg:col-span-7 lg:min-h-[15rem]",
+    layout: "lg:col-span-7 lg:min-h-[13.5rem]",
   },
   {
     number: "02",
     name: "Circles",
-    eyebrow: "Find people to return to",
+    eyebrow: "Frequency Clusters",
     description:
       "Connect in smaller communities built around shared interests, identities, goals, and energy.",
     href: "/home/circles",
     color: "#6c14ce",
     icon: UsersRound,
-    layout: "lg:col-span-5 lg:min-h-[15rem]",
+    layout: "lg:col-span-5 lg:min-h-[13.5rem]",
   },
   {
     number: "03",
     name: "Creator Commons",
-    eyebrow: "Make something together",
+    eyebrow: "Co-Creation Nodes",
     description:
       "Find collaborators, opportunities, resources, and creative spaces where ideas can become real work.",
     href: "/home/commons",
     color: "#a855f7",
     icon: PenLine,
-    layout: "lg:col-span-5 lg:min-h-[15rem]",
+    layout: "lg:col-span-5 lg:min-h-[13.5rem]",
   },
   {
     number: "04",
     name: "Fifth Realm",
-    eyebrow: "Enter a shared world",
+    eyebrow: "Simulated Experiences",
     description:
       "Step into campaigns and immersive experiences shaped by story, culture, play, and collective imagination.",
     href: "/home/realm",
     color: "#22d3ee",
     icon: Gamepad2,
-    layout: "lg:col-span-7 lg:min-h-[15rem]",
+    layout: "lg:col-span-7 lg:min-h-[13.5rem]",
   },
   {
     number: "05",
     name: "Passport",
-    eyebrow: "Carry your participation forward",
+    eyebrow: "Verified Credentials",
     description:
       "Keep one private, trusted record of the Sessions, opportunities, campaigns, and contributions you complete across SIGNAL.",
     href: "/home/passport",
     color: "#7cff00",
     icon: Globe2,
-    layout: "lg:col-span-12 lg:min-h-[15rem]",
+    layout: "lg:col-span-12 lg:min-h-[11.5rem]",
   },
 ] as const;
 
 const principles = [
   {
-    title: "Your capacity matters",
+    title: "Capacity First",
     description:
-      "SIGNAL considers your energy, time, format, and social intensity—not only your interests.",
+      "What you see is shaped by your current capacity and preferences-not what generates the most clicks.",
     icon: Activity,
     color: "#6c14ce",
   },
   {
-    title: "You control how you participate",
+    title: "Nothing Is Paid To Reach You",
     description:
-      "Show up online, in person, with a group, or independently. Your preferences lead the experience.",
+      "No advertisements, sponsored posts, or paid placement competing for your attention.",
     icon: SlidersHorizontal,
     color: "#f359d2",
   },
   {
-    title: "Your information remains yours",
+    title: "Participation Over Popularity",
     description:
-      "Private responses and verified participation replace popularity scores and public performance.",
+      "Signal is designed to help people connect, create, and contribute-not perform for numbers.",
     icon: LockKeyhole,
     color: "#7cff00",
   },
@@ -155,24 +155,21 @@ export default function HomePage() {
       <div className="relative z-10">
         <PulseHero />
 
-        <section className="relative py-14 sm:py-18 lg:py-24">
-          <Container className="max-w-[84rem]">
+        <section className="relative py-12 sm:py-14 lg:py-16">
+          <Container className="!max-w-[76rem]">
             <div className="mx-auto max-w-3xl text-center">
               <p className="font-mono text-[0.65rem] font-bold tracking-[0.24em] text-[#f359d2] uppercase">
-                How SIGNAL Moves
+                Your Signal Ignites The Network
               </p>
 
-              <h2 className="mt-5 text-[clamp(2.5rem,5vw,4.8rem)] leading-[0.95] font-black tracking-[-0.05em] text-white">
-                One Signal Becomes A Path Forward.
+              <h2 className="mt-1 text-[clamp(2.3rem,3.6vw,3.75rem)] leading-[0.95] font-black tracking-[-0.05em] text-white">
+                How It Works
               </h2>
 
-              <p className="mx-auto mt-6 max-w-2xl text-sm leading-7 text-white/60 sm:text-base">
-                SIGNAL turns what you have capacity for right now into clearer
-                ways to connect, create, and participate.
-              </p>
+              <p className="mx-auto mt-6 max-w-2xl text-sm leading-7 text-white/60 sm:text-base"></p>
             </div>
 
-            <div className="relative mt-12 overflow-hidden rounded-[2rem] border border-white/10 bg-black/35 p-4 backdrop-blur-xl sm:p-6 lg:p-0">
+            <div className="relative mt-9 overflow-hidden rounded-[2rem] border border-white/10 bg-black/35 p-4 backdrop-blur-xl sm:p-6 lg:p-0">
               <div
                 aria-hidden="true"
                 className="absolute top-1/2 right-[10%] left-[10%] hidden h-px -translate-y-1/2 bg-[linear-gradient(90deg,#1800ad,#6c14ce,#f359d2,#7cff00)] opacity-70 lg:block"
@@ -184,7 +181,7 @@ export default function HomePage() {
 
                   return (
                     <article
-                      className="group relative flex min-h-48 flex-col rounded-[1.4rem] border border-white/10 bg-[#07070b]/95 p-6 lg:min-h-64 lg:rounded-none lg:border-y-0 lg:border-r lg:border-l-0 lg:last:border-r-0"
+                      className="group relative flex min-h-48 flex-col rounded-[1.4rem] border border-white/10 bg-[#07070b]/95 p-6 lg:min-h-52 lg:rounded-none lg:border-y-0 lg:border-r lg:border-l-0 lg:last:border-r-0"
                       key={step.title}
                     >
                       <div className="flex items-center justify-between">
@@ -207,7 +204,7 @@ export default function HomePage() {
                         </span>
                       </div>
 
-                      <div className="mt-auto pt-9">
+                      <div className="mt-auto pt-6">
                         <h3 className="text-lg font-black text-white">
                           {step.title}
                         </h3>
@@ -224,17 +221,17 @@ export default function HomePage() {
         </section>
 
         <section
-          className="relative scroll-mt-24 py-14 sm:py-18 lg:py-24"
+          className="relative scroll-mt-24 py-12 sm:py-14 lg:py-16"
           id="ecosystem"
         >
-          <Container className="max-w-[84rem]">
+          <Container className="!max-w-[76rem]">
             <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
               <div className="max-w-3xl">
                 <p className="font-mono text-[0.65rem] font-bold tracking-[0.24em] text-[#7cff00] uppercase">
                   The SIGNAL Ecosystem
                 </p>
 
-                <h2 className="mt-5 text-[clamp(2.7rem,5vw,5rem)] leading-[0.92] font-black tracking-[-0.05em] text-white">
+                <h2 className="mt-5 text-[clamp(2.4rem,3.8vw,4rem)] leading-[0.92] font-black tracking-[-0.05em] text-white">
                   Five Ways To Find Your Way In.
                 </h2>
               </div>
@@ -245,7 +242,7 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-12">
+            <div className="mt-9 grid gap-4 md:grid-cols-2 lg:grid-cols-12">
               {features.map((feature) => {
                 const Icon = feature.icon;
 
@@ -305,25 +302,26 @@ export default function HomePage() {
           </Container>
         </section>
 
-        <section className="relative py-14 sm:py-18 lg:py-24">
-          <Container className="max-w-[84rem]">
-            <div className="overflow-hidden rounded-[2.4rem] border border-white/10 bg-[linear-gradient(145deg,rgba(24,0,173,0.14),rgba(4,4,8,0.94)_42%,rgba(243,89,210,0.08))] p-7 backdrop-blur-xl sm:p-10 lg:p-14">
+        <section className="relative py-12 sm:py-14 lg:py-16">
+          <Container className="!max-w-[76rem]">
+            <div className="overflow-hidden rounded-[2.4rem] border border-white/10 bg-[linear-gradient(145deg,rgba(24,0,173,0.14),rgba(4,4,8,0.94)_42%,rgba(243,89,210,0.08))] p-7 backdrop-blur-xl sm:p-10 lg:p-10">
               <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-start lg:gap-20">
                 <div>
                   <p className="font-mono text-[0.65rem] font-bold tracking-[0.24em] text-[#f359d2] uppercase">
                     Designed Differently
                   </p>
 
-                  <h2 className="mt-5 text-[clamp(2.8rem,5vw,5.2rem)] leading-[0.92] font-black tracking-[-0.05em] text-white">
-                    Built Around People.
+                  <h2 className="mt-5 text-[clamp(2.5rem,4vw,4.1rem)] leading-[0.92] font-black tracking-[-0.05em] text-white">
+                    No Ads.
                     <span className="block bg-[linear-gradient(90deg,#6c14ce,#f359d2,#7cff00)] bg-clip-text text-transparent [-webkit-text-fill-color:transparent]">
-                      Not Popularity.
+                      No Algorithm.
                     </span>
                   </h2>
 
                   <p className="mt-7 max-w-lg text-sm leading-7 text-white/55 sm:text-base">
-                    SIGNAL is designed to help people find meaningful ways to
-                    participate—not compete for attention.
+                    Signal uses the Pulse you choose to share to help you find
+                    what fits-not paid placement, follower counts, endless
+                    scrolling, or engagement bait.
                   </p>
                 </div>
 
@@ -363,17 +361,20 @@ export default function HomePage() {
           </Container>
         </section>
 
-        <section className="relative py-14 sm:py-18 lg:py-24">
-          <Container className="max-w-[84rem]">
-            <div className="relative overflow-hidden rounded-[2.4rem] border border-[#f359d2]/35 bg-[linear-gradient(110deg,rgba(24,0,173,0.34),rgba(108,20,206,0.25)_34%,rgba(243,89,210,0.2)_68%,rgba(124,255,0,0.1))] p-7 sm:p-10 lg:p-14">
+        <section className="relative py-12 sm:py-14 lg:py-16">
+          <Container className="!max-w-[76rem]">
+            <div className="relative overflow-hidden rounded-[2.4rem] border border-[#f359d2]/35 bg-[linear-gradient(110deg,rgba(24,0,173,0.34),rgba(108,20,206,0.25)_34%,rgba(243,89,210,0.2)_68%,rgba(124,255,0,0.1))] p-7 sm:p-10 lg:p-10">
               <div
                 aria-hidden="true"
                 className="absolute inset-x-0 bottom-0 h-px bg-[linear-gradient(90deg,#1800ad,#6c14ce,#f359d2,#7cff00)]"
               />
 
-              <div className="relative grid gap-10 lg:grid-cols-[auto_1fr_auto] lg:items-center">
-                <div className="flex size-16 items-center justify-center rounded-2xl border border-[#f359d2]/60 bg-black/30 text-[#f359d2] shadow-[0_0_34px_rgba(243,89,210,0.2)]">
-                  <Building2 className="size-8" />
+              <div className="mx-auto flex max-w-4xl flex-col items-center text-center">
+                <div className="mb-6 flex size-20 items-center justify-center rounded-2xl border border-[#f359d2] bg-black/25">
+                  <Building2
+                    aria-hidden="true"
+                    className="size-7 text-[#f359d2]"
+                  />
                 </div>
 
                 <div>
@@ -381,22 +382,25 @@ export default function HomePage() {
                     The Five Fifths eHub
                   </p>
                   <h2 className="mt-3 text-3xl font-black tracking-[-0.04em] text-white sm:text-4xl">
-                    Digital connection gets a physical home.
+                    Plug Into Our Physical Home
                   </h2>
-                  <p className="mt-4 max-w-2xl text-sm leading-7 text-white/65 sm:text-base">
-                    SIGNAL will connect members to eHub bookings, events,
-                    programs, memberships, and real-world ways to meet, work,
-                    create, and play.
+                  <p className="mx-auto mt-5 max-w-3xl text-base leading-8 text-white/55 sm:text-lg">
+                    The Five Fifths eHub will bring SIGNAL’s digital ecosystem
+                    into a physical space built for gaming, creation, work,
+                    learning, and community. Members will use SIGNAL to discover
+                    events, reserve spaces and experiences, manage memberships,
+                    and move seamlessly between the virtual network and the
+                    physical hub.
                   </p>
                 </div>
 
                 <a
-                  className="inline-flex min-h-12 items-center justify-center gap-3 rounded-full border border-white/25 bg-black/30 px-7 text-sm font-black text-white transition hover:border-[#7cff00]/60 hover:bg-white/[0.06]"
+                  className="mt-7 inline-flex min-h-12 items-center justify-center gap-3 rounded-full border border-[#f359d2] bg-black/30 px-7 text-sm font-black text-white transition hover:border-[#7cff00]/60 hover:bg-white/[0.06] sm:mt-9"
                   href="https://fivefifthsnp.com/ehub"
                   rel="noopener noreferrer"
                   target="_blank"
                 >
-                  Explore the eHub
+                  Explore The eHub
                   <ArrowRight className="size-4" />
                 </a>
               </div>
@@ -404,7 +408,7 @@ export default function HomePage() {
           </Container>
         </section>
 
-        <section className="relative px-5 pt-14 pb-24 text-center sm:pt-20 sm:pb-32">
+        <section className="relative px-5 pt-12 pb-20 text-center sm:pt-16 sm:pb-24">
           <div
             aria-hidden="true"
             className="absolute right-0 bottom-0 left-0 h-72 bg-[radial-gradient(ellipse_at_bottom,rgba(108,20,206,0.2),rgba(243,89,210,0.1)_42%,transparent_72%)]"
@@ -415,7 +419,7 @@ export default function HomePage() {
               <Sparkles className="size-5 text-[#f359d2]" />
             </div>
 
-            <h2 className="mt-7 text-[clamp(3rem,6vw,6rem)] leading-[0.9] font-black tracking-[-0.055em] text-white">
+            <h2 className="mt-7 text-[clamp(2.8rem,4.5vw,4.6rem)] leading-[0.9] font-black tracking-[-0.055em] text-white">
               Find What Fits.
               <span className="block bg-[linear-gradient(90deg,#1800ad_0%,#6c14ce_30%,#f359d2_65%,#7cff00_100%)] bg-clip-text text-transparent [-webkit-text-fill-color:transparent]">
                 Show Up Your Way.
@@ -428,7 +432,7 @@ export default function HomePage() {
             </p>
 
             <Link
-              className="mx-auto mt-9 inline-flex min-h-14 w-full max-w-md items-center justify-center gap-4 rounded-full bg-[linear-gradient(90deg,#1800ad_0%,#6c14ce_32%,#f359d2_68%,#7cff00_115%)] px-10 text-sm font-black tracking-[0.1em] text-white uppercase shadow-[0_0_40px_rgba(108,20,206,0.28)] transition hover:scale-[1.02] hover:brightness-110 sm:w-auto sm:min-w-80"
+              className="mx-auto mt-9 inline-flex min-h-14 w-full max-w-md items-center justify-center gap-4 rounded-full bg-[linear-gradient(90deg,#1800ad_0%,#6c14ce_32%,#f359d2_68%,#7cff00_100%)] px-10 text-sm font-black tracking-[0.1em] text-white uppercase shadow-[0_0_40px_rgba(108,20,206,0.28)] transition hover:scale-[1.02] hover:brightness-110 sm:w-auto sm:min-w-80"
               href="/signup"
             >
               Join SIGNAL
