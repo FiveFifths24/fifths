@@ -148,7 +148,7 @@ export default async function CampaignDetailPage({
       ====================================================== */}
 
       <ButtonLink
-        className="text-[#22d3ee]/75 hover:text-[#a5f3fc]"
+        className="mx-auto flex w-fit text-[#22d3ee]/75 hover:text-[#a5f3fc] lg:mx-0"
         href="/home/realm"
         variant="quiet"
       >
@@ -159,16 +159,16 @@ export default async function CampaignDetailPage({
           CAMPAIGN HERO
       ====================================================== */}
 
-      <header className="relative mt-8 overflow-hidden rounded-[2.25rem] border border-[#22d3ee]/25 bg-[linear-gradient(145deg,rgba(34,211,238,0.07),rgba(10,10,12,0.97)_42%,rgba(34,211,238,0.025))] p-6 shadow-[0_0_60px_rgba(34,211,238,0.035)] sm:p-9 lg:p-10">
+      <header className="relative mt-8 overflow-hidden rounded-[2.25rem] border border-[#22d3ee]/25 bg-[linear-gradient(145deg,rgba(34,211,238,0.07),rgba(10,10,12,0.97)_42%,rgba(34,211,238,0.025))] p-6 shadow-[0_0_60px_rgba(34,211,238,0.035)] sm:p-9 lg:p-10 lg:text-left">
         <div
           aria-hidden="true"
           className="pointer-events-none absolute -top-24 -right-24 size-72 rounded-full bg-[#22d3ee]/[0.055] blur-3xl"
         />
 
         <div className="relative">
-          <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
-            <div className="max-w-4xl">
-              <div className="flex flex-wrap gap-2">
+          <div className="flex flex-col items-center gap-8 lg:flex-row lg:items-start lg:justify-between">
+            <div className="mx-auto max-w-4xl lg:mx-0">
+              <div className="flex flex-wrap justify-center gap-2 lg:justify-start">
                 <Badge className={realmBadge}>
                   {modeResult.data?.name ?? "Immerse"}
                 </Badge>
@@ -186,11 +186,11 @@ export default async function CampaignDetailPage({
                 </Badge>
               </div>
 
-              <h1 className="display-type mt-6 max-w-5xl text-5xl leading-[0.92] text-white sm:text-7xl">
+              <h1 className="display-type mx-auto mt-6 max-w-5xl text-5xl leading-[0.92] text-white sm:text-7xl lg:mx-0">
                 {campaign.title}
               </h1>
 
-              <p className="mt-5 max-w-3xl text-lg leading-8 text-white/60">
+              <p className="mx-auto mt-5 max-w-3xl text-lg leading-8 text-white/60 lg:mx-0">
                 {campaign.summary}
               </p>
 
@@ -201,12 +201,12 @@ export default async function CampaignDetailPage({
 
             {isManager ? (
               <div className="shrink-0">
-                <ButtonLink
-                  className="border-[#22d3ee]/35 bg-[#22d3ee]/[0.06] text-[#cffafe] shadow-[0_0_22px_rgba(34,211,238,0.05)] hover:border-[#22d3ee]/70 hover:bg-[#22d3ee]/10 hover:text-white"
-                  href={`/home/realm/manage/${campaign.id}`}
-                  variant="secondary"
-                >
-                  Manage Campaign
+<ButtonLink
+  className="mx-auto mt-5 flex w-fit border-[#22d3ee]/35 bg-[#22d3ee]/[0.06] text-[#cffafe] shadow-[0_0_22px_rgba(34,211,238,0.05)] hover:border-[#22d3ee]/70 hover:bg-[#22d3ee]/10 hover:text-white lg:mx-0"
+  href={`/home/realm/manage/${campaign.id}`}
+  variant="secondary"
+>
+                    Manage Campaign
                 </ButtonLink>
               </div>
             ) : null}
@@ -214,7 +214,7 @@ export default async function CampaignDetailPage({
 
           {/* SNAPSHOT */}
 
-          <dl className="mt-9 grid gap-px overflow-hidden rounded-2xl border border-[#22d3ee]/15 bg-[#22d3ee]/10 sm:grid-cols-2 lg:grid-cols-4">
+          <dl className="mt-9 grid gap-px overflow-hidden rounded-2xl border border-[#22d3ee]/15 bg-[#22d3ee]/10 text-center sm:grid-cols-2 lg:grid-cols-4 lg:text-left">
             <div className="bg-black/55 p-5">
               <dt className="text-xs font-medium tracking-wide text-[#a5f3fc]/40 uppercase">
                 Format
@@ -259,7 +259,7 @@ export default async function CampaignDetailPage({
           </dl>
 
           {campaign.status === "recruiting" ? (
-            <div className="mt-6 flex items-center gap-2 text-sm text-white/45">
+            <div className="mt-6 flex items-center justify-center gap-2 text-sm text-white/45 lg:justify-start">
               <CalendarRange
                 aria-hidden="true"
                 className="size-4 text-[#22d3ee]/70"
@@ -287,8 +287,8 @@ export default async function CampaignDetailPage({
       <div className="mt-8 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
         {/* PREMISE */}
 
-        <section className="rounded-[2rem] border border-[#22d3ee]/15 bg-[linear-gradient(145deg,rgba(34,211,238,0.025),rgba(0,0,0,0.28))] p-6 sm:p-8">
-          <div className="flex items-center gap-3">
+        <section className="rounded-[2rem] border border-[#22d3ee]/15 bg-[linear-gradient(145deg,rgba(34,211,238,0.025),rgba(0,0,0,0.28))] p-6 text-center sm:p-8 lg:text-left">
+          <div className="flex flex-col items-center gap-3 text-center lg:flex-row lg:text-left">
             <div className="flex size-10 items-center justify-center rounded-full border border-[#22d3ee]/25 bg-[#22d3ee]/[0.07]">
               <Compass aria-hidden="true" className="size-5 text-[#22d3ee]" />
             </div>
@@ -323,7 +323,7 @@ export default async function CampaignDetailPage({
               Interests
             </p>
 
-            <ul className="mt-4 flex flex-wrap gap-2">
+            <ul className="mt-4 flex flex-wrap justify-center gap-2 lg:justify-start">
               {(interestsResult.data ?? []).map((interest) => (
                 <li key={interest.id}>
                   <Badge className={realmBadge}>{interest.name}</Badge>
@@ -335,8 +335,8 @@ export default async function CampaignDetailPage({
 
         {/* SAFETY */}
 
-        <section className="rounded-[2rem] border border-[#22d3ee]/20 bg-[linear-gradient(145deg,rgba(34,211,238,0.045),rgba(0,0,0,0.3))] p-6 shadow-[0_0_45px_rgba(34,211,238,0.02)] sm:p-8">
-          <div className="flex items-center gap-3">
+        <section className="rounded-[2rem] border border-[#22d3ee]/20 bg-[linear-gradient(145deg,rgba(34,211,238,0.045),rgba(0,0,0,0.3))] p-6 text-center shadow-[0_0_45px_rgba(34,211,238,0.02)] sm:p-8 lg:text-left">
+          <div className="flex flex-col items-center gap-3 text-center lg:flex-row lg:text-left">
             <div className="flex size-10 items-center justify-center rounded-full border border-[#22d3ee]/25 bg-[#22d3ee]/[0.07]">
               <ShieldCheck
                 aria-hidden="true"
@@ -360,7 +360,7 @@ export default async function CampaignDetailPage({
           </p>
 
           <ButtonLink
-            className="mt-7 border-[#22d3ee]/35 bg-[#22d3ee]/[0.06] text-[#cffafe] hover:border-[#22d3ee]/70 hover:bg-[#22d3ee]/10 hover:text-white"
+            className="mx-auto mt-7 flex w-fit border-[#22d3ee]/35 bg-[#22d3ee]/[0.06] text-[#cffafe] hover:border-[#22d3ee]/70 hover:bg-[#22d3ee]/10 hover:text-white lg:mx-0"
             href="/realm/safety"
             variant="secondary"
           >
@@ -373,8 +373,8 @@ export default async function CampaignDetailPage({
           PARTICIPATION
       ====================================================== */}
 
-      <section className="mt-8 rounded-[2rem] border border-[#22d3ee]/15 bg-[linear-gradient(145deg,rgba(34,211,238,0.025),rgba(0,0,0,0.28))] p-6 sm:p-8">
-        <div className="flex items-center gap-3">
+      <section className="mt-8 rounded-[2rem] border border-[#22d3ee]/15 bg-[linear-gradient(145deg,rgba(34,211,238,0.025),rgba(0,0,0,0.28))] p-6 text-center sm:p-8 lg:text-left">
+        <div className="flex flex-col items-center gap-3 text-center lg:flex-row lg:text-left">
           <div className="flex size-10 items-center justify-center rounded-full border border-[#22d3ee]/25 bg-[#22d3ee]/[0.07]">
             <Users aria-hidden="true" className="size-5 text-[#22d3ee]" />
           </div>
@@ -468,7 +468,7 @@ export default async function CampaignDetailPage({
       ====================================================== */}
 
       <section className="mt-10" aria-labelledby="realm-sessions-heading">
-        <div className="flex items-center gap-3">
+        <div className="flex flex-col items-center gap-3 text-center lg:flex-row lg:text-left">
           <div className="flex size-10 items-center justify-center rounded-full border border-[#22d3ee]/25 bg-[#22d3ee]/[0.07]">
             <CalendarRange
               aria-hidden="true"

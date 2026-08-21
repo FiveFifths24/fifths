@@ -1,8 +1,11 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+
 import { SiteHeader } from "./site-header";
 
-vi.mock("next/navigation", () => ({ usePathname: () => "/about" }));
+vi.mock("next/navigation", () => ({
+  usePathname: () => "/",
+}));
 
 vi.mock("@/lib/supabase/client", () => ({
   createClient: () => ({
@@ -11,6 +14,7 @@ vi.mock("@/lib/supabase/client", () => ({
         data: {
           user: null,
         },
+        error: null,
       }),
       onAuthStateChange: vi.fn(() => ({
         data: {
@@ -24,27 +28,67 @@ vi.mock("@/lib/supabase/client", () => ({
 }));
 
 describe("SiteHeader", () => {
-  beforeEach(() => render(<SiteHeader />));
-
-  it("provides labeled primary navigation and marks the active page", () => {
-    const navigation = screen.getByRole("navigation", {
-      name: "Primary navigation",
-    });
-    expect(
-      within(navigation).getByRole("link", { name: "About" }),
-    ).toHaveAttribute("aria-current", "page");
+  beforeEach(() => {
+    render(<SiteHeader />);
   });
 
-  it("opens and closes the mobile navigation with an accessible control", () => {
-    const toggle = screen.getByRole("button", { name: "Open navigation menu" });
-    expect(toggle).toHaveAttribute("aria-expanded", "false");
+  it("shows the SIGNAL brand and login action when signed out", () => {
+    expect(
+      screen.getByRole("link", {
+        name: "SIGNAL powered by FIVE FIFTHS",
+      }),
+    ).toHaveAttribute("href", "/");
 
-    fireEvent.click(toggle);
     expect(
-      screen.getByRole("navigation", { name: "Mobile navigation" }),
-    ).toBeInTheDocument();
+      screen.getByRole("link", {
+        name: "Log In",
+      }),
+    ).toHaveAttribute("href", "/login");
+
     expect(
-      screen.getByRole("button", { name: "Close navigation menu" }),
-    ).toHaveAttribute("aria-expanded", "true");
+      screen.queryByRole("link", {
+        name: "About",
+      }),
+    ).not.toBeInTheDocument();
+
+    expect(
+      screen.queryByRole("link", {
+        name: "Community",
+      }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("opens and closes the mobile account menu accessibly", () => {
+    const openButton = screen.getByRole("button", {
+      name: "Open navigation menu",
+    });
+
+    expect(openButton).toHaveAttribute("aria-expanded", "false");
+
+    const menuId = openButton.getAttribute("aria-controls");
+
+    expect(menuId).toBeTruthy();
+
+    fireEvent.click(openButton);
+
+    const mobileMenu = document.getElementById(menuId!);
+
+    expect(mobileMenu).toBeInTheDocument();
+
+    expect(
+      within(mobileMenu!).getByRole("link", {
+        name: "Log In",
+      }),
+    ).toHaveAttribute("href", "/login");
+
+    const closeButton = screen.getByRole("button", {
+      name: "Close navigation menu",
+    });
+
+    expect(closeButton).toHaveAttribute("aria-expanded", "true");
+
+    fireEvent.click(closeButton);
+
+    expect(document.getElementById(menuId!)).not.toBeInTheDocument();
   });
 });

@@ -13,8 +13,9 @@ const opportunity = {
     "Plan and produce a short interview series with a defined scope and accessible workflow.",
   deliverables:
     "Three edited interviews, captions, and a shared handoff document are expected.",
-  kind: "collaboration",
-  format: "either",
+kind: "collaboration",
+compensation: "paid",
+format: "either",
   locationLabel: "Northern New Jersey or online",
   responseDeadlineLocal: "2026-09-01T17:00",
   timezone: "America/New_York",

@@ -20,7 +20,7 @@ describe("CreateOpportunityForm", () => {
         name: "Create a Creator Commons opportunity",
       }),
     ).toBeInTheDocument();
-    expect(screen.getByLabelText("Response deadline")).toHaveAttribute(
+    expect(screen.getByLabelText(/response deadline/i)).toHaveAttribute(
       "type",
       "datetime-local",
     );
@@ -29,8 +29,10 @@ describe("CreateOpportunityForm", () => {
       "skillIds",
     );
     expect(
-      screen.getByRole("button", { name: "Create draft opportunity" }),
+      screen.getByRole("button", {
+  name: /create draft opportunity/i,
+}),
     ).toBeInTheDocument();
-    expect(screen.getByText(/does not publish it/i)).toBeInTheDocument();
+    expect(screen.getByText(/does not publish the opportunity automatically/i)).toBeInTheDocument();
   });
 });

@@ -9,13 +9,13 @@ describe("landing page", () => {
     expect(
       screen.getByRole("heading", {
         level: 1,
-        name: /broadcast your\s*signal\.\s*find your people\./i,
+        name: /your energy changes\.\s*your options should too\./i,
       }),
     ).toBeInTheDocument();
 
     expect(
       screen.getByText(
-        /find communities, creators, events, collaborations, and experiences worth doing/i,
+        /signal turns what you have capacity for right now into clearer ways to connect, create, and participate/i,
       ),
     ).toBeInTheDocument();
 
@@ -23,21 +23,27 @@ describe("landing page", () => {
       screen.getAllByRole("link", { name: "Join SIGNAL" })[0],
     ).toHaveAttribute("href", "/signup");
 
-    const featureNavigation = screen.getByRole("navigation", {
-      name: "SIGNAL features",
-    });
+screen.getByRole("navigation", {
+  name: /quick access to signal features/i,
+})
 
-    for (const moduleName of [
-      "Pulse",
-      "Sessions",
-      "Circles",
-      "Commons",
-      "Realm",
-      "Passport",
-    ]) {
-      expect(
-        within(featureNavigation).getByRole("link", { name: moduleName }),
-      ).toBeInTheDocument();
-    }
+const featureNavigation = screen.getByRole("navigation", {
+  name: /quick access to signal features/i,
+});
+
+for (const moduleName of [
+  "Pulse",
+  "Sessions",
+  "Circles",
+  "Creator Commons",
+  "Fifth Realm",
+  "Passport",
+]) {
+  expect(
+    within(featureNavigation).getByRole("link", {
+      name: moduleName,
+    }),
+  ).toBeInTheDocument();
+}
   });
 });
