@@ -183,7 +183,7 @@ export function CreateCampaignForm({
           <TextField
             defaultValue={value("title")}
             error={firstFieldError(state, "title")}
-            label="Campaign title"
+            label="Campaign Title"
             maxLength={40}
             name="title"
             placeholder="The Lantern Archive"
@@ -299,7 +299,7 @@ export function CreateCampaignForm({
             defaultValue={value("playerCapacity")}
             error={firstFieldError(state, "playerCapacity")}
             hint="Maximum Players."
-            label="Player seats"
+            label="Player Seats"
             max={12}
             min={1}
             name="playerCapacity"
@@ -331,7 +331,7 @@ export function CreateCampaignForm({
           <SelectField
             defaultValue={value("timezone", "America/New_York")}
             error={firstFieldError(state, "timezone")}
-            label="Campaign timezone"
+            label="Campaign Timezone"
             name="timezone"
           >
             {campaignTimezones.map((timezone) => (
@@ -483,7 +483,7 @@ export function CreateCampaignForm({
 
         <fieldset aria-describedby="interestIds-description" className="mt-8">
           <legend className="text-base font-bold text-white">
-            Campaign interests
+            Campaign Interests
           </legend>
 
           <p

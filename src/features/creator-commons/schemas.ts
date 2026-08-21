@@ -43,39 +43,61 @@ export const opportunityTimezones = [
 export const createOpportunitySchema = z
   .object({
     circleId: optionalUuid,
+
     title: z
       .string()
       .trim()
       .min(3, "Use at least three characters.")
       .max(40, "Keep the Commons title to 40 characters or fewer."),
+
     summary: z
       .string()
       .trim()
       .min(10, "Use at least ten characters.")
       .max(280, "Keep the summary under 280 characters."),
+
     description: z
       .string()
       .trim()
       .min(20, "Use at least 20 characters.")
       .max(5000, "Keep the description under 5,000 characters."),
+
     deliverables: z
       .string()
       .trim()
       .min(20, "Use at least 20 characters.")
       .max(3000, "Keep the deliverables under 3,000 characters."),
+
     kind: z.enum(["collaboration", "project", "volunteer", "mentorship"]),
+
+    compensation: z.enum(["paid", "unpaid"], {
+      error: "Choose whether this opportunity is paid or unpaid.",
+    }),
+
     format: z.enum(["in_person", "online", "either"]),
+
     locationLabel: optionalLabel,
+
     responseDeadlineLocal: localDateTime,
+
     timezone: z.enum(opportunityTimezones),
+
     estimatedMinutes: z.coerce.number().int().min(15).max(1440),
+
     positions: z.coerce.number().int().min(1).max(25),
+
     modeId: z.uuid("Choose a Pulse mode."),
+
     minimumEnergy: z.coerce.number().int().min(1).max(5),
+
     maximumEnergy: z.coerce.number().int().min(1).max(5),
+
     stimulationLevel: z.enum(["low", "moderate", "high"]),
+
     socialIntensity: z.enum(["solo", "light", "social"]),
+
     skillIds: uniqueIds(8, "skill", 1),
+
     interestIds: uniqueIds(8, "interest"),
   })
   .superRefine((value, context) => {
@@ -88,7 +110,9 @@ export const createOpportunitySchema = z
     }
   });
 
-export const opportunityIdSchema = z.object({ opportunityId: z.uuid() });
+export const opportunityIdSchema = z.object({
+  opportunityId: z.uuid(),
+});
 
 export const opportunityStatusSchema = z.object({
   opportunityId: z.uuid(),
@@ -102,11 +126,13 @@ export const saveOpportunitySchema = z.object({
 
 export const opportunityResponseSchema = z.object({
   opportunityId: z.uuid(),
+
   statement: z
     .string()
     .trim()
     .min(20, "Use at least 20 characters.")
     .max(2000, "Keep the response under 2,000 characters."),
+
   availability: z
     .string()
     .trim()
