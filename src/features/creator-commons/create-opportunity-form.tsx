@@ -1,17 +1,19 @@
 "use client";
 
 import { useActionState } from "react";
+
 import { ActionStatus } from "@/components/forms/action-status";
 import { SubmitButton } from "@/components/forms/submit-button";
 import { TextField } from "@/components/forms/text-field";
 import { firstFieldError, initialActionState } from "@/features/auth/state";
 import { cn } from "@/lib/cn";
 import type { Circle, Interest, Mode, Skill } from "@/types/database";
+
 import { createOpportunityAction } from "./actions";
 import { opportunityTimezones } from "./schemas";
 
 const controlClassName =
-  "min-h-12 w-full rounded-xl border border-neutral-700 bg-neutral-950 px-4 py-3 text-base text-white hover:border-neutral-500 focus:border-amber-400 focus:outline-none";
+  "min-h-12 w-full rounded-xl border border-[#992bff]/30 bg-black/70 px-4 py-3 text-base text-white transition-colors hover:border-[#992bff]/60 focus:border-[#f359d2] focus:ring-2 focus:ring-[#992bff]/30 focus:outline-none";
 
 function SelectField({
   label,
@@ -29,18 +31,24 @@ function SelectField({
   children: React.ReactNode;
 }) {
   const descriptionId = error ? `${name}-description` : undefined;
+
   return (
-    <div>
+    <div className="text-left">
       <label
-        className="mb-2 block text-sm font-bold text-neutral-100"
+        className="mb-2 block text-sm font-bold text-white/90"
         htmlFor={name}
       >
         {label}
       </label>
+
       <select
         aria-describedby={descriptionId}
         aria-invalid={error ? true : undefined}
-        className={cn(controlClassName, error && "border-red-500")}
+        className={cn(
+          controlClassName,
+          error &&
+            "border-[#ff6b9e] focus:border-[#ff6b9e] focus:ring-[#ff6b9e]/25",
+        )}
         defaultValue={defaultValue}
         id={name}
         name={name}
@@ -48,8 +56,9 @@ function SelectField({
       >
         {children}
       </select>
+
       {error ? (
-        <p className="mt-2 text-xs text-red-300" id={descriptionId}>
+        <p className="mt-2 text-xs text-[#ff9ab9]" id={descriptionId}>
           {error}
         </p>
       ) : null}
@@ -73,29 +82,37 @@ function TextAreaField({
   placeholder: string;
 }) {
   const descriptionId = error || hint ? `${name}-description` : undefined;
+
   return (
-    <div>
+    <div className="text-left">
       <label
-        className="mb-2 block text-sm font-bold text-neutral-100"
+        className="mb-2 block text-sm font-bold text-white/90"
         htmlFor={name}
       >
         {label}
       </label>
+
       <textarea
         aria-describedby={descriptionId}
         aria-invalid={error ? true : undefined}
-        className={cn(controlClassName, "min-h-36", error && "border-red-500")}
+        className={cn(
+          controlClassName,
+          "min-h-32 resize-y sm:min-h-36",
+          error &&
+            "border-[#ff6b9e] focus:border-[#ff6b9e] focus:ring-[#ff6b9e]/25",
+        )}
         id={name}
         maxLength={maxLength}
         name={name}
         placeholder={placeholder}
         required
       />
+
       {error || hint ? (
         <p
           className={cn(
-            "mt-2 text-xs leading-5 text-neutral-500",
-            error && "text-red-300",
+            "mt-2 text-xs leading-5 text-white/45",
+            error && "text-[#ff9ab9]",
           )}
           id={descriptionId}
         >
@@ -121,29 +138,34 @@ function TaxonomyChoices({
 }) {
   return (
     <fieldset aria-describedby={`${name}-description`}>
-      <legend className="text-xl font-bold text-white">{label}</legend>
+      <legend className="w-full text-center text-xl font-bold text-white lg:text-left">
+        {label}
+      </legend>
+
       <p
         className={cn(
-          "mt-2 text-sm leading-6 text-neutral-400",
-          error && "text-red-300",
+          "mx-auto mt-2 max-w-3xl text-center text-sm leading-6 text-white/50 lg:mx-0 lg:text-left",
+          error && "text-[#ff9ab9]",
         )}
         id={`${name}-description`}
       >
         {error ?? hint}
       </p>
-      <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+
+      <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((item) => (
           <label
-            className="flex min-h-12 cursor-pointer items-center gap-3 rounded-xl border border-neutral-700 bg-neutral-950 px-4 py-3 text-sm text-neutral-200 hover:border-neutral-500 has-checked:border-amber-600 has-checked:bg-amber-950/30"
+            className="flex min-h-12 cursor-pointer items-center gap-3 rounded-xl border border-[#992bff]/25 bg-black/60 px-4 py-3 text-left text-sm text-white/75 transition-colors hover:border-[#992bff]/55 has-checked:border-[#f359d2]/70 has-checked:bg-[#992bff]/15 has-checked:text-white"
             key={item.id}
           >
             <input
-              className="size-5 accent-amber-600"
+              className="size-5 shrink-0 accent-[#f359d2]"
               name={name}
               type="checkbox"
               value={item.id}
             />
-            {item.name}
+
+            <span>{item.name}</span>
           </label>
         ))}
       </div>
@@ -171,19 +193,21 @@ export function CreateOpportunityForm({
     <form
       action={action}
       aria-label="Create a Creator Commons opportunity"
-      className="space-y-9"
+      className="space-y-10 text-left"
     >
       <ActionStatus state={state} />
 
       <fieldset>
-        <legend className="text-xl font-bold text-white">
-          Opportunity brief
+        <legend className="w-full text-center text-xl font-bold text-white lg:text-left">
+          Opportunity Brief
         </legend>
-        <p className="mt-2 text-sm leading-6 text-neutral-400">
-          State the work, boundaries, expected outcome, and creator clearly.
-          Every new opportunity remains a private draft.
+
+        <p className="mx-auto mt-2 max-w-3xl text-center text-sm leading-6 text-white/50 lg:mx-0 lg:text-left">
+          Explain what you want to create, who you want to work with, and what a
+          successful collaboration will produce.
         </p>
-        <div className="mt-5 grid gap-5 sm:grid-cols-2">
+
+        <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           <TextField
             error={firstFieldError(state, "title")}
             label="Title"
@@ -192,10 +216,11 @@ export function CreateOpportunityForm({
             placeholder="Produce a launch interview series"
             required
           />
+
           <SelectField
             defaultValue="collaboration"
             error={firstFieldError(state, "kind")}
-            label="Opportunity type"
+            label="Opportunity Type"
             name="kind"
           >
             <option value="collaboration">Collaboration</option>
@@ -203,86 +228,106 @@ export function CreateOpportunityForm({
             <option value="volunteer">Volunteer</option>
             <option value="mentorship">Mentorship</option>
           </SelectField>
+
+          <SelectField
+            error={firstFieldError(state, "compensation")}
+            label="Compensation"
+            name="compensation"
+          >
+            <option value="">Choose Paid or Unpaid</option>
+            <option value="paid">Paid opportunity</option>
+            <option value="unpaid">Unpaid / community collaboration</option>
+          </SelectField>
         </div>
+
         <div className="mt-5">
           <TextAreaField
             error={firstFieldError(state, "summary")}
-            hint="10–280 characters. This appears on discovery cards."
-            label="Short summary"
+            hint="10–280 characters. This will appear on discovery cards."
+            label="Short Summary"
             maxLength={280}
             name="summary"
             placeholder="Explain the opportunity, who it serves, and why it matters."
           />
         </div>
+
         <div className="mt-5 grid gap-5 lg:grid-cols-2">
           <TextAreaField
             error={firstFieldError(state, "description")}
-            label="Full description"
+            label="Full Description"
             maxLength={5000}
             name="description"
             placeholder="Describe the scope, workflow, intended audience, and working expectations."
           />
+
           <TextAreaField
             error={firstFieldError(state, "deliverables")}
-            hint="Describe outputs without presenting a contract or payment promise."
-            label="Expected deliverables"
+            hint="Describe the expected results without presenting a contract or payment promise."
+            label="Expected Deliverables"
             maxLength={3000}
             name="deliverables"
-            placeholder="List the bounded outputs and what completion means."
+            placeholder="List the expected outputs and explain what completion means."
           />
         </div>
       </fieldset>
 
       <fieldset>
-        <legend className="text-xl font-bold text-white">
-          Access and commitment
+        <legend className="w-full text-center text-xl font-bold text-white lg:text-left">
+          Access And Commitment
         </legend>
-        <p className="mt-2 text-sm leading-6 text-neutral-400">
-          Use only a broad access label. Private links, precise addresses,
-          compensation, and contract terms are not stored in Phase 6.
+
+        <p className="mx-auto mt-2 max-w-3xl text-center text-sm leading-6 text-white/50 lg:mx-0 lg:text-left">
+          Tell people how they will participate, how much time they should
+          expect to contribute, and when responses close.
         </p>
-        <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+
+        <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           <SelectField
             error={firstFieldError(state, "circleId")}
-            label="Circle association"
+            label="Circle Association"
             name="circleId"
             required={false}
           >
-            <option value="">No Circle association</option>
+            <option value="">No Circle Association</option>
+
             {circles.map((circle) => (
               <option key={circle.id} value={circle.id}>
                 {circle.name}
               </option>
             ))}
           </SelectField>
+
           <SelectField
             error={firstFieldError(state, "format")}
             label="Format"
             name="format"
           >
-            <option value="">Choose a format</option>
-            <option value="in_person">In person</option>
+            <option value="">Choose A Format</option>
+            <option value="in_person">In Person</option>
             <option value="online">Online</option>
             <option value="either">Hybrid</option>
           </SelectField>
+
           <TextField
             error={firstFieldError(state, "locationLabel")}
             hint="Optional broad area or access label."
-            label="Area or access label"
+            label="Area Or Access Label"
             maxLength={120}
             name="locationLabel"
           />
+
           <TextField
             error={firstFieldError(state, "responseDeadlineLocal")}
-            label="Response deadline"
+            label="Response Deadline"
             name="responseDeadlineLocal"
             required
             type="datetime-local"
           />
+
           <SelectField
             defaultValue="America/New_York"
             error={firstFieldError(state, "timezone")}
-            label="Deadline timezone"
+            label="Deadline Timezone"
             name="timezone"
           >
             {opportunityTimezones.map((timezone) => (
@@ -291,19 +336,21 @@ export function CreateOpportunityForm({
               </option>
             ))}
           </SelectField>
+
           <TextField
             error={firstFieldError(state, "estimatedMinutes")}
-            hint="15–1,440 minutes used only for explainable Pulse matching."
-            label="Estimated commitment (minutes)"
+            hint="Enter between 15 and 1,440 minutes."
+            label="Estimated Commitment In Minutes"
             max={1440}
             min={15}
             name="estimatedMinutes"
             required
             type="number"
           />
+
           <TextField
             error={firstFieldError(state, "positions")}
-            label="Available positions"
+            label="Available Positions"
             max={25}
             min={1}
             name="positions"
@@ -314,28 +361,34 @@ export function CreateOpportunityForm({
       </fieldset>
 
       <fieldset>
-        <legend className="text-xl font-bold text-white">Pulse fit</legend>
-        <p className="mt-2 text-sm leading-6 text-neutral-400">
-          These bounded signals explain fit; they do not profile health or
-          guarantee selection.
+        <legend className="w-full text-center text-xl font-bold text-white lg:text-left">
+          Pulse Fit
+        </legend>
+
+        <p className="mx-auto mt-2 max-w-3xl text-center text-sm leading-6 text-white/50 lg:mx-0 lg:text-left">
+          Help Signal connect your opportunity with people whose current energy,
+          interests, and preferred way of participating align with the work.
         </p>
-        <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+
+        <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           <SelectField
             error={firstFieldError(state, "modeId")}
-            label="Primary mode"
+            label="Primary Mode"
             name="modeId"
           >
-            <option value="">Choose a mode</option>
+            <option value="">Choose A Mode</option>
+
             {modes.map((mode) => (
               <option key={mode.id} value={mode.id}>
                 {mode.name}
               </option>
             ))}
           </SelectField>
+
           <SelectField
             defaultValue="1"
             error={firstFieldError(state, "minimumEnergy")}
-            label="Minimum energy"
+            label="Minimum Energy"
             name="minimumEnergy"
           >
             {[1, 2, 3, 4, 5].map((value) => (
@@ -344,10 +397,11 @@ export function CreateOpportunityForm({
               </option>
             ))}
           </SelectField>
+
           <SelectField
             defaultValue="5"
             error={firstFieldError(state, "maximumEnergy")}
-            label="Maximum energy"
+            label="Maximum Energy"
             name="maximumEnergy"
           >
             {[1, 2, 3, 4, 5].map((value) => (
@@ -356,24 +410,26 @@ export function CreateOpportunityForm({
               </option>
             ))}
           </SelectField>
+
           <SelectField
             error={firstFieldError(state, "stimulationLevel")}
             label="Stimulation"
             name="stimulationLevel"
           >
-            <option value="">Choose a level</option>
+            <option value="">Choose A Level</option>
             <option value="low">Low</option>
             <option value="moderate">Moderate</option>
             <option value="high">High</option>
           </SelectField>
+
           <SelectField
             error={firstFieldError(state, "socialIntensity")}
-            label="Social pace"
+            label="Social Pace"
             name="socialIntensity"
           >
-            <option value="">Choose a pace</option>
-            <option value="solo">Solo-friendly</option>
-            <option value="light">Light interaction</option>
+            <option value="">Choose A Pace</option>
+            <option value="solo">Solo-Friendly</option>
+            <option value="light">Light Interaction</option>
             <option value="social">Social</option>
           </SelectField>
         </div>
@@ -383,9 +439,10 @@ export function CreateOpportunityForm({
         error={firstFieldError(state, "skillIds")}
         hint="Required. Choose one to eight active skills relevant to the work."
         items={skills}
-        label="Relevant skills"
+        label="Relevant Skills"
         name="skillIds"
       />
+
       <TaxonomyChoices
         error={firstFieldError(state, "interestIds")}
         hint="Optional. Choose up to eight interests for discovery and Pulse matching."
@@ -394,12 +451,14 @@ export function CreateOpportunityForm({
         name="interestIds"
       />
 
-      <div className="rounded-2xl border border-neutral-800 bg-neutral-950 p-5 text-sm leading-6 text-neutral-400">
-        Creating a draft does not publish it, accept a response, create a
-        contract, promise payment, or issue Passport activity.
+      <div className="rounded-2xl border border-[#992bff]/25 bg-[#992bff]/[0.06] p-5 text-center text-sm leading-6 text-white/55 lg:text-left">
+        Creating a draft does not publish the opportunity automatically. You
+        will be able to review everything before making it visible to the
+        community.
       </div>
+
       <SubmitButton pendingLabel="Creating draft…">
-        Create draft opportunity
+        Create Draft Opportunity
       </SubmitButton>
     </form>
   );
