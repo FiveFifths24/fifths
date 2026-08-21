@@ -30,9 +30,11 @@ describe("CreateOpportunityForm", () => {
     );
     expect(
       screen.getByRole("button", {
-  name: /create draft opportunity/i,
-}),
+        name: /create draft opportunity/i,
+      }),
     ).toBeInTheDocument();
-    expect(screen.getByText(/does not publish the opportunity automatically/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/does not publish the opportunity automatically/i),
+    ).toBeInTheDocument();
   });
 });

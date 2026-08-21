@@ -43,9 +43,7 @@ export function PulseLivingBackground() {
       return;
     }
 
-    const reducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    );
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
     let width = window.innerWidth;
     let height = window.innerHeight;
@@ -124,8 +122,7 @@ export function PulseLivingBackground() {
 
         const secondaryFlicker =
           (Math.sin(
-            time * star.flickerSpeed * 2.37 +
-              star.flickerPhase * 1.73,
+            time * star.flickerSpeed * 2.37 + star.flickerPhase * 1.73,
           ) +
             1) /
           2;
@@ -208,10 +205,7 @@ export function PulseLivingBackground() {
       cancelAnimationFrame(animationFrame);
 
       window.removeEventListener("resize", resizeCanvas);
-      document.removeEventListener(
-        "visibilitychange",
-        handleVisibility,
-      );
+      document.removeEventListener("visibilitychange", handleVisibility);
     };
   }, []);
 

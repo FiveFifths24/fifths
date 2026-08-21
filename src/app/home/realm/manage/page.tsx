@@ -75,9 +75,7 @@ export default async function ManageRealmPage({
   const isAdmin = roles.includes("platform_admin");
   const authorized = true;
 
-  const circleIds = (membershipResult.data ?? []).map(
-    (item) => item.circle_id,
-  );
+  const circleIds = (membershipResult.data ?? []).map((item) => item.circle_id);
 
   const circleResult =
     authorized && circleIds.length
@@ -145,9 +143,9 @@ export default async function ManageRealmPage({
     linksResult.data ?? [],
   );
 
-  const pendingApplications = (
-    applicationsResult.data ?? []
-  ).filter((application) => application.status === "submitted");
+  const pendingApplications = (applicationsResult.data ?? []).filter(
+    (application) => application.status === "submitted",
+  );
 
   const pendingByCampaign = new Map<string, number>();
 
@@ -158,22 +156,14 @@ export default async function ManageRealmPage({
     );
   }
 
-  const drafts = cards.filter(
-    (card) => card.status === "draft",
-  );
+  const drafts = cards.filter((card) => card.status === "draft");
 
-  const recruiting = cards.filter(
-    (card) => card.status === "recruiting",
-  );
+  const recruiting = cards.filter((card) => card.status === "recruiting");
 
-  const active = cards.filter(
-    (card) => card.status === "active",
-  );
+  const active = cards.filter((card) => card.status === "active");
 
   const history = cards.filter(
-    (card) =>
-      card.status === "completed" ||
-      card.status === "cancelled",
+    (card) => card.status === "completed" || card.status === "cancelled",
   );
 
   const campaignsNeedingReview = cards.filter(
@@ -219,10 +209,7 @@ export default async function ManageRealmPage({
           >
             <span className="flex items-center gap-2">
               {showCreateForm ? (
-                <FolderOpen
-                  aria-hidden="true"
-                  className="size-4"
-                />
+                <FolderOpen aria-hidden="true" className="size-4" />
               ) : (
                 <Plus aria-hidden="true" className="size-4" />
               )}
@@ -283,9 +270,7 @@ export default async function ManageRealmPage({
             className="mt-10 grid grid-cols-2 gap-3 lg:grid-cols-4"
           >
             <div className="rounded-2xl border border-[#22d3ee]/15 bg-[#22d3ee]/[0.035] p-5 text-center lg:text-left">
-              <p className="text-3xl font-black text-white">
-                {cards.length}
-              </p>
+              <p className="text-3xl font-black text-white">{cards.length}</p>
 
               <p className="mt-1 text-xs font-bold tracking-wide text-[#22d3ee]/65 uppercase">
                 Total Campaigns
@@ -303,9 +288,7 @@ export default async function ManageRealmPage({
             </div>
 
             <div className="rounded-2xl border border-[#22d3ee]/15 bg-[#22d3ee]/[0.035] p-5 text-center lg:text-left">
-              <p className="text-3xl font-black text-white">
-                {active.length}
-              </p>
+              <p className="text-3xl font-black text-white">{active.length}</p>
 
               <p className="mt-1 text-xs font-bold tracking-wide text-[#22d3ee]/65 uppercase">
                 Active Worlds
@@ -330,10 +313,7 @@ export default async function ManageRealmPage({
             >
               <div className="flex flex-col items-center gap-3 text-center lg:flex-row lg:text-left">
                 <div className="flex size-10 items-center justify-center rounded-full border border-[#22d3ee]/25 bg-[#22d3ee]/[0.07]">
-                  <Users
-                    aria-hidden="true"
-                    className="size-5 text-[#22d3ee]"
-                  />
+                  <Users aria-hidden="true" className="size-5 text-[#22d3ee]" />
                 </div>
 
                 <div>
@@ -352,8 +332,7 @@ export default async function ManageRealmPage({
 
               <div className="mt-6 grid gap-3 lg:grid-cols-2">
                 {campaignsNeedingReview.map((campaign) => {
-                  const pendingCount =
-                    pendingByCampaign.get(campaign.id) ?? 0;
+                  const pendingCount = pendingByCampaign.get(campaign.id) ?? 0;
 
                   return (
                     <div
@@ -367,9 +346,7 @@ export default async function ManageRealmPage({
 
                         <p className="mt-1 text-sm text-white/45">
                           {pendingCount}{" "}
-                          {pendingCount === 1
-                            ? "application"
-                            : "applications"}{" "}
+                          {pendingCount === 1 ? "application" : "applications"}{" "}
                           waiting
                         </p>
                       </div>
@@ -396,10 +373,7 @@ export default async function ManageRealmPage({
       >
         <div className="flex flex-col items-center gap-4 text-center lg:flex-row lg:items-start lg:text-left">
           <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-[#22d3ee]/25 bg-[#22d3ee]/[0.05]">
-            <ShieldCheck
-              aria-hidden="true"
-              className="size-5 text-[#22d3ee]"
-            />
+            <ShieldCheck aria-hidden="true" className="size-5 text-[#22d3ee]" />
           </div>
 
           <div>
@@ -436,10 +410,7 @@ export default async function ManageRealmPage({
 
                 <div className="mt-6 grid gap-6 lg:grid-cols-2">
                   {drafts.map((campaign) => (
-                    <div
-                      className="flex flex-col gap-3"
-                      key={campaign.id}
-                    >
+                    <div className="flex flex-col gap-3" key={campaign.id}>
                       <CampaignCard item={campaign} />
 
                       <ButtonLink
@@ -472,10 +443,7 @@ export default async function ManageRealmPage({
 
                 <div className="mt-6 grid gap-6 lg:grid-cols-2">
                   {recruiting.map((campaign) => (
-                    <div
-                      className="flex flex-col gap-3"
-                      key={campaign.id}
-                    >
+                    <div className="flex flex-col gap-3" key={campaign.id}>
                       <CampaignCard item={campaign} />
 
                       <ButtonLink
@@ -508,10 +476,7 @@ export default async function ManageRealmPage({
 
                 <div className="mt-6 grid gap-6 lg:grid-cols-2">
                   {active.map((campaign) => (
-                    <div
-                      className="flex flex-col gap-3"
-                      key={campaign.id}
-                    >
+                    <div className="flex flex-col gap-3" key={campaign.id}>
                       <CampaignCard item={campaign} />
 
                       <ButtonLink
@@ -544,10 +509,7 @@ export default async function ManageRealmPage({
 
                 <div className="mt-6 grid gap-6 lg:grid-cols-2">
                   {history.map((campaign) => (
-                    <div
-                      className="flex flex-col gap-3"
-                      key={campaign.id}
-                    >
+                    <div className="flex flex-col gap-3" key={campaign.id}>
                       <CampaignCard item={campaign} />
 
                       <ButtonLink

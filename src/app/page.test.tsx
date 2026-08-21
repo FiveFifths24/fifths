@@ -23,27 +23,27 @@ describe("landing page", () => {
       screen.getAllByRole("link", { name: "Join SIGNAL" })[0],
     ).toHaveAttribute("href", "/signup");
 
-screen.getByRole("navigation", {
-  name: /quick access to signal features/i,
-})
+    screen.getByRole("navigation", {
+      name: /quick access to signal features/i,
+    });
 
-const featureNavigation = screen.getByRole("navigation", {
-  name: /quick access to signal features/i,
-});
+    const featureNavigation = screen.getByRole("navigation", {
+      name: /quick access to signal features/i,
+    });
 
-for (const moduleName of [
-  "Pulse",
-  "Sessions",
-  "Circles",
-  "Creator Commons",
-  "Fifth Realm",
-  "Passport",
-]) {
-  expect(
-    within(featureNavigation).getByRole("link", {
-      name: moduleName,
-    }),
-  ).toBeInTheDocument();
-}
+    for (const moduleName of [
+      "Pulse",
+      "Sessions",
+      "Circles",
+      "Creator Commons",
+      "Fifth Realm",
+      "Passport",
+    ]) {
+      expect(
+        within(featureNavigation).getByRole("link", {
+          name: moduleName,
+        }),
+      ).toBeInTheDocument();
+    }
   });
 });

@@ -23,28 +23,32 @@ const signalJourney = [
   {
     number: "01",
     title: "Check your Pulse",
-    description: "Tell SIGNAL what your energy, time, and capacity look like right now.",
+    description:
+      "Tell SIGNAL what your energy, time, and capacity look like right now.",
     color: "#1800ad",
     icon: Activity,
   },
   {
     number: "02",
     title: "See what fits",
-    description: "Discover people, plans, and experiences aligned with the way you want to participate.",
+    description:
+      "Discover people, plans, and experiences aligned with the way you want to participate.",
     color: "#6c14ce",
     icon: RadioTower,
   },
   {
     number: "03",
     title: "Participate your way",
-    description: "Join online, meet in person, create with others, or explore independently.",
+    description:
+      "Join online, meet in person, create with others, or explore independently.",
     color: "#f359d2",
     icon: UsersRound,
   },
   {
     number: "04",
     title: "Build your Passport",
-    description: "Carry your verified participation, access, and benefits forward as you grow.",
+    description:
+      "Carry your verified participation, access, and benefits forward as you grow.",
     color: "#7cff00",
     icon: Globe2,
   },
@@ -55,43 +59,52 @@ const features = [
     number: "01",
     name: "Sessions",
     eyebrow: "Find something worth doing",
-    description: "Discover curated events, workshops, game nights, gatherings, and experiences that fit your current Pulse.",
+    description:
+      "Discover curated events, workshops, game nights, gatherings, and experiences that fit your current Pulse.",
     href: "/home/sessions",
     color: "#f359d2",
     icon: CalendarDays,
-layout: "lg:col-span-7 lg:min-h-[15rem]",  },
+    layout: "lg:col-span-7 lg:min-h-[15rem]",
+  },
   {
     number: "02",
     name: "Circles",
     eyebrow: "Find people to return to",
-    description: "Connect in smaller communities built around shared interests, identities, goals, and energy.",
+    description:
+      "Connect in smaller communities built around shared interests, identities, goals, and energy.",
     href: "/home/circles",
     color: "#6c14ce",
     icon: UsersRound,
-layout: "lg:col-span-5 lg:min-h-[15rem]",  },
+    layout: "lg:col-span-5 lg:min-h-[15rem]",
+  },
   {
     number: "03",
     name: "Creator Commons",
     eyebrow: "Make something together",
-    description: "Find collaborators, opportunities, resources, and creative spaces where ideas can become real work.",
+    description:
+      "Find collaborators, opportunities, resources, and creative spaces where ideas can become real work.",
     href: "/home/commons",
     color: "#a855f7",
     icon: PenLine,
-layout: "lg:col-span-5 lg:min-h-[15rem]",  },
+    layout: "lg:col-span-5 lg:min-h-[15rem]",
+  },
   {
     number: "04",
     name: "Fifth Realm",
     eyebrow: "Enter a shared world",
-    description: "Step into campaigns and immersive experiences shaped by story, culture, play, and collective imagination.",
+    description:
+      "Step into campaigns and immersive experiences shaped by story, culture, play, and collective imagination.",
     href: "/home/realm",
     color: "#22d3ee",
     icon: Gamepad2,
-layout: "lg:col-span-7 lg:min-h-[15rem]",  },
+    layout: "lg:col-span-7 lg:min-h-[15rem]",
+  },
   {
     number: "05",
     name: "Passport",
     eyebrow: "Carry your participation forward",
-    description: "Keep one private, trusted record of the Sessions, opportunities, campaigns, and contributions you complete across SIGNAL.",
+    description:
+      "Keep one private, trusted record of the Sessions, opportunities, campaigns, and contributions you complete across SIGNAL.",
     href: "/home/passport",
     color: "#7cff00",
     icon: Globe2,
@@ -102,19 +115,22 @@ layout: "lg:col-span-7 lg:min-h-[15rem]",  },
 const principles = [
   {
     title: "Your capacity matters",
-    description: "SIGNAL considers your energy, time, format, and social intensity—not only your interests.",
+    description:
+      "SIGNAL considers your energy, time, format, and social intensity—not only your interests.",
     icon: Activity,
     color: "#6c14ce",
   },
   {
     title: "You control how you participate",
-    description: "Show up online, in person, with a group, or independently. Your preferences lead the experience.",
+    description:
+      "Show up online, in person, with a group, or independently. Your preferences lead the experience.",
     icon: SlidersHorizontal,
     color: "#f359d2",
   },
   {
     title: "Your information remains yours",
-    description: "Private responses and verified participation replace popularity scores and public performance.",
+    description:
+      "Private responses and verified participation replace popularity scores and public performance.",
     icon: LockKeyhole,
     color: "#7cff00",
   },
@@ -151,7 +167,8 @@ export default function HomePage() {
               </h2>
 
               <p className="mx-auto mt-6 max-w-2xl text-sm leading-7 text-white/60 sm:text-base">
-                SIGNAL turns what you have capacity for right now into clearer ways to connect, create, and participate.
+                SIGNAL turns what you have capacity for right now into clearer
+                ways to connect, create, and participate.
               </p>
             </div>
 
@@ -167,7 +184,7 @@ export default function HomePage() {
 
                   return (
                     <article
-                      className="group relative flex min-h-48 flex-col rounded-[1.4rem] border border-white/10 bg-[#07070b]/95 p-6 lg:min-h-64 lg:rounded-none lg:border-y-0 lg:border-l-0 lg:border-r lg:last:border-r-0"
+                      className="group relative flex min-h-48 flex-col rounded-[1.4rem] border border-white/10 bg-[#07070b]/95 p-6 lg:min-h-64 lg:rounded-none lg:border-y-0 lg:border-r lg:border-l-0 lg:last:border-r-0"
                       key={step.title}
                     >
                       <div className="flex items-center justify-between">
@@ -223,7 +240,8 @@ export default function HomePage() {
               </div>
 
               <p className="max-w-md text-sm leading-7 text-white/55 sm:text-base">
-                Each feature serves a different kind of participation. Together, they create one connected community experience.
+                Each feature serves a different kind of participation. Together,
+                they create one connected community experience.
               </p>
             </div>
 
@@ -304,7 +322,8 @@ export default function HomePage() {
                   </h2>
 
                   <p className="mt-7 max-w-lg text-sm leading-7 text-white/55 sm:text-base">
-                    SIGNAL is designed to help people find meaningful ways to participate—not compete for attention.
+                    SIGNAL is designed to help people find meaningful ways to
+                    participate—not compete for attention.
                   </p>
                 </div>
 
@@ -365,7 +384,9 @@ export default function HomePage() {
                     Digital connection gets a physical home.
                   </h2>
                   <p className="mt-4 max-w-2xl text-sm leading-7 text-white/65 sm:text-base">
-                    SIGNAL will connect members to eHub bookings, events, programs, memberships, and real-world ways to meet, work, create, and play.
+                    SIGNAL will connect members to eHub bookings, events,
+                    programs, memberships, and real-world ways to meet, work,
+                    create, and play.
                   </p>
                 </div>
 
@@ -402,7 +423,8 @@ export default function HomePage() {
             </h2>
 
             <p className="mx-auto mt-7 max-w-xl text-sm leading-7 text-white/60 sm:text-base">
-              Your energy is already sending a signal. Let it lead you somewhere worth going.
+              Your energy is already sending a signal. Let it lead you somewhere
+              worth going.
             </p>
 
             <Link

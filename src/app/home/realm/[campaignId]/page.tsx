@@ -201,12 +201,12 @@ export default async function CampaignDetailPage({
 
             {isManager ? (
               <div className="shrink-0">
-<ButtonLink
-  className="mx-auto mt-5 flex w-fit border-[#22d3ee]/35 bg-[#22d3ee]/[0.06] text-[#cffafe] shadow-[0_0_22px_rgba(34,211,238,0.05)] hover:border-[#22d3ee]/70 hover:bg-[#22d3ee]/10 hover:text-white lg:mx-0"
-  href={`/home/realm/manage/${campaign.id}`}
-  variant="secondary"
->
-                    Manage Campaign
+                <ButtonLink
+                  className="mx-auto mt-5 flex w-fit border-[#22d3ee]/35 bg-[#22d3ee]/[0.06] text-[#cffafe] shadow-[0_0_22px_rgba(34,211,238,0.05)] hover:border-[#22d3ee]/70 hover:bg-[#22d3ee]/10 hover:text-white lg:mx-0"
+                  href={`/home/realm/manage/${campaign.id}`}
+                  variant="secondary"
+                >
+                  Manage Campaign
                 </ButtonLink>
               </div>
             ) : null}
