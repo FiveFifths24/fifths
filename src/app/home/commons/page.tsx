@@ -216,8 +216,8 @@ export default async function CreatorCommonsPage() {
           PAGE INTRO
       ====================================================== */}
       <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-12">
-        <div className="max-w-4xl">
-          <p className="flex items-center gap-2 text-xs font-bold tracking-[0.2em] text-white uppercase">
+        <div className="mx-auto max-w-4xl text-center lg:mx-0 lg:text-left">
+          <p className="flex items-center justify-center gap-2 text-xs font-bold tracking-[0.2em] text-white uppercase lg:justify-start">
             <FilePenLine aria-hidden="true" className="size-4" />
             Creator Commons
           </p>
@@ -226,7 +226,7 @@ export default async function CreatorCommonsPage() {
             Make Something With Someone.
           </h1>
 
-          <p className="mt-5 max-w-3xl text-lg leading-8 text-neutral-300">
+          <p className="mx-auto mt-5 max-w-3xl text-lg leading-8 text-neutral-300 lg:mx-0">
             Creator Commons is where ideas become collaborations. Find projects,
             creative opportunities, professional partnerships, and people
             looking for the skills you bring — or create an opportunity of your
@@ -285,16 +285,16 @@ export default async function CreatorCommonsPage() {
           PRIVACY NOTE
       ====================================================== */}
       <StatusMessage className="mt-8">
-        Responses are private to you and authorized opportunity managers.
-        Creator Commons currently keeps payments, contracts, file exchange, and
-        direct messaging outside the platform.
+        Connect with confidence. Your responses stay private between you and the
+        opportunity host. If you decide to work together, you’ll coordinate
+        payments, agreements, files, and conversations directly with them.
       </StatusMessage>
 
       {/* =====================================================
           OPPORTUNITIES
       ====================================================== */}
       <section aria-labelledby="opportunity-discovery" className="mt-10">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center justify-center gap-3 lg:justify-start">
           <BriefcaseBusiness aria-hidden="true" className="size-5 text-white" />
 
           <h2
@@ -307,7 +307,7 @@ export default async function CreatorCommonsPage() {
           </h2>
         </div>
 
-        <p className="mt-3 max-w-3xl text-sm leading-6 text-white/45">
+        <p className="mx-auto mt-3 max-w-3xl text-center text-sm leading-6 text-white/45 lg:mx-0 lg:text-left">
           {pulseInput
             ? "Your current Pulse helps bring relevant opportunities closer to the top. You still decide what is worth pursuing."
             : "Check your Pulse to help order opportunities around your current capacity, interests, and preferred way of working."}

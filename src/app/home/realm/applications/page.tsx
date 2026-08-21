@@ -94,7 +94,7 @@ export default async function RealmApplicationsPage({
       ====================================================== */}
 
       <ButtonLink
-        className="text-[#22d3ee]/75 hover:text-[#a5f3fc]"
+        className="mx-auto flex w-fit text-[#22d3ee]/75 hover:text-[#a5f3fc] lg:mx-0"
         href="/home/realm"
         variant="quiet"
       >
@@ -105,10 +105,10 @@ export default async function RealmApplicationsPage({
           HERO
       ====================================================== */}
 
-      <header className="mt-10 border-b border-[#22d3ee]/12 pb-10">
+      <header className="mt-10 border-b border-[#22d3ee]/12 pb-10 text-center lg:text-left">
         <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
           <div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center justify-center gap-3 lg:justify-start">
               <div className="flex size-9 items-center justify-center rounded-full border border-[#22d3ee]/25 bg-[#22d3ee]/[0.07]">
                 <ClipboardList
                   aria-hidden="true"
@@ -167,7 +167,7 @@ export default async function RealmApplicationsPage({
       ====================================================== */}
 
       <section className="mt-10" aria-labelledby="active-campaigns-heading">
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col items-center gap-4 text-center lg:flex-row lg:text-left">
           <div className="flex size-11 items-center justify-center rounded-full border border-[#22d3ee]/25 bg-[#22d3ee]/[0.07]">
             <Users aria-hidden="true" className="size-5 text-[#22d3ee]" />
           </div>
@@ -201,9 +201,9 @@ export default async function RealmApplicationsPage({
                   className="rounded-[2rem] border border-[#22d3ee]/20 bg-[linear-gradient(145deg,rgba(34,211,238,0.04),rgba(0,0,0,0.3))] p-6 shadow-[0_0_40px_rgba(34,211,238,0.025)] sm:p-7"
                   key={membership.campaign_id}
                 >
-                  <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex flex-col items-center gap-6 text-center lg:flex-row lg:justify-between lg:text-left">
                     <div>
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap justify-center gap-3 lg:justify-start">
                         <Badge className={`${realmBadge} capitalize`}>
                           {membership.role.replaceAll("_", " ")}
                         </Badge>
@@ -218,7 +218,7 @@ export default async function RealmApplicationsPage({
                       </h3>
 
                       <p className="mt-2 text-sm text-white/40">
-                        Game master {campaign.game_master_display_name}
+                        Game Master {campaign.game_master_display_name}
                       </p>
                     </div>
 
@@ -272,12 +272,12 @@ export default async function RealmApplicationsPage({
         aria-labelledby="application-history-heading"
       >
         <div>
-          <p className="font-mono text-[0.62rem] font-bold tracking-[0.18em] text-[#22d3ee]/65 uppercase">
+          <p className="text-center font-mono text-[0.62rem] font-bold tracking-[0.18em] text-[#22d3ee]/65 uppercase">
             Recruitment Trail
           </p>
 
           <h2
-            className="mt-1 text-2xl font-bold text-white sm:text-3xl"
+            className="mt-1 text-center text-2xl font-bold text-white sm:text-3xl"
             id="application-history-heading"
           >
             Application History
@@ -299,7 +299,7 @@ export default async function RealmApplicationsPage({
                   className="rounded-[2rem] border border-[#22d3ee]/15 bg-[linear-gradient(145deg,rgba(34,211,238,0.025),rgba(0,0,0,0.28))] p-6 sm:p-7"
                   key={application.campaign_id}
                 >
-                  <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
+                  <div className="flex flex-col items-center gap-6 text-center lg:flex-row lg:items-start lg:justify-between lg:text-left">
                     <div>
                       <Badge className={`${realmBadge} capitalize`}>
                         {application.status}
@@ -319,7 +319,7 @@ export default async function RealmApplicationsPage({
                       </p>
                     </div>
 
-                    <div className="flex flex-wrap gap-3">
+                    <div className="flex flex-wrap justify-center gap-3 lg:justify-start">
                       <ButtonLink
                         className={realmButton}
                         href={`/home/realm/${campaign.id}`}
@@ -352,7 +352,7 @@ export default async function RealmApplicationsPage({
           </div>
         ) : (
           <div className="mt-7">
-            <PreviewState title="No applications">
+            <PreviewState title="No Applications">
               Campaigns you apply to will appear here.
             </PreviewState>
           </div>
