@@ -15,6 +15,7 @@ const opportunity: CreatorOpportunity = {
   description: "A complete and intentionally bounded creator collaboration.",
   deliverables: "Three captioned interviews and one production handoff guide.",
   kind: "collaboration",
+  is_paid: true,
   status: "published",
   close_reason: null,
   format: "online",

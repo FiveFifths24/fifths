@@ -120,7 +120,7 @@ export default async function SavedOpportunitiesPage() {
           BACK LINK
       ====================================================== */}
       <ButtonLink
-        className="text-white/60 hover:text-white"
+        className="mx-auto flex w-fit text-white/60 hover:text-white lg:mx-0"
         href="/home/commons"
         variant="quiet"
       >
@@ -132,8 +132,8 @@ export default async function SavedOpportunitiesPage() {
           PAGE INTRO
       ====================================================== */}
       <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_0.7fr] lg:items-end lg:gap-16">
-        <div className="max-w-4xl">
-          <p className="flex items-center gap-2 text-xs font-bold tracking-[0.2em] text-white uppercase">
+        <div className="mx-auto max-w-4xl text-center lg:mx-0 lg:text-left">
+          <p className="flex items-center justify-center gap-2 text-xs font-bold tracking-[0.2em] text-white uppercase lg:justify-start">
             <Bookmark aria-hidden="true" className="size-4" />
             Private Collection
           </p>
@@ -143,7 +143,7 @@ export default async function SavedOpportunitiesPage() {
           </h1>
         </div>
 
-        <p className="max-w-xl text-base leading-8 text-white/55 sm:text-lg">
+        <p className="mx-auto max-w-xl text-center text-base leading-8 text-white/55 sm:text-lg lg:mx-0 lg:text-left">
           Save opportunities that catch your attention and return to them when
           the timing feels right. Your saved list stays private, and saving
           something does not submit a response or reserve a spot.
@@ -157,12 +157,12 @@ export default async function SavedOpportunitiesPage() {
         aria-labelledby="saved-opportunities-heading"
         className="mt-10 border-t border-white/10 pt-10"
       >
-        <div className="flex items-start gap-4">
+        <div className="flex flex-col items-center gap-4 text-center lg:flex-row lg:items-start lg:text-left">
           <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-white/15 bg-white/[0.035]">
             <FileText aria-hidden="true" className="size-5 text-white" />
           </div>
 
-          <div>
+          <div className="flex flex-col items-center lg:items-start">
             <h2
               className="text-2xl font-bold text-white"
               id="saved-opportunities-heading"

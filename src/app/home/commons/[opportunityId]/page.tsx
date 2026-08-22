@@ -3,10 +3,13 @@ import { notFound } from "next/navigation";
 import {
   Bookmark,
   CheckCircle2,
+  CircleDollarSign,
   Clock3,
+  HeartHandshake,
   ShieldCheck,
   Users,
 } from "lucide-react";
+
 import { AccountUnavailable } from "@/components/account/account-unavailable";
 import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button-link";
@@ -24,11 +27,14 @@ import {
 import { OpportunityResponseForm } from "@/features/creator-commons/opportunity-response-form";
 import { createClient } from "@/lib/supabase/server";
 
-export const metadata: Metadata = { title: "Creator Commons opportunity" };
+export const metadata: Metadata = {
+  title: "Creator Commons opportunity",
+};
+
 export const dynamic = "force-dynamic";
 
 function actionButtonClass() {
-  return "min-h-12 rounded-full border border-neutral-600 bg-neutral-950 px-6 py-3 text-sm font-bold text-white hover:border-amber-500";
+  return "min-h-12 w-full rounded-full border border-[#f359d2] bg-[#f359d2] px-6 py-3 text-sm font-black text-black transition hover:bg-[#ff78df] sm:w-auto";
 }
 
 export default async function OpportunityDetailPage({
@@ -42,14 +48,20 @@ export default async function OpportunityDetailPage({
     params,
     searchParams,
   ]);
+
   let supabase;
+
   try {
     supabase = await createClient();
   } catch {
     return <AccountUnavailable />;
   }
+
   const { data: userData } = await supabase.auth.getUser();
-  if (!userData.user) return <AccountUnavailable />;
+
+  if (!userData.user) {
+    return <AccountUnavailable />;
+  }
 
   const [
     opportunityResult,
@@ -86,8 +98,13 @@ export default async function OpportunityDetailPage({
       .gt("response_deadline", "now")
       .maybeSingle(),
   ]);
-  if (opportunityResult.error || !opportunityResult.data) notFound();
+
+  if (opportunityResult.error || !opportunityResult.data) {
+    notFound();
+  }
+
   const opportunity = opportunityResult.data;
+
   const [modeResult, skillLinkResult, interestLinkResult] = await Promise.all([
     supabase
       .from("modes")
@@ -103,6 +120,7 @@ export default async function OpportunityDetailPage({
       .select("interest_id")
       .eq("opportunity_id", opportunity.id),
   ]);
+
   const [skillsResult, interestsResult] = await Promise.all([
     skillLinkResult.data?.length
       ? supabase
@@ -125,182 +143,265 @@ export default async function OpportunityDetailPage({
           .order("name")
       : Promise.resolve({ data: [], error: null }),
   ]);
+
   const response = responseResult.data;
   const isManager = managerResult.data === true;
   const acceptingResponses =
     Boolean(acceptingResult.data) &&
     opportunity.accepted_count < opportunity.positions;
 
+  const remainingOpenings = Math.max(
+    0,
+    opportunity.positions - opportunity.accepted_count,
+  );
+
   return (
-    <article>
-      <ButtonLink href="/home/commons" variant="quiet">
-        ← Back to Creator Commons
-      </ButtonLink>
+    <article className="mx-auto w-full max-w-6xl">
+      <div className="text-center lg:text-left">
+        <ButtonLink href="/home/commons" variant="quiet">
+          ← Back to Creator Commons
+        </ButtonLink>
+      </div>
+
       {parameters?.saved === "saved" ? (
         <StatusMessage className="mt-6" tone="success">
           Opportunity saved privately.
         </StatusMessage>
       ) : null}
+
       {parameters?.saved === "removed" ? (
         <StatusMessage className="mt-6">
           Opportunity removed from your saved list.
         </StatusMessage>
       ) : null}
+
       {parameters?.saved === "error" ? (
         <StatusMessage className="mt-6" tone="error">
           The saved-opportunity state could not be changed.
         </StatusMessage>
       ) : null}
 
-      <div className="mt-8 rounded-[2rem] border border-amber-950/80 bg-neutral-900 p-6 sm:p-9">
-        <div className="flex flex-wrap gap-2">
-          <Badge className="border-amber-900 bg-amber-950/40 text-amber-100">
-            {modeResult.data?.name ?? "Create"}
-          </Badge>
-          <Badge>{formatOpportunityKind(opportunity.kind)}</Badge>
-          <Badge>{opportunity.status}</Badge>
-          {response ? (
-            <Badge className="capitalize">Response: {response.status}</Badge>
-          ) : null}
+      <section className="mt-8 overflow-hidden rounded-[2rem] border border-[#f359d2]/55 bg-[#10080e]">
+        <div className="border-b border-[#f359d2]/20 p-6 text-center sm:p-9 lg:text-left">
+          <div className="flex flex-wrap justify-center gap-2 lg:justify-start">
+            <Badge className="border-white bg-white text-black">
+              Creator Commons
+            </Badge>
+
+            <Badge className="border-white bg-white text-black">
+              {modeResult.data?.name ?? "Create"}
+            </Badge>
+
+            <Badge className="border-[#f359d2]/60 bg-black/30 text-[#f359d2]">
+              {formatOpportunityKind(opportunity.kind)}
+            </Badge>
+
+            {opportunity.is_paid ? (
+              <Badge className="flex items-center gap-1.5 border-emerald-700 bg-emerald-950/60 text-emerald-200">
+                <CircleDollarSign aria-hidden="true" className="size-3.5" />
+                Paid opportunity
+              </Badge>
+            ) : (
+              <Badge className="flex items-center gap-1.5 border-[#f359d2]/60 bg-black/30 text-[#f359d2]">
+                <HeartHandshake aria-hidden="true" className="size-3.5" />
+                Unpaid / community
+              </Badge>
+            )}
+
+            <Badge className="border-neutral-700 bg-neutral-950 text-neutral-200 capitalize">
+              {opportunity.status}
+            </Badge>
+
+            {response ? (
+              <Badge className="border-[#f359d2]/60 bg-black/30 text-[#f359d2] capitalize">
+                Response: {response.status}
+              </Badge>
+            ) : null}
+          </div>
+
+          <h1 className="display-type mx-auto mt-6 max-w-4xl text-5xl leading-[0.95] text-white sm:text-7xl lg:mx-0">
+            {opportunity.title}
+          </h1>
+
+          <p className="mx-auto mt-5 max-w-3xl text-lg leading-8 text-neutral-300 lg:mx-0">
+            {opportunity.summary}
+          </p>
+
+          <p className="mt-4 text-xs font-black tracking-[0.16em] text-[#f359d2] uppercase">
+            Created by {opportunity.creator_display_name}
+          </p>
         </div>
-        <h1 className="display-type mt-5 max-w-4xl text-5xl leading-none text-white sm:text-7xl">
-          {opportunity.title}
-        </h1>
-        <p className="mt-5 max-w-3xl text-lg leading-8 text-neutral-300">
-          {opportunity.summary}
-        </p>
-        <p className="mt-4 text-xs font-bold tracking-[0.14em] text-neutral-500 uppercase">
-          Created by {opportunity.creator_display_name}
-        </p>
 
-        <dl className="mt-8 grid gap-5 border-y border-neutral-800 py-7 text-sm sm:grid-cols-2 lg:grid-cols-4">
-          <div>
-            <dt className="text-neutral-500">Respond by</dt>
-            <dd className="mt-1 font-bold text-white">
-              {formatOpportunityDeadline(
-                opportunity.response_deadline,
-                opportunity.timezone,
-              )}
-            </dd>
-          </div>
-          <div>
-            <dt className="text-neutral-500">Format</dt>
-            <dd className="mt-1 font-bold text-white">
-              {formatOpportunityFormat(opportunity.format)}
-              {opportunity.location_label
-                ? ` · ${opportunity.location_label}`
-                : ""}
-            </dd>
-          </div>
-          <div>
-            <dt className="text-neutral-500">Commitment</dt>
-            <dd className="mt-1 font-bold text-white">
-              About {opportunity.estimated_minutes} minutes
-            </dd>
-          </div>
-          <div>
-            <dt className="text-neutral-500">Openings</dt>
-            <dd className="mt-1 font-bold text-white">
-              {Math.max(0, opportunity.positions - opportunity.accepted_count)}{" "}
-              of {opportunity.positions}
-            </dd>
-          </div>
-        </dl>
+        <div className="p-6 sm:p-9">
+          <dl className="grid gap-5 border-b border-[#f359d2]/20 pb-7 text-center text-sm sm:grid-cols-2 lg:grid-cols-5 lg:text-left">
+            <div>
+              <dt className="text-neutral-500">Respond by</dt>
+              <dd className="mt-1 font-bold text-[#f359d2]">
+                {formatOpportunityDeadline(
+                  opportunity.response_deadline,
+                  opportunity.timezone,
+                )}
+              </dd>
+            </div>
 
-        <div className="mt-8 grid gap-8 lg:grid-cols-2">
-          <section aria-labelledby="opportunity-description">
-            <h2
-              className="text-2xl font-bold text-white"
-              id="opportunity-description"
+            <div>
+              <dt className="text-neutral-500">Format</dt>
+              <dd className="mt-1 font-bold text-[#f359d2]">
+                {formatOpportunityFormat(opportunity.format)}
+                {opportunity.location_label
+                  ? ` · ${opportunity.location_label}`
+                  : ""}
+              </dd>
+            </div>
+
+            <div>
+              <dt className="text-neutral-500">Commitment</dt>
+              <dd className="mt-1 font-bold text-[#f359d2]">
+                About {opportunity.estimated_minutes} minutes
+              </dd>
+            </div>
+
+            <div>
+              <dt className="text-neutral-500">Openings</dt>
+              <dd className="mt-1 font-bold text-[#f359d2]">
+                {remainingOpenings} of {opportunity.positions}
+              </dd>
+            </div>
+
+            <div>
+              <dt className="text-neutral-500">Compensation</dt>
+              <dd
+                className={
+                  opportunity.is_paid
+                    ? "mt-1 font-bold text-emerald-300"
+                    : "mt-1 font-bold text-[#f359d2]"
+                }
+              >
+                {opportunity.is_paid ? "Paid" : "Unpaid / community"}
+              </dd>
+            </div>
+          </dl>
+
+          <div className="mt-8 grid gap-5 lg:grid-cols-2">
+            <section
+              aria-labelledby="opportunity-description"
+              className="rounded-2xl border border-white/10 bg-black/20 p-5 text-center lg:text-left"
             >
-              Opportunity
-            </h2>
-            <p className="mt-4 text-base leading-7 whitespace-pre-line text-neutral-300">
-              {opportunity.description}
-            </p>
-          </section>
-          <section aria-labelledby="opportunity-deliverables">
-            <h2
-              className="text-2xl font-bold text-white"
-              id="opportunity-deliverables"
+              <h2
+                className="text-2xl font-black text-white"
+                id="opportunity-description"
+              >
+                Opportunity
+              </h2>
+
+              <p className="mt-4 text-base leading-7 whitespace-pre-line text-neutral-300">
+                {opportunity.description}
+              </p>
+            </section>
+
+            <section
+              aria-labelledby="opportunity-deliverables"
+              className="rounded-2xl border border-white/10 bg-black/20 p-5 text-center lg:text-left"
             >
-              Expected deliverables
-            </h2>
-            <p className="mt-4 text-base leading-7 whitespace-pre-line text-neutral-300">
-              {opportunity.deliverables}
-            </p>
-          </section>
-        </div>
+              <h2
+                className="text-2xl font-black text-white"
+                id="opportunity-deliverables"
+              >
+                Expected deliverables
+              </h2>
 
-        <div className="mt-8 grid gap-6 sm:grid-cols-2">
-          <section>
-            <h2 className="text-sm font-bold tracking-wide text-amber-200 uppercase">
-              Relevant skills
-            </h2>
-            <ul className="mt-3 flex flex-wrap gap-2">
-              {(skillsResult.data ?? []).map((skill) => (
-                <li key={skill.id}>
-                  <Badge>{skill.name}</Badge>
-                </li>
-              ))}
-            </ul>
-          </section>
-          <section>
-            <h2 className="text-sm font-bold tracking-wide text-amber-200 uppercase">
-              Interests
-            </h2>
-            <ul className="mt-3 flex flex-wrap gap-2">
-              {(interestsResult.data ?? []).map((interest) => (
-                <li key={interest.id}>
-                  <Badge>{interest.name}</Badge>
-                </li>
-              ))}
-            </ul>
-          </section>
-        </div>
+              <p className="mt-4 text-base leading-7 whitespace-pre-line text-neutral-300">
+                {opportunity.deliverables}
+              </p>
+            </section>
+          </div>
 
-        <div className="mt-8 flex flex-wrap gap-3">
-          {!isManager ? (
-            <form action={saveOpportunityAction}>
-              <input
-                name="opportunityId"
-                type="hidden"
-                value={opportunity.id}
-              />
-              <input
-                name="save"
-                type="hidden"
-                value={savedResult.data ? "false" : "true"}
-              />
-              <button className={actionButtonClass()} type="submit">
-                <span className="flex items-center gap-2">
-                  <Bookmark aria-hidden="true" className="size-4" />
-                  {savedResult.data
-                    ? "Remove saved opportunity"
-                    : "Save opportunity"}
-                </span>
-              </button>
-            </form>
-          ) : (
-            <ButtonLink href={`/home/commons/manage/${opportunity.id}`}>
-              Manage opportunity
-            </ButtonLink>
-          )}
+          <div className="mt-6 grid gap-5 sm:grid-cols-2">
+            <section className="rounded-2xl border border-white/10 bg-black/20 p-5 text-center lg:text-left">
+              <h2 className="text-sm font-black tracking-[0.15em] text-[#f359d2] uppercase">
+                Relevant skills
+              </h2>
+
+              <ul className="mt-4 flex flex-wrap justify-center gap-2 lg:justify-start">
+                {(skillsResult.data ?? []).map((skill) => (
+                  <li key={skill.id}>
+                    <Badge className="border-[#f359d2]/50 bg-[#10080e] text-[#f359d2]">
+                      {skill.name}
+                    </Badge>
+                  </li>
+                ))}
+              </ul>
+            </section>
+
+            <section className="rounded-2xl border border-white/10 bg-black/20 p-5 text-center lg:text-left">
+              <h2 className="text-sm font-black tracking-[0.15em] text-[#f359d2] uppercase">
+                Interests
+              </h2>
+
+              <ul className="mt-4 flex flex-wrap justify-center gap-2 lg:justify-start">
+                {(interestsResult.data ?? []).map((interest) => (
+                  <li key={interest.id}>
+                    <Badge className="border-[#f359d2]/50 bg-[#10080e] text-[#f359d2]">
+                      {interest.name}
+                    </Badge>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          </div>
+
+          <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            {!isManager ? (
+              <form action={saveOpportunityAction} className="w-full sm:w-auto">
+                <input
+                  name="opportunityId"
+                  type="hidden"
+                  value={opportunity.id}
+                />
+
+                <input
+                  name="save"
+                  type="hidden"
+                  value={savedResult.data ? "false" : "true"}
+                />
+
+                <button className={actionButtonClass()} type="submit">
+                  <span className="flex items-center justify-center gap-2">
+                    <Bookmark aria-hidden="true" className="size-4" />
+
+                    {savedResult.data
+                      ? "Remove saved opportunity"
+                      : "Save opportunity"}
+                  </span>
+                </button>
+              </form>
+            ) : (
+              <ButtonLink
+                className="border-[#f359d2] bg-[#f359d2] text-black hover:bg-[#ff78df]"
+                href={`/home/commons/manage/${opportunity.id}`}
+              >
+                Manage opportunity
+              </ButtonLink>
+            )}
+          </div>
         </div>
-      </div>
+      </section>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-        <section className="rounded-[2rem] border border-neutral-800 bg-neutral-900 p-6 sm:p-8">
-          <div className="flex items-center gap-3">
-            <Users aria-hidden="true" className="size-5 text-amber-300" />
-            <h2 className="text-2xl font-bold text-white">
+        <section className="rounded-[2rem] border border-[#f359d2]/45 bg-[#10080e] p-6 text-center sm:p-8 lg:text-left">
+          <div className="flex items-center justify-center gap-3 lg:justify-start">
+            <Users aria-hidden="true" className="size-5 text-[#f359d2]" />
+
+            <h2 className="text-2xl font-black text-white">
               Your participation
             </h2>
           </div>
+
           {isManager ? (
             <p className="mt-4 text-sm leading-6 text-neutral-400">
-              Creators cannot respond to their own managed opportunity. Use the
-              management view to review private responses.
+              You created this opportunity, so you cannot respond to it. Use the
+              management page to review private responses and choose
+              collaborators.
             </p>
           ) : response ? (
             <div className="mt-5">
@@ -315,6 +416,7 @@ export default async function OpportunityDetailPage({
                 Your response status is{" "}
                 <strong className="capitalize">{response.status}</strong>.
               </StatusMessage>
+
               {response.status === "submitted" ||
               response.status === "accepted" ? (
                 <form
@@ -326,11 +428,13 @@ export default async function OpportunityDetailPage({
                     type="hidden"
                     value={opportunity.id}
                   />
+
                   <button className={actionButtonClass()} type="submit">
                     Withdraw response
                   </button>
                 </form>
               ) : null}
+
               {response.status === "accepted" &&
               opportunity.status === "closed" &&
               !response.participant_confirmed_at ? (
@@ -343,9 +447,11 @@ export default async function OpportunityDetailPage({
                     type="hidden"
                     value={opportunity.id}
                   />
+
                   <input name="userId" type="hidden" value={userData.user.id} />
+
                   <button className={actionButtonClass()} type="submit">
-                    <span className="flex items-center gap-2">
+                    <span className="flex items-center justify-center gap-2">
                       <CheckCircle2 aria-hidden="true" className="size-4" />
                       Confirm your completion
                     </span>
@@ -354,7 +460,7 @@ export default async function OpportunityDetailPage({
               ) : null}
             </div>
           ) : acceptingResponses ? (
-            <div className="mt-5">
+            <div className="mt-5 text-left">
               <OpportunityResponseForm opportunityId={opportunity.id} />
             </div>
           ) : (
@@ -364,38 +470,70 @@ export default async function OpportunityDetailPage({
           )}
         </section>
 
-        <aside className="rounded-[2rem] border border-neutral-800 bg-neutral-950 p-6 sm:p-8">
-          <div className="flex items-center gap-3">
-            <ShieldCheck
-              aria-hidden="true"
-              className="size-5 text-emerald-400"
-            />
-            <h2 className="text-xl font-bold text-white">Phase 6 boundary</h2>
+        <aside className="rounded-[2rem] border border-[#f359d2]/45 bg-[#10080e] p-6 text-center sm:p-8 lg:text-left">
+          <div className="flex items-center justify-center gap-3 lg:justify-start">
+            <ShieldCheck aria-hidden="true" className="size-5 text-[#f359d2]" />
+
+            <h2 className="text-2xl font-black text-white">
+              Before you respond
+            </h2>
           </div>
-          <ul className="mt-6 space-y-4 text-sm leading-6 text-neutral-400">
+
+          <ul className="mt-6 space-y-4 text-left text-sm leading-6 text-neutral-400">
             <li className="flex gap-3">
-              <Clock3
-                aria-hidden="true"
-                className="mt-1 size-4 shrink-0 text-amber-300"
-              />
-              A response is an expression of interest—not a contract, employment
-              offer, or payment promise.
+              {opportunity.is_paid ? (
+                <CircleDollarSign
+                  aria-hidden="true"
+                  className="mt-1 size-4 shrink-0 text-emerald-300"
+                />
+              ) : (
+                <HeartHandshake
+                  aria-hidden="true"
+                  className="mt-1 size-4 shrink-0 text-[#f359d2]"
+                />
+              )}
+
+              <span>
+                {opportunity.is_paid
+                  ? "This opportunity is marked as paid. Confirm the compensation amount, payment schedule, and terms with the creator before beginning work."
+                  : "This is an unpaid community opportunity. Participate for collaboration, experience, shared interests, or fun—not financial compensation."}
+              </span>
             </li>
+
             <li className="flex gap-3">
               <ShieldCheck
                 aria-hidden="true"
-                className="mt-1 size-4 shrink-0 text-amber-300"
+                className="mt-1 size-4 shrink-0 text-[#f359d2]"
               />
-              Only you and authorized managers can read your response under Row
-              Level Security.
+
+              <span>
+                Your response is private and can only be viewed by you and
+                authorized opportunity managers.
+              </span>
             </li>
+
+            <li className="flex gap-3">
+              <Clock3
+                aria-hidden="true"
+                className="mt-1 size-4 shrink-0 text-[#f359d2]"
+              />
+
+              <span>
+                Payment arrangements, contracts, direct messaging, and file
+                exchange currently happen outside SIGNAL.
+              </span>
+            </li>
+
             <li className="flex gap-3">
               <CheckCircle2
                 aria-hidden="true"
-                className="mt-1 size-4 shrink-0 text-amber-300"
+                className="mt-1 size-4 shrink-0 text-[#f359d2]"
               />
-              Completion requires confirmation from both the accepted
-              participant and an authorized manager.
+
+              <span>
+                Completed collaborations are confirmed by both the participant
+                and an authorized manager.
+              </span>
             </li>
           </ul>
         </aside>

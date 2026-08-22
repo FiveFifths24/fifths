@@ -187,7 +187,7 @@ export default async function FifthRealmPage() {
       ====================================================== */}
       <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-12">
         <div className="max-w-4xl">
-          <p className="flex items-center gap-2 text-xs font-bold tracking-[0.2em] text-[#22d3ee] uppercase">
+          <p className="flex items-center justify-center gap-2 text-xs font-bold tracking-[0.2em] text-[#22d3ee] uppercase lg:justify-start">
             <Compass aria-hidden="true" className="size-4" />
             Fifth Realm
           </p>
@@ -207,7 +207,7 @@ export default async function FifthRealmPage() {
 
         <ButtonLink
           className="min-h-12 min-w-[12.5rem] border-0 bg-gradient-to-r from-[#0891b2] via-[#22d3ee] to-[#6c14ce] px-7 text-sm whitespace-nowrap text-white shadow-lg shadow-[#22d3ee]/15 hover:brightness-110"
-          href="/home/realm/manage"
+          href="/home/realm/manage?create=1"
         >
           <Gamepad2 aria-hidden="true" className="size-4" />
           Create A Campaign

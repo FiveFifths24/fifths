@@ -48,8 +48,8 @@ export function ModuleOverview({ module }: { module: PlatformModule }) {
                   ? `Open ${module.name}`
                   : "Join the future beta"}
               </ButtonLink>
-              <ButtonLink href="/ecosystem" variant="secondary">
-                Back to ecosystem
+              <ButtonLink href="/#ecosystem" variant="secondary">
+                Back to SIGNAL Overview
               </ButtonLink>
             </div>
           </div>
@@ -183,7 +183,7 @@ export function ModuleOverview({ module }: { module: PlatformModule }) {
         <Container className="flex flex-col gap-8 rounded-[2rem] border border-neutral-800 bg-white p-8 text-black sm:p-12 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="text-xs font-bold tracking-[0.18em] text-red-700 uppercase">
-              The ecosystem is bigger than one module
+              SIGNAL Is Bigger Than One Feature
             </p>
             <h2 className="display-type mt-4 max-w-3xl text-4xl leading-tight sm:text-5xl">
               See how {module.name} connects with every way people participate.
@@ -191,9 +191,9 @@ export function ModuleOverview({ module }: { module: PlatformModule }) {
           </div>
           <Link
             className="inline-flex min-h-12 shrink-0 items-center gap-2 font-black text-red-800 hover:text-red-600"
-            href="/ecosystem"
+            href="/#ecosystem"
           >
-            Explore all five{" "}
+            Explore All Five{" "}
             <ArrowRight aria-hidden="true" className="size-4" />
           </Link>
         </Container>

@@ -2,11 +2,14 @@ import Link from "next/link";
 import {
   Bookmark,
   BriefcaseBusiness,
+  CircleDollarSign,
   Clock3,
+  HeartHandshake,
   MapPin,
   Users,
   Zap,
 } from "lucide-react";
+
 import { Badge } from "@/components/ui/badge";
 import type { RankedRecommendation } from "@/lib/recommendations/types";
 import type { CreatorOpportunity, OpportunityResponse } from "@/types/database";
@@ -18,6 +21,7 @@ export type OpportunityCardItem = Pick<
   | "summary"
   | "creator_display_name"
   | "kind"
+  | "is_paid"
   | "status"
   | "format"
   | "location_label"
@@ -65,46 +69,70 @@ export function OpportunityCard({ item }: { item: OpportunityCardItem }) {
   const openings = Math.max(0, item.positions - item.accepted_count);
 
   return (
-    <article className="flex h-full flex-col rounded-[1.75rem] border border-amber-950/80 bg-neutral-900 p-6">
+    <article className="flex h-full flex-col rounded-[1.75rem] border border-[#f359d2]/55 bg-[#10080e] p-6">
       <div className="flex flex-wrap items-center gap-2">
-        <Badge>Creator Commons</Badge>
-        <Badge className="border-amber-900 bg-amber-950/40 text-amber-100">
+        <Badge className="border-white bg-white text-black">
+          Creator Commons
+        </Badge>
+
+        <Badge className="border-white bg-white text-black">
           {item.modeName}
         </Badge>
+
         <Badge>{formatOpportunityKind(item.kind)}</Badge>
-        <Badge>{openings === 1 ? "1 opening" : `${openings} openings`}</Badge>
+
+        {item.is_paid ? (
+          <Badge className="flex items-center gap-1.5 border-emerald-800 bg-emerald-950/60 text-emerald-200">
+            <CircleDollarSign aria-hidden="true" className="size-3.5" />
+            Paid Opportunity
+          </Badge>
+        ) : (
+          <Badge className="flex items-center gap-1.5 border-fuchsia-900 bg-fuchsia-950/40 text-fuchsia-200">
+            <HeartHandshake aria-hidden="true" className="size-3.5" />
+            Unpaid / community
+          </Badge>
+        )}
+
+        <Badge>{openings === 1 ? "1 opening" : `${openings} Openings`}</Badge>
+
         {item.saved ? (
           <Badge className="flex items-center gap-1.5">
-            <Bookmark aria-hidden="true" className="size-3" /> Saved
+            <Bookmark aria-hidden="true" className="size-3" />
+            Saved
           </Badge>
         ) : null}
+
         {item.responseStatus ? (
           <Badge className="capitalize">{item.responseStatus}</Badge>
         ) : null}
+
         {item.status !== "published" ? <Badge>{item.status}</Badge> : null}
       </div>
 
       <h2 className="mt-5 text-2xl font-bold text-white">
         <Link
-          className="rounded-sm underline decoration-neutral-700 underline-offset-4 hover:decoration-amber-400"
+          className="rounded-sm underline decoration-neutral-700 underline-offset-4 hover:decoration-[#f359d2]"
           href={`/home/commons/${item.id}`}
         >
           {item.title}
         </Link>
       </h2>
+
       <p className="mt-3 flex-1 text-sm leading-6 text-neutral-400">
         {item.summary}
       </p>
+
       <p className="mt-4 text-xs font-bold tracking-wide text-neutral-500 uppercase">
         Created by {item.creator_display_name}
       </p>
 
-      <dl className="mt-6 grid gap-3 text-sm text-neutral-300 sm:grid-cols-2">
+      <dl className="mt-6 grid gap-3 text-sm font-medium text-[#f359d2] sm:grid-cols-2">
         <div className="flex gap-2">
           <Clock3
             aria-hidden="true"
-            className="mt-0.5 size-4 shrink-0 text-amber-300"
+            className="mt-0.5 size-4 shrink-0 text-[#f359d2]"
           />
+
           <div>
             <dt className="sr-only">Response deadline</dt>
             <dd>
@@ -113,11 +141,13 @@ export function OpportunityCard({ item }: { item: OpportunityCardItem }) {
             </dd>
           </div>
         </div>
+
         <div className="flex gap-2">
           <MapPin
             aria-hidden="true"
-            className="mt-0.5 size-4 shrink-0 text-amber-300"
+            className="mt-0.5 size-4 shrink-0 text-[#f359d2]"
           />
+
           <div>
             <dt className="sr-only">Format and location</dt>
             <dd>
@@ -126,11 +156,13 @@ export function OpportunityCard({ item }: { item: OpportunityCardItem }) {
             </dd>
           </div>
         </div>
+
         <div className="flex gap-2">
           <BriefcaseBusiness
             aria-hidden="true"
-            className="mt-0.5 size-4 shrink-0 text-amber-300"
+            className="mt-0.5 size-4 shrink-0 text-[#f359d2]"
           />
+
           <div>
             <dt className="sr-only">Skills</dt>
             <dd>
@@ -138,11 +170,13 @@ export function OpportunityCard({ item }: { item: OpportunityCardItem }) {
             </dd>
           </div>
         </div>
+
         <div className="flex gap-2">
           <Users
             aria-hidden="true"
-            className="mt-0.5 size-4 shrink-0 text-amber-300"
+            className="mt-0.5 size-4 shrink-0 text-[#f359d2]"
           />
+
           <div>
             <dt className="sr-only">Commitment and social pace</dt>
             <dd>
@@ -157,8 +191,10 @@ export function OpportunityCard({ item }: { item: OpportunityCardItem }) {
         <div className="mt-5 border-t border-neutral-800 pt-5">
           <p className="flex items-center gap-2 text-xs font-bold tracking-wide text-amber-200 uppercase">
             <Zap aria-hidden="true" className="size-4" />
-            {item.fit ? `${item.fit} fit · ` : ""}Why this may fit
+            {item.fit ? `${item.fit} fit · ` : ""}
+            Why this may fit
           </p>
+
           <ul
             className="mt-3 flex flex-wrap gap-2"
             aria-label="Why this matches your Pulse"

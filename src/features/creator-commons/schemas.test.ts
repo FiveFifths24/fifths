@@ -14,6 +14,7 @@ const opportunity = {
   deliverables:
     "Three edited interviews, captions, and a shared handoff document are expected.",
   kind: "collaboration",
+  compensation: "paid",
   format: "either",
   locationLabel: "Northern New Jersey or online",
   responseDeadlineLocal: "2026-09-01T17:00",

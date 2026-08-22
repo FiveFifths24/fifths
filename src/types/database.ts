@@ -380,6 +380,7 @@ export type Database = {
           description: string;
           deliverables: string;
           kind: Database["public"]["Enums"]["creator_opportunity_kind"];
+          is_paid: boolean;
           status: Database["public"]["Enums"]["creator_opportunity_status"];
           close_reason:
             | Database["public"]["Enums"]["creator_opportunity_close_reason"]
@@ -412,6 +413,7 @@ export type Database = {
           description: string;
           deliverables: string;
           kind: Database["public"]["Enums"]["creator_opportunity_kind"];
+          is_paid?: boolean;
           status?: Database["public"]["Enums"]["creator_opportunity_status"];
           close_reason?:
             | Database["public"]["Enums"]["creator_opportunity_close_reason"]
@@ -438,7 +440,11 @@ export type Database = {
         Relationships: [];
       };
       opportunity_skills: {
-        Row: { opportunity_id: string; skill_id: string; created_at: string };
+        Row: {
+          opportunity_id: string;
+          skill_id: string;
+          created_at: string;
+        };
         Insert: {
           opportunity_id: string;
           skill_id: string;
@@ -496,7 +502,11 @@ export type Database = {
         Relationships: [];
       };
       saved_opportunities: {
-        Row: { opportunity_id: string; user_id: string; created_at: string };
+        Row: {
+          opportunity_id: string;
+          user_id: string;
+          created_at: string;
+        };
         Insert: {
           opportunity_id: string;
           user_id: string;
@@ -965,6 +975,7 @@ export type Database = {
           p_description: string;
           p_deliverables: string;
           p_kind: Database["public"]["Enums"]["creator_opportunity_kind"];
+          p_is_paid: boolean;
           p_format: Database["public"]["Enums"]["participation_format"];
           p_location_label: string | null;
           p_response_deadline_local: string;

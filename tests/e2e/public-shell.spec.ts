@@ -8,7 +8,7 @@ test("landing page exposes the public shell and primary calls to action", async 
   await expect(
     page.getByRole("heading", {
       level: 1,
-      name: /broadcast your\s*signal\.\s*find your people\./i,
+      name: /real-time capacity\s*meets real-world\s*connections/i,
     }),
   ).toBeVisible();
 
@@ -19,8 +19,8 @@ test("landing page exposes the public shell and primary calls to action", async 
   await expect(page.locator("#main-content")).toBeVisible();
 
   await expect(
-    page.getByRole("link", { name: "Explore Ecosystem" }).first(),
-  ).toHaveAttribute("href", "/ecosystem");
+    page.getByRole("link", { name: "Check Your Pulse" }).first(),
+  ).toHaveAttribute("href", "/home/pulse");
 
   const headers = response?.headers() ?? {};
 
@@ -33,20 +33,23 @@ test("landing page exposes the public shell and primary calls to action", async 
   expect(headers["permissions-policy"]).toContain("camera=()");
 });
 
-test("navigation is usable at the active viewport", async ({ page }) => {
+test("header authentication control is usable at the active viewport", async ({
+  page,
+}) => {
   await page.goto("/about");
+
   const isMobile = (page.viewportSize()?.width ?? 0) < 768;
 
   if (isMobile) {
-    const toggle = page.getByRole("button", { name: "Open navigation menu" });
+    const toggle = page.getByRole("button", {
+      name: "Open navigation menu",
+    });
 
     await expect(toggle).toHaveAttribute("aria-expanded", "false");
 
     await toggle.click();
 
-    await expect(
-      page.getByRole("navigation", { name: "Mobile navigation" }),
-    ).toBeVisible();
+    await expect(page.getByRole("link", { name: /log in/i })).toBeVisible();
 
     await expect(
       page.getByRole("button", { name: "Close navigation menu" }),
@@ -58,15 +61,10 @@ test("navigation is usable at the active viewport", async ({ page }) => {
       page.getByRole("button", { name: "Open navigation menu" }),
     ).toHaveAttribute("aria-expanded", "false");
   } else {
-    const navigation = page.getByRole("navigation", {
-      name: "Primary navigation",
-    });
-
-    await expect(navigation).toBeVisible();
-
-    await expect(
-      navigation.getByRole("link", { name: "About" }),
-    ).toHaveAttribute("aria-current", "page");
+    await expect(page.getByRole("link", { name: /log in/i })).toHaveAttribute(
+      "href",
+      "/login",
+    );
   }
 });
 

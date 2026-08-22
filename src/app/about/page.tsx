@@ -136,7 +136,7 @@ export default function AboutPage() {
             </p>
 
             <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-              <ButtonLink href="/ecosystem">Explore the Ecosystem</ButtonLink>
+              <ButtonLink href="/#ecosystem">Explore the Ecosystem</ButtonLink>
 
               <a
                 className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/15 bg-black/30 px-7 text-sm font-bold text-white/85 transition hover:border-white/30 hover:bg-white/[0.05]"
@@ -558,7 +558,7 @@ export default function AboutPage() {
           </p>
 
           <div className="mt-10 flex flex-col justify-center gap-3 sm:flex-row">
-            <ButtonLink href="/ecosystem">Explore PULSE</ButtonLink>
+            <ButtonLink href="/#ecosystem">Explore PULSE</ButtonLink>
 
             <a
               className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/15 bg-black/30 px-7 text-sm font-bold text-white/85 transition hover:border-white/30 hover:bg-white/[0.05]"

@@ -8,6 +8,7 @@ const item: OpportunityCardItem = {
   summary: "Produce a short creator interview series.",
   creator_display_name: "Avery",
   kind: "collaboration",
+  is_paid: true,
   status: "published",
   format: "online",
   location_label: null,
