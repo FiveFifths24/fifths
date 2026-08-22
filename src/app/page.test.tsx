@@ -9,13 +9,13 @@ describe("landing page", () => {
     expect(
       screen.getByRole("heading", {
         level: 1,
-        name: /your energy changes\.\s*your options should too\./i,
+        name: /real-time capacity\s*meets real-world\s*connections/i,
       }),
     ).toBeInTheDocument();
 
     expect(
       screen.getByText(
-        /signal turns what you have capacity for right now into clearer ways to connect, create, and participate/i,
+        /signal converts your real-time mental, emotional, and physical capacity into meaningful ways to connect, create, and participate/i,
       ),
     ).toBeInTheDocument();
 

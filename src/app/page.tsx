@@ -196,10 +196,7 @@ export default function HomePage() {
                           <Icon className="size-5" />
                         </div>
 
-                        <span
-                          className="font-mono text-xs font-black"
-                          style={{ color: step.color }}
-                        >
+                        <span className="font-mono text-xs font-black text-white/70">
                           {step.number}
                         </span>
                       </div>
