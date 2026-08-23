@@ -206,7 +206,7 @@ export default async function CirclesDiscoveryPage() {
             href="/home/circles/manage"
           >
             <MessagesSquare aria-hidden="true" className="size-4" />
-            Manage Circles
+            Create A Circle
           </ButtonLink>
         </div>
       </div>
@@ -233,7 +233,7 @@ export default async function CirclesDiscoveryPage() {
             className="text-2xl font-bold text-white"
             id="circle-results-heading"
           >
-            {pulseInput ? "Circles that fit right now" : "Explore Circles"}
+            {pulseInput ? "Circles That Fit Right Now" : "Explore Circles"}
           </h2>
         </div>
 
@@ -276,7 +276,7 @@ export default async function CirclesDiscoveryPage() {
 
         <div>
           <p className="font-bold text-white/80">
-            Your membership stays intentional.
+            Your Membership Stays Intentional.
           </p>
 
           <p className="mt-1">

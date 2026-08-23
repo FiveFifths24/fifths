@@ -26,7 +26,7 @@ export function SignupForm() {
       <TextField
         autoComplete="email"
         error={firstFieldError(state, "email")}
-        label="Email address"
+        label="Email Address"
         name="email"
         placeholder="you@example.com"
         required
@@ -37,7 +37,7 @@ export function SignupForm() {
         autoComplete="new-password"
         error={firstFieldError(state, "password")}
         hint="Use 8–72 characters. A password manager is recommended."
-        label="Create a password"
+        label="Create A Password"
         maxLength={72}
         minLength={8}
         name="password"
@@ -47,7 +47,7 @@ export function SignupForm() {
       <PasswordField
         autoComplete="new-password"
         error={firstFieldError(state, "confirmPassword")}
-        label="Confirm password"
+        label="Confirm Password"
         maxLength={72}
         minLength={8}
         name="confirmPassword"
@@ -102,7 +102,7 @@ export function SignupForm() {
       </div>
 
       <SubmitButton pendingLabel="Creating account…">
-        Create account
+        Create Account
       </SubmitButton>
     </form>
   );
