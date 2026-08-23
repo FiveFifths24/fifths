@@ -5,8 +5,8 @@ import {
   BadgeCheck,
   Building2,
   Gauge,
-HeartHandshake,
-MegaphoneOff,
+  HeartHandshake,
+  MegaphoneOff,
   CalendarDays,
   Gamepad2,
   Globe2,
@@ -300,65 +300,65 @@ export default function HomePage() {
           </Container>
         </section>
 
-<section className="relative py-12 sm:py-14 lg:py-16">
-  <Container className="!max-w-[76rem]">
-    <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-[linear-gradient(145deg,rgba(24,0,173,0.14),rgba(4,4,8,0.94)_42%,rgba(243,89,210,0.08))] px-6 py-9 backdrop-blur-xl sm:px-8 sm:py-10 lg:px-10">
-      <div className="grid items-center gap-9 lg:grid-cols-[0.78fr_1.22fr] lg:gap-12">
-        <div className="mx-auto max-w-lg text-center lg:mx-0 lg:text-left">
-          <p className="font-mono text-[0.62rem] font-bold tracking-[0.24em] text-[#f359d2] uppercase sm:text-[0.65rem]">
-            Designed Differently
-          </p>
+        <section className="relative py-12 sm:py-14 lg:py-16">
+          <Container className="!max-w-[76rem]">
+            <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-[linear-gradient(145deg,rgba(24,0,173,0.14),rgba(4,4,8,0.94)_42%,rgba(243,89,210,0.08))] px-6 py-9 backdrop-blur-xl sm:px-8 sm:py-10 lg:px-10">
+              <div className="grid items-center gap-9 lg:grid-cols-[0.78fr_1.22fr] lg:gap-12">
+                <div className="mx-auto max-w-lg text-center lg:mx-0 lg:text-left">
+                  <p className="font-mono text-[0.62rem] font-bold tracking-[0.24em] text-[#f359d2] uppercase sm:text-[0.65rem]">
+                    Designed Differently
+                  </p>
 
-          <h2 className="mt-4 text-[clamp(2.7rem,9vw,3.85rem)] leading-[0.9] font-black tracking-[-0.05em] text-white">
-            No Ads.
-            <span className="mx-auto block w-fit bg-[linear-gradient(90deg,#6c14ce,#f359d2,#7cff00)] bg-clip-text text-transparent [-webkit-text-fill-color:transparent] lg:mx-0">
-              No Algorithmic Feed.
-            </span>
-          </h2>
+                  <h2 className="mt-4 text-[clamp(2.7rem,9vw,3.85rem)] leading-[0.9] font-black tracking-[-0.05em] text-white">
+                    No Ads.
+                    <span className="mx-auto block w-fit bg-[linear-gradient(90deg,#6c14ce,#f359d2,#7cff00)] bg-clip-text text-transparent [-webkit-text-fill-color:transparent] lg:mx-0">
+                      No Algorithmic Feed.
+                    </span>
+                  </h2>
 
-          <p className="mx-auto mt-5 max-w-md text-sm leading-7 text-white/60 sm:text-base lg:mx-0">
-            SIGNAL uses the Pulse you choose to share to help you find what
-            fits—not paid placement, follower counts, endless scrolling, or
-            engagement bait.
-          </p>
-        </div>
-
-        <div className="grid gap-3.5">
-          {principles.map((principle) => {
-            const Icon = principle.icon;
-
-            return (
-              <article
-                className="grid min-h-[7.5rem] grid-cols-[2.75rem_minmax(0,1fr)] items-center gap-4 rounded-[1.35rem] border border-white/10 bg-black/30 p-5 text-left sm:grid-cols-[3rem_minmax(0,1fr)] sm:gap-5 sm:px-6"
-                key={principle.title}
-              >
-                <div
-                  className="flex size-11 shrink-0 items-center justify-center rounded-xl border bg-black/40 sm:size-12"
-                  style={{
-                    borderColor: `${principle.color}65`,
-                    color: principle.color,
-                  }}
-                >
-                  <Icon aria-hidden="true" className="size-5" />
-                </div>
-
-                <div className="min-w-0">
-                  <h3 className="text-[0.95rem] leading-6 font-black text-white sm:text-base">
-                    {principle.title}
-                  </h3>
-
-                  <p className="mt-1.5 text-[0.82rem] leading-5 text-white/60 sm:text-sm sm:leading-6">
-                    {principle.description}
+                  <p className="mx-auto mt-5 max-w-md text-sm leading-7 text-white/60 sm:text-base lg:mx-0">
+                    SIGNAL uses the Pulse you choose to share to help you find
+                    what fits—not paid placement, follower counts, endless
+                    scrolling, or engagement bait.
                   </p>
                 </div>
-              </article>
-            );
-          })}
-        </div>
-      </div>
-    </div>
-  </Container>
-</section>
+
+                <div className="grid gap-3.5">
+                  {principles.map((principle) => {
+                    const Icon = principle.icon;
+
+                    return (
+                      <article
+                        className="grid min-h-[7.5rem] grid-cols-[2.75rem_minmax(0,1fr)] items-center gap-4 rounded-[1.35rem] border border-white/10 bg-black/30 p-5 text-left sm:grid-cols-[3rem_minmax(0,1fr)] sm:gap-5 sm:px-6"
+                        key={principle.title}
+                      >
+                        <div
+                          className="flex size-11 shrink-0 items-center justify-center rounded-xl border bg-black/40 sm:size-12"
+                          style={{
+                            borderColor: `${principle.color}65`,
+                            color: principle.color,
+                          }}
+                        >
+                          <Icon aria-hidden="true" className="size-5" />
+                        </div>
+
+                        <div className="min-w-0">
+                          <h3 className="text-[0.95rem] leading-6 font-black text-white sm:text-base">
+                            {principle.title}
+                          </h3>
+
+                          <p className="mt-1.5 text-[0.82rem] leading-5 text-white/60 sm:text-sm sm:leading-6">
+                            {principle.description}
+                          </p>
+                        </div>
+                      </article>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          </Container>
+        </section>
 
         <section className="relative py-12 sm:py-14 lg:py-16">
           <Container className="!max-w-[76rem]">
