@@ -14,12 +14,12 @@ export default function SignupPage() {
       description="Create your Signal account to bring your daily capacity, communities, creative work, campaigns, and Passport together in one place."
       footer={
         <>
-          Already have an account?{" "}
+          Already Have An Account?{" "}
           <Link
             className="font-bold text-white underline decoration-neutral-600 underline-offset-4"
             href="/login"
           >
-            Log in
+            Log In
           </Link>
         </>
       }
