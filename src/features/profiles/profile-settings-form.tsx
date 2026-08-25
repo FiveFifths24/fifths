@@ -5,6 +5,7 @@ import { ActionStatus } from "@/components/forms/action-status";
 import { SubmitButton } from "@/components/forms/submit-button";
 import { firstFieldError, initialActionState } from "@/features/auth/state";
 import { updateProfileSettingsAction } from "./actions";
+import { ProfileMediaEditor } from "./profile-media-editor";
 
 const inputClass =
   "min-h-12 w-full rounded-xl border border-white/10 bg-black/45 px-4 py-3 text-white outline-none transition file:mr-4 file:rounded-full file:border-0 file:bg-[#6c14ce]/20 file:px-4 file:py-2 file:font-bold file:text-[#e9d5ff] hover:file:bg-[#6c14ce]/30 focus:border-[#f359d2]/70 focus:ring-2 focus:ring-[#992bff]/20";
@@ -62,6 +63,16 @@ export function ProfileSettingsForm({
     displayNameChangedAt: string | null;
     bio: string;
     accentColor: string;
+    landscapeUrl: string | null;
+    landscapeImageFit: "cover" | "contain";
+    landscapeImagePositionX: number;
+    landscapeImagePositionY: number;
+    landscapeImageZoom: number;
+    backgroundUrl: string | null;
+    backgroundImageFit: "cover" | "contain";
+    backgroundImagePositionX: number;
+    backgroundImagePositionY: number;
+    backgroundImageZoom: number;
     spotlightTitle: string;
     spotlightDescription: string;
     spotlightUrl: string;
@@ -81,7 +92,7 @@ export function ProfileSettingsForm({
     <form action={action} className="space-y-6" encType="multipart/form-data">
       <ActionStatus state={state} />
       <div
-        className="grid scroll-mt-28 gap-5 lg:grid-cols-3"
+        className="grid scroll-mt-28 gap-5 sm:grid-cols-2"
         id="profile-media"
       >
         <div>
@@ -106,22 +117,6 @@ export function ProfileSettingsForm({
             error={firstFieldError(state, "username")}
             hint={`${usernameWindow.message} Usernames are unique and checked when you save.`}
           />
-        </div>
-        <div>
-          <label
-            className="mb-2 block text-sm font-bold text-white"
-            htmlFor="profile-landscape"
-          >
-            Landscape image
-          </label>
-          <input
-            accept="image/jpeg,image/png,image/webp,image/gif"
-            className={inputClass}
-            id="profile-landscape"
-            name="landscape"
-            type="file"
-          />
-          <FieldMessage hint="Optional JPG, PNG, WebP, or GIF header, up to 5 MB." />
         </div>
         <div>
           <label
@@ -164,40 +159,38 @@ export function ProfileSettingsForm({
           hint="Up to 500 characters."
         />
       </div>
-      <div className="grid gap-5 sm:grid-cols-2">
-        <div>
-          <label
-            className="mb-2 block text-sm font-bold text-white"
-            htmlFor="profile-avatar"
-          >
-            Profile photo
-          </label>
-          <input
-            accept="image/jpeg,image/png,image/webp"
-            className={inputClass}
-            id="profile-avatar"
-            name="avatar"
-            type="file"
-          />
-          <FieldMessage hint="One JPG, PNG, or WebP image, up to 5 MB." />
-        </div>
-        <div>
-          <label
-            className="mb-2 block text-sm font-bold text-white"
-            htmlFor="profile-background"
-          >
-            Profile background
-          </label>
-          <input
-            accept="image/jpeg,image/png,image/webp"
-            className={inputClass}
-            id="profile-background"
-            name="background"
-            type="file"
-          />
-          <FieldMessage hint="A static MySpace-style background, up to 5 MB." />
-        </div>
+      <div>
+        <label
+          className="mb-2 block text-sm font-bold text-white"
+          htmlFor="profile-avatar"
+        >
+          Profile photo
+        </label>
+        <input
+          accept="image/jpeg,image/png,image/webp"
+          className={inputClass}
+          id="profile-avatar"
+          name="avatar"
+          type="file"
+        />
+        <FieldMessage hint="One JPG, PNG, or WebP image, up to 5 MB." />
       </div>
+      <ProfileMediaEditor
+        background={{
+          currentUrl: profile.backgroundUrl,
+          fit: profile.backgroundImageFit,
+          positionX: profile.backgroundImagePositionX,
+          positionY: profile.backgroundImagePositionY,
+          zoom: profile.backgroundImageZoom,
+        }}
+        landscape={{
+          currentUrl: profile.landscapeUrl,
+          fit: profile.landscapeImageFit,
+          positionX: profile.landscapeImagePositionX,
+          positionY: profile.landscapeImagePositionY,
+          zoom: profile.landscapeImageZoom,
+        }}
+      />
       <div>
         <label
           className="mb-2 block text-sm font-bold text-white"
