@@ -28,6 +28,14 @@ export const profileSettingsSchema = z.object({
     .trim()
     .toLowerCase()
     .regex(/^#[0-9a-f]{6}$/, "Use a six-digit hex color such as #ff3cac."),
+  landscapeImageFit: z.enum(["cover", "contain"]),
+  landscapeImagePositionX: z.coerce.number().int().min(0).max(100),
+  landscapeImagePositionY: z.coerce.number().int().min(0).max(100),
+  landscapeImageZoom: z.coerce.number().int().min(100).max(200),
+  backgroundImageFit: z.enum(["cover", "contain"]),
+  backgroundImagePositionX: z.coerce.number().int().min(0).max(100),
+  backgroundImagePositionY: z.coerce.number().int().min(0).max(100),
+  backgroundImageZoom: z.coerce.number().int().min(100).max(200),
   spotlightTitle: z
     .string()
     .trim()
