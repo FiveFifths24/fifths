@@ -136,7 +136,9 @@ export default async function AccountPage({
             <ProfileSettingsForm
               profile={{
                 username: profile.username ?? "",
+                usernameChangedAt: profile.username_changed_at,
                 displayName: profile.display_name ?? "",
+                displayNameChangedAt: profile.display_name_changed_at,
                 bio: profile.bio ?? "",
                 visibility: profile.visibility,
                 discoverable: profile.discoverable,

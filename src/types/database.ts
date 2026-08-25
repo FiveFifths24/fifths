@@ -13,7 +13,9 @@ export type Database = {
         Row: {
           id: string;
           username: string | null;
+          username_changed_at: string | null;
           display_name: string | null;
+          display_name_changed_at: string | null;
           pronouns: string | null;
           timezone: string;
           avatar_url: string | null;
@@ -37,7 +39,9 @@ export type Database = {
         Insert: {
           id: string;
           username?: string | null;
+          username_changed_at?: string | null;
           display_name?: string | null;
+          display_name_changed_at?: string | null;
           pronouns?: string | null;
           timezone?: string;
           avatar_url?: string | null;

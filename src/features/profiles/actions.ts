@@ -77,7 +77,7 @@ export async function updateProfileSettingsAction(
       };
     const { data: current } = await supabase
       .from("profiles")
-      .select("avatar_url, cover_image_url")
+      .select("username, avatar_url, cover_image_url")
       .eq("id", userData.user.id)
       .maybeSingle();
     const avatarPath = await uploadProfileImage(
@@ -102,16 +102,25 @@ export async function updateProfileSettingsAction(
       p_cover_image_url: backgroundPath,
     });
     if (error) {
+      const errorMessage = error.message.toUpperCase();
       return {
         status: "error",
-        message:
-          error.code === "23505"
-            ? "That username is already taken."
-            : "Your profile could not be updated.",
+        message: errorMessage.includes("USERNAME_CHANGE_COOLDOWN")
+          ? "Your username can only be changed once every 7 days."
+          : errorMessage.includes("DISPLAY_NAME_CHANGE_COOLDOWN")
+            ? "Your display name can only be changed once every 7 days."
+            : error.code === "23505"
+              ? "That username is already taken. Try another one."
+              : "Your profile could not be updated.",
       };
     }
     revalidatePath("/account");
+    if (current?.username) {
+      revalidatePath(`/home/profiles/${current.username}`);
+      revalidatePath(`/profiles/${current.username}`);
+    }
     revalidatePath(`/home/profiles/${parsed.data.username}`);
+    revalidatePath(`/profiles/${parsed.data.username}`);
     return {
       status: "success",
       message: "Your SIGNAL profile has been updated.",
@@ -122,7 +131,9 @@ export async function updateProfileSettingsAction(
       message:
         error instanceof Error && error.message === "IMAGE_INVALID"
           ? "Use a JPG, PNG, or WebP image no larger than 5 MB."
-          : "Profile updates require the latest Supabase migration and media bucket.",
+          : error instanceof Error && error.message === "IMAGE_UPLOAD_FAILED"
+            ? "Your image could not be uploaded. Please try again."
+            : "Profile updates require the latest Supabase migration and media bucket.",
     };
   }
 }

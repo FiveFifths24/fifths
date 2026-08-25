@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { ActionStatus } from "@/components/forms/action-status";
 import { SubmitButton } from "@/components/forms/submit-button";
 import { firstFieldError, initialActionState } from "@/features/auth/state";
@@ -17,12 +17,49 @@ function FieldMessage({ hint, error }: { hint: string; error?: string }) {
   );
 }
 
+const NAME_CHANGE_WAIT_MS = 7 * 24 * 60 * 60 * 1000;
+
+function useNameChangeWindow(changedAt: string | null) {
+  const [now, setNow] = useState(() => Date.now());
+
+  useEffect(() => {
+    const timer = window.setInterval(() => setNow(Date.now()), 60_000);
+    return () => window.clearInterval(timer);
+  }, []);
+
+  if (!changedAt) return { locked: false, message: "Available to change now." };
+  const nextChangeAt = new Date(changedAt).getTime() + NAME_CHANGE_WAIT_MS;
+  if (nextChangeAt <= now) {
+    return { locked: false, message: "Available to change now." };
+  }
+
+  const remainingMinutes = Math.max(
+    1,
+    Math.ceil((nextChangeAt - now) / (60 * 1000)),
+  );
+  const days = Math.floor(remainingMinutes / (24 * 60));
+  const hours = Math.floor((remainingMinutes % (24 * 60)) / 60);
+  const minutes = remainingMinutes % 60;
+  const remaining = days
+    ? `${days}d ${hours}h`
+    : hours
+      ? `${hours}h ${minutes}m`
+      : `${minutes}m`;
+
+  return {
+    locked: true,
+    message: `Available again in ${remaining}.`,
+  };
+}
+
 export function ProfileSettingsForm({
   profile,
 }: {
   profile: {
     username: string;
+    usernameChangedAt: string | null;
     displayName: string;
+    displayNameChangedAt: string | null;
     bio: string;
     visibility: "private" | "members" | "public";
     discoverable: boolean;
@@ -32,29 +69,57 @@ export function ProfileSettingsForm({
     updateProfileSettingsAction,
     initialActionState,
   );
+  const usernameWindow = useNameChangeWindow(profile.usernameChangedAt);
+  const displayNameWindow = useNameChangeWindow(profile.displayNameChangedAt);
+
   return (
     <form action={action} className="space-y-6" encType="multipart/form-data">
       <ActionStatus state={state} />
-      <input name="username" type="hidden" value={profile.username} />
-      <div>
-        <label
-          className="mb-2 block text-sm font-bold text-white"
-          htmlFor="profile-display-name"
-        >
-          Display name
-        </label>
-        <input
-          className={inputClass}
-          defaultValue={profile.displayName}
-          id="profile-display-name"
-          maxLength={80}
-          name="displayName"
-          required
-        />
-        <FieldMessage
-          error={firstFieldError(state, "displayName")}
-          hint="The name people see on your profile."
-        />
+      <div className="grid gap-5 sm:grid-cols-2">
+        <div>
+          <label
+            className="mb-2 block text-sm font-bold text-white"
+            htmlFor="profile-username"
+          >
+            Username
+          </label>
+          <input
+            className={`${inputClass} read-only:cursor-not-allowed read-only:opacity-55`}
+            defaultValue={profile.username}
+            id="profile-username"
+            maxLength={30}
+            minLength={3}
+            name="username"
+            pattern="[a-z0-9](?:[a-z0-9_]*[a-z0-9])?"
+            readOnly={usernameWindow.locked}
+            required
+          />
+          <FieldMessage
+            error={firstFieldError(state, "username")}
+            hint={`${usernameWindow.message} Usernames are unique and checked when you save.`}
+          />
+        </div>
+        <div>
+          <label
+            className="mb-2 block text-sm font-bold text-white"
+            htmlFor="profile-display-name"
+          >
+            Display name
+          </label>
+          <input
+            className={`${inputClass} read-only:cursor-not-allowed read-only:opacity-55`}
+            defaultValue={profile.displayName}
+            id="profile-display-name"
+            maxLength={80}
+            name="displayName"
+            readOnly={displayNameWindow.locked}
+            required
+          />
+          <FieldMessage
+            error={firstFieldError(state, "displayName")}
+            hint={`${displayNameWindow.message} Display names do not need to be unique.`}
+          />
+        </div>
       </div>
       <div>
         <label
