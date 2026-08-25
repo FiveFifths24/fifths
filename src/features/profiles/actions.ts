@@ -152,16 +152,17 @@ export async function updateProfileSettingsAction(
               : "Your profile could not be updated.",
       };
     }
+    const activePaths = new Set(
+      [avatarPath, landscapePath, backgroundPath].filter(Boolean),
+    );
     const replacedPaths = [
-      [current?.avatar_url, avatarPath],
-      [current?.cover_image_url, landscapePath],
-      [current?.background_image_url, backgroundPath],
-    ]
-      .filter(
-        (paths): paths is [string, string] =>
-          Boolean(paths[0] && paths[1] && paths[0] !== paths[1]),
-      )
-      .map(([currentPath]) => currentPath);
+      current?.avatar_url,
+      current?.cover_image_url,
+      current?.background_image_url,
+    ].filter(
+      (currentPath): currentPath is string =>
+        Boolean(currentPath && !activePaths.has(currentPath)),
+    );
     if (replacedPaths.length) {
       await supabase.storage.from("profile-media").remove(replacedPaths);
     }
