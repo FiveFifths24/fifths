@@ -114,9 +114,7 @@ function MediaFrameEditor({
             className={inputClass}
             id={`${prefix}-fit`}
             name={`${prefix}Fit`}
-            onChange={(event) =>
-              setFit(event.target.value as ProfileImageFit)
-            }
+            onChange={(event) => setFit(event.target.value as ProfileImageFit)}
             value={fit}
           >
             <option value="cover">Fill frame</option>
