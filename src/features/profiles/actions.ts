@@ -159,9 +159,8 @@ export async function updateProfileSettingsAction(
       current?.avatar_url,
       current?.cover_image_url,
       current?.background_image_url,
-    ].filter(
-      (currentPath): currentPath is string =>
-        Boolean(currentPath && !activePaths.has(currentPath)),
+    ].filter((currentPath): currentPath is string =>
+      Boolean(currentPath && !activePaths.has(currentPath)),
     );
     if (replacedPaths.length) {
       await supabase.storage.from("profile-media").remove(replacedPaths);
