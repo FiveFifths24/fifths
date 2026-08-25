@@ -33,6 +33,7 @@ function TextField({
   error,
   multiline = false,
   maxLength,
+  defaultValue,
 }: {
   name: "summary" | "details" | "contextUrl";
   label: string;
@@ -40,6 +41,7 @@ function TextField({
   error?: string;
   multiline?: boolean;
   maxLength: number;
+  defaultValue?: string;
 }) {
   const errorId = `report-${name}-description`;
   const common =
@@ -60,6 +62,7 @@ function TextField({
           id={`report-${name}`}
           maxLength={maxLength}
           name={name}
+          defaultValue={defaultValue}
           required
         />
       ) : (
@@ -70,6 +73,7 @@ function TextField({
           id={`report-${name}`}
           maxLength={maxLength}
           name={name}
+          defaultValue={defaultValue}
           required={name === "summary"}
         />
       )}
@@ -86,7 +90,15 @@ function TextField({
   );
 }
 
-export function ReportForm() {
+export function ReportForm({
+  defaultTarget = "platform",
+  defaultContextUrl = "",
+  lockTarget = false,
+}: {
+  defaultTarget?: (typeof targets)[number][0];
+  defaultContextUrl?: string;
+  lockTarget?: boolean;
+} = {}) {
   const [state, action] = useActionState(
     submitReportAction,
     initialActionState,
@@ -110,7 +122,8 @@ export function ReportForm() {
           </label>
           <select
             className={selectClass}
-            defaultValue="platform"
+            defaultValue={defaultTarget}
+            disabled={lockTarget}
             id="report-target"
             name="targetType"
           >
@@ -120,6 +133,9 @@ export function ReportForm() {
               </option>
             ))}
           </select>
+          {lockTarget ? (
+            <input name="targetType" type="hidden" value={defaultTarget} />
+          ) : null}
         </div>
         <div>
           <label
@@ -158,6 +174,7 @@ export function ReportForm() {
         name="details"
       />
       <TextField
+        defaultValue={defaultContextUrl}
         error={firstFieldError(state, "contextUrl")}
         label="Related FIFTHS path (optional)"
         hint="Example: /home/circles. External links and uploads are not accepted in Phase 10."

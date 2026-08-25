@@ -660,6 +660,17 @@ export function OnboardingForm({
           <option value="members">SIGNAL members</option>
         </SelectField>
 
+        <SelectField
+          defaultValue="members"
+          id="profileVisibility"
+          label="Who can view your profile?"
+          name="profileVisibility"
+        >
+          <option value="public">Anyone</option>
+          <option value="members">SIGNAL members</option>
+          <option value="private">Friends only</option>
+        </SelectField>
+
         <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-white/10 bg-black/30 p-5 has-checked:border-[#ca9aff]/70 has-checked:bg-[#6c14ce]/15">
           <input
             className="mt-0.5 size-5 shrink-0 accent-[#a855f7]"

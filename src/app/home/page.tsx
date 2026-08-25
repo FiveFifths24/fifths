@@ -16,6 +16,10 @@ import {
 } from "@/features/creator-commons/opportunity-data";
 import { CampaignCard } from "@/features/fifth-realm/campaign-card";
 import {
+  filterMemberContent,
+  loadContentPreferences,
+} from "@/features/profiles/content-filters";
+import {
   assembleCampaignCards,
   toCampaignRecommendationCandidates,
 } from "@/features/fifth-realm/campaign-data";
@@ -172,10 +176,33 @@ export default async function PersonalHomePage({
   const displayName = profile?.display_name ?? "You";
   const modes = modeResult.data ?? [];
   const mode = pulse ? modes.find((item) => item.id === pulse.mode_id) : null;
-  const sessions = sessionResult.data ?? [];
-  const circles = circleResult.data ?? [];
-  const opportunities = opportunityResult.data ?? [];
-  const campaigns = campaignResult.data ?? [];
+  const contentPreferences = user
+    ? await loadContentPreferences(supabase, user.id)
+    : { hiddenUserIds: new Set<string>(), blockedWords: [] };
+  const sessions = filterMemberContent(
+    sessionResult.data ?? [],
+    contentPreferences,
+    (item) => item.host_user_id,
+    (item) => `${item.title} ${item.summary} ${item.description}`,
+  );
+  const circles = filterMemberContent(
+    circleResult.data ?? [],
+    contentPreferences,
+    (item) => item.created_by,
+    (item) => `${item.name} ${item.summary} ${item.description}`,
+  );
+  const opportunities = filterMemberContent(
+    opportunityResult.data ?? [],
+    contentPreferences,
+    (item) => item.created_by,
+    (item) => `${item.title} ${item.summary} ${item.description}`,
+  );
+  const campaigns = filterMemberContent(
+    campaignResult.data ?? [],
+    contentPreferences,
+    (item) => item.created_by,
+    (item) => `${item.title} ${item.summary} ${item.premise}`,
+  );
   const [
     sessionLinkResult,
     circleLinkResult,

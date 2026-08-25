@@ -17,6 +17,17 @@ export type Database = {
           pronouns: string | null;
           timezone: string;
           avatar_url: string | null;
+          bio: string | null;
+          city: string | null;
+          region: string | null;
+          country_code: string | null;
+          cover_image_url: string | null;
+          profile_song_url: string | null;
+          profile_song_title: string | null;
+          profile_song_artist: string | null;
+          location_visibility: Database["public"]["Enums"]["location_visibility"];
+          friend_list_visibility: Database["public"]["Enums"]["friend_list_visibility"];
+          discoverable: boolean;
           visibility: Database["public"]["Enums"]["profile_visibility"];
           age_confirmed_at: string | null;
           onboarding_completed_at: string | null;
@@ -30,6 +41,17 @@ export type Database = {
           pronouns?: string | null;
           timezone?: string;
           avatar_url?: string | null;
+          bio?: string | null;
+          city?: string | null;
+          region?: string | null;
+          country_code?: string | null;
+          cover_image_url?: string | null;
+          profile_song_url?: string | null;
+          profile_song_title?: string | null;
+          profile_song_artist?: string | null;
+          location_visibility?: Database["public"]["Enums"]["location_visibility"];
+          friend_list_visibility?: Database["public"]["Enums"]["friend_list_visibility"];
+          discoverable?: boolean;
           visibility?: Database["public"]["Enums"]["profile_visibility"];
           age_confirmed_at?: string | null;
           onboarding_completed_at?: string | null;
@@ -775,6 +797,66 @@ export type Database = {
         Update: never;
         Relationships: [];
       };
+      profile_follows: {
+        Row: { follower_id: string; followed_id: string; created_at: string };
+        Insert: {
+          follower_id: string;
+          followed_id: string;
+          created_at?: string;
+        };
+        Update: never;
+        Relationships: [];
+      };
+      profile_friendships: {
+        Row: {
+          user_id_a: string;
+          user_id_b: string;
+          requested_by: string;
+          status: Database["public"]["Enums"]["friendship_status"];
+          created_at: string;
+          responded_at: string | null;
+        };
+        Insert: {
+          user_id_a: string;
+          user_id_b: string;
+          requested_by: string;
+          status?: Database["public"]["Enums"]["friendship_status"];
+          created_at?: string;
+          responded_at?: string | null;
+        };
+        Update: never;
+        Relationships: [];
+      };
+      profile_blocks: {
+        Row: {
+          blocker_id: string;
+          blocked_id: string;
+          blocked_username: string | null;
+          blocked_display_name: string | null;
+          created_at: string;
+        };
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
+      profile_mutes: {
+        Row: {
+          muter_id: string;
+          muted_id: string;
+          muted_username: string | null;
+          muted_display_name: string | null;
+          created_at: string;
+        };
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
+      profile_blocked_words: {
+        Row: { id: string; user_id: string; word: string; created_at: string };
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: {
@@ -1187,6 +1269,95 @@ export type Database = {
         Args: Record<string, never>;
         Returns: undefined;
       };
+      update_profile_settings: {
+        Args: {
+          p_username: string;
+          p_display_name: string;
+          p_bio: string | null;
+          p_visibility: Database["public"]["Enums"]["profile_visibility"];
+          p_discoverable: boolean;
+          p_avatar_url: string | null;
+          p_cover_image_url: string | null;
+        };
+        Returns: undefined;
+      };
+      set_profile_visibility: {
+        Args: {
+          p_visibility: Database["public"]["Enums"]["profile_visibility"];
+        };
+        Returns: undefined;
+      };
+      get_public_profile: {
+        Args: { p_username: string };
+        Returns: Array<{
+          id: string;
+          username: string;
+          display_name: string;
+          pronouns: string | null;
+          bio: string | null;
+          avatar_url: string | null;
+          cover_image_url: string | null;
+          city: string | null;
+          region: string | null;
+          location_visibility: Database["public"]["Enums"]["location_visibility"];
+          created_at: string;
+        }>;
+      };
+      get_member_profiles: {
+        Args: { p_username?: string | null; p_discoverable_only?: boolean };
+        Returns: Array<{
+          id: string;
+          username: string;
+          display_name: string;
+          pronouns: string | null;
+          bio: string | null;
+          avatar_url: string | null;
+          cover_image_url: string | null;
+          city: string | null;
+          region: string | null;
+          location_visibility: Database["public"]["Enums"]["location_visibility"];
+          friend_list_visibility: Database["public"]["Enums"]["friend_list_visibility"];
+          discoverable: boolean;
+          visibility: Database["public"]["Enums"]["profile_visibility"];
+          created_at: string;
+        }>;
+      };
+      follow_profile: {
+        Args: { p_target_user_id: string };
+        Returns: undefined;
+      };
+      unfollow_profile: {
+        Args: { p_target_user_id: string };
+        Returns: undefined;
+      };
+      remove_follower: {
+        Args: { p_follower_user_id: string };
+        Returns: undefined;
+      };
+      send_friend_request: {
+        Args: { p_target_user_id: string };
+        Returns: undefined;
+      };
+      accept_friend_request: {
+        Args: { p_requester_user_id: string };
+        Returns: undefined;
+      };
+      remove_friendship: {
+        Args: { p_target_user_id: string };
+        Returns: undefined;
+      };
+      block_profile: { Args: { p_target_user_id: string }; Returns: undefined };
+      unblock_profile: {
+        Args: { p_target_user_id: string };
+        Returns: undefined;
+      };
+      mute_profile: { Args: { p_target_user_id: string }; Returns: undefined };
+      unmute_profile: {
+        Args: { p_target_user_id: string };
+        Returns: undefined;
+      };
+      add_blocked_word: { Args: { p_word: string }; Returns: string };
+      remove_blocked_word: { Args: { p_word_id: string }; Returns: undefined };
     };
     Enums: {
       app_role:
@@ -1198,6 +1369,9 @@ export type Database = {
         | "organization_admin"
         | "platform_admin";
       profile_visibility: "private" | "members" | "public";
+      location_visibility: "hidden" | "city_region" | "region_only";
+      friend_list_visibility: "private" | "friends" | "members";
+      friendship_status: "pending" | "accepted";
       pulse_stimulation_level: "low" | "moderate" | "high";
       pulse_social_intensity: "solo" | "light" | "social";
       participation_format: "in_person" | "online" | "either";
@@ -1271,7 +1445,10 @@ export type Database = {
         | "commons_response"
         | "realm_application"
         | "passport_activity"
-        | "system";
+        | "system"
+        | "friend_request"
+        | "friend_accepted"
+        | "new_follower";
     };
     CompositeTypes: Record<string, never>;
   };

@@ -2,7 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bell, CalendarRange, HeartHandshake, House } from "lucide-react";
+import {
+  Bell,
+  CalendarRange,
+  HeartHandshake,
+  House,
+  UsersRound,
+} from "lucide-react";
 
 import { cn } from "@/lib/cn";
 
@@ -28,6 +34,12 @@ const items = [
     href: "/home/notifications",
     label: "Inbox",
     icon: Bell,
+    nested: true,
+  },
+  {
+    href: "/home/people",
+    label: "People",
+    icon: UsersRound,
     nested: true,
   },
 ] as const;

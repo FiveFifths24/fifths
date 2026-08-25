@@ -1,6 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { CalendarDays, Clock3, MapPin, ShieldCheck, Users } from "lucide-react";
+import {
+  CalendarDays,
+  Clock3,
+  Flag,
+  MapPin,
+  ShieldCheck,
+  Users,
+} from "lucide-react";
 
 import { AccountUnavailable } from "@/components/account/account-unavailable";
 import { Badge } from "@/components/ui/badge";
@@ -12,6 +19,7 @@ import {
   formatSessionFormat,
 } from "@/features/sessions/session-card";
 import { SessionRegistrationForm } from "@/features/sessions/session-registration-form";
+import { ReportForm } from "@/features/trust-safety/report-form";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = { title: "Session details" };
@@ -328,6 +336,20 @@ export default async function SessionDetailsPage({
           </p>
         </aside>
       </div>
+
+      <details className="mt-8 rounded-[1.5rem] border border-red-900/50 bg-red-950/20 p-6">
+        <summary className="flex cursor-pointer list-none items-center justify-center gap-3 font-bold text-red-200 sm:justify-start">
+          <Flag aria-hidden="true" className="size-5" />
+          Report this Session
+        </summary>
+        <div className="mt-6 border-t border-red-900/40 pt-6">
+          <ReportForm
+            defaultContextUrl={`/home/sessions/${session.id}`}
+            defaultTarget="session"
+            lockTarget
+          />
+        </div>
+      </details>
     </div>
   );
 }

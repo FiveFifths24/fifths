@@ -75,6 +75,8 @@ export const onboardingSchema = z.object({
 
   discoverable: checkbox,
 
+  profileVisibility: z.enum(["private", "members", "public"]),
+
   interestIds: interestSelection,
   skillIds: skillSelection,
 

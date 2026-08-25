@@ -8,6 +8,7 @@ const validOnboarding = {
   timezone: "America/New_York",
   locationVisibility: "hidden",
   friendListVisibility: "private",
+  profileVisibility: "members",
   interestIds: ["aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"],
   skillIds: ["bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb"],
 };

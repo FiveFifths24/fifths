@@ -10,6 +10,7 @@ import {
   rankSessions,
 } from "@/features/sessions/session-data";
 import { SessionCard } from "@/features/sessions/session-card";
+import { filterMemberContent, loadContentPreferences } from "@/features/profiles/content-filters";
 import type { PulseRecommendationInput } from "@/lib/recommendations/types";
 import { createClient } from "@/lib/supabase/server";
 
@@ -29,6 +30,7 @@ export default async function SessionsPage() {
   }
 
   const now = new Date().toISOString();
+  const { data: userData } = await supabase.auth.getUser();
 
   const [sessionResult, modeResult, interestResult, pulseResult] =
     await Promise.all([
@@ -68,7 +70,15 @@ export default async function SessionsPage() {
     );
   }
 
-  const sessions = sessionResult.data ?? [];
+  const contentPreferences = userData.user
+    ? await loadContentPreferences(supabase, userData.user.id)
+    : { hiddenUserIds: new Set<string>(), blockedWords: [] };
+  const sessions = filterMemberContent(
+    sessionResult.data ?? [],
+    contentPreferences,
+    (session) => session.host_user_id,
+    (session) => `${session.title} ${session.summary} ${session.description} ${session.host_display_name}`,
+  );
 
   const sessionIds = sessions.map((session) => session.id);
 
