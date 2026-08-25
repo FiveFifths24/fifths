@@ -61,6 +61,10 @@ export function ProfileSettingsForm({
     displayName: string;
     displayNameChangedAt: string | null;
     bio: string;
+    accentColor: string;
+    spotlightTitle: string;
+    spotlightDescription: string;
+    spotlightUrl: string;
     visibility: "private" | "members" | "public";
     discoverable: boolean;
   };
@@ -71,12 +75,13 @@ export function ProfileSettingsForm({
   );
   const usernameWindow = useNameChangeWindow(profile.usernameChangedAt);
   const displayNameWindow = useNameChangeWindow(profile.displayNameChangedAt);
+  const [accentColor, setAccentColor] = useState(profile.accentColor);
 
   return (
     <form action={action} className="space-y-6" encType="multipart/form-data">
       <ActionStatus state={state} />
       <div
-        className="grid scroll-mt-28 gap-5 sm:grid-cols-2"
+        className="grid scroll-mt-28 gap-5 lg:grid-cols-3"
         id="profile-media"
       >
         <div>
@@ -101,6 +106,22 @@ export function ProfileSettingsForm({
             error={firstFieldError(state, "username")}
             hint={`${usernameWindow.message} Usernames are unique and checked when you save.`}
           />
+        </div>
+        <div>
+          <label
+            className="mb-2 block text-sm font-bold text-white"
+            htmlFor="profile-landscape"
+          >
+            Landscape image
+          </label>
+          <input
+            accept="image/jpeg,image/png,image/webp,image/gif"
+            className={inputClass}
+            id="profile-landscape"
+            name="landscape"
+            type="file"
+          />
+          <FieldMessage hint="Optional JPG, PNG, WebP, or GIF header, up to 5 MB." />
         </div>
         <div>
           <label
@@ -177,6 +198,102 @@ export function ProfileSettingsForm({
           <FieldMessage hint="A static MySpace-style background, up to 5 MB." />
         </div>
       </div>
+      <div>
+        <label
+          className="mb-2 block text-sm font-bold text-white"
+          htmlFor="profile-accent-color"
+        >
+          Card border color
+        </label>
+        <div className="flex gap-3">
+          <input
+            aria-label="Choose card border color"
+            className="size-12 shrink-0 cursor-pointer rounded-xl border border-white/10 bg-black/45 p-1"
+            onChange={(event) => setAccentColor(event.target.value)}
+            type="color"
+            value={
+              /^#[0-9a-f]{6}$/i.test(accentColor) ? accentColor : "#a855f7"
+            }
+          />
+          <input
+            className={inputClass}
+            id="profile-accent-color"
+            maxLength={7}
+            name="accentColor"
+            onChange={(event) => setAccentColor(event.target.value)}
+            pattern="#[0-9a-fA-F]{6}"
+            placeholder="#ff3cac"
+            required
+            value={accentColor}
+          />
+        </div>
+        <FieldMessage
+          error={firstFieldError(state, "accentColor")}
+          hint="Enter any six-digit hex color to match your wallpaper."
+        />
+      </div>
+      <fieldset className="rounded-2xl border border-white/10 bg-black/25 p-5">
+        <legend className="px-2 text-sm font-bold text-white">
+          Pinned spotlight
+        </legend>
+        <p className="mb-5 text-xs leading-5 text-white/45">
+          Optionally feature one project, session, Circle, opportunity, or link.
+        </p>
+        <div className="space-y-4">
+          <div>
+            <label className="sr-only" htmlFor="spotlight-title">
+              Spotlight title
+            </label>
+            <input
+              className={inputClass}
+              defaultValue={profile.spotlightTitle}
+              id="spotlight-title"
+              maxLength={80}
+              name="spotlightTitle"
+              placeholder="Spotlight title"
+            />
+            <FieldMessage
+              error={firstFieldError(state, "spotlightTitle")}
+              hint="Up to 80 characters."
+            />
+          </div>
+          <div>
+            <label className="sr-only" htmlFor="spotlight-description">
+              Spotlight description
+            </label>
+            <textarea
+              className={`${inputClass} min-h-24`}
+              defaultValue={profile.spotlightDescription}
+              id="spotlight-description"
+              maxLength={240}
+              name="spotlightDescription"
+              placeholder="A short description"
+            />
+            <FieldMessage
+              error={firstFieldError(state, "spotlightDescription")}
+              hint="Up to 240 characters."
+            />
+          </div>
+          <div>
+            <label className="sr-only" htmlFor="spotlight-url">
+              Spotlight link
+            </label>
+            <input
+              className={inputClass}
+              defaultValue={profile.spotlightUrl}
+              id="spotlight-url"
+              maxLength={500}
+              name="spotlightUrl"
+              placeholder="https://…"
+              type="url"
+            />
+            <FieldMessage
+              error={firstFieldError(state, "spotlightUrl")}
+              hint="Optional complete link beginning with http:// or https://."
+            />
+          </div>
+        </div>
+      </fieldset>
       <div>
         <label
           className="mb-2 block text-sm font-bold text-white"

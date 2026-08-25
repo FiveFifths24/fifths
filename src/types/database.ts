@@ -24,6 +24,11 @@ export type Database = {
           region: string | null;
           country_code: string | null;
           cover_image_url: string | null;
+          background_image_url: string | null;
+          profile_accent_color: string;
+          spotlight_title: string | null;
+          spotlight_description: string | null;
+          spotlight_url: string | null;
           profile_song_url: string | null;
           profile_song_title: string | null;
           profile_song_artist: string | null;
@@ -50,6 +55,11 @@ export type Database = {
           region?: string | null;
           country_code?: string | null;
           cover_image_url?: string | null;
+          background_image_url?: string | null;
+          profile_accent_color?: string;
+          spotlight_title?: string | null;
+          spotlight_description?: string | null;
+          spotlight_url?: string | null;
           profile_song_url?: string | null;
           profile_song_title?: string | null;
           profile_song_artist?: string | null;
@@ -861,6 +871,28 @@ export type Database = {
         Update: never;
         Relationships: [];
       };
+      profile_statuses: {
+        Row: {
+          user_id: string;
+          status_text: string;
+          expires_at: string;
+          updated_at: string;
+        };
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
+      profile_featured_connections: {
+        Row: {
+          owner_id: string;
+          featured_id: string;
+          display_order: number;
+          created_at: string;
+        };
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: {
@@ -1284,6 +1316,56 @@ export type Database = {
           p_cover_image_url: string | null;
         };
         Returns: undefined;
+      };
+      update_profile_experience: {
+        Args: {
+          p_username: string;
+          p_display_name: string;
+          p_bio: string | null;
+          p_visibility: Database["public"]["Enums"]["profile_visibility"];
+          p_discoverable: boolean;
+          p_avatar_url: string | null;
+          p_cover_image_url: string | null;
+          p_background_image_url: string | null;
+          p_profile_accent_color: string;
+          p_spotlight_title: string | null;
+          p_spotlight_description: string | null;
+          p_spotlight_url: string | null;
+        };
+        Returns: undefined;
+      };
+      set_profile_status: {
+        Args: { p_status_text: string };
+        Returns: undefined;
+      };
+      set_featured_connections: {
+        Args: { p_featured_ids: string[] };
+        Returns: undefined;
+      };
+      get_profile_experience: {
+        Args: { p_user_id: string };
+        Returns: Array<{
+          background_image_url: string | null;
+          profile_accent_color: string;
+          status_text: string | null;
+          status_expires_at: string | null;
+          spotlight_title: string | null;
+          spotlight_description: string | null;
+          spotlight_url: string | null;
+          friend_count: number;
+          follower_count: number;
+          following_count: number;
+        }>;
+      };
+      get_featured_connections: {
+        Args: { p_owner_id: string };
+        Returns: Array<{
+          id: string;
+          username: string;
+          display_name: string;
+          avatar_url: string | null;
+          display_order: number;
+        }>;
       };
       set_profile_visibility: {
         Args: {

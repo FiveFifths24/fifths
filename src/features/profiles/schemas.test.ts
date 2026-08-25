@@ -10,6 +10,10 @@ describe("profile settings schema", () => {
         bio: "Building something different.",
         visibility: "members",
         discoverable: true,
+        accentColor: "#ff3cac",
+        spotlightTitle: "Building SIGNAL",
+        spotlightDescription: "A profile spotlight.",
+        spotlightUrl: "https://example.com",
       }).success,
     ).toBe(true);
   });
@@ -22,6 +26,10 @@ describe("profile settings schema", () => {
         bio: "x".repeat(501),
         visibility: "public",
         discoverable: true,
+        accentColor: "not-a-color",
+        spotlightTitle: "",
+        spotlightDescription: "",
+        spotlightUrl: "",
       }).success,
     ).toBe(false);
   });

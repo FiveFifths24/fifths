@@ -7,7 +7,9 @@ import { createClient } from "@/lib/supabase/server";
 import {
   blockedWordIdSchema,
   blockedWordSchema,
+  featuredConnectionsSchema,
   profileSettingsSchema,
+  profileStatusSchema,
   targetProfileSchema,
 } from "./schemas";
 
@@ -15,6 +17,7 @@ const allowedImageTypes = new Map([
   ["image/jpeg", "jpg"],
   ["image/png", "png"],
   ["image/webp", "webp"],
+  ["image/gif", "gif"],
 ]);
 
 function safeReturnPath(value: FormDataEntryValue | null) {
@@ -25,14 +28,18 @@ function safeReturnPath(value: FormDataEntryValue | null) {
 }
 
 async function uploadProfileImage(
-  kind: "avatar" | "background",
+  kind: "avatar" | "landscape" | "background",
   file: FormDataEntryValue | null,
   userId: string,
   currentPath: string | null,
 ) {
   if (!(file instanceof File) || file.size === 0) return currentPath;
   const extension = allowedImageTypes.get(file.type);
-  if (!extension || file.size > 5 * 1024 * 1024) {
+  if (
+    !extension ||
+    (file.type === "image/gif" && kind !== "landscape") ||
+    file.size > 5 * 1024 * 1024
+  ) {
     throw new Error("IMAGE_INVALID");
   }
   const supabase = await createClient();
@@ -58,6 +65,10 @@ export async function updateProfileSettingsAction(
     bio: formData.get("bio"),
     visibility: formData.get("visibility"),
     discoverable: formData.get("discoverable") === "on",
+    accentColor: formData.get("accentColor"),
+    spotlightTitle: formData.get("spotlightTitle"),
+    spotlightDescription: formData.get("spotlightDescription"),
+    spotlightUrl: formData.get("spotlightUrl"),
   });
   if (!parsed.success) {
     return {
@@ -77,7 +88,7 @@ export async function updateProfileSettingsAction(
       };
     const { data: current } = await supabase
       .from("profiles")
-      .select("username, avatar_url, cover_image_url")
+      .select("username, avatar_url, cover_image_url, background_image_url")
       .eq("id", userData.user.id)
       .maybeSingle();
     const avatarPath = await uploadProfileImage(
@@ -86,20 +97,31 @@ export async function updateProfileSettingsAction(
       userData.user.id,
       current?.avatar_url ?? null,
     );
+    const landscapePath = await uploadProfileImage(
+      "landscape",
+      formData.get("landscape"),
+      userData.user.id,
+      current?.cover_image_url ?? null,
+    );
     const backgroundPath = await uploadProfileImage(
       "background",
       formData.get("background"),
       userData.user.id,
-      current?.cover_image_url ?? null,
+      current?.background_image_url ?? null,
     );
-    const { error } = await supabase.rpc("update_profile_settings", {
+    const { error } = await supabase.rpc("update_profile_experience", {
       p_username: parsed.data.username,
       p_display_name: parsed.data.displayName,
       p_bio: parsed.data.bio,
       p_visibility: parsed.data.visibility,
       p_discoverable: parsed.data.discoverable,
       p_avatar_url: avatarPath,
-      p_cover_image_url: backgroundPath,
+      p_cover_image_url: landscapePath,
+      p_background_image_url: backgroundPath,
+      p_profile_accent_color: parsed.data.accentColor,
+      p_spotlight_title: parsed.data.spotlightTitle,
+      p_spotlight_description: parsed.data.spotlightDescription,
+      p_spotlight_url: parsed.data.spotlightUrl,
     });
     if (error) {
       const errorMessage = error.message.toUpperCase();
@@ -130,12 +152,79 @@ export async function updateProfileSettingsAction(
       status: "error",
       message:
         error instanceof Error && error.message === "IMAGE_INVALID"
-          ? "Use a JPG, PNG, or WebP image no larger than 5 MB."
+          ? "Use a JPG, PNG, or WebP image—or a GIF for the landscape—no larger than 5 MB."
           : error instanceof Error && error.message === "IMAGE_UPLOAD_FAILED"
             ? "Your image could not be uploaded. Please try again."
             : "Profile updates require the latest Supabase migration and media bucket.",
     };
   }
+}
+
+export async function updateProfileStatusAction(
+  _previousState: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  const parsed = profileStatusSchema.safeParse({
+    statusText: formData.get("statusText"),
+  });
+  if (!parsed.success) {
+    return {
+      status: "error",
+      message: "Your Current Signal could not be updated.",
+      fieldErrors: parsed.error.flatten().fieldErrors,
+    };
+  }
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("set_profile_status", {
+    p_status_text: parsed.data.statusText,
+  });
+  if (error) {
+    return {
+      status: "error",
+      message: "Your Current Signal could not be updated.",
+    };
+  }
+  revalidatePath("/account");
+  revalidatePath("/profile");
+  return {
+    status: "success",
+    message: parsed.data.statusText
+      ? "Your Current Signal is live for 24 hours."
+      : "Your Current Signal was cleared.",
+  };
+}
+
+export async function updateFeaturedConnectionsAction(
+  _previousState: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  const parsed = featuredConnectionsSchema.safeParse({
+    featuredUserIds: formData
+      .getAll("featuredUserIds")
+      .filter((value): value is string => typeof value === "string"),
+  });
+  if (!parsed.success) {
+    return {
+      status: "error",
+      message: "Choose up to 8 current friends.",
+    };
+  }
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("set_featured_connections", {
+    p_featured_ids: parsed.data.featuredUserIds,
+  });
+  if (error) {
+    return {
+      status: "error",
+      message: "Your featured connections could not be updated.",
+    };
+  }
+  revalidatePath("/account");
+  revalidatePath("/profile");
+  return {
+    status: "success",
+    message: "Your featured connections were updated.",
+  };
 }
 
 async function runRelationshipAction(
