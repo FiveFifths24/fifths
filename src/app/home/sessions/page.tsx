@@ -10,7 +10,10 @@ import {
   rankSessions,
 } from "@/features/sessions/session-data";
 import { SessionCard } from "@/features/sessions/session-card";
-import { filterMemberContent, loadContentPreferences } from "@/features/profiles/content-filters";
+import {
+  filterMemberContent,
+  loadContentPreferences,
+} from "@/features/profiles/content-filters";
 import type { PulseRecommendationInput } from "@/lib/recommendations/types";
 import { createClient } from "@/lib/supabase/server";
 
@@ -77,7 +80,8 @@ export default async function SessionsPage() {
     sessionResult.data ?? [],
     contentPreferences,
     (session) => session.host_user_id,
-    (session) => `${session.title} ${session.summary} ${session.description} ${session.host_display_name}`,
+    (session) =>
+      `${session.title} ${session.summary} ${session.description} ${session.host_display_name}`,
   );
 
   const sessionIds = sessions.map((session) => session.id);

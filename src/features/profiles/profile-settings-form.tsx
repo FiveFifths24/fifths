@@ -322,7 +322,9 @@ export function ProfileSettingsForm({
           </span>
         </span>
       </label>
-      <SubmitButton pendingLabel="Saving profile…">Save profile</SubmitButton>
+      <SubmitButton pendingLabel="Saving profile…">
+        Save profile & background
+      </SubmitButton>
     </form>
   );
 }

@@ -8,6 +8,7 @@ import {
   blockedWordIdSchema,
   blockedWordSchema,
   featuredConnectionsSchema,
+  profileRoomSettingsSchema,
   profileSettingsSchema,
   profileStatusSchema,
   targetProfileSchema,
@@ -222,6 +223,66 @@ export async function updateProfileStatusAction(
       ? "Your Current Signal is live for 24 hours."
       : "Your Current Signal was cleared.",
   };
+}
+
+export async function updateProfileRoomAction(
+  _previousState: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  const parsed = profileRoomSettingsSchema.safeParse({
+    enabled: formData.get("enabled") === "on",
+    wallColor: formData.get("wallColor"),
+    lightingTheme: formData.get("lightingTheme"),
+    currentVibe: formData.get("currentVibe"),
+    characterColor: formData.get("characterColor"),
+    characterShape: formData.get("characterShape"),
+    characterExpression: formData.get("characterExpression"),
+    characterAccessory: formData.get("characterAccessory"),
+    motionEnabled: formData.get("motionEnabled") === "on",
+  });
+  if (!parsed.success) {
+    return {
+      status: "error",
+      message: "Check your room choices and try again.",
+      fieldErrors: parsed.error.flatten().fieldErrors,
+    };
+  }
+
+  const supabase = await createClient();
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) {
+    return { status: "error", message: "Sign in again to update your room." };
+  }
+  const { error } = await supabase.rpc("update_profile_room", {
+    p_enabled: parsed.data.enabled,
+    p_wall_color: parsed.data.wallColor,
+    p_lighting_theme: parsed.data.lightingTheme,
+    p_current_vibe: parsed.data.currentVibe,
+    p_character_color: parsed.data.characterColor,
+    p_character_shape: parsed.data.characterShape,
+    p_character_expression: parsed.data.characterExpression,
+    p_character_accessory: parsed.data.characterAccessory,
+    p_motion_enabled: parsed.data.motionEnabled,
+  });
+  if (error) {
+    return {
+      status: "error",
+      message: "My Room requires the latest Supabase migration.",
+    };
+  }
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("username")
+    .eq("id", userData.user.id)
+    .maybeSingle();
+  revalidatePath("/account");
+  revalidatePath("/profile");
+  if (profile?.username) {
+    revalidatePath(`/home/profiles/${profile.username}`);
+    revalidatePath(`/profiles/${profile.username}`);
+  }
+  return { status: "success", message: "Your room has been updated." };
 }
 
 export async function updateFeaturedConnectionsAction(

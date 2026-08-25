@@ -91,6 +91,40 @@ export type Database = {
         Update: Partial<Database["public"]["Tables"]["profiles"]["Insert"]>;
         Relationships: [];
       };
+      profile_rooms: {
+        Row: {
+          user_id: string;
+          enabled: boolean;
+          wall_color: string;
+          lighting_theme: "cosmic" | "warm" | "daylight" | "midnight";
+          current_vibe: "chill" | "focused" | "gaming" | "creative" | "social";
+          character_color: string;
+          character_shape: "ghost" | "blob" | "orbit";
+          character_expression: "smile" | "calm" | "wink";
+          character_accessory: "none" | "headphones" | "glasses" | "beanie";
+          motion_enabled: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          user_id: string;
+          enabled?: boolean;
+          wall_color?: string;
+          lighting_theme?: "cosmic" | "warm" | "daylight" | "midnight";
+          current_vibe?: "chill" | "focused" | "gaming" | "creative" | "social";
+          character_color?: string;
+          character_shape?: "ghost" | "blob" | "orbit";
+          character_expression?: "smile" | "calm" | "wink";
+          character_accessory?: "none" | "headphones" | "glasses" | "beanie";
+          motion_enabled?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<
+          Database["public"]["Tables"]["profile_rooms"]["Insert"]
+        >;
+        Relationships: [];
+      };
       user_roles: {
         Row: {
           user_id: string;
@@ -1357,6 +1391,38 @@ export type Database = {
           p_spotlight_url: string | null;
         };
         Returns: undefined;
+      };
+      update_profile_room: {
+        Args: {
+          p_enabled: boolean;
+          p_wall_color: string;
+          p_lighting_theme: "cosmic" | "warm" | "daylight" | "midnight";
+          p_current_vibe:
+            "chill" | "focused" | "gaming" | "creative" | "social";
+          p_character_color: string;
+          p_character_shape: "ghost" | "blob" | "orbit";
+          p_character_expression: "smile" | "calm" | "wink";
+          p_character_accessory: "none" | "headphones" | "glasses" | "beanie";
+          p_motion_enabled: boolean;
+        };
+        Returns: undefined;
+      };
+      get_profile_room: {
+        Args: { p_user_id: string };
+        Returns: Array<{
+          enabled: boolean;
+          wall_color: string;
+          lighting_theme: "cosmic" | "warm" | "daylight" | "midnight";
+          current_vibe: "chill" | "focused" | "gaming" | "creative" | "social";
+          character_color: string;
+          character_shape: "ghost" | "blob" | "orbit";
+          character_expression: "smile" | "calm" | "wink";
+          character_accessory: "none" | "headphones" | "glasses" | "beanie";
+          motion_enabled: boolean;
+          profile_song_title: string | null;
+          profile_song_artist: string | null;
+          profile_song_url: string | null;
+        }>;
       };
       set_profile_status: {
         Args: { p_status_text: string };

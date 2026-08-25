@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { Palette, ShieldCheck } from "lucide-react";
+import { House, ShieldCheck } from "lucide-react";
 
 const tabs = [
   {
     href: "/account",
-    label: "Edit profile",
-    icon: Palette,
+    label: "Edit My Room",
+    icon: House,
   },
   {
     href: "/account/safety",
@@ -14,11 +14,7 @@ const tabs = [
   },
 ] as const;
 
-export function AccountTabs({
-  active,
-}: {
-  active: "profile" | "safety";
-}) {
+export function AccountTabs({ active }: { active: "profile" | "safety" }) {
   return (
     <nav
       aria-label="Account settings"

@@ -1,23 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import {
-  ExternalLink,
-  Flag,
-  MapPin,
-  Pencil,
-  Radio,
-  ShieldCheck,
-  Sparkles,
-  UsersRound,
-} from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { Flag, Pencil, Radio, ShieldCheck } from "lucide-react";
 import { ButtonLink } from "@/components/ui/button-link";
 import { StatusMessage } from "@/components/ui/status-message";
 import { RelationshipControls } from "@/features/profiles/relationship-controls";
 import { friendshipState } from "@/features/profiles/relationship-data";
 import { ProfileImageLayer } from "@/features/profiles/profile-image-layer";
 import { signProfileMedia } from "@/features/profiles/profile-media";
+import { ProfileRoom } from "@/features/profiles/profile-room";
 import { ProfileWallpaper } from "@/features/profiles/profile-wallpaper";
 import { ProfileStatusCountdown } from "@/features/profiles/profile-status-countdown";
 import { ReportForm } from "@/features/trust-safety/report-form";
@@ -57,12 +48,11 @@ export default async function MemberProfilePage({
     friendshipResult,
     followResult,
     muteResult,
-    interestLinks,
-    interests,
     avatarUrl,
     landscapeUrl,
     experienceResult,
     featuredResult,
+    roomResult,
   ] = await Promise.all([
     supabase
       .from("profile_friendships")
@@ -83,17 +73,14 @@ export default async function MemberProfilePage({
       .eq("muter_id", userData.user.id)
       .eq("muted_id", profile.id)
       .maybeSingle(),
-    supabase
-      .from("profile_interests")
-      .select("interest_id")
-      .eq("user_id", profile.id),
-    supabase.from("interests").select("id, name").eq("active", true),
     signProfileMedia(supabase, profile.avatar_url),
     signProfileMedia(supabase, profile.cover_image_url),
     supabase.rpc("get_profile_experience", { p_user_id: profile.id }),
     supabase.rpc("get_featured_connections", { p_owner_id: profile.id }),
+    supabase.rpc("get_profile_room", { p_user_id: profile.id }),
   ]);
   const experience = experienceResult.data?.[0];
+  const room = roomResult.data?.[0];
   const accentColor = experience?.profile_accent_color ?? "#a855f7";
   const backgroundUrl = await signProfileMedia(
     supabase,
@@ -104,9 +91,6 @@ export default async function MemberProfilePage({
       ...connection,
       avatarUrl: await signProfileMedia(supabase, connection.avatar_url),
     })),
-  );
-  const interestNames = new Map(
-    (interests.data ?? []).map((item) => [item.id, item.name]),
   );
   const returnTo = `/home/profiles/${profile.username}`;
 
@@ -208,7 +192,9 @@ export default async function MemberProfilePage({
           <div className="border-t border-white/10 bg-black/30 p-6 sm:p-9">
             {isOwnProfile ? (
               <div className="flex flex-wrap justify-center gap-3 sm:justify-start">
-                <ButtonLink href="/account">Edit profile</ButtonLink>
+                <ButtonLink href="/account#edit-my-room">
+                  Edit My Room
+                </ButtonLink>
                 <ButtonLink href="/home" variant="secondary">
                   Back to Home
                 </ButtonLink>
@@ -228,149 +214,47 @@ export default async function MemberProfilePage({
           </div>
         </article>
 
-        <div className="mt-6 grid gap-6 md:grid-cols-3">
-          <section
-            className="rounded-[1.5rem] border bg-black/55 p-6 backdrop-blur-md md:col-span-2"
-            style={cardStyle}
-          >
-            <h2 className="text-xl font-bold text-white">About me</h2>
-            <p className="mt-4 text-base leading-7 text-white/70">
-              {profile.bio || "No bio added yet."}
-            </p>
-            {profile.location_visibility !== "hidden" &&
-            (profile.city || profile.region) ? (
-              <p className="mt-5 flex items-center gap-2 text-sm text-white/45">
-                <MapPin aria-hidden="true" className="size-4" />
-                {profile.location_visibility === "city_region"
-                  ? [profile.city, profile.region].filter(Boolean).join(", ")
-                  : profile.region}
-              </p>
-            ) : null}
-          </section>
-
-          <section
-            className="rounded-[1.5rem] border bg-black/55 p-6 backdrop-blur-md"
-            style={cardStyle}
-          >
-            <h2 className="text-sm font-bold tracking-[0.16em] text-white/55 uppercase">
-              Connections
-            </h2>
-            <dl className="mt-5 grid grid-cols-3 gap-3 text-center md:grid-cols-1 md:text-left">
-              {[
-                ["Friends", experience?.friend_count ?? 0],
-                ["Followers", experience?.follower_count ?? 0],
-                ["Following", experience?.following_count ?? 0],
-              ].map(([label, count]) => (
-                <div key={label}>
-                  <dd className="text-2xl font-bold text-white">{count}</dd>
-                  <dt className="text-xs text-white/40">{label}</dt>
-                </div>
-              ))}
-            </dl>
-          </section>
-        </div>
-
-        {(interestLinks.data ?? []).length ? (
-          <section
-            className="mt-6 rounded-[1.5rem] border bg-black/55 p-6 backdrop-blur-md"
-            style={cardStyle}
-          >
-            <h2 className="text-xl font-bold text-white">Into lately</h2>
-            <ul className="mt-4 flex flex-wrap gap-2">
-              {(interestLinks.data ?? [])
-                .map((item) => interestNames.get(item.interest_id))
-                .filter((name): name is string => Boolean(name))
-                .map((name) => (
-                  <li key={name}>
-                    <Badge>{name}</Badge>
-                  </li>
-                ))}
-            </ul>
-          </section>
-        ) : null}
-
-        {experience?.spotlight_title ? (
-          <section
-            className="mt-6 rounded-[1.5rem] border bg-black/55 p-6 backdrop-blur-md"
-            style={cardStyle}
-          >
-            <div className="flex items-center gap-3">
-              <Sparkles
-                aria-hidden="true"
-                className="size-5"
-                style={{ color: accentColor }}
+        <ProfileRoom
+          accentColor={accentColor}
+          bio={profile.bio}
+          displayName={profile.display_name}
+          featuredConnections={featuredConnections.map((connection) => ({
+            id: connection.id,
+            username: connection.username,
+            displayName: connection.display_name,
+            avatarUrl: connection.avatarUrl,
+          }))}
+          isOwner={isOwnProfile}
+          settings={{
+            enabled: room?.enabled ?? true,
+            wallColor: room?.wall_color ?? "#241039",
+            lightingTheme: room?.lighting_theme ?? "cosmic",
+            currentVibe: room?.current_vibe ?? "chill",
+            characterColor: room?.character_color ?? "#f359d2",
+            characterShape: room?.character_shape ?? "ghost",
+            characterExpression: room?.character_expression ?? "smile",
+            characterAccessory: room?.character_accessory ?? "headphones",
+            motionEnabled: room?.motion_enabled ?? true,
+          }}
+          song={{
+            title: room?.profile_song_title ?? null,
+            artist: room?.profile_song_artist ?? null,
+            url: room?.profile_song_url ?? null,
+          }}
+          spotlight={{
+            title: experience?.spotlight_title ?? null,
+            description: experience?.spotlight_description ?? null,
+            url: experience?.spotlight_url ?? null,
+          }}
+          statusCountdown={
+            isOwnProfile && experience?.status_expires_at ? (
+              <ProfileStatusCountdown
+                expiresAt={experience.status_expires_at}
               />
-              <h2 className="text-xl font-bold text-white">Pinned spotlight</h2>
-            </div>
-            <h3 className="mt-4 text-2xl font-bold text-white">
-              {experience.spotlight_title}
-            </h3>
-            {experience.spotlight_description ? (
-              <p className="mt-3 max-w-3xl leading-7 text-white/65">
-                {experience.spotlight_description}
-              </p>
-            ) : null}
-            {experience.spotlight_url ? (
-              <a
-                className="mt-5 inline-flex items-center gap-2 text-sm font-bold hover:underline"
-                href={experience.spotlight_url}
-                rel="noreferrer"
-                style={{ color: accentColor }}
-                target="_blank"
-              >
-                Visit spotlight
-                <ExternalLink aria-hidden="true" className="size-4" />
-              </a>
-            ) : null}
-          </section>
-        ) : null}
-
-        {featuredConnections.length ? (
-          <section
-            className="mt-6 rounded-[1.5rem] border bg-black/55 p-6 backdrop-blur-md"
-            style={cardStyle}
-          >
-            <div className="flex items-center gap-3">
-              <UsersRound
-                aria-hidden="true"
-                className="size-5"
-                style={{ color: accentColor }}
-              />
-              <h2 className="text-xl font-bold text-white">
-                Featured connections
-              </h2>
-            </div>
-            <ul className="mt-5 grid grid-cols-2 gap-4 sm:grid-cols-4">
-              {featuredConnections.map((connection) => (
-                <li key={connection.id}>
-                  <Link
-                    className="block rounded-2xl border border-white/10 bg-black/30 p-4 text-center transition hover:bg-black/50"
-                    href={`/home/profiles/${connection.username}`}
-                  >
-                    <span
-                      aria-label={`${connection.display_name}'s profile photo`}
-                      className="mx-auto block size-16 rounded-full bg-gradient-to-br from-[#992bff] to-[#f359d2] bg-cover bg-center"
-                      role="img"
-                      style={
-                        connection.avatarUrl
-                          ? {
-                              backgroundImage: `url(${JSON.stringify(connection.avatarUrl).slice(1, -1)})`,
-                            }
-                          : undefined
-                      }
-                    />
-                    <span className="mt-3 block truncate font-bold text-white">
-                      {connection.display_name}
-                    </span>
-                    <span className="block truncate text-xs text-white/40">
-                      @{connection.username}
-                    </span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </section>
-        ) : null}
+            ) : undefined
+          }
+          statusText={experience?.status_text ?? null}
+        />
 
         {!isOwnProfile ? (
           <>

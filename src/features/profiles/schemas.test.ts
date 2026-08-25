@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { blockedWordSchema, profileSettingsSchema } from "./schemas";
+import {
+  blockedWordSchema,
+  profileRoomSettingsSchema,
+  profileSettingsSchema,
+} from "./schemas";
 
 describe("profile settings schema", () => {
   it("accepts a customized member profile", () => {
@@ -38,6 +42,40 @@ describe("profile settings schema", () => {
         spotlightTitle: "",
         spotlightDescription: "",
         spotlightUrl: "",
+      }).success,
+    ).toBe(false);
+  });
+});
+
+describe("My Room settings schema", () => {
+  it("accepts the intentionally limited phase-one customization", () => {
+    expect(
+      profileRoomSettingsSchema.safeParse({
+        enabled: true,
+        wallColor: "#241039",
+        lightingTheme: "cosmic",
+        currentVibe: "creative",
+        characterColor: "#ff3cac",
+        characterShape: "ghost",
+        characterExpression: "wink",
+        characterAccessory: "headphones",
+        motionEnabled: false,
+      }).success,
+    ).toBe(true);
+  });
+
+  it("rejects arbitrary CSS and unsupported character options", () => {
+    expect(
+      profileRoomSettingsSchema.safeParse({
+        enabled: true,
+        wallColor: "url(https://example.com)",
+        lightingTheme: "strobe",
+        currentVibe: "creative",
+        characterColor: "pink",
+        characterShape: "human",
+        characterExpression: "wink",
+        characterAccessory: "headphones",
+        motionEnabled: true,
       }).success,
     ).toBe(false);
   });

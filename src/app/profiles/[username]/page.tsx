@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ExternalLink, MapPin, Radio, Sparkles } from "lucide-react";
+import { MapPin, Radio } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { ProfileImageLayer } from "@/features/profiles/profile-image-layer";
 import { signProfileMedia } from "@/features/profiles/profile-media";
+import { ProfileRoom } from "@/features/profiles/profile-room";
 import { ProfileWallpaper } from "@/features/profiles/profile-wallpaper";
 import { createClient } from "@/lib/supabase/server";
 
@@ -31,12 +32,15 @@ export default async function PublicProfilePage({
   });
   const profile = data?.[0];
   if (!profile) notFound();
-  const [avatarUrl, landscapeUrl, experienceResult] = await Promise.all([
-    signProfileMedia(supabase, profile.avatar_url),
-    signProfileMedia(supabase, profile.cover_image_url),
-    supabase.rpc("get_profile_experience", { p_user_id: profile.id }),
-  ]);
+  const [avatarUrl, landscapeUrl, experienceResult, roomResult] =
+    await Promise.all([
+      signProfileMedia(supabase, profile.avatar_url),
+      signProfileMedia(supabase, profile.cover_image_url),
+      supabase.rpc("get_profile_experience", { p_user_id: profile.id }),
+      supabase.rpc("get_profile_room", { p_user_id: profile.id }),
+    ]);
   const experience = experienceResult.data?.[0];
+  const room = roomResult.data?.[0];
   const accentColor = experience?.profile_accent_color ?? "#a855f7";
   const backgroundUrl = await signProfileMedia(
     supabase,
@@ -158,43 +162,34 @@ export default async function PublicProfilePage({
             ))}
           </div>
 
-          {experience?.spotlight_title ? (
-            <section
-              className="mt-6 rounded-[1.5rem] border bg-black/55 p-6 backdrop-blur-md"
-              style={cardStyle}
-            >
-              <div className="flex items-center gap-3">
-                <Sparkles
-                  aria-hidden="true"
-                  className="size-5"
-                  style={{ color: accentColor }}
-                />
-                <h2 className="text-xl font-bold text-white">
-                  Pinned spotlight
-                </h2>
-              </div>
-              <h3 className="mt-4 text-2xl font-bold text-white">
-                {experience.spotlight_title}
-              </h3>
-              {experience.spotlight_description ? (
-                <p className="mt-3 max-w-3xl leading-7 text-white/65">
-                  {experience.spotlight_description}
-                </p>
-              ) : null}
-              {experience.spotlight_url ? (
-                <a
-                  className="mt-5 inline-flex items-center gap-2 text-sm font-bold hover:underline"
-                  href={experience.spotlight_url}
-                  rel="noreferrer"
-                  style={{ color: accentColor }}
-                  target="_blank"
-                >
-                  Visit spotlight
-                  <ExternalLink aria-hidden="true" className="size-4" />
-                </a>
-              ) : null}
-            </section>
-          ) : null}
+          <ProfileRoom
+            accentColor={accentColor}
+            bio={profile.bio}
+            displayName={profile.display_name}
+            featuredConnections={[]}
+            settings={{
+              enabled: room?.enabled ?? true,
+              wallColor: room?.wall_color ?? "#241039",
+              lightingTheme: room?.lighting_theme ?? "cosmic",
+              currentVibe: room?.current_vibe ?? "chill",
+              characterColor: room?.character_color ?? "#f359d2",
+              characterShape: room?.character_shape ?? "ghost",
+              characterExpression: room?.character_expression ?? "smile",
+              characterAccessory: room?.character_accessory ?? "headphones",
+              motionEnabled: room?.motion_enabled ?? true,
+            }}
+            song={{
+              title: room?.profile_song_title ?? null,
+              artist: room?.profile_song_artist ?? null,
+              url: room?.profile_song_url ?? null,
+            }}
+            spotlight={{
+              title: experience?.spotlight_title ?? null,
+              description: experience?.spotlight_description ?? null,
+              url: experience?.spotlight_url ?? null,
+            }}
+            statusText={experience?.status_text ?? null}
+          />
         </div>
       </Container>
     </ProfileWallpaper>

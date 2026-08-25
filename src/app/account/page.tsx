@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { Eye, Radio, Sparkles, UsersRound } from "lucide-react";
+import { Eye, House, Radio, Sparkles, UsersRound } from "lucide-react";
 import { AccountTabs } from "@/components/account/account-tabs";
 import { AccountUnavailable } from "@/components/account/account-unavailable";
 import { Container } from "@/components/ui/container";
@@ -9,12 +9,13 @@ import { StatusMessage } from "@/components/ui/status-message";
 import { signOutAction } from "@/features/auth/actions";
 import { signProfileMedia } from "@/features/profiles/profile-media";
 import { ProfileSettingsForm } from "@/features/profiles/profile-settings-form";
+import { ProfileRoomSettingsForm } from "@/features/profiles/profile-room-settings-form";
 import { ProfileStatusForm } from "@/features/profiles/profile-status-form";
 import { FeaturedConnectionsForm } from "@/features/profiles/featured-connections-form";
 import { otherFriendId } from "@/features/profiles/relationship-data";
 import { createClient } from "@/lib/supabase/server";
 
-export const metadata: Metadata = { title: "Your account" };
+export const metadata: Metadata = { title: "Edit My Room" };
 export const dynamic = "force-dynamic";
 
 export default async function AccountPage({
@@ -41,6 +42,7 @@ export default async function AccountPage({
     friendshipsResult,
     peopleResult,
     featuredResult,
+    roomResult,
     parameters,
   ] = await Promise.all([
     supabase
@@ -66,11 +68,13 @@ export default async function AccountPage({
       .from("profile_featured_connections")
       .select("featured_id")
       .eq("owner_id", userData.user.id),
+    supabase.rpc("get_profile_room", { p_user_id: userData.user.id }),
     searchParams,
   ]);
 
   if (!profileResult.data?.onboarding_completed_at) redirect("/onboarding");
   const profile = profileResult.data;
+  const room = roomResult.data?.[0];
   const [landscapeUrl, backgroundUrl] = await Promise.all([
     signProfileMedia(supabase, profile.cover_image_url),
     signProfileMedia(supabase, profile.background_image_url),
@@ -117,7 +121,7 @@ export default async function AccountPage({
               variant="secondary"
             >
               <Eye aria-hidden="true" className="size-4" />
-              View profile
+              View My Room
             </ButtonLink>
           </div>
         </header>
@@ -137,14 +141,41 @@ export default async function AccountPage({
         <section className="relative mt-8 overflow-hidden rounded-[2rem] border border-[#a855f7]/30 bg-[linear-gradient(145deg,rgba(108,20,206,0.12),rgba(3,3,7,0.9)_50%,rgba(243,89,210,0.07))] p-6 shadow-[0_24px_80px_rgba(0,0,0,0.3)] sm:p-8">
           <div className="flex items-center gap-3">
             <Sparkles aria-hidden="true" className="size-5 text-[#f359d2]" />
-            <h2 className="text-3xl font-bold text-white">
-              Customize your profile
-            </h2>
+            <h2 className="text-3xl font-bold text-white">Edit My Room</h2>
           </div>
           <p className="mt-3 max-w-2xl text-sm leading-6 text-white/50">
-            Add a profile photo, optional landscape image, full-page wallpaper,
-            and matching card color.
+            Shape the profile people meet first, then give them a room that
+            feels unmistakably yours.
           </p>
+          <div
+            className="mt-7 scroll-mt-28 rounded-2xl border border-[#a855f7]/25 bg-black/25 p-5 sm:p-6"
+            id="edit-my-room"
+          >
+            <div className="flex items-center gap-3">
+              <House aria-hidden="true" className="size-5 text-[#ca9aff]" />
+              <h3 className="text-xl font-bold text-white">Room appearance</h3>
+            </div>
+            <p className="mt-2 text-sm leading-6 text-white/45">
+              Choose the room color, lighting, vibe, and your simple room
+              character. Your profile accent still controls the matching borders
+              and profile-photo ring.
+            </p>
+            <div className="mt-5">
+              <ProfileRoomSettingsForm
+                settings={{
+                  enabled: room?.enabled ?? true,
+                  wallColor: room?.wall_color ?? "#241039",
+                  lightingTheme: room?.lighting_theme ?? "cosmic",
+                  currentVibe: room?.current_vibe ?? "chill",
+                  characterColor: room?.character_color ?? "#f359d2",
+                  characterShape: room?.character_shape ?? "ghost",
+                  characterExpression: room?.character_expression ?? "smile",
+                  characterAccessory: room?.character_accessory ?? "headphones",
+                  motionEnabled: room?.motion_enabled ?? true,
+                }}
+              />
+            </div>
+          </div>
           <div className="mt-7 rounded-2xl border border-[#f359d2]/25 bg-black/25 p-5 sm:p-6">
             <div className="flex items-center gap-3">
               <Radio aria-hidden="true" className="size-5 text-[#f359d2]" />
@@ -160,7 +191,19 @@ export default async function AccountPage({
               />
             </div>
           </div>
-          <div className="mt-7">
+          <div className="mt-7 rounded-2xl border border-white/10 bg-black/20 p-5 sm:p-6">
+            <div className="mb-6 flex items-center gap-3">
+              <Sparkles aria-hidden="true" className="size-5 text-[#7cff00]" />
+              <div>
+                <h3 className="text-xl font-bold text-white">
+                  Profile & background
+                </h3>
+                <p className="mt-1 text-sm leading-6 text-white/45">
+                  Edit your names, bio, photo, landscape, wallpaper, and
+                  matching accent color.
+                </p>
+              </div>
+            </div>
             <ProfileSettingsForm
               profile={{
                 username: profile.username ?? "",
@@ -192,12 +235,10 @@ export default async function AccountPage({
         <section className="mt-8 rounded-[2rem] border border-[#a855f7]/20 bg-[linear-gradient(145deg,rgba(108,20,206,0.08),rgba(3,3,7,0.92))] p-6 sm:p-8">
           <div className="flex items-center gap-3">
             <UsersRound aria-hidden="true" className="size-5 text-[#ca9aff]" />
-            <h2 className="text-2xl font-bold text-white">
-              Featured connections
-            </h2>
+            <h2 className="text-2xl font-bold text-white">Friend Spotlight</h2>
           </div>
           <p className="mt-3 text-sm leading-6 text-white/45">
-            Choose up to eight friends to feature on your profile.
+            Choose up to eight friends whose photos appear inside your room.
           </p>
           <div className="mt-6">
             <FeaturedConnectionsForm

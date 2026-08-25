@@ -64,6 +64,26 @@ export const profileStatusSchema = z.object({
     .max(180, "Keep your Current Signal to 180 characters or fewer."),
 });
 
+export const profileRoomSettingsSchema = z.object({
+  enabled: z.boolean(),
+  wallColor: z
+    .string()
+    .trim()
+    .toLowerCase()
+    .regex(/^#[0-9a-f]{6}$/, "Use a six-digit hex color."),
+  lightingTheme: z.enum(["cosmic", "warm", "daylight", "midnight"]),
+  currentVibe: z.enum(["chill", "focused", "gaming", "creative", "social"]),
+  characterColor: z
+    .string()
+    .trim()
+    .toLowerCase()
+    .regex(/^#[0-9a-f]{6}$/, "Use a six-digit hex color."),
+  characterShape: z.enum(["ghost", "blob", "orbit"]),
+  characterExpression: z.enum(["smile", "calm", "wink"]),
+  characterAccessory: z.enum(["none", "headphones", "glasses", "beanie"]),
+  motionEnabled: z.boolean(),
+});
+
 export const featuredConnectionsSchema = z.object({
   featuredUserIds: z.array(z.uuid()).max(8, "Choose no more than 8 friends."),
 });
