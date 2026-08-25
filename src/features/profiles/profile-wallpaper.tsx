@@ -1,8 +1,5 @@
 import type { ReactNode } from "react";
-import {
-  ProfileImageLayer,
-  type ProfileImageFit,
-} from "./profile-image-layer";
+import { ProfileImageLayer, type ProfileImageFit } from "./profile-image-layer";
 
 export function ProfileWallpaper({
   backgroundUrl,
