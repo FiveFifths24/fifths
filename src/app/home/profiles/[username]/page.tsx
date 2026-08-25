@@ -146,13 +146,14 @@ export default async function MemberProfilePage({
                     aria-label={`${profile.display_name}'s profile photo`}
                     className="size-28 rounded-full border-4 border-black bg-gradient-to-br from-[#992bff] to-[#f359d2] bg-cover bg-center shadow-2xl"
                     role="img"
-                    style={
-                      avatarUrl
+                    style={{
+                      borderColor: accentColor,
+                      ...(avatarUrl
                         ? {
                             backgroundImage: `url(${JSON.stringify(avatarUrl).slice(1, -1)})`,
                           }
-                        : undefined
-                    }
+                        : {}),
+                    }}
                   />
                   {isOwnProfile ? (
                     <Link
