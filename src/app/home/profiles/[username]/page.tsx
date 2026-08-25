@@ -16,6 +16,7 @@ import { ButtonLink } from "@/components/ui/button-link";
 import { StatusMessage } from "@/components/ui/status-message";
 import { RelationshipControls } from "@/features/profiles/relationship-controls";
 import { friendshipState } from "@/features/profiles/relationship-data";
+import { ProfileImageLayer } from "@/features/profiles/profile-image-layer";
 import { signProfileMedia } from "@/features/profiles/profile-media";
 import { ProfileWallpaper } from "@/features/profiles/profile-wallpaper";
 import { ProfileStatusCountdown } from "@/features/profiles/profile-status-countdown";
@@ -112,7 +113,13 @@ export default async function MemberProfilePage({
   const cardStyle = { borderColor: accentColor };
 
   return (
-    <ProfileWallpaper backgroundUrl={backgroundUrl}>
+    <ProfileWallpaper
+      backgroundUrl={backgroundUrl}
+      fit={experience?.background_image_fit ?? "cover"}
+      positionX={experience?.background_image_position_x ?? 50}
+      positionY={experience?.background_image_position_y ?? 50}
+      zoom={experience?.background_image_zoom ?? 100}
+    >
       <div className="mx-auto max-w-5xl">
         {parameters?.social === "updated" ? (
           <StatusMessage className="mb-6" tone="success">
@@ -129,17 +136,16 @@ export default async function MemberProfilePage({
           className="overflow-hidden rounded-[2rem] border bg-black/40 shadow-[0_28px_90px_rgba(0,0,0,.45)] backdrop-blur-[2px]"
           style={cardStyle}
         >
-          <div
-            className="relative min-h-80 bg-[radial-gradient(circle_at_75%_20%,rgba(243,89,210,.22),transparent_30%),linear-gradient(135deg,#160626,#070711_58%,#071b20)] bg-cover bg-center"
-            style={
-              landscapeUrl
-                ? {
-                    backgroundImage: `linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.7)),url(${JSON.stringify(landscapeUrl).slice(1, -1)})`,
-                  }
-                : undefined
-            }
-          >
-            <div className="absolute inset-x-0 bottom-0 p-6 sm:p-9">
+          <div className="relative min-h-80 overflow-hidden bg-[radial-gradient(circle_at_75%_20%,rgba(243,89,210,.22),transparent_30%),linear-gradient(135deg,#160626,#070711_58%,#071b20)]">
+            <ProfileImageLayer
+              fit={experience?.landscape_image_fit ?? "cover"}
+              imageUrl={landscapeUrl}
+              overlayClassName="bg-gradient-to-b from-black/20 to-black/70"
+              positionX={experience?.landscape_image_position_x ?? 50}
+              positionY={experience?.landscape_image_position_y ?? 50}
+              zoom={experience?.landscape_image_zoom ?? 100}
+            />
+            <div className="absolute inset-x-0 bottom-0 z-10 p-6 sm:p-9">
               <div className="flex flex-col items-center gap-5 sm:flex-row sm:items-end">
                 <div className="relative shrink-0">
                   <div
