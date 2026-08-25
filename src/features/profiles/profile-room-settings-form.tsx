@@ -141,53 +141,67 @@ export function ProfileRoomSettingsForm({
           Room character
         </legend>
         <p className="mb-5 text-xs leading-5 text-white/45">
-          Keep it simple for now: choose a shape, face, and one accessory.
+          The blob stays one friendly shape for now. Combine one head, face, and
+          neck accessory when the choices are compatible.
         </p>
         <div className="grid gap-4 sm:grid-cols-3">
           <div>
-            <label className="sr-only" htmlFor="characterShape">
-              Character shape
+            <label
+              className="mb-2 block text-xs font-bold text-white/55"
+              htmlFor="headAccessory"
+            >
+              Head
             </label>
             <select
               className={inputClass}
-              defaultValue={settings.characterShape}
-              id="characterShape"
-              name="characterShape"
+              defaultValue={settings.headAccessory}
+              id="headAccessory"
+              name="headAccessory"
             >
-              <option value="ghost">Ghost</option>
-              <option value="blob">Blob</option>
-              <option value="orbit">Orbit</option>
-            </select>
-          </div>
-          <div>
-            <label className="sr-only" htmlFor="characterExpression">
-              Character expression
-            </label>
-            <select
-              className={inputClass}
-              defaultValue={settings.characterExpression}
-              id="characterExpression"
-              name="characterExpression"
-            >
-              <option value="smile">Smile</option>
-              <option value="calm">Calm</option>
-              <option value="wink">Wink</option>
-            </select>
-          </div>
-          <div>
-            <label className="sr-only" htmlFor="characterAccessory">
-              Character accessory
-            </label>
-            <select
-              className={inputClass}
-              defaultValue={settings.characterAccessory}
-              id="characterAccessory"
-              name="characterAccessory"
-            >
-              <option value="none">No accessory</option>
+              <option value="none">None</option>
               <option value="headphones">Headphones</option>
-              <option value="glasses">Glasses</option>
               <option value="beanie">Beanie</option>
+              <option value="bow">Hair bow</option>
+              <option value="hat">Hat</option>
+              <option value="crown">Crown</option>
+              <option value="flower">Flower</option>
+              <option value="headband">Headband</option>
+            </select>
+          </div>
+          <div>
+            <label
+              className="mb-2 block text-xs font-bold text-white/55"
+              htmlFor="faceAccessory"
+            >
+              Face
+            </label>
+            <select
+              className={inputClass}
+              defaultValue={settings.faceAccessory}
+              id="faceAccessory"
+              name="faceAccessory"
+            >
+              <option value="none">None</option>
+              <option value="glasses">Glasses</option>
+              <option value="sunglasses">Sunglasses</option>
+            </select>
+          </div>
+          <div>
+            <label
+              className="mb-2 block text-xs font-bold text-white/55"
+              htmlFor="neckAccessory"
+            >
+              Neck
+            </label>
+            <select
+              className={inputClass}
+              defaultValue={settings.neckAccessory}
+              id="neckAccessory"
+              name="neckAccessory"
+            >
+              <option value="none">None</option>
+              <option value="scarf">Scarf</option>
+              <option value="bandana">Bandana</option>
             </select>
           </div>
         </div>

@@ -8,9 +8,9 @@ const settings = {
   lightingTheme: "cosmic" as const,
   currentVibe: "creative" as const,
   characterColor: "#ff3cac",
-  characterShape: "ghost" as const,
-  characterExpression: "smile" as const,
-  characterAccessory: "headphones" as const,
+  headAccessory: "headphones" as const,
+  faceAccessory: "glasses" as const,
+  neckAccessory: "none" as const,
   motionEnabled: true,
 };
 
@@ -60,7 +60,9 @@ describe("ProfileRoom", () => {
 
   it("opens an accessible room detail and closes it with Escape", () => {
     renderRoom();
-    fireEvent.click(screen.getAllByRole("button", { name: /Bedroom/ })[0]!);
+    fireEvent.click(
+      screen.getByRole("button", { name: "Open bedroom status and vibe" }),
+    );
     expect(
       screen.getByRole("dialog", { name: "Bedroom details" }),
     ).toBeInTheDocument();
@@ -70,5 +72,19 @@ describe("ProfileRoom", () => {
     expect(
       screen.queryByRole("dialog", { name: "Bedroom details" }),
     ).not.toBeInTheDocument();
+  });
+
+  it("lets each viewer override the automatic device-local house light", () => {
+    renderRoom();
+    fireEvent.change(screen.getByRole("combobox", { name: "House light" }), {
+      target: { value: "night" },
+    });
+
+    const themedScenes = document.querySelectorAll("[data-house-theme]");
+    expect(themedScenes.length).toBeGreaterThan(0);
+    themedScenes.forEach((scene) =>
+      expect(scene).toHaveAttribute("data-house-theme", "night"),
+    );
+    expect(window.localStorage.getItem("signal-room-theme")).toBe("night");
   });
 });

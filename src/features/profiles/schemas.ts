@@ -78,9 +78,18 @@ export const profileRoomSettingsSchema = z.object({
     .trim()
     .toLowerCase()
     .regex(/^#[0-9a-f]{6}$/, "Use a six-digit hex color."),
-  characterShape: z.enum(["ghost", "blob", "orbit"]),
-  characterExpression: z.enum(["smile", "calm", "wink"]),
-  characterAccessory: z.enum(["none", "headphones", "glasses", "beanie"]),
+  headAccessory: z.enum([
+    "none",
+    "headphones",
+    "beanie",
+    "bow",
+    "hat",
+    "crown",
+    "flower",
+    "headband",
+  ]),
+  faceAccessory: z.enum(["none", "glasses", "sunglasses"]),
+  neckAccessory: z.enum(["none", "scarf", "bandana"]),
   motionEnabled: z.boolean(),
 });
 

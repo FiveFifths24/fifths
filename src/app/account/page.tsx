@@ -156,9 +156,9 @@ export default async function AccountPage({
               <h3 className="text-xl font-bold text-white">Room appearance</h3>
             </div>
             <p className="mt-2 text-sm leading-6 text-white/45">
-              Choose the room color, lighting, vibe, and your simple room
-              character. Your profile accent still controls the matching borders
-              and profile-photo ring.
+              Choose the room color, lighting, vibe, blob color, and compatible
+              accessories. Your profile accent still controls the matching
+              borders and profile-photo ring.
             </p>
             <div className="mt-5">
               <ProfileRoomSettingsForm
@@ -168,9 +168,9 @@ export default async function AccountPage({
                   lightingTheme: room?.lighting_theme ?? "cosmic",
                   currentVibe: room?.current_vibe ?? "chill",
                   characterColor: room?.character_color ?? "#f359d2",
-                  characterShape: room?.character_shape ?? "ghost",
-                  characterExpression: room?.character_expression ?? "smile",
-                  characterAccessory: room?.character_accessory ?? "headphones",
+                  headAccessory: room?.head_accessory ?? "headphones",
+                  faceAccessory: room?.face_accessory ?? "none",
+                  neckAccessory: room?.neck_accessory ?? "none",
                   motionEnabled: room?.motion_enabled ?? true,
                 }}
               />

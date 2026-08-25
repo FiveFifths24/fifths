@@ -102,6 +102,17 @@ export type Database = {
           character_shape: "ghost" | "blob" | "orbit";
           character_expression: "smile" | "calm" | "wink";
           character_accessory: "none" | "headphones" | "glasses" | "beanie";
+          head_accessory:
+            | "none"
+            | "headphones"
+            | "beanie"
+            | "bow"
+            | "hat"
+            | "crown"
+            | "flower"
+            | "headband";
+          face_accessory: "none" | "glasses" | "sunglasses";
+          neck_accessory: "none" | "scarf" | "bandana";
           motion_enabled: boolean;
           created_at: string;
           updated_at: string;
@@ -116,6 +127,17 @@ export type Database = {
           character_shape?: "ghost" | "blob" | "orbit";
           character_expression?: "smile" | "calm" | "wink";
           character_accessory?: "none" | "headphones" | "glasses" | "beanie";
+          head_accessory?:
+            | "none"
+            | "headphones"
+            | "beanie"
+            | "bow"
+            | "hat"
+            | "crown"
+            | "flower"
+            | "headband";
+          face_accessory?: "none" | "glasses" | "sunglasses";
+          neck_accessory?: "none" | "scarf" | "bandana";
           motion_enabled?: boolean;
           created_at?: string;
           updated_at?: string;
@@ -1400,9 +1422,17 @@ export type Database = {
           p_current_vibe:
             "chill" | "focused" | "gaming" | "creative" | "social";
           p_character_color: string;
-          p_character_shape: "ghost" | "blob" | "orbit";
-          p_character_expression: "smile" | "calm" | "wink";
-          p_character_accessory: "none" | "headphones" | "glasses" | "beanie";
+          p_head_accessory:
+            | "none"
+            | "headphones"
+            | "beanie"
+            | "bow"
+            | "hat"
+            | "crown"
+            | "flower"
+            | "headband";
+          p_face_accessory: "none" | "glasses" | "sunglasses";
+          p_neck_accessory: "none" | "scarf" | "bandana";
           p_motion_enabled: boolean;
         };
         Returns: undefined;
@@ -1422,6 +1452,17 @@ export type Database = {
           profile_song_title: string | null;
           profile_song_artist: string | null;
           profile_song_url: string | null;
+          head_accessory:
+            | "none"
+            | "headphones"
+            | "beanie"
+            | "bow"
+            | "hat"
+            | "crown"
+            | "flower"
+            | "headband";
+          face_accessory: "none" | "glasses" | "sunglasses";
+          neck_accessory: "none" | "scarf" | "bandana";
         }>;
       };
       set_profile_status: {

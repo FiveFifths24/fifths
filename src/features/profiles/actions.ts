@@ -235,9 +235,9 @@ export async function updateProfileRoomAction(
     lightingTheme: formData.get("lightingTheme"),
     currentVibe: formData.get("currentVibe"),
     characterColor: formData.get("characterColor"),
-    characterShape: formData.get("characterShape"),
-    characterExpression: formData.get("characterExpression"),
-    characterAccessory: formData.get("characterAccessory"),
+    headAccessory: formData.get("headAccessory"),
+    faceAccessory: formData.get("faceAccessory"),
+    neckAccessory: formData.get("neckAccessory"),
     motionEnabled: formData.get("motionEnabled") === "on",
   });
   if (!parsed.success) {
@@ -259,9 +259,9 @@ export async function updateProfileRoomAction(
     p_lighting_theme: parsed.data.lightingTheme,
     p_current_vibe: parsed.data.currentVibe,
     p_character_color: parsed.data.characterColor,
-    p_character_shape: parsed.data.characterShape,
-    p_character_expression: parsed.data.characterExpression,
-    p_character_accessory: parsed.data.characterAccessory,
+    p_head_accessory: parsed.data.headAccessory,
+    p_face_accessory: parsed.data.faceAccessory,
+    p_neck_accessory: parsed.data.neckAccessory,
     p_motion_enabled: parsed.data.motionEnabled,
   });
   if (error) {

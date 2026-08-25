@@ -231,9 +231,9 @@ export default async function MemberProfilePage({
             lightingTheme: room?.lighting_theme ?? "cosmic",
             currentVibe: room?.current_vibe ?? "chill",
             characterColor: room?.character_color ?? "#f359d2",
-            characterShape: room?.character_shape ?? "ghost",
-            characterExpression: room?.character_expression ?? "smile",
-            characterAccessory: room?.character_accessory ?? "headphones",
+            headAccessory: room?.head_accessory ?? "headphones",
+            faceAccessory: room?.face_accessory ?? "none",
+            neckAccessory: room?.neck_accessory ?? "none",
             motionEnabled: room?.motion_enabled ?? true,
           }}
           song={{
