@@ -1,11 +1,6 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import {
-  EyeOff,
-  ShieldBan,
-  ShieldCheck,
-  UserRoundMinus,
-} from "lucide-react";
+import { EyeOff, ShieldBan, ShieldCheck, UserRoundMinus } from "lucide-react";
 import { AccountUnavailable } from "@/components/account/account-unavailable";
 import { AccountTabs } from "@/components/account/account-tabs";
 import { ButtonLink } from "@/components/ui/button-link";
@@ -128,7 +123,10 @@ export default async function AccountSafetyPage({
                 everyone you follow.
               </p>
             </div>
-            <ButtonLink href="/home/people#connections-title" variant="secondary">
+            <ButtonLink
+              href="/home/people#connections-title"
+              variant="secondary"
+            >
               Manage connections
             </ButtonLink>
           </div>
