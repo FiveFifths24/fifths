@@ -67,13 +67,14 @@ export default async function PublicProfilePage({
                     aria-label={`${profile.display_name}'s profile photo`}
                     className="size-28 rounded-full border-4 border-black bg-gradient-to-br from-[#992bff] to-[#f359d2] bg-cover bg-center"
                     role="img"
-                    style={
-                      avatarUrl
+                    style={{
+                      borderColor: accentColor,
+                      ...(avatarUrl
                         ? {
                             backgroundImage: `url(${JSON.stringify(avatarUrl).slice(1, -1)})`,
                           }
-                        : undefined
-                    }
+                        : {}),
+                    }}
                   />
                   <div className="text-center sm:text-left">
                     <p className="flex items-center justify-center gap-2 text-xs font-bold tracking-[0.2em] text-[#f359d2] uppercase sm:justify-start">
