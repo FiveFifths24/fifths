@@ -65,11 +65,11 @@ const characterPositions: Record<
   ProfileRoomSettings["currentVibe"],
   { left: string; top: string }
 > = {
-  chill: { left: "20%", top: "66%" },
-  focused: { left: "48%", top: "27%" },
-  gaming: { left: "51%", top: "66%" },
-  creative: { left: "55%", top: "28%" },
-  social: { left: "79%", top: "28%" },
+  chill: { left: "34%", top: "71%" },
+  focused: { left: "48%", top: "49%" },
+  gaming: { left: "61%", top: "70%" },
+  creative: { left: "48%", top: "49%" },
+  social: { left: "79%", top: "49%" },
 };
 
 function faceColorFor(hex: string) {
@@ -207,44 +207,106 @@ function RoomCharacter({ settings }: { settings: ProfileRoomSettings }) {
   );
 }
 
-function HouseWindow({
+function IsoBlock({
   x,
   y,
+  width,
+  depth,
+  height,
+  top,
+  left,
+  right,
+  stroke = "#3c3037",
+}: {
+  x: number;
+  y: number;
+  width: number;
+  depth: number;
+  height: number;
+  top: string;
+  left: string;
+  right: string;
+  stroke?: string;
+}) {
+  const slope = 0.44;
+  const a: [number, number] = [x, y];
+  const b: [number, number] = [x + width, y + width * slope];
+  const c: [number, number] = [x + width - depth, y + (width + depth) * slope];
+  const d: [number, number] = [x - depth, y + depth * slope];
+  const lowered = (point: [number, number]): [number, number] => [
+    point[0],
+    point[1] + height,
+  ];
+  const points = (items: [number, number][]) =>
+    items.map((point) => point.join(",")).join(" ");
+
+  return (
+    <g stroke={stroke} strokeLinejoin="round" strokeWidth="2">
+      <polygon points={points([d, c, lowered(c), lowered(d)])} fill={left} />
+      <polygon points={points([b, c, lowered(c), lowered(b)])} fill={right} />
+      <polygon points={points([a, b, c, d])} fill={top} />
+    </g>
+  );
+}
+
+function IsoWindow({
+  x,
+  y,
+  width,
+  height,
+  direction,
   theme,
 }: {
   x: number;
   y: number;
+  width: number;
+  height: number;
+  direction: "left" | "right";
   theme: HouseTheme;
 }) {
   const day = theme === "day";
+  const rise = width * 0.44 * (direction === "left" ? -1 : 1);
+  const outer = `${x},${y} ${x + width},${y + rise} ${x + width},${
+    y + rise + height
+  } ${x},${y + height}`;
+  const inset = 7;
+  const innerWidth = width - inset * 2;
+  const innerRise = innerWidth * 0.44 * (direction === "left" ? -1 : 1);
+  const innerX = x + inset;
+  const innerY =
+    y + (direction === "left" ? -inset * 0.44 : inset * 0.44) + inset;
+  const inner = `${innerX},${innerY} ${innerX + innerWidth},${
+    innerY + innerRise
+  } ${innerX + innerWidth},${innerY + innerRise + height - inset * 2} ${
+    innerX
+  },${innerY + height - inset * 2}`;
+  const midX = x + width / 2;
+  const midY = y + rise / 2;
+
   return (
-    <g transform={`translate(${x} ${y})`}>
-      <rect width="116" height="82" rx="7" fill={day ? "#8fd8ff" : "#08142f"} />
-      {!day ? (
-        <>
-          <circle cx="18" cy="17" r="2" fill="#fff8ca" />
-          <circle cx="47" cy="28" r="1.5" fill="#fff8ca" />
-          <circle cx="88" cy="14" r="2" fill="#fff8ca" />
-          <circle cx="102" cy="38" r="1.5" fill="#fff8ca" />
-          <path d="M5 76 28 57l21 19ZM70 76l18-15 23 15Z" fill="#17284b" />
-          <circle cx="13" cy="69" r="8" fill="#ffd977" opacity=".45" />
-        </>
+    <g>
+      <polygon points={outer} fill="#463942" opacity=".95" />
+      <polygon points={inner} fill={day ? "#8ed7f5" : "#07142e"} />
+      {day ? (
+        <circle
+          cx={x + width * 0.72}
+          cy={y + rise * 0.72 + 20}
+          fill="#fff2a8"
+          r="8"
+        />
       ) : (
-        <>
-          <circle cx="92" cy="21" r="12" fill="#fff2a8" />
-          <path d="M0 66 24 46l22 20 19-13 51 13v16H0Z" fill="#69ad78" />
-          <path d="M0 72h116v10H0Z" fill="#4f8e62" />
-        </>
+        <g fill="#fff7c8">
+          <circle cx={x + width * 0.28} cy={y + rise * 0.28 + 20} r="1.8" />
+          <circle cx={x + width * 0.67} cy={y + rise * 0.67 + 34} r="1.4" />
+          <circle cx={x + width * 0.82} cy={y + rise * 0.82 + 16} r="1.2" />
+        </g>
       )}
-      <path d="M58 0v82M0 41h116" stroke="#f7f0e8" strokeWidth="7" />
-      <rect
-        width="116"
-        height="82"
-        rx="7"
-        fill="none"
-        stroke="#3b2d35"
-        strokeWidth="8"
+      <path
+        d={`M${midX} ${midY + 4}v${height - 8}`}
+        stroke="#f5ede7"
+        strokeWidth="5"
       />
+      <polygon points={outer} fill="none" stroke="#312830" strokeWidth="3" />
     </g>
   );
 }
@@ -280,12 +342,44 @@ function HouseIllustration({
           <stop stopColor="#07112a" />
           <stop offset="1" stopColor="#151b3d" />
         </linearGradient>
-        <linearGradient id="floor" x1="0" y1="0" x2="1" y2="1">
-          <stop stopColor="#b9825a" />
-          <stop offset="1" stopColor="#775039" />
+        <linearGradient id="iso-floor" x1="0" y1="0" x2="1" y2="1">
+          <stop stopColor="#d7aa7e" />
+          <stop offset="1" stopColor="#9b6f52" />
+        </linearGradient>
+        <linearGradient id="iso-wall-left" x1="0" y1="0" x2="1" y2="1">
+          <stop stopColor={settings.wallColor} />
+          <stop offset="1" stopColor="#c6aeb8" />
+        </linearGradient>
+        <linearGradient id="iso-wall-right" x1="0" y1="0" x2="1" y2="1">
+          <stop stopColor={settings.wallColor} />
+          <stop offset="1" stopColor="#a58b98" />
         </linearGradient>
         <filter id="soft-glow">
           <feGaussianBlur stdDeviation="14" />
+        </filter>
+        <filter id="house-shadow" x="-20%" y="-20%" width="140%" height="160%">
+          <feDropShadow
+            dx="0"
+            dy="18"
+            floodColor="#09070d"
+            floodOpacity=".45"
+            stdDeviation="16"
+          />
+        </filter>
+        <filter
+          id="furniture-shadow"
+          x="-30%"
+          y="-30%"
+          width="160%"
+          height="180%"
+        >
+          <feDropShadow
+            dx="0"
+            dy="7"
+            floodColor="#201820"
+            floodOpacity=".3"
+            stdDeviation="5"
+          />
         </filter>
       </defs>
 
@@ -310,37 +404,131 @@ function HouseIllustration({
           ))}
         </g>
       ) : null}
-      <path d="M70 190 600 25l530 165H70Z" fill={day ? "#503642" : "#2b263a"} />
-      <path
-        d="M93 185 600 48l507 137"
-        fill="none"
-        stroke={accentColor}
-        strokeOpacity=".4"
-        strokeWidth="6"
-      />
-      <rect
-        x="70"
-        y="178"
-        width="1060"
-        height="514"
-        rx="18"
-        fill={settings.wallColor}
-      />
-      <path d="M70 405h1060" stroke="#33252c" strokeWidth="18" />
-      <path d="M408 178v514M758 178v514" stroke="#33252c" strokeWidth="13" />
-      <path d="m70 372 1060 0-78 61H148Z" fill="url(#floor)" />
-      <path d="m70 638 1060 0-78 54H148Z" fill="url(#floor)" />
+      <g filter="url(#house-shadow)">
+        {/* One continuous apartment shell. */}
+        <polygon
+          points="105,342 550,146 1122,398 676,655"
+          fill="url(#iso-floor)"
+          stroke="#40333d"
+          strokeLinejoin="round"
+          strokeWidth="10"
+        />
+        <polygon
+          points="105,342 550,146 550,49 105,245"
+          fill="url(#iso-wall-left)"
+        />
+        <polygon
+          points="550,146 1122,398 1122,301 550,49"
+          fill="url(#iso-wall-right)"
+        />
+        <path
+          d="M105 245 550 49 1122 301"
+          fill="none"
+          stroke="#4a3945"
+          strokeWidth="9"
+        />
+        <path
+          d="M105 342 550 146 1122 398"
+          fill="none"
+          stroke="#55414e"
+          strokeWidth="7"
+        />
+        <path d="M550 49v97" stroke="#4a3945" strokeWidth="9" />
 
-      <HouseWindow theme={theme} x={115} y={218} />
-      <HouseWindow theme={theme} x={456} y={218} />
-      <HouseWindow theme={theme} x={944} y={218} />
-      <HouseWindow theme={theme} x={115} y={465} />
-      <HouseWindow theme={theme} x={792} y={465} />
+        <IsoWindow
+          direction="left"
+          height={68}
+          theme={theme}
+          width={102}
+          x={162}
+          y={245}
+        />
+        <IsoWindow
+          direction="left"
+          height={62}
+          theme={theme}
+          width={88}
+          x={356}
+          y={159}
+        />
+        <IsoWindow
+          direction="right"
+          height={64}
+          theme={theme}
+          width={94}
+          x={632}
+          y={93}
+        />
+        <IsoWindow
+          direction="right"
+          height={64}
+          theme={theme}
+          width={94}
+          x={891}
+          y={207}
+        />
+
+        {/* Subtle flooring zones flow together instead of forming room cards. */}
+        <polygon
+          points="128,350 334,260 517,341 308,439"
+          fill="#d9b18c"
+          opacity=".65"
+        />
+        <polygon
+          points="338,455 534,369 736,458 535,550"
+          fill="#b8796d"
+          opacity=".32"
+        />
+        <polygon
+          points="708,463 905,376 1084,455 883,570"
+          fill="#d9c6a8"
+          opacity=".5"
+        />
+        <path
+          d="M122 350 675 650M296 266 850 566M470 181 1024 481"
+          stroke="#7f5d49"
+          strokeOpacity=".18"
+          strokeWidth="2"
+        />
+        <path
+          d="M550 150 1110 398M406 213 965 460M261 278 819 525"
+          stroke="#fff8ec"
+          strokeOpacity=".14"
+          strokeWidth="2"
+        />
+
+        {/* Low interior walls create depth without dividing the home into boxes. */}
+        <polygon
+          points="481,330 644,402 644,337 481,265"
+          fill={settings.wallColor}
+          stroke="#4a3945"
+          strokeWidth="4"
+        />
+        <polygon
+          points="644,402 680,386 680,321 644,337"
+          fill="#967b87"
+          stroke="#4a3945"
+          strokeWidth="4"
+        />
+        <polygon
+          points="731,374 842,325 842,260 731,309"
+          fill={settings.wallColor}
+          stroke="#4a3945"
+          strokeWidth="4"
+        />
+        <polygon
+          points="842,325 875,340 875,275 842,260"
+          fill="#967b87"
+          stroke="#4a3945"
+          strokeWidth="4"
+        />
+      </g>
+
       {!day ? (
         <>
           <ellipse
-            cx="560"
-            cy="345"
+            cx="552"
+            cy="300"
             rx="105"
             ry="65"
             fill={interiorLight}
@@ -348,8 +536,8 @@ function HouseIllustration({
             filter="url(#soft-glow)"
           />
           <ellipse
-            cx="940"
-            cy="589"
+            cx="937"
+            cy="474"
             rx="120"
             ry="70"
             fill="#ffbf69"
@@ -357,8 +545,8 @@ function HouseIllustration({
             filter="url(#soft-glow)"
           />
           <ellipse
-            cx="260"
-            cy="579"
+            cx="333"
+            cy="514"
             rx="95"
             ry="58"
             fill={accentColor}
@@ -368,148 +556,275 @@ function HouseIllustration({
         </>
       ) : (
         <>
-          <path d="m190 300 180 72-70 0-160-54Z" fill="#fff7c7" opacity=".2" />
-          <path d="m510 302 190 70-76 0-170-52Z" fill="#fff7c7" opacity=".18" />
-          <path d="m170 548 190 90-86 0-150-66Z" fill="#fff7c7" opacity=".2" />
+          <path
+            d="m175 300 212 50-115 54-151-55Z"
+            fill="#fff7c7"
+            opacity=".2"
+          />
+          <path
+            d="m650 173 204 108-98 45-157-112Z"
+            fill="#fff7c7"
+            opacity=".17"
+          />
+          <path
+            d="m910 289 180 116-91 52-136-126Z"
+            fill="#fff7c7"
+            opacity=".16"
+          />
         </>
       )}
+      <g filter="url(#furniture-shadow)">
+        {/* Bedroom: a real bed, side table, lamp and standing mirror. */}
+        <IsoBlock
+          depth={106}
+          height={24}
+          left="#735166"
+          right="#5c4053"
+          top="#a87891"
+          width={150}
+          x={288}
+          y={274}
+        />
+        <IsoBlock
+          depth={96}
+          height={14}
+          left="#e3d7d2"
+          right="#c9bbb7"
+          top="#f8f1ed"
+          width={132}
+          x={280}
+          y={257}
+        />
+        <polygon
+          points="185,306 225,288 225,333 185,351"
+          fill="#b6d3d8"
+          stroke="#eef8f8"
+          strokeWidth="5"
+        />
+        <path d="M205 300v-15" stroke="#5a454d" strokeWidth="4" />
+        <IsoBlock
+          depth={35}
+          height={27}
+          left="#6c4936"
+          right="#513527"
+          top="#8b6045"
+          width={38}
+          x={149}
+          y={337}
+        />
+        <path d="M164 332v-40" stroke="#c49757" strokeWidth="5" />
+        <path
+          d="m148 296 17-24 18 24Z"
+          fill={day ? "#e7d5af" : "#ffd77a"}
+          stroke="#6f583d"
+          strokeWidth="3"
+        />
 
-      {/* Bedroom */}
-      <rect x="230" y="310" width="145" height="52" rx="12" fill="#6f4961" />
-      <rect x="216" y="288" width="52" height="34" rx="17" fill="#f0e8df" />
-      <rect x="235" y="326" width="140" height="35" rx="7" fill="#9a6685" />
-      <rect x="87" y="319" width="55" height="44" rx="5" fill="#654333" />
-      <path d="M111 319v-26" stroke="#d9b36c" strokeWidth="5" />
-      <path d="m92 294 19-23 19 23Z" fill={day ? "#ead8ad" : "#ffd577"} />
-      <ellipse
-        cx="111"
-        cy="300"
-        rx="38"
-        ry="28"
-        fill="#ffd577"
-        opacity={day ? ".08" : ".25"}
-      />
-      <rect
-        x="325"
-        y="205"
-        width="56"
-        height="76"
-        rx="28"
-        fill="#b7d5dc"
-        stroke="#dceef2"
-        strokeWidth="6"
-      />
+        {/* Study and reading nook. */}
+        <IsoBlock
+          depth={63}
+          height={15}
+          left="#67432f"
+          right="#503222"
+          top="#8f603f"
+          width={132}
+          x={472}
+          y={284}
+        />
+        <path
+          d="M437 331v55M562 386v55M604 357v54"
+          stroke="#4b3026"
+          strokeWidth="8"
+        />
+        <polygon
+          points="486,281 536,303 536,341 486,319"
+          fill="#252836"
+          stroke="#12141d"
+          strokeWidth="4"
+        />
+        <polygon
+          points="492,288 530,305 530,330 492,313"
+          fill={accentColor}
+          opacity=".7"
+        />
+        <polygon
+          points="586,220 660,252 660,365 586,333"
+          fill="#56392d"
+          stroke="#3c2822"
+          strokeWidth="5"
+        />
+        {[246, 277, 308, 339].map((y, index) => (
+          <g key={y}>
+            <path d={`m591 ${y} 64 28`} stroke="#a87551" strokeWidth="5" />
+            <path
+              d={`m598 ${y - 16} 9 4v18l-9-4Z`}
+              fill={index % 2 ? accentColor : "#78b69a"}
+            />
+            <path d={`m614 ${y - 10} 11 5v18l-11-5Z`} fill="#efc376" />
+            <path d={`m632 ${y - 7} 8 4v14l-8-4Z`} fill="#83a8d6" />
+          </g>
+        ))}
+        <path d="M609 378v-46" stroke="#c99b57" strokeWidth="5" />
+        <path
+          d="m592 337 17-24 18 24Z"
+          fill={day ? "#e7d5af" : "#ffd77a"}
+          stroke="#6f583d"
+          strokeWidth="3"
+        />
 
-      {/* Study */}
-      <rect x="451" y="320" width="178" height="20" rx="4" fill="#694734" />
-      <path d="M470 340v32M610 340v32" stroke="#4b3026" strokeWidth="8" />
-      <rect x="516" y="286" width="62" height="37" rx="5" fill="#202535" />
-      <rect
-        x="530"
-        y="296"
-        width="34"
-        height="18"
-        rx="2"
-        fill={accentColor}
-        opacity=".7"
-      />
-      <rect x="648" y="205" width="82" height="155" rx="4" fill="#55382d" />
-      {[222, 255, 288, 321].map((y, index) => (
-        <g key={y}>
-          <path d={`M655 ${y}h68`} stroke="#a97450" strokeWidth="5" />
-          <rect
-            x={660 + index * 3}
-            y={y - 18}
-            width="11"
-            height="18"
-            fill={index % 2 ? "#8fd8ff" : accentColor}
-          />
-          <rect
-            x={675 + index * 2}
-            y={y - 22}
-            width="13"
-            height="22"
-            fill="#e4b86e"
-          />
-          <rect
-            x={691 - index}
-            y={y - 15}
-            width="10"
-            height="15"
-            fill="#7cbf8b"
-          />
-        </g>
-      ))}
-      <path d="M616 319v-38" stroke="#cfaa65" strokeWidth="5" />
-      <path d="m598 284 18-23 18 23Z" fill={day ? "#e3d0a6" : "#ffd577"} />
+        {/* Photo and travel wall built into the right side of the apartment. */}
+        {[760, 820, 880].map((x, index) => (
+          <g key={x}>
+            <polygon
+              points={`${x},231 ${x + 41},249 ${x + 41},296 ${x},278`}
+              fill="#31272f"
+            />
+            <polygon
+              points={`${x + 6},240 ${x + 35},253 ${x + 35},285 ${x + 6},272`}
+              fill={index === 1 ? accentColor : "#cab7c5"}
+              opacity=".85"
+            />
+          </g>
+        ))}
+        <path
+          d="M951 306c20 11 38 14 54 11"
+          fill="none"
+          stroke="#e6c482"
+          strokeWidth="4"
+        />
+        <circle cx="956" cy="308" r="5" fill="#f359d2" />
+        <circle cx="981" cy="316" r="5" fill="#8ed7f5" />
+        <circle cx="1004" cy="317" r="5" fill="#ffd166" />
+        <IsoBlock
+          depth={42}
+          height={18}
+          left="#5c3d2f"
+          right="#493025"
+          top="#825b45"
+          width={108}
+          x={846}
+          y={354}
+        />
 
-      {/* Entryway / photo wall */}
-      {[806, 866, 926].map((x, index) => (
-        <g key={x}>
-          <rect
-            x={x}
-            y={222 + (index % 2) * 20}
-            width="44"
-            height="55"
-            rx="3"
-            fill="#31242b"
-          />
-          <rect
-            x={x + 6}
-            y={228 + (index % 2) * 20}
-            width="32"
-            height="35"
-            rx="3"
-            fill={index === 1 ? accentColor : "#b8a4bd"}
-            opacity=".75"
-          />
-        </g>
-      ))}
-      <rect x="806" y="320" width="184" height="18" rx="4" fill="#654333" />
-      <circle cx="840" cy="309" r="18" fill="#74a275" />
-      <rect x="832" y="320" width="16" height="19" fill="#9d6d4a" />
+        {/* Living and music area. */}
+        <IsoBlock
+          depth={76}
+          height={40}
+          left="#69516d"
+          right="#55415a"
+          top="#846889"
+          width={148}
+          x={318}
+          y={474}
+        />
+        <IsoBlock
+          depth={42}
+          height={42}
+          left="#806286"
+          right="#624c69"
+          top="#96769c"
+          width={128}
+          x={317}
+          y={451}
+        />
+        <IsoBlock
+          depth={45}
+          height={54}
+          left="#493128"
+          right="#38241f"
+          top="#694637"
+          width={50}
+          x={204}
+          y={492}
+        />
+        <ellipse
+          cx="227"
+          cy="536"
+          rx="21"
+          ry="14"
+          fill="#15151d"
+          stroke={accentColor}
+          strokeWidth="4"
+        />
+        <ellipse cx="227" cy="536" rx="7" ry="5" fill="#d6d0ca" />
+        <IsoBlock
+          depth={54}
+          height={15}
+          left="#75513c"
+          right="#5b3d2e"
+          top="#9a7054"
+          width={76}
+          x={390}
+          y={558}
+        />
 
-      {/* Living room */}
-      <rect x="193" y="567" width="176" height="61" rx="18" fill="#6a526e" />
-      <rect x="210" y="535" width="142" height="54" rx="24" fill="#806487" />
-      <rect x="94" y="554" width="68" height="78" rx="6" fill="#4f352c" />
-      <circle
-        cx="128"
-        cy="582"
-        r="23"
-        fill="#15151d"
-        stroke={accentColor}
-        strokeWidth="4"
-      />
-      <circle cx="128" cy="582" r="7" fill="#d6d0ca" />
-      <path d="M101 552h54" stroke="#b17b52" strokeWidth="7" />
+        {/* Gaming area with an angled screen and console cabinet. */}
+        <polygon
+          points="574,456 716,518 716,600 574,538"
+          fill="#242735"
+          stroke="#11131c"
+          strokeWidth="6"
+        />
+        <polygon points="587,468 704,519 704,580 587,529" fill="#0a1020" />
+        <path
+          d="m610 505 69 30"
+          stroke={accentColor}
+          strokeOpacity=".75"
+          strokeWidth="5"
+        />
+        <IsoBlock
+          depth={49}
+          height={31}
+          left="#3b2e35"
+          right="#2d2329"
+          top="#59434d"
+          width={148}
+          x={579}
+          y={589}
+        />
+        <ellipse cx="632" cy="631" rx="11" ry="7" fill={accentColor} />
+        <path
+          d="m672 622 33 15"
+          stroke="#15151d"
+          strokeLinecap="round"
+          strokeWidth="12"
+        />
 
-      {/* Gaming area */}
-      <rect x="463" y="478" width="236" height="94" rx="8" fill="#202535" />
-      <rect x="477" y="491" width="208" height="65" rx="4" fill="#0b1020" />
-      <path
-        d="M510 525h142"
-        stroke={accentColor}
-        strokeWidth="5"
-        opacity=".65"
-      />
-      <rect x="493" y="584" width="174" height="41" rx="6" fill="#3b2d35" />
-      <circle cx="534" cy="604" r="8" fill={accentColor} />
-      <rect x="577" y="595" width="61" height="18" rx="9" fill="#11111a" />
-
-      {/* Kitchen */}
-      <rect x="803" y="483" width="91" height="151" rx="7" fill="#d5d9dd" />
-      <path d="M803 537h91" stroke="#8b929a" strokeWidth="4" />
-      <circle cx="877" cy="520" r="4" fill="#59616a" />
-      <circle cx="877" cy="558" r="4" fill="#59616a" />
-      <rect x="913" y="548" width="178" height="86" rx="5" fill="#9b7256" />
-      <rect x="903" y="534" width="198" height="20" rx="6" fill="#e3ddd4" />
-      <path
-        d="M969 534v-31c0-18 34-18 34 0v31"
-        fill="none"
-        stroke="#8a9298"
-        strokeWidth="7"
-      />
+        {/* Kitchen wraps naturally around the far-right edge. */}
+        <IsoBlock
+          depth={70}
+          height={38}
+          left="#946c51"
+          right="#72513d"
+          top="#e3ddd4"
+          width={177}
+          x={869}
+          y={438}
+        />
+        <IsoBlock
+          depth={62}
+          height={116}
+          left="#b9c0c4"
+          right="#8f999f"
+          top="#e2e6e8"
+          width={74}
+          x={1011}
+          y={398}
+        />
+        <path
+          d="m967 471 39 17M961 491l39 17"
+          stroke="#7e858a"
+          strokeWidth="4"
+        />
+        <circle cx="1027" cy="493" r="4" fill="#59616a" />
+        <path
+          d="M905 456v-28c0-18 34-18 34 0v43"
+          fill="none"
+          stroke="#81898e"
+          strokeWidth="7"
+        />
+        <ellipse cx="923" cy="471" rx="22" ry="10" fill="#aeb8bd" />
+      </g>
     </svg>
   );
 }
@@ -966,7 +1281,7 @@ export function ProfileRoom({
               accentColor={accentColor}
               label="Open bedroom status and vibe"
               onClick={() => setSelectedRoom("bedroom")}
-              style={{ left: "24%", top: "43%" }}
+              style={{ left: "25%", top: "43%" }}
             >
               <BedDouble aria-hidden="true" className="size-5" />
             </Hotspot>
@@ -974,7 +1289,7 @@ export function ProfileRoom({
               accentColor={accentColor}
               label="Open study notes and spotlight"
               onClick={() => setSelectedRoom("study")}
-              style={{ left: "54%", top: "42%" }}
+              style={{ left: "52%", top: "43%" }}
             >
               <BriefcaseBusiness aria-hidden="true" className="size-5" />
             </Hotspot>
@@ -982,7 +1297,7 @@ export function ProfileRoom({
               accentColor={accentColor}
               label="Open Friend Spotlight"
               onClick={() => setSelectedRoom("friends")}
-              style={{ left: "77%", top: "37%" }}
+              style={{ left: "77%", top: "39%" }}
             >
               <Images aria-hidden="true" className="size-5" />
             </Hotspot>
@@ -990,7 +1305,7 @@ export function ProfileRoom({
               accentColor={accentColor}
               label="Open featured song"
               onClick={() => setSelectedRoom("living")}
-              style={{ left: "11%", top: "77%" }}
+              style={{ left: "19%", top: "70%" }}
             >
               <Music2 aria-hidden="true" className="size-5" />
             </Hotspot>
