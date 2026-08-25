@@ -43,7 +43,7 @@ async function uploadProfileImage(
     throw new Error("IMAGE_INVALID");
   }
   const supabase = await createClient();
-  const path = `${userId}/${kind}.${extension}`;
+  const path = `${userId}/${kind}-${crypto.randomUUID()}.${extension}`;
   const { error } = await supabase.storage
     .from("profile-media")
     .upload(path, file, {
@@ -66,6 +66,14 @@ export async function updateProfileSettingsAction(
     visibility: formData.get("visibility"),
     discoverable: formData.get("discoverable") === "on",
     accentColor: formData.get("accentColor"),
+    landscapeImageFit: formData.get("landscapeImageFit"),
+    landscapeImagePositionX: formData.get("landscapeImagePositionX"),
+    landscapeImagePositionY: formData.get("landscapeImagePositionY"),
+    landscapeImageZoom: formData.get("landscapeImageZoom"),
+    backgroundImageFit: formData.get("backgroundImageFit"),
+    backgroundImagePositionX: formData.get("backgroundImagePositionX"),
+    backgroundImagePositionY: formData.get("backgroundImagePositionY"),
+    backgroundImageZoom: formData.get("backgroundImageZoom"),
     spotlightTitle: formData.get("spotlightTitle"),
     spotlightDescription: formData.get("spotlightDescription"),
     spotlightUrl: formData.get("spotlightUrl"),
@@ -119,6 +127,14 @@ export async function updateProfileSettingsAction(
       p_cover_image_url: landscapePath,
       p_background_image_url: backgroundPath,
       p_profile_accent_color: parsed.data.accentColor,
+      p_landscape_image_fit: parsed.data.landscapeImageFit,
+      p_landscape_image_position_x: parsed.data.landscapeImagePositionX,
+      p_landscape_image_position_y: parsed.data.landscapeImagePositionY,
+      p_landscape_image_zoom: parsed.data.landscapeImageZoom,
+      p_background_image_fit: parsed.data.backgroundImageFit,
+      p_background_image_position_x: parsed.data.backgroundImagePositionX,
+      p_background_image_position_y: parsed.data.backgroundImagePositionY,
+      p_background_image_zoom: parsed.data.backgroundImageZoom,
       p_spotlight_title: parsed.data.spotlightTitle,
       p_spotlight_description: parsed.data.spotlightDescription,
       p_spotlight_url: parsed.data.spotlightUrl,
@@ -136,6 +152,20 @@ export async function updateProfileSettingsAction(
               : "Your profile could not be updated.",
       };
     }
+    const replacedPaths = [
+      [current?.avatar_url, avatarPath],
+      [current?.cover_image_url, landscapePath],
+      [current?.background_image_url, backgroundPath],
+    ]
+      .filter(
+        (paths): paths is [string, string] =>
+          Boolean(paths[0] && paths[1] && paths[0] !== paths[1]),
+      )
+      .map(([currentPath]) => currentPath);
+    if (replacedPaths.length) {
+      await supabase.storage.from("profile-media").remove(replacedPaths);
+    }
+
     revalidatePath("/account");
     if (current?.username) {
       revalidatePath(`/home/profiles/${current.username}`);
