@@ -203,11 +203,11 @@ export function ProfileSettingsForm({
           className="mb-2 block text-sm font-bold text-white"
           htmlFor="profile-accent-color"
         >
-          Card border color
+          Profile accent color
         </label>
         <div className="flex gap-3">
           <input
-            aria-label="Choose card border color"
+            aria-label="Choose profile accent color"
             className="size-12 shrink-0 cursor-pointer rounded-xl border border-white/10 bg-black/45 p-1"
             onChange={(event) => setAccentColor(event.target.value)}
             type="color"
@@ -229,7 +229,7 @@ export function ProfileSettingsForm({
         </div>
         <FieldMessage
           error={firstFieldError(state, "accentColor")}
-          hint="Enter any six-digit hex color to match your wallpaper."
+          hint="Sets the card borders and profile-photo ring. Enter any six-digit hex color to match your wallpaper."
         />
       </div>
       <fieldset className="rounded-2xl border border-white/10 bg-black/25 p-5">
