@@ -7,6 +7,7 @@ import { Container } from "@/components/ui/container";
 import { ButtonLink } from "@/components/ui/button-link";
 import { StatusMessage } from "@/components/ui/status-message";
 import { signOutAction } from "@/features/auth/actions";
+import { signProfileMedia } from "@/features/profiles/profile-media";
 import { ProfileSettingsForm } from "@/features/profiles/profile-settings-form";
 import { ProfileStatusForm } from "@/features/profiles/profile-status-form";
 import { FeaturedConnectionsForm } from "@/features/profiles/featured-connections-form";
@@ -70,6 +71,10 @@ export default async function AccountPage({
 
   if (!profileResult.data?.onboarding_completed_at) redirect("/onboarding");
   const profile = profileResult.data;
+  const [landscapeUrl, backgroundUrl] = await Promise.all([
+    signProfileMedia(supabase, profile.cover_image_url),
+    signProfileMedia(supabase, profile.background_image_url),
+  ]);
   const friendIds = new Set(
     (friendshipsResult.data ?? [])
       .filter((friendship) => friendship.status === "accepted")
@@ -164,6 +169,16 @@ export default async function AccountPage({
                 displayNameChangedAt: profile.display_name_changed_at,
                 bio: profile.bio ?? "",
                 accentColor: profile.profile_accent_color,
+                landscapeUrl,
+                landscapeImageFit: profile.landscape_image_fit,
+                landscapeImagePositionX: profile.landscape_image_position_x,
+                landscapeImagePositionY: profile.landscape_image_position_y,
+                landscapeImageZoom: profile.landscape_image_zoom,
+                backgroundUrl,
+                backgroundImageFit: profile.background_image_fit,
+                backgroundImagePositionX: profile.background_image_position_x,
+                backgroundImagePositionY: profile.background_image_position_y,
+                backgroundImageZoom: profile.background_image_zoom,
                 spotlightTitle: profile.spotlight_title ?? "",
                 spotlightDescription: profile.spotlight_description ?? "",
                 spotlightUrl: profile.spotlight_url ?? "",
