@@ -383,27 +383,7 @@ function HouseIllustration({
         </filter>
       </defs>
 
-      <rect
-        width="1200"
-        height="760"
-        fill={day ? "url(#day-sky)" : "url(#night-sky)"}
-      />
-      {!day ? (
-        <g fill="#fff8ca" opacity=".8">
-          {[
-            [92, 75],
-            [185, 112],
-            [310, 62],
-            [448, 105],
-            [589, 54],
-            [748, 91],
-            [895, 50],
-            [1070, 106],
-          ].map(([cx, cy]) => (
-            <circle cx={cx} cy={cy} key={`${cx}-${cy}`} r="2" />
-          ))}
-        </g>
-      ) : null}
+
       <g filter="url(#house-shadow)">
         {/* One continuous apartment shell. */}
         <polygon
@@ -892,17 +872,22 @@ function DetailBlock({
   title: string;
   children: ReactNode;
 }) {
-  return (
-    <section className="rounded-2xl border border-white/10 bg-black/25 p-5">
-      <h4 className="flex items-center gap-2 font-bold text-white">
-        {icon}
-        {title}
-      </h4>
-      <div className="mt-3 text-sm leading-6 text-white/65">{children}</div>
-    </section>
-  );
-}
+return (
+  <section
+    className="min-h-[160px] rounded-[1.5rem] border bg-black/70 p-6 backdrop-blur-md"
+    style={{ borderColor: "var(--room-accent)" }}
+  >
+    <h4 className="flex items-center gap-2 font-bold text-white">
+      {icon}
+      {title}
+    </h4>
 
+    <div className="mt-3 text-sm leading-6 text-white/65">
+      {children}
+    </div>
+  </section>
+);
+}
 function MobileWindow({ theme }: { theme: HouseTheme }) {
   const day = theme === "day";
   return (
@@ -1025,15 +1010,73 @@ export function ProfileRoom({
   featuredConnections: RoomConnection[];
   isOwner?: boolean;
 }) {
-  const [view, setView] = useState<"room" | "quick">(
-    settings.enabled ? "room" : "quick",
-  );
+  const [musicArtworkUrl, setMusicArtworkUrl] = useState<string | null>(null);
+const [view, setView] = useState<"room" | "quick">("quick");
   const [selectedRoom, setSelectedRoom] = useState<RoomKey | null>(null);
   const [localTheme, setLocalTheme] = useState<HouseTheme>("day");
   const [themePreference, setThemePreference] =
     useState<ThemePreference>("auto");
   const validSongUrl =
     song.url && /^https?:\/\//i.test(song.url) ? song.url : null;
+    const musicService =
+  validSongUrl?.includes("music.apple.com")
+    ? "apple"
+    : validSongUrl?.includes("open.spotify.com")
+      ? "spotify"
+      : validSongUrl?.includes("youtube.com") ||
+          validSongUrl?.includes("youtu.be")
+        ? "youtube"
+        : "other";
+
+const musicLinkLabel =
+  musicService === "apple"
+    ? "Listen on Apple Music"
+    : musicService === "spotify"
+      ? "Listen on Spotify"
+      : musicService === "youtube"
+        ? "Watch on YouTube"
+        : "Open music link";
+
+useEffect(() => {
+  if (!validSongUrl) {
+    setMusicArtworkUrl(null);
+    return;
+  }
+
+  const controller = new AbortController();
+
+  async function loadMusicMetadata() {
+    try {
+      const response = await fetch(
+        `/api/music-metadata?url=${encodeURIComponent(validSongUrl!)}`,
+        {
+          signal: controller.signal,
+        },
+      );
+
+      if (!response.ok) {
+        setMusicArtworkUrl(null);
+        return;
+      }
+
+      const metadata = (await response.json()) as {
+        artworkUrl?: string | null;
+      };
+
+      setMusicArtworkUrl(metadata.artworkUrl ?? null);
+    } catch (error) {
+      if (error instanceof DOMException && error.name === "AbortError") {
+        return;
+      }
+
+      setMusicArtworkUrl(null);
+    }
+  }
+
+  void loadMusicMetadata();
+
+  return () => controller.abort();
+}, [validSongUrl]);
   const theme = themePreference === "auto" ? localTheme : themePreference;
 
   useEffect(() => {
@@ -1088,12 +1131,6 @@ export function ProfileRoom({
     bedroom: (
       <div className="space-y-4">
         <DetailBlock
-          icon={<Sparkles aria-hidden="true" className="size-4" />}
-          title="Current Vibe"
-        >
-          <span className="capitalize">{settings.currentVibe}</span>
-        </DetailBlock>
-        <DetailBlock
           icon={<Radio aria-hidden="true" className="size-4" />}
           title="Current Signal"
         >
@@ -1129,7 +1166,7 @@ export function ProfileRoom({
                 style={{ color: accentColor }}
                 target="_blank"
               >
-                Listen outside SIGNAL
+                {musicLinkLabel}
               </a>
             ) : null}
           </>
@@ -1194,79 +1231,234 @@ export function ProfileRoom({
   } as CSSProperties;
 
   return (
-    <section className="mt-8" id="my-room">
-      <div className="mb-5 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-        <div>
-          <p className="text-xs font-bold tracking-[0.2em] text-white/45 uppercase">
-            Come on in
-          </p>
-          <h2 className="display-type mt-1 text-4xl text-white sm:text-5xl">
-            My Room
-          </h2>
-          <p className="mt-2 max-w-xl text-sm leading-6 text-white/50">
-            Explore the little things that make this space feel like{" "}
-            {displayName}.
-          </p>
+    <section className="mt-8" id="my-room" style={sceneStyle}>
+<div
+  className="mb-5 flex flex-col gap-5 rounded-[1.75rem] border bg-black/50 p-5 backdrop-blur-xl sm:p-6 lg:flex-row lg:items-center lg:justify-between"
+  style={{ borderColor: accentColor }}
+>
+<div className="flex items-center gap-3">
+  <div>
+    <p className="text-xs font-bold tracking-[0.18em] text-white/40 uppercase">
+      Profile Space
+    </p>
+
+<h2 className="mt-1 text-xl font-bold text-white sm:text-2xl">
+  {isOwner ? "My Room" : `${displayName}'s Room`}
+</h2>
+  </div>
+</div>
+
+  <div className="flex flex-wrap items-center gap-2 lg:justify-end">
+    <label className="flex min-h-11 items-center gap-2 rounded-full border border-white/10 bg-black/45 px-4 text-sm font-bold text-white/65">
+      {theme === "day" ? (
+        <Sun aria-hidden="true" className="size-4 text-[#ffd166]" />
+      ) : (
+        <Moon aria-hidden="true" className="size-4 text-[#b8c8ff]" />
+      )}
+
+      <span className="sr-only">House light</span>
+
+      <select
+        aria-label="House light"
+        className="bg-transparent text-white outline-none"
+        onChange={(event) =>
+          chooseTheme(event.target.value as ThemePreference)
+        }
+        value={themePreference}
+      >
+        <option className="bg-[#111118]" value="auto">
+          Automatic
+        </option>
+
+        <option className="bg-[#111118]" value="day">
+          Always Day
+        </option>
+
+        <option className="bg-[#111118]" value="night">
+          Always Night
+        </option>
+      </select>
+    </label>
+
+    <div
+      aria-label="Choose profile view"
+      className="flex rounded-full border border-white/10 bg-black/45 p-1"
+      role="group"
+    >
+      {(["room", "quick"] as const).map((option) => (
+        <button
+          aria-pressed={view === option}
+          className="min-h-10 rounded-full px-4 text-sm font-bold text-white/55 transition focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none aria-pressed:bg-white/10 aria-pressed:text-white"
+          key={option}
+          onClick={() => setView(option)}
+          type="button"
+        >
+          {option === "room" ? "Room View" : "Quick View"}
+        </button>
+      ))}
+    </div>
+  </div>
+</div>
+
+{view === "quick" ? (
+  <div className="grid gap-5 lg:grid-cols-[minmax(360px,1.05fr)_minmax(0,1.45fr)]">
+    <div className="space-y-4">
+
+    <DetailBlock
+      icon={<Radio aria-hidden="true" className="size-4" />}
+      title="Current Signal"
+    >
+      {statusText ? (
+        <p>{statusText}</p>
+      ) : (
+        <p>{displayName} is between signals right now.</p>
+      )}
+
+      {statusCountdown ? (
+        <div className="mt-2 text-xs text-white/40">
+          {statusCountdown}
         </div>
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-          <label className="flex min-h-12 items-center gap-2 rounded-full border border-white/10 bg-black/55 px-4 text-sm font-bold text-white/65">
-            {theme === "day" ? (
-              <Sun aria-hidden="true" className="size-4 text-[#ffd166]" />
-            ) : (
-              <Moon aria-hidden="true" className="size-4 text-[#b8c8ff]" />
-            )}
-            <span className="sr-only">House light</span>
-            <select
-              aria-label="House light"
-              className="bg-transparent text-white outline-none"
-              onChange={(event) =>
-                chooseTheme(event.target.value as ThemePreference)
-              }
-              value={themePreference}
+      ) : null}
+    </DetailBlock>
+
+
+<DetailBlock
+  icon={<Music2 aria-hidden="true" className="size-4" />}
+  title="Music"
+>
+  {song.title ? (
+    <div className="relative overflow-hidden rounded-[1.25rem] border border-white/10 bg-white/[0.03]">
+      <div className="flex flex-col gap-4 p-4 sm:flex-row sm:items-center">
+        <div
+          className="relative flex aspect-square w-full shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-black/40 sm:w-28"
+          style={{ borderColor: "var(--room-accent)" }}
+        >
+          {musicArtworkUrl ? (
+<img
+  alt={`${song.title ?? "Featured track"} artwork`}
+  className="size-full object-cover"
+  src={musicArtworkUrl}
+/>          ) : (
+            <Music2
+              aria-hidden="true"
+              className="size-10 text-white/25"
+            />
+          )}
+        </div>
+
+        <div className="min-w-0 flex-1">
+          <p className="text-xs font-bold tracking-[0.16em] text-white/40 uppercase">
+            Featured Track
+          </p>
+
+          <p className="mt-2 truncate text-lg font-bold text-white">
+            {song.title}
+          </p>
+
+          {song.artist ? (
+            <p className="mt-1 truncate text-sm text-white/55">
+              {song.artist}
+            </p>
+          ) : null}
+
+          {validSongUrl ? (
+            <a
+              className="relative z-20 mt-4 inline-flex cursor-pointer items-center gap-2 text-sm font-bold hover:underline"
+              href={validSongUrl}
+              rel="noopener noreferrer"
+              style={{ color: accentColor }}
+              target="_blank"
             >
-              <option className="bg-[#111118]" value="auto">
-                Automatic
-              </option>
-              <option className="bg-[#111118]" value="day">
-                Always Day
-              </option>
-              <option className="bg-[#111118]" value="night">
-                Always Night
-              </option>
-            </select>
-          </label>
-          <div
-            aria-label="Choose profile view"
-            className="flex rounded-full border border-white/10 bg-black/55 p-1"
-            role="group"
-          >
-            {(["room", "quick"] as const).map((option) => (
-              <button
-                aria-pressed={view === option}
-                className="min-h-11 rounded-full px-4 text-sm font-bold text-white/55 transition focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none aria-pressed:bg-white/10 aria-pressed:text-white"
-                key={option}
-                onClick={() => setView(option)}
-                type="button"
-              >
-                {option === "room" ? "Room View" : "Quick View"}
-              </button>
-            ))}
-          </div>
+              {musicLinkLabel}
+            </a>
+          ) : (
+            <p className="mt-4 text-xs text-white/35">
+              Add a valid music link to listen.
+            </p>
+          )}
         </div>
       </div>
+    </div>
+  ) : (
+    <p className="text-white/50">
+      No featured music yet.
+    </p>
+  )}
+</DetailBlock>
 
-      {view === "quick" ? (
-        <div
-          className="grid gap-4 rounded-[2rem] border bg-black/60 p-5 backdrop-blur-md sm:grid-cols-2 sm:p-7"
-          style={{ borderColor: accentColor }}
-        >
-          {details.bedroom}
-          {details.study}
-          {details.living}
-          {details.friends}
+
+    {spotlight.title ? (
+      <DetailBlock
+        icon={<LampDesk aria-hidden="true" className="size-4" />}
+        title="Current Focus"
+      >
+        <p className="font-bold text-white">{spotlight.title}</p>
+
+        {spotlight.description ? (
+          <p className="mt-1">{spotlight.description}</p>
+        ) : null}
+
+        {spotlight.url ? (
+          <a
+            className="mt-3 inline-flex font-bold hover:underline"
+            href={spotlight.url}
+            rel="noreferrer"
+            style={{ color: accentColor }}
+            target="_blank"
+          >
+            Open spotlight
+          </a>
+        ) : null}
+      </DetailBlock>
+    ) : null}
+
+    <DetailBlock
+  icon={<Sparkles aria-hidden="true" className="size-4" />}
+  title="Latest Pick"
+>
+  <p className="text-white/50">
+    Add a book, game, movie, food, or other current favorite.
+  </p>
+</DetailBlock>
+
+<DetailBlock
+  icon={<UsersRound aria-hidden="true" className="size-4" />}
+  title="Friend Spotlight"
+>
+  {featuredConnections.length ? (
+    <div className="grid grid-cols-2 gap-3">
+      {featuredConnections.slice(0, 3).map((connection) => (
+        <Frame connection={connection} key={connection.id} />
+      ))}
+    </div>
+  ) : (
+    <p>No Friends Featured Yet.</p>
+  )}
+      </DetailBlock>
+    </div>
+
+    <div
+      className="relative min-h-[520px] overflow-hidden rounded-[1.5rem] border bg-black/35 backdrop-blur-sm"
+      style={{ borderColor: accentColor }}
+    >
+      <div className="absolute inset-0 flex items-center justify-center p-8 text-center">
+        <div>
+          <Images
+            aria-hidden="true"
+            className="mx-auto size-10 text-white/35"
+          />
+          <p className="mt-4 text-sm font-bold text-white/70">
+            Featured Profile Image
+          </p>
+          <p className="mt-1 text-xs text-white/40">
+            A large profile photo or featured visual will go here.
+          </p>
         </div>
-      ) : (
-        <>
+      </div>
+    </div>
+  </div>
+) : (
+              <>
           <div
             className="relative hidden aspect-[16/10] overflow-hidden rounded-[2.25rem] border border-white/15 shadow-[0_35px_100px_rgba(0,0,0,.55)] md:block"
             data-house-theme={theme}

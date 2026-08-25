@@ -90,7 +90,7 @@ function MediaFrameEditor({
           className="mb-2 block text-sm font-bold text-white"
           htmlFor={`profile-${inputName}`}
         >
-          Choose image
+          Choose Image
         </label>
         <input
           accept={accept}
@@ -108,7 +108,7 @@ function MediaFrameEditor({
             className="mb-2 block text-sm font-bold text-white"
             htmlFor={`${prefix}-fit`}
           >
-            Image fit
+            Image Fit
           </label>
           <select
             className={inputClass}
@@ -117,8 +117,8 @@ function MediaFrameEditor({
             onChange={(event) => setFit(event.target.value as ProfileImageFit)}
             value={fit}
           >
-            <option value="cover">Fill frame</option>
-            <option value="contain">Show whole image</option>
+            <option value="cover">Fill Frame</option>
+            <option value="contain">Show Whole Image</option>
           </select>
         </div>
         <div>
@@ -149,7 +149,7 @@ function MediaFrameEditor({
             className="mb-2 flex justify-between text-sm font-bold text-white"
             htmlFor={`${prefix}-position-x`}
           >
-            <span>Move left or right</span>
+            <span>Move Left or Right</span>
             <span className="text-white/45">{positionX}%</span>
           </label>
           <input
@@ -168,7 +168,7 @@ function MediaFrameEditor({
             className="mb-2 flex justify-between text-sm font-bold text-white"
             htmlFor={`${prefix}-position-y`}
           >
-            <span>Move up or down</span>
+            <span>Move Up or Down</span>
             <span className="text-white/45">{positionY}%</span>
           </label>
           <input
@@ -218,7 +218,7 @@ export function ProfileMediaEditor({
         initialZoom={landscape.zoom}
         inputName="landscape"
         previewClassName="aspect-[16/5]"
-        title="Landscape header"
+        title="Landscape Header"
       />
       <MediaFrameEditor
         accept="image/jpeg,image/png,image/webp"

@@ -55,7 +55,29 @@ export const profileSettingsSchema = z.object({
       "Use a complete http:// or https:// link.",
     )
     .transform((value) => value || null),
+    profileSongTitle: z
+  .string()
+  .trim()
+  .max(100, "Use no more than 100 characters.")
+  .transform((value) => value || null),
+
+profileSongArtist: z
+  .string()
+  .trim()
+  .max(100, "Use no more than 100 characters.")
+  .transform((value) => value || null),
+
+profileSongUrl: z
+  .string()
+  .trim()
+  .max(500, "Use no more than 500 characters.")
+  .refine(
+    (value) => !value || /^https?:\/\//i.test(value),
+    "Use a complete http:// or https:// link.",
+  )
+  .transform((value) => value || null),
 });
+
 
 export const profileStatusSchema = z.object({
   statusText: z
@@ -94,7 +116,7 @@ export const profileRoomSettingsSchema = z.object({
 });
 
 export const featuredConnectionsSchema = z.object({
-  featuredUserIds: z.array(z.uuid()).max(8, "Choose no more than 8 friends."),
+  featuredUserIds: z.array(z.uuid()).max(8, "Choose no more than 3 friends."),
 });
 
 export const targetProfileSchema = z.object({ targetUserId: z.uuid() });

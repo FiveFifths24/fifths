@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { Flag, Pencil, Radio, ShieldCheck } from "lucide-react";
+import { Flag, Pencil, ShieldCheck } from "lucide-react";
 import { ButtonLink } from "@/components/ui/button-link";
 import { StatusMessage } from "@/components/ui/status-message";
 import { RelationshipControls } from "@/features/profiles/relationship-controls";
@@ -116,103 +116,104 @@ export default async function MemberProfilePage({
           </StatusMessage>
         ) : null}
 
-        <article
-          className="overflow-hidden rounded-[2rem] border bg-black/40 shadow-[0_28px_90px_rgba(0,0,0,.45)] backdrop-blur-[2px]"
-          style={cardStyle}
-        >
-          <div className="relative min-h-80 overflow-hidden bg-[radial-gradient(circle_at_75%_20%,rgba(243,89,210,.22),transparent_30%),linear-gradient(135deg,#160626,#070711_58%,#071b20)]">
-            <ProfileImageLayer
-              fit={experience?.landscape_image_fit ?? "cover"}
-              imageUrl={landscapeUrl}
-              overlayClassName="bg-gradient-to-b from-black/20 to-black/70"
-              positionX={experience?.landscape_image_position_x ?? 50}
-              positionY={experience?.landscape_image_position_y ?? 50}
-              zoom={experience?.landscape_image_zoom ?? 100}
+<article
+  className="overflow-hidden rounded-[2rem] border bg-black/20 shadow-[0_28px_90px_rgba(0,0,0,.45)] backdrop-blur-[2px]"
+  style={cardStyle}
+>
+  <div className="relative min-h-[390px] overflow-hidden bg-[radial-gradient(circle_at_75%_20%,rgba(243,89,210,.22),transparent_30%),linear-gradient(135deg,#160626,#070711_58%,#071b20)]">
+    <ProfileImageLayer
+      fit={experience?.landscape_image_fit ?? "cover"}
+      imageUrl={landscapeUrl}
+      overlayClassName="bg-gradient-to-b from-black/10 via-black/20 to-black/55"
+      positionX={experience?.landscape_image_position_x ?? 50}
+      positionY={experience?.landscape_image_position_y ?? 50}
+      zoom={experience?.landscape_image_zoom ?? 100}
+    />
+
+    <div className="absolute inset-x-0 bottom-0 z-10 p-4 sm:p-7">
+      <div
+        className="flex flex-col gap-6 rounded-[1.75rem] border bg-black/55 p-5 shadow-2xl backdrop-blur-xl sm:p-6 lg:flex-row lg:items-center lg:justify-between"
+        style={cardStyle}
+      >
+        <div className="flex min-w-0 flex-col items-center gap-5 sm:flex-row">
+          <div className="relative shrink-0">
+            <div
+              aria-label={`${profile.display_name}'s profile photo`}
+              className="size-28 rounded-full border-4 border-black bg-gradient-to-br from-[#992bff] to-[#f359d2] bg-cover bg-center shadow-2xl"
+              role="img"
+              style={{
+                borderColor: accentColor,
+                ...(avatarUrl
+                  ? {
+                      backgroundImage: `url(${JSON.stringify(avatarUrl).slice(1, -1)})`,
+                    }
+                  : {}),
+              }}
             />
-            <div className="absolute inset-x-0 bottom-0 z-10 p-6 sm:p-9">
-              <div className="flex flex-col items-center gap-5 sm:flex-row sm:items-end">
-                <div className="relative shrink-0">
-                  <div
-                    aria-label={`${profile.display_name}'s profile photo`}
-                    className="size-28 rounded-full border-4 border-black bg-gradient-to-br from-[#992bff] to-[#f359d2] bg-cover bg-center shadow-2xl"
-                    role="img"
-                    style={{
-                      borderColor: accentColor,
-                      ...(avatarUrl
-                        ? {
-                            backgroundImage: `url(${JSON.stringify(avatarUrl).slice(1, -1)})`,
-                          }
-                        : {}),
-                    }}
-                  />
-                  {isOwnProfile ? (
-                    <Link
-                      aria-label="Edit profile photo"
-                      className="absolute -right-1 -bottom-1 inline-flex size-9 items-center justify-center rounded-full border-2 border-black text-white shadow-lg transition hover:scale-105"
-                      href="/account#profile-media"
-                      style={{ backgroundColor: accentColor }}
-                    >
-                      <Pencil aria-hidden="true" className="size-4" />
-                    </Link>
-                  ) : null}
-                </div>
-                <div className="min-w-0 text-center sm:text-left">
-                  <h1 className="display-type text-5xl text-white capitalize sm:text-7xl">
-                    {profile.display_name}
-                  </h1>
-                  <p className="mt-2 font-bold text-white/55">
-                    @{profile.username}
-                  </p>
-                  {experience?.status_text ? (
-                    <div
-                      className="mt-4 max-w-xl rounded-2xl border bg-black/55 px-4 py-3 text-sm leading-6 text-white/80 backdrop-blur-md"
-                      style={cardStyle}
-                    >
-                      <p className="flex items-start gap-2">
-                        <Radio
-                          aria-hidden="true"
-                          className="mt-1 size-4 shrink-0"
-                          style={{ color: accentColor }}
-                        />
-                        <span>{experience.status_text}</span>
-                      </p>
-                      {isOwnProfile && experience.status_expires_at ? (
-                        <p className="mt-1 text-right text-[0.68rem] text-white/40">
-                          <ProfileStatusCountdown
-                            expiresAt={experience.status_expires_at}
-                          />
-                        </p>
-                      ) : null}
-                    </div>
-                  ) : null}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="border-t border-white/10 bg-black/30 p-6 sm:p-9">
+
             {isOwnProfile ? (
-              <div className="flex flex-wrap justify-center gap-3 sm:justify-start">
-                <ButtonLink href="/account#edit-my-room">
-                  Edit My Room
-                </ButtonLink>
-                <ButtonLink href="/home" variant="secondary">
-                  Back to Home
-                </ButtonLink>
-              </div>
-            ) : (
-              <RelationshipControls
-                friendship={friendshipState(
-                  friendshipResult.data ?? undefined,
-                  userData.user.id,
-                )}
-                isFollowing={Boolean(followResult.data)}
-                isMuted={Boolean(muteResult.data)}
-                returnTo={returnTo}
-                targetUserId={profile.id}
-              />
-            )}
+              <Link
+                aria-label="Edit Profile Photo"
+                className="absolute -right-1 -bottom-1 inline-flex size-9 items-center justify-center rounded-full border-2 border-black text-white shadow-lg transition hover:scale-105"
+                href="/account#profile-media"
+                style={{ backgroundColor: accentColor }}
+              >
+                <Pencil aria-hidden="true" className="size-4" />
+              </Link>
+            ) : null}
           </div>
-        </article>
+
+          <div className="min-w-0 text-center sm:text-left">
+            <h1 className="display-type text-5xl text-white capitalize sm:text-6xl">
+              {profile.display_name}
+            </h1>
+
+            <p className="mt-1 font-bold text-white/55">
+              @{profile.username}
+            </p>
+
+            {profile.bio ? (
+              <div className="mt-4 max-w-xl">
+                <p className="mb-1 text-xs font-bold tracking-[0.14em] text-white/45 uppercase">
+                  About Me
+                </p>
+
+                <p className="text-sm leading-6 text-white/80">
+                  {profile.bio}
+                </p>
+              </div>
+            ) : null}
+          </div>
+        </div>
+
+        <div className="shrink-0">
+          {isOwnProfile ? (
+            <div className="flex flex-wrap justify-center gap-3 lg:justify-end">
+              <ButtonLink href="/account#edit-my-room">
+                Edit My Room
+              </ButtonLink>
+
+              <ButtonLink href="/home" variant="secondary">
+                Back to Home
+              </ButtonLink>
+            </div>
+          ) : (
+            <RelationshipControls
+              friendship={friendshipState(
+                friendshipResult.data ?? undefined,
+                userData.user.id,
+              )}
+              isFollowing={Boolean(followResult.data)}
+              isMuted={Boolean(muteResult.data)}
+              returnTo={returnTo}
+              targetUserId={profile.id}
+            />
+          )}
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
 
         <ProfileRoom
           accentColor={accentColor}

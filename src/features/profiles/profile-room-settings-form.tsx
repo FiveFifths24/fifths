@@ -74,7 +74,7 @@ export function ProfileRoomSettingsForm({
         />
         <span>
           <span className="block text-sm font-bold text-white">
-            Make Room View my default
+            Make Room View My Default
           </span>
           <span className="mt-1 block text-xs leading-5 text-white/45">
             Visitors can always switch to the accessible Quick View.
@@ -84,13 +84,13 @@ export function ProfileRoomSettingsForm({
 
       <div className="grid gap-5 sm:grid-cols-2">
         <ColorField
-          label="Room wall color"
+          label="Room Wall Color"
           name="wallColor"
           onChange={setWallColor}
           value={wallColor}
         />
         <ColorField
-          label="Character color"
+          label="Character Color"
           name="characterColor"
           onChange={setCharacterColor}
           value={characterColor}
@@ -108,9 +108,9 @@ export function ProfileRoomSettingsForm({
             id="lightingTheme"
             name="lightingTheme"
           >
-            <option value="cosmic">Cosmic glow</option>
-            <option value="warm">Warm evening</option>
-            <option value="daylight">Soft daylight</option>
+            <option value="cosmic">Cosmic Glow</option>
+            <option value="warm">Warm Evening</option>
+            <option value="daylight">Soft Daylight</option>
             <option value="midnight">Midnight</option>
           </select>
         </div>
@@ -138,7 +138,7 @@ export function ProfileRoomSettingsForm({
 
       <fieldset className="rounded-2xl border border-white/10 bg-black/25 p-5">
         <legend className="px-2 text-sm font-bold text-white">
-          Room character
+          Room Character
         </legend>
         <p className="mb-5 text-xs leading-5 text-white/45">
           The blob stays one friendly shape for now. Combine one head, face, and
@@ -216,7 +216,7 @@ export function ProfileRoomSettingsForm({
         />
         <span>
           <span className="block text-sm font-bold text-white">
-            Allow subtle room animation
+            Allow Subtle Room Animation
           </span>
           <span className="mt-1 block text-xs leading-5 text-white/45">
             System reduced-motion settings always take priority.

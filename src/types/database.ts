@@ -1411,6 +1411,9 @@ export type Database = {
           p_spotlight_title: string | null;
           p_spotlight_description: string | null;
           p_spotlight_url: string | null;
+          p_profile_song_title: string | null;
+p_profile_song_artist: string | null;
+p_profile_song_url: string | null;
         };
         Returns: undefined;
       };

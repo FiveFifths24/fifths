@@ -76,6 +76,9 @@ export function ProfileSettingsForm({
     spotlightTitle: string;
     spotlightDescription: string;
     spotlightUrl: string;
+    profileSongTitle: string;
+profileSongArtist: string;
+profileSongUrl: string;
     visibility: "private" | "members" | "public";
     discoverable: boolean;
   };
@@ -164,7 +167,7 @@ export function ProfileSettingsForm({
           className="mb-2 block text-sm font-bold text-white"
           htmlFor="profile-avatar"
         >
-          Profile photo
+          Profile Photo
         </label>
         <input
           accept="image/jpeg,image/png,image/webp"
@@ -196,7 +199,7 @@ export function ProfileSettingsForm({
           className="mb-2 block text-sm font-bold text-white"
           htmlFor="profile-accent-color"
         >
-          Profile accent color
+          Profile Accent Color
         </label>
         <div className="flex gap-3">
           <input
@@ -226,16 +229,98 @@ export function ProfileSettingsForm({
         />
       </div>
       <fieldset className="rounded-2xl border border-white/10 bg-black/25 p-5">
+  <legend className="px-2 text-sm font-bold text-white">
+    Featured Music
+  </legend>
+
+  <p className="mb-5 text-xs leading-5 text-white/45">
+    Share the song you&apos;re listening to right now, a favorite track, or a
+    link to a playlist.
+  </p>
+
+  <div className="space-y-4">
+    <div>
+      <label
+        className="mb-2 block text-xs font-bold text-white/55"
+        htmlFor="profile-song-title"
+      >
+        Song Title
+      </label>
+
+      <input
+        className={inputClass}
+        defaultValue={profile.profileSongTitle}
+        id="profile-song-title"
+        maxLength={100}
+        name="profileSongTitle"
+        placeholder="What song are you playing?"
+      />
+
+      <FieldMessage
+        error={firstFieldError(state, "profileSongTitle")}
+        hint="Up to 100 characters."
+      />
+    </div>
+
+    <div>
+      <label
+        className="mb-2 block text-xs font-bold text-white/55"
+        htmlFor="profile-song-artist"
+      >
+        Artist
+      </label>
+
+      <input
+        className={inputClass}
+        defaultValue={profile.profileSongArtist}
+        id="profile-song-artist"
+        maxLength={100}
+        name="profileSongArtist"
+        placeholder="Artist name"
+      />
+
+      <FieldMessage
+        error={firstFieldError(state, "profileSongArtist")}
+        hint="Up to 100 characters."
+      />
+    </div>
+
+    <div>
+      <label
+        className="mb-2 block text-xs font-bold text-white/55"
+        htmlFor="profile-song-url"
+      >
+        Song or Playlist Link
+      </label>
+
+      <input
+        className={inputClass}
+        defaultValue={profile.profileSongUrl}
+        id="profile-song-url"
+        maxLength={500}
+        name="profileSongUrl"
+        placeholder="https://open.spotify.com/..."
+        type="url"
+      />
+
+      <FieldMessage
+        error={firstFieldError(state, "profileSongUrl")}
+        hint="Optional Spotify, Apple Music, YouTube, or other complete link."
+      />
+    </div>
+  </div>
+</fieldset>
+      <fieldset className="rounded-2xl border border-white/10 bg-black/25 p-5">
         <legend className="px-2 text-sm font-bold text-white">
-          Pinned spotlight
+          Current Focus
         </legend>
         <p className="mb-5 text-xs leading-5 text-white/45">
-          Optionally feature one project, session, Circle, opportunity, or link.
+          Share what currently has your attention — a project, school, cosplay, event, goal, or anything else.
         </p>
         <div className="space-y-4">
           <div>
             <label className="sr-only" htmlFor="spotlight-title">
-              Spotlight title
+              Spotlight Title
             </label>
             <input
               className={inputClass}
@@ -243,7 +328,7 @@ export function ProfileSettingsForm({
               id="spotlight-title"
               maxLength={80}
               name="spotlightTitle"
-              placeholder="Spotlight title"
+              placeholder="Tell everyone who/what you're spotlighting!"
             />
             <FieldMessage
               error={firstFieldError(state, "spotlightTitle")}
@@ -252,7 +337,7 @@ export function ProfileSettingsForm({
           </div>
           <div>
             <label className="sr-only" htmlFor="spotlight-description">
-              Spotlight description
+              Spotlight Description
             </label>
             <textarea
               className={`${inputClass} min-h-24`}
@@ -260,7 +345,7 @@ export function ProfileSettingsForm({
               id="spotlight-description"
               maxLength={240}
               name="spotlightDescription"
-              placeholder="A short description"
+              placeholder="Give us a short description for why you're selecting this spotlight!"
             />
             <FieldMessage
               error={firstFieldError(state, "spotlightDescription")}
@@ -269,7 +354,7 @@ export function ProfileSettingsForm({
           </div>
           <div>
             <label className="sr-only" htmlFor="spotlight-url">
-              Spotlight link
+              Spotlight Link
             </label>
             <input
               className={inputClass}
@@ -292,7 +377,7 @@ export function ProfileSettingsForm({
           className="mb-2 block text-sm font-bold text-white"
           htmlFor="profile-visibility"
         >
-          Profile visibility
+          Profile Visibility
         </label>
         <select
           className={inputClass}
@@ -301,8 +386,8 @@ export function ProfileSettingsForm({
           name="visibility"
         >
           <option value="public">Public</option>
-          <option value="members">SIGNAL members</option>
-          <option value="private">Friends only</option>
+          <option value="members">SIGNAL Members</option>
+          <option value="private">Friends Only</option>
         </select>
       </div>
       <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-white/10 bg-black/30 p-5 has-checked:border-[#ca9aff]/70">
@@ -314,7 +399,7 @@ export function ProfileSettingsForm({
         />
         <span>
           <span className="block text-sm font-bold text-white">
-            Help people find me
+            Help People Find Me
           </span>
           <span className="mt-1 block text-xs leading-5 text-white/45">
             Include your profile in people search and relevant community
@@ -323,7 +408,7 @@ export function ProfileSettingsForm({
         </span>
       </label>
       <SubmitButton pendingLabel="Saving profile…">
-        Save profile & background
+        Save Profile & Background
       </SubmitButton>
     </form>
   );

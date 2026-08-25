@@ -153,7 +153,7 @@ export default async function AccountPage({
           >
             <div className="flex items-center gap-3">
               <House aria-hidden="true" className="size-5 text-[#ca9aff]" />
-              <h3 className="text-xl font-bold text-white">Room appearance</h3>
+              <h3 className="text-xl font-bold text-white">Room Appearance</h3>
             </div>
             <p className="mt-2 text-sm leading-6 text-white/45">
               Choose the room color, lighting, vibe, blob color, and compatible
@@ -196,7 +196,7 @@ export default async function AccountPage({
               <Sparkles aria-hidden="true" className="size-5 text-[#7cff00]" />
               <div>
                 <h3 className="text-xl font-bold text-white">
-                  Profile & background
+                  Profile & Background
                 </h3>
                 <p className="mt-1 text-sm leading-6 text-white/45">
                   Edit your names, bio, photo, landscape, wallpaper, and
@@ -225,6 +225,9 @@ export default async function AccountPage({
                 spotlightTitle: profile.spotlight_title ?? "",
                 spotlightDescription: profile.spotlight_description ?? "",
                 spotlightUrl: profile.spotlight_url ?? "",
+                profileSongTitle: profile.profile_song_title ?? "",
+profileSongArtist: profile.profile_song_artist ?? "",
+profileSongUrl: profile.profile_song_url ?? "",
                 visibility: profile.visibility,
                 discoverable: profile.discoverable,
               }}
@@ -238,7 +241,7 @@ export default async function AccountPage({
             <h2 className="text-2xl font-bold text-white">Friend Spotlight</h2>
           </div>
           <p className="mt-3 text-sm leading-6 text-white/45">
-            Choose up to eight friends whose photos appear inside your room.
+            Choose up to three friends whose photos appear inside your room.
           </p>
           <div className="mt-6">
             <FeaturedConnectionsForm
@@ -251,7 +254,7 @@ export default async function AccountPage({
         </section>
 
         <div className="mt-8 flex flex-wrap gap-3">
-          <ButtonLink href="/home">Go to your Home</ButtonLink>
+          <ButtonLink href="/home">Go To Your Home</ButtonLink>
           <form action={signOutAction}>
             <button
               className="min-h-12 rounded-full border border-neutral-700 px-6 py-3 font-bold text-white hover:border-neutral-500"

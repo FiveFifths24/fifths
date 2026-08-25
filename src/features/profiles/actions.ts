@@ -78,6 +78,9 @@ export async function updateProfileSettingsAction(
     spotlightTitle: formData.get("spotlightTitle"),
     spotlightDescription: formData.get("spotlightDescription"),
     spotlightUrl: formData.get("spotlightUrl"),
+    profileSongTitle: formData.get("profileSongTitle"),
+profileSongArtist: formData.get("profileSongArtist"),
+profileSongUrl: formData.get("profileSongUrl"),
   });
   if (!parsed.success) {
     return {
@@ -139,6 +142,9 @@ export async function updateProfileSettingsAction(
       p_spotlight_title: parsed.data.spotlightTitle,
       p_spotlight_description: parsed.data.spotlightDescription,
       p_spotlight_url: parsed.data.spotlightUrl,
+      p_profile_song_title: parsed.data.profileSongTitle,
+p_profile_song_artist: parsed.data.profileSongArtist,
+p_profile_song_url: parsed.data.profileSongUrl,
     });
     if (error) {
       const errorMessage = error.message.toUpperCase();
@@ -297,7 +303,7 @@ export async function updateFeaturedConnectionsAction(
   if (!parsed.success) {
     return {
       status: "error",
-      message: "Choose up to 8 current friends.",
+      message: "Choose up to 3 current friends.",
     };
   }
   const supabase = await createClient();
