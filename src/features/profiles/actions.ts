@@ -302,22 +302,22 @@ export async function unmuteProfileAction(formData: FormData) {
 
 export async function addBlockedWordAction(formData: FormData) {
   const parsed = blockedWordSchema.safeParse({ word: formData.get("word") });
-  if (!parsed.success) redirect("/account?filter=invalid");
+  if (!parsed.success) redirect("/account/safety?filter=invalid");
   const supabase = await createClient();
   const { error } = await supabase.rpc("add_blocked_word", {
     p_word: parsed.data.word,
   });
-  revalidatePath("/account");
-  redirect(`/account?filter=${error ? "error" : "updated"}`);
+  revalidatePath("/account/safety");
+  redirect(`/account/safety?filter=${error ? "error" : "updated"}`);
 }
 
 export async function removeBlockedWordAction(formData: FormData) {
   const parsed = blockedWordIdSchema.safeParse({
     wordId: formData.get("wordId"),
   });
-  if (!parsed.success) redirect("/account?filter=invalid");
+  if (!parsed.success) redirect("/account/safety?filter=invalid");
   const supabase = await createClient();
   await supabase.rpc("remove_blocked_word", { p_word_id: parsed.data.wordId });
-  revalidatePath("/account");
-  redirect("/account?filter=updated");
+  revalidatePath("/account/safety");
+  redirect("/account/safety?filter=updated");
 }
