@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ExternalLink, MapPin, Radio, Sparkles } from "lucide-react";
 import { Container } from "@/components/ui/container";
+import { ProfileImageLayer } from "@/features/profiles/profile-image-layer";
 import { signProfileMedia } from "@/features/profiles/profile-media";
 import { ProfileWallpaper } from "@/features/profiles/profile-wallpaper";
 import { createClient } from "@/lib/supabase/server";
@@ -44,24 +45,29 @@ export default async function PublicProfilePage({
   const cardStyle = { borderColor: accentColor };
 
   return (
-    <ProfileWallpaper backgroundUrl={backgroundUrl}>
+    <ProfileWallpaper
+      backgroundUrl={backgroundUrl}
+      fit={experience?.background_image_fit ?? "cover"}
+      positionX={experience?.background_image_position_x ?? 50}
+      positionY={experience?.background_image_position_y ?? 50}
+      zoom={experience?.background_image_zoom ?? 100}
+    >
       <Container className="py-16 sm:py-24">
         <div className="mx-auto max-w-5xl">
           <article
             className="overflow-hidden rounded-[2rem] border bg-black/40 shadow-[0_28px_90px_rgba(0,0,0,.45)] backdrop-blur-[2px]"
             style={cardStyle}
           >
-            <div
-              className="relative min-h-80 bg-[radial-gradient(circle_at_75%_20%,rgba(243,89,210,.22),transparent_30%),linear-gradient(135deg,#160626,#070711_58%,#071b20)] bg-cover bg-center"
-              style={
-                landscapeUrl
-                  ? {
-                      backgroundImage: `linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.7)),url(${JSON.stringify(landscapeUrl).slice(1, -1)})`,
-                    }
-                  : undefined
-              }
-            >
-              <div className="absolute inset-x-0 bottom-0 p-7 sm:p-10">
+            <div className="relative min-h-80 overflow-hidden bg-[radial-gradient(circle_at_75%_20%,rgba(243,89,210,.22),transparent_30%),linear-gradient(135deg,#160626,#070711_58%,#071b20)]">
+              <ProfileImageLayer
+                fit={experience?.landscape_image_fit ?? "cover"}
+                imageUrl={landscapeUrl}
+                overlayClassName="bg-gradient-to-b from-black/20 to-black/70"
+                positionX={experience?.landscape_image_position_x ?? 50}
+                positionY={experience?.landscape_image_position_y ?? 50}
+                zoom={experience?.landscape_image_zoom ?? 100}
+              />
+              <div className="absolute inset-x-0 bottom-0 z-10 p-7 sm:p-10">
                 <div className="flex flex-col items-center gap-5 sm:flex-row sm:items-end">
                   <div
                     aria-label={`${profile.display_name}'s profile photo`}
