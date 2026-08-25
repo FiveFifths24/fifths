@@ -7,7 +7,7 @@ import { firstFieldError, initialActionState } from "@/features/auth/state";
 import { updateProfileSettingsAction } from "./actions";
 
 const inputClass =
-  "min-h-12 w-full rounded-xl border border-white/10 bg-black/35 px-4 py-3 text-white outline-none focus:border-[#ca9aff]/70";
+  "min-h-12 w-full rounded-xl border border-white/10 bg-black/45 px-4 py-3 text-white outline-none transition file:mr-4 file:rounded-full file:border-0 file:bg-[#6c14ce]/20 file:px-4 file:py-2 file:font-bold file:text-[#e9d5ff] hover:file:bg-[#6c14ce]/30 focus:border-[#f359d2]/70 focus:ring-2 focus:ring-[#992bff]/20";
 
 function FieldMessage({ hint, error }: { hint: string; error?: string }) {
   return (
@@ -35,47 +35,26 @@ export function ProfileSettingsForm({
   return (
     <form action={action} className="space-y-6" encType="multipart/form-data">
       <ActionStatus state={state} />
-      <div className="grid gap-5 sm:grid-cols-2">
-        <div>
-          <label
-            className="mb-2 block text-sm font-bold text-white"
-            htmlFor="profile-username"
-          >
-            Username
-          </label>
-          <input
-            className={inputClass}
-            defaultValue={profile.username}
-            id="profile-username"
-            maxLength={30}
-            name="username"
-            required
-          />
-          <FieldMessage
-            error={firstFieldError(state, "username")}
-            hint="Your unique @username."
-          />
-        </div>
-        <div>
-          <label
-            className="mb-2 block text-sm font-bold text-white"
-            htmlFor="profile-display-name"
-          >
-            Display name
-          </label>
-          <input
-            className={inputClass}
-            defaultValue={profile.displayName}
-            id="profile-display-name"
-            maxLength={80}
-            name="displayName"
-            required
-          />
-          <FieldMessage
-            error={firstFieldError(state, "displayName")}
-            hint="The name people see on your profile."
-          />
-        </div>
+      <input name="username" type="hidden" value={profile.username} />
+      <div>
+        <label
+          className="mb-2 block text-sm font-bold text-white"
+          htmlFor="profile-display-name"
+        >
+          Display name
+        </label>
+        <input
+          className={inputClass}
+          defaultValue={profile.displayName}
+          id="profile-display-name"
+          maxLength={80}
+          name="displayName"
+          required
+        />
+        <FieldMessage
+          error={firstFieldError(state, "displayName")}
+          hint="The name people see on your profile."
+        />
       </div>
       <div>
         <label

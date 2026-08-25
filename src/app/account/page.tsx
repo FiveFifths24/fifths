@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { Check, EyeOff, LockKeyhole, ShieldBan } from "lucide-react";
+import { EyeOff, ShieldBan, Sparkles } from "lucide-react";
 import { AccountUnavailable } from "@/components/account/account-unavailable";
 import { Container } from "@/components/ui/container";
 import { ButtonLink } from "@/components/ui/button-link";
@@ -38,54 +38,61 @@ export default async function AccountPage({
   const { data: userData } = await supabase.auth.getUser();
   if (!userData.user) redirect("/login?next=/account");
 
-  const [
-    profileResult,
-    roleResult,
-    blockedResult,
-    mutedResult,
-    wordsResult,
-    parameters,
-  ] = await Promise.all([
-    supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", userData.user.id)
-      .maybeSingle(),
-    supabase.from("user_roles").select("role").eq("user_id", userData.user.id),
-    supabase
-      .from("profile_blocks")
-      .select("blocked_id, blocked_username, blocked_display_name, created_at")
-      .eq("blocker_id", userData.user.id)
-      .order("created_at", { ascending: false }),
-    supabase
-      .from("profile_mutes")
-      .select("muted_id, muted_username, muted_display_name, created_at")
-      .eq("muter_id", userData.user.id)
-      .order("created_at", { ascending: false }),
-    supabase
-      .from("profile_blocked_words")
-      .select("id, word")
-      .eq("user_id", userData.user.id)
-      .order("word"),
-    searchParams,
-  ]);
+  const [profileResult, blockedResult, mutedResult, wordsResult, parameters] =
+    await Promise.all([
+      supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", userData.user.id)
+        .maybeSingle(),
+      supabase
+        .from("profile_blocks")
+        .select(
+          "blocked_id, blocked_username, blocked_display_name, created_at",
+        )
+        .eq("blocker_id", userData.user.id)
+        .order("created_at", { ascending: false }),
+      supabase
+        .from("profile_mutes")
+        .select("muted_id, muted_username, muted_display_name, created_at")
+        .eq("muter_id", userData.user.id)
+        .order("created_at", { ascending: false }),
+      supabase
+        .from("profile_blocked_words")
+        .select("id, word")
+        .eq("user_id", userData.user.id)
+        .order("word"),
+      searchParams,
+    ]);
 
   if (!profileResult.data?.onboarding_completed_at) redirect("/onboarding");
   const profile = profileResult.data;
 
   return (
     <Container className="py-16 sm:py-24">
-      <div className="mx-auto max-w-4xl">
-        <p className="text-xs font-bold tracking-[0.2em] text-red-400 uppercase">
-          Your FIFTHS identity
-        </p>
-        <h1 className="display-type mt-4 text-5xl text-white sm:text-7xl">
-          Welcome, {profile.display_name}.
-        </h1>
-        <p className="mt-5 max-w-2xl text-lg leading-8 text-neutral-300">
-          Your identity stays shared across every FIFTHS product. Pulse and your
-          private personal Home are now the first active product foundation.
-        </p>
+      <div className="mx-auto max-w-6xl">
+        <header className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[linear-gradient(145deg,rgba(24,0,173,0.2),rgba(4,4,8,0.94)_46%,rgba(243,89,210,0.12))] p-7 shadow-[0_30px_100px_rgba(0,0,0,0.38)] sm:p-10">
+          <div
+            aria-hidden="true"
+            className="absolute -top-28 -right-20 size-72 rounded-full bg-[#f359d2]/10 blur-[100px]"
+          />
+          <div
+            aria-hidden="true"
+            className="absolute -bottom-32 -left-16 size-72 rounded-full bg-[#6c14ce]/15 blur-[110px]"
+          />
+          <div className="relative">
+            <p className="w-fit bg-[linear-gradient(90deg,#a855f7,#f359d2,#7cff00)] bg-clip-text text-xs font-bold tracking-[0.22em] text-transparent uppercase [-webkit-text-fill-color:transparent]">
+              Your SIGNAL identity
+            </p>
+            <h1 className="display-type mt-4 text-5xl text-white sm:text-7xl">
+              Welcome, {profile.display_name}.
+            </h1>
+            <p className="mt-5 max-w-2xl text-base leading-7 text-white/60 sm:text-lg sm:leading-8">
+              Shape how you appear, connect, and protect your experience across
+              SIGNAL.
+            </p>
+          </div>
+        </header>
 
         {parameters?.onboarding === "complete" ? (
           <StatusMessage className="mt-8" tone="success">
@@ -114,59 +121,13 @@ export default async function AccountPage({
           </StatusMessage>
         ) : null}
 
-        <div className="mt-10 grid gap-5 md:grid-cols-2">
-          <section className="rounded-3xl border border-neutral-800 bg-neutral-900 p-6">
-            <div className="flex items-center gap-3">
-              <Check aria-hidden="true" className="size-5 text-emerald-400" />
-              <h2 className="text-xl font-bold text-white">Profile ready</h2>
-            </div>
-            <dl className="mt-6 space-y-4 text-sm">
-              <div>
-                <dt className="text-neutral-500">Username</dt>
-                <dd className="mt-1 font-semibold text-white">
-                  @{profile.username}
-                </dd>
-              </div>
-              <div>
-                <dt className="text-neutral-500">Email</dt>
-                <dd className="mt-1 break-all text-neutral-200">
-                  {userData.user.email}
-                </dd>
-              </div>
-              <div>
-                <dt className="text-neutral-500">Time zone</dt>
-                <dd className="mt-1 text-neutral-200">{profile.timezone}</dd>
-              </div>
-            </dl>
-          </section>
-
-          <section className="rounded-3xl border border-neutral-800 bg-neutral-900 p-6">
-            <div className="flex items-center gap-3">
-              <LockKeyhole aria-hidden="true" className="size-5 text-red-400" />
-              <h2 className="text-xl font-bold text-white">
-                Access foundation
-              </h2>
-            </div>
-            <p className="mt-5 text-sm leading-6 text-neutral-400">
-              Active roles:{" "}
-              {roleResult.data
-                ?.map(({ role }) => role.replaceAll("_", " "))
-                .join(", ") || "member"}
-              . Elevated roles cannot be self-assigned.
-            </p>
-            <p className="mt-4 text-sm leading-6 text-neutral-400">
-              Pulse check-ins, private history, Sessions, registrations,
-              Circles, and Creator Commons participation are available from your
-              Home. Fifth Realm and Passport activity remain intentionally
-              inactive.
-            </p>
-          </section>
-        </div>
-
-        <section className="mt-10 rounded-[2rem] border border-[#992bff]/25 bg-[#992bff]/[0.05] p-6 sm:p-8">
-          <h2 className="text-3xl font-bold text-white">
-            Customize your profile
-          </h2>
+        <section className="relative mt-8 overflow-hidden rounded-[2rem] border border-[#a855f7]/30 bg-[linear-gradient(145deg,rgba(108,20,206,0.12),rgba(3,3,7,0.9)_50%,rgba(243,89,210,0.07))] p-6 shadow-[0_24px_80px_rgba(0,0,0,0.3)] sm:p-8">
+          <div className="flex items-center gap-3">
+            <Sparkles aria-hidden="true" className="size-5 text-[#f359d2]" />
+            <h2 className="text-3xl font-bold text-white">
+              Customize your profile
+            </h2>
+          </div>
           <p className="mt-3 max-w-2xl text-sm leading-6 text-white/50">
             Add one profile photo and a static background that feels like you.
             You can replace either image whenever you want.
@@ -184,7 +145,7 @@ export default async function AccountPage({
           </div>
         </section>
 
-        <section className="mt-8 rounded-[2rem] border border-white/10 bg-neutral-900 p-6 sm:p-8">
+        <section className="mt-8 rounded-[2rem] border border-[#f359d2]/20 bg-[linear-gradient(145deg,rgba(243,89,210,0.07),rgba(3,3,7,0.9)_55%,rgba(108,20,206,0.08))] p-6 sm:p-8">
           <div className="flex items-center gap-3">
             <EyeOff aria-hidden="true" className="size-5 text-[#f359d2]" />
             <h2 className="text-2xl font-bold text-white">Blocked words</h2>
@@ -290,7 +251,7 @@ export default async function AccountPage({
               </p>
             )}
           </section>
-          <section className="rounded-[2rem] border border-white/10 bg-neutral-900 p-6">
+          <section className="rounded-[2rem] border border-[#a855f7]/20 bg-[linear-gradient(145deg,rgba(108,20,206,0.08),rgba(3,3,7,0.92))] p-6">
             <div className="flex items-center gap-3">
               <EyeOff aria-hidden="true" className="size-5 text-[#ca9aff]" />
               <h2 className="text-2xl font-bold text-white">Muted members</h2>
