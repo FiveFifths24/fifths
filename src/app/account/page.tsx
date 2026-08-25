@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { EyeOff, ShieldBan, Sparkles } from "lucide-react";
+import { Eye, EyeOff, ShieldBan, Sparkles } from "lucide-react";
 import { AccountUnavailable } from "@/components/account/account-unavailable";
 import { Container } from "@/components/ui/container";
 import { ButtonLink } from "@/components/ui/button-link";
@@ -85,12 +85,21 @@ export default async function AccountPage({
               Your SIGNAL identity
             </p>
             <h1 className="display-type mt-4 text-5xl text-white sm:text-7xl">
-              Welcome, {profile.display_name}.
+              Welcome,{" "}
+              <span className="capitalize">{profile.display_name}</span>.
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-7 text-white/60 sm:text-lg sm:leading-8">
               Shape how you appear, connect, and protect your experience across
               SIGNAL.
             </p>
+            <ButtonLink
+              className="mt-7"
+              href={`/home/profiles/${profile.username}`}
+              variant="secondary"
+            >
+              <Eye aria-hidden="true" className="size-4" />
+              View profile
+            </ButtonLink>
           </div>
         </header>
 

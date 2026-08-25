@@ -32,18 +32,12 @@ describe("SiteHeader", () => {
     render(<SiteHeader />);
   });
 
-  it("shows the SIGNAL brand and login action when signed out", () => {
+  it("shows the SIGNAL brand when signed out", () => {
     expect(
       screen.getByRole("link", {
         name: "SIGNAL powered by FIVE FIFTHS",
       }),
     ).toHaveAttribute("href", "/");
-
-    expect(
-      screen.getByRole("link", {
-        name: "Log In",
-      }),
-    ).toHaveAttribute("href", "/login");
 
     expect(
       screen.queryByRole("link", {
@@ -58,7 +52,7 @@ describe("SiteHeader", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("opens and closes the mobile account menu accessibly", () => {
+  it("opens and closes the account menu accessibly", () => {
     const openButton = screen.getByRole("button", {
       name: "Open navigation menu",
     });

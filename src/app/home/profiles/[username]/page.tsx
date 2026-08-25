@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { Flag, MapPin, ShieldCheck } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { ButtonLink } from "@/components/ui/button-link";
 import { StatusMessage } from "@/components/ui/status-message";
 import { RelationshipControls } from "@/features/profiles/relationship-controls";
 import { friendshipState } from "@/features/profiles/relationship-data";
@@ -37,7 +38,7 @@ export default async function MemberProfilePage({
   });
   const profile = profileResult.data?.[0];
   if (!profile) notFound();
-  if (profile.id === userData.user.id) redirect("/account");
+  const isOwnProfile = profile.id === userData.user.id;
 
   const [
     friendshipResult,
@@ -129,16 +130,25 @@ export default async function MemberProfilePage({
           </div>
         </div>
         <div className="space-y-8 p-6 sm:p-9">
-          <RelationshipControls
-            friendship={friendshipState(
-              friendshipResult.data ?? undefined,
-              userData.user.id,
-            )}
-            isFollowing={Boolean(followResult.data)}
-            isMuted={Boolean(muteResult.data)}
-            returnTo={returnTo}
-            targetUserId={profile.id}
-          />
+          {isOwnProfile ? (
+            <div className="flex flex-wrap justify-center gap-3 sm:justify-start">
+              <ButtonLink href="/account">Edit profile</ButtonLink>
+              <ButtonLink href="/home" variant="secondary">
+                Back to Home
+              </ButtonLink>
+            </div>
+          ) : (
+            <RelationshipControls
+              friendship={friendshipState(
+                friendshipResult.data ?? undefined,
+                userData.user.id,
+              )}
+              isFollowing={Boolean(followResult.data)}
+              isMuted={Boolean(muteResult.data)}
+              returnTo={returnTo}
+              targetUserId={profile.id}
+            />
+          )}
           {profile.bio ? (
             <p className="max-w-3xl text-lg leading-8 text-white/70">
               {profile.bio}
@@ -168,23 +178,27 @@ export default async function MemberProfilePage({
         </div>
       </article>
 
-      <details className="mt-8 rounded-[1.5rem] border border-red-900/50 bg-red-950/20 p-6">
-        <summary className="flex cursor-pointer list-none items-center gap-3 font-bold text-red-200">
-          <Flag aria-hidden="true" className="size-5" />
-          Report this member
-        </summary>
-        <div className="mt-6 border-t border-red-900/40 pt-6">
-          <ReportForm
-            defaultContextUrl={returnTo}
-            defaultTarget="member"
-            lockTarget
-          />
-        </div>
-      </details>
-      <p className="mt-5 flex items-center justify-center gap-2 text-xs text-white/35">
-        <ShieldCheck aria-hidden="true" className="size-4" />
-        Reports are private and reviewed by authorized moderators.
-      </p>
+      {!isOwnProfile ? (
+        <>
+          <details className="mt-8 rounded-[1.5rem] border border-red-900/50 bg-red-950/20 p-6">
+            <summary className="flex cursor-pointer list-none items-center gap-3 font-bold text-red-200">
+              <Flag aria-hidden="true" className="size-5" />
+              Report this member
+            </summary>
+            <div className="mt-6 border-t border-red-900/40 pt-6">
+              <ReportForm
+                defaultContextUrl={returnTo}
+                defaultTarget="member"
+                lockTarget
+              />
+            </div>
+          </details>
+          <p className="mt-5 flex items-center justify-center gap-2 text-xs text-white/35">
+            <ShieldCheck aria-hidden="true" className="size-4" />
+            Reports are private and reviewed by authorized moderators.
+          </p>
+        </>
+      ) : null}
     </div>
   );
 }
