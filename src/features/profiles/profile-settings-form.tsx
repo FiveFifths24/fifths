@@ -75,7 +75,10 @@ export function ProfileSettingsForm({
   return (
     <form action={action} className="space-y-6" encType="multipart/form-data">
       <ActionStatus state={state} />
-      <div className="grid gap-5 sm:grid-cols-2">
+      <div
+        className="grid scroll-mt-28 gap-5 sm:grid-cols-2"
+        id="profile-media"
+      >
         <div>
           <label
             className="mb-2 block text-sm font-bold text-white"

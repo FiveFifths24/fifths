@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { Flag, MapPin, ShieldCheck } from "lucide-react";
+import { Flag, MapPin, Pencil, ShieldCheck } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button-link";
 import { StatusMessage } from "@/components/ui/status-message";
 import { RelationshipControls } from "@/features/profiles/relationship-controls";
 import { friendshipState } from "@/features/profiles/relationship-data";
 import { signProfileMedia } from "@/features/profiles/profile-media";
+import { ProfileWallpaper } from "@/features/profiles/profile-wallpaper";
 import { ReportForm } from "@/features/trust-safety/report-form";
 import { createClient } from "@/lib/supabase/server";
 
@@ -82,123 +84,127 @@ export default async function MemberProfilePage({
   const returnTo = `/home/profiles/${profile.username}`;
 
   return (
-    <div className="mx-auto max-w-5xl">
-      {parameters?.social === "updated" ? (
-        <StatusMessage className="mb-6" tone="success">
-          Your connection settings were updated.
-        </StatusMessage>
-      ) : null}
-      {parameters?.social === "error" ? (
-        <StatusMessage className="mb-6" tone="error">
-          That connection could not be changed.
-        </StatusMessage>
-      ) : null}
-      <article className="overflow-hidden rounded-[2rem] border border-white/10 bg-black/45">
-        <div
-          className="relative min-h-72 bg-gradient-to-br from-[#14051f] via-[#4d0d79] to-[#071321] bg-cover bg-center"
-          style={
-            backgroundUrl
-              ? {
-                  backgroundImage: `linear-gradient(rgba(0,0,0,.3),rgba(0,0,0,.72)),url(${JSON.stringify(backgroundUrl).slice(1, -1)})`,
-                }
-              : undefined
-          }
-        >
-          <div className="absolute inset-x-0 bottom-0 p-6 sm:p-9">
-            <div className="flex flex-col items-center gap-5 sm:flex-row sm:items-end">
-              <div
-                aria-label={`${profile.display_name}'s profile photo`}
-                className="size-28 shrink-0 rounded-full border-4 border-black bg-gradient-to-br from-[#992bff] to-[#f359d2] bg-cover bg-center shadow-2xl"
-                role="img"
-                style={
-                  avatarUrl
-                    ? {
-                        backgroundImage: `url(${JSON.stringify(avatarUrl).slice(1, -1)})`,
-                      }
-                    : undefined
-                }
-              />
-              <div className="text-center sm:text-left">
-                <h1 className="display-type text-5xl text-white sm:text-7xl">
-                  {profile.display_name}
-                </h1>
-                <p className="mt-2 font-bold text-white/55">
-                  @{profile.username}
-                </p>
+    <ProfileWallpaper backgroundUrl={backgroundUrl}>
+      <div className="mx-auto max-w-5xl">
+        {parameters?.social === "updated" ? (
+          <StatusMessage className="mb-6" tone="success">
+            Your connection settings were updated.
+          </StatusMessage>
+        ) : null}
+        {parameters?.social === "error" ? (
+          <StatusMessage className="mb-6" tone="error">
+            That connection could not be changed.
+          </StatusMessage>
+        ) : null}
+        <article className="overflow-hidden rounded-[2rem] border border-white/15 bg-black/40 shadow-[0_28px_90px_rgba(0,0,0,.45)] backdrop-blur-[2px]">
+          <div className="relative min-h-72 bg-[linear-gradient(180deg,rgba(20,5,31,.18),rgba(0,0,0,.68))]">
+            <div className="absolute inset-x-0 bottom-0 p-6 sm:p-9">
+              <div className="flex flex-col items-center gap-5 sm:flex-row sm:items-end">
+                <div className="relative shrink-0">
+                  <div
+                    aria-label={`${profile.display_name}'s profile photo`}
+                    className="size-28 rounded-full border-4 border-black bg-gradient-to-br from-[#992bff] to-[#f359d2] bg-cover bg-center shadow-2xl"
+                    role="img"
+                    style={
+                      avatarUrl
+                        ? {
+                            backgroundImage: `url(${JSON.stringify(avatarUrl).slice(1, -1)})`,
+                          }
+                        : undefined
+                    }
+                  />
+                  {isOwnProfile ? (
+                    <Link
+                      aria-label="Edit profile photo"
+                      className="absolute -right-1 -bottom-1 inline-flex size-9 items-center justify-center rounded-full border-2 border-black bg-[#f359d2] text-white shadow-lg transition hover:scale-105 hover:bg-[#d946ef]"
+                      href="/account#profile-media"
+                    >
+                      <Pencil aria-hidden="true" className="size-4" />
+                    </Link>
+                  ) : null}
+                </div>
+                <div className="text-center sm:text-left">
+                  <h1 className="display-type text-5xl text-white sm:text-7xl">
+                    {profile.display_name}
+                  </h1>
+                  <p className="mt-2 font-bold text-white/55">
+                    @{profile.username}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="space-y-8 p-6 sm:p-9">
-          {isOwnProfile ? (
-            <div className="flex flex-wrap justify-center gap-3 sm:justify-start">
-              <ButtonLink href="/account">Edit profile</ButtonLink>
-              <ButtonLink href="/home" variant="secondary">
-                Back to Home
-              </ButtonLink>
-            </div>
-          ) : (
-            <RelationshipControls
-              friendship={friendshipState(
-                friendshipResult.data ?? undefined,
-                userData.user.id,
-              )}
-              isFollowing={Boolean(followResult.data)}
-              isMuted={Boolean(muteResult.data)}
-              returnTo={returnTo}
-              targetUserId={profile.id}
-            />
-          )}
-          {profile.bio ? (
-            <p className="max-w-3xl text-lg leading-8 text-white/70">
-              {profile.bio}
-            </p>
-          ) : null}
-          {profile.location_visibility !== "hidden" &&
-          (profile.city || profile.region) ? (
-            <p className="flex items-center justify-center gap-2 text-sm text-white/45 sm:justify-start">
-              <MapPin aria-hidden="true" className="size-4" />
-              {profile.location_visibility === "city_region"
-                ? [profile.city, profile.region].filter(Boolean).join(", ")
-                : profile.region}
-            </p>
-          ) : null}
-          {(interestLinks.data ?? []).length ? (
-            <ul className="flex flex-wrap justify-center gap-2 sm:justify-start">
-              {(interestLinks.data ?? [])
-                .map((item) => interestNames.get(item.interest_id))
-                .filter((name): name is string => Boolean(name))
-                .map((name) => (
-                  <li key={name}>
-                    <Badge>{name}</Badge>
-                  </li>
-                ))}
-            </ul>
-          ) : null}
-        </div>
-      </article>
-
-      {!isOwnProfile ? (
-        <>
-          <details className="mt-8 rounded-[1.5rem] border border-red-900/50 bg-red-950/20 p-6">
-            <summary className="flex cursor-pointer list-none items-center gap-3 font-bold text-red-200">
-              <Flag aria-hidden="true" className="size-5" />
-              Report this member
-            </summary>
-            <div className="mt-6 border-t border-red-900/40 pt-6">
-              <ReportForm
-                defaultContextUrl={returnTo}
-                defaultTarget="member"
-                lockTarget
+          <div className="space-y-8 border-t border-white/10 bg-black/25 p-6 sm:p-9">
+            {isOwnProfile ? (
+              <div className="flex flex-wrap justify-center gap-3 sm:justify-start">
+                <ButtonLink href="/account">Edit profile</ButtonLink>
+                <ButtonLink href="/home" variant="secondary">
+                  Back to Home
+                </ButtonLink>
+              </div>
+            ) : (
+              <RelationshipControls
+                friendship={friendshipState(
+                  friendshipResult.data ?? undefined,
+                  userData.user.id,
+                )}
+                isFollowing={Boolean(followResult.data)}
+                isMuted={Boolean(muteResult.data)}
+                returnTo={returnTo}
+                targetUserId={profile.id}
               />
-            </div>
-          </details>
-          <p className="mt-5 flex items-center justify-center gap-2 text-xs text-white/35">
-            <ShieldCheck aria-hidden="true" className="size-4" />
-            Reports are private and reviewed by authorized moderators.
-          </p>
-        </>
-      ) : null}
-    </div>
+            )}
+            {profile.bio ? (
+              <p className="max-w-3xl text-lg leading-8 text-white/70">
+                {profile.bio}
+              </p>
+            ) : null}
+            {profile.location_visibility !== "hidden" &&
+            (profile.city || profile.region) ? (
+              <p className="flex items-center justify-center gap-2 text-sm text-white/45 sm:justify-start">
+                <MapPin aria-hidden="true" className="size-4" />
+                {profile.location_visibility === "city_region"
+                  ? [profile.city, profile.region].filter(Boolean).join(", ")
+                  : profile.region}
+              </p>
+            ) : null}
+            {(interestLinks.data ?? []).length ? (
+              <ul className="flex flex-wrap justify-center gap-2 sm:justify-start">
+                {(interestLinks.data ?? [])
+                  .map((item) => interestNames.get(item.interest_id))
+                  .filter((name): name is string => Boolean(name))
+                  .map((name) => (
+                    <li key={name}>
+                      <Badge>{name}</Badge>
+                    </li>
+                  ))}
+              </ul>
+            ) : null}
+          </div>
+        </article>
+
+        {!isOwnProfile ? (
+          <>
+            <details className="mt-8 rounded-[1.5rem] border border-red-900/50 bg-red-950/20 p-6">
+              <summary className="flex cursor-pointer list-none items-center gap-3 font-bold text-red-200">
+                <Flag aria-hidden="true" className="size-5" />
+                Report this member
+              </summary>
+              <div className="mt-6 border-t border-red-900/40 pt-6">
+                <ReportForm
+                  defaultContextUrl={returnTo}
+                  defaultTarget="member"
+                  lockTarget
+                />
+              </div>
+            </details>
+            <p className="mt-5 flex items-center justify-center gap-2 text-xs text-white/35">
+              <ShieldCheck aria-hidden="true" className="size-4" />
+              Reports are private and reviewed by authorized moderators.
+            </p>
+          </>
+        ) : null}
+      </div>
+    </ProfileWallpaper>
   );
 }
