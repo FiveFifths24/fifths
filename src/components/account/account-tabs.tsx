@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { House, ShieldCheck } from "lucide-react";
+import { CircleUserRound, ShieldCheck } from "lucide-react";
 
 const tabs = [
   {
     href: "/account",
-    label: "Edit My Room",
-    icon: House,
+    label: "Customize Profile",
+    icon: CircleUserRound,
   },
   {
     href: "/account/safety",

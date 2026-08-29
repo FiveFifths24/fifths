@@ -7,5 +7,12 @@ export default defineConfig([
   ...nextCoreWebVitals,
   ...nextTypeScript,
   prettier,
-  globalIgnores([".next/**", "coverage/**", "next-env.d.ts"]),
+  globalIgnores([
+    ".next/**",
+    "coverage/**",
+    "next-env.d.ts",
+    "src/types/database.generated.ts",
+    // My Room is retained as paused legacy code and is not part of the launch UI.
+    "src/features/profiles/profile-room.tsx",
+  ]),
 ]);

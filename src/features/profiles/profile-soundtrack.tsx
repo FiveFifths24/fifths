@@ -1,0 +1,82 @@
+"use client";
+
+import { Headphones, Music2 } from "lucide-react";
+import { useEffect, useState } from "react";
+
+type MusicMetadata = {
+  artworkUrl: string | null;
+  title: string | null;
+  artist: string | null;
+  service: string | null;
+};
+
+function actionLabel(url: string) {
+  try {
+    const host = new URL(url).hostname;
+    return host.includes("youtube.com") || host.includes("youtu.be")
+      ? "Watch"
+      : "Listen";
+  } catch {
+    return "Listen";
+  }
+}
+
+export function ProfileSoundtrack({
+  accentColor,
+  song,
+}: {
+  accentColor: string;
+  song: { title: string | null; artist: string | null; url: string | null };
+}) {
+  const [metadata, setMetadata] = useState<MusicMetadata | null>(null);
+
+  useEffect(() => {
+    if (!song.url) return;
+    const controller = new AbortController();
+    void fetch(`/api/music-metadata?url=${encodeURIComponent(song.url)}`, {
+      signal: controller.signal,
+    })
+      .then((response) => (response.ok ? response.json() : null))
+      .then((value: MusicMetadata | null) => setMetadata(value))
+      .catch(() => undefined);
+    return () => controller.abort();
+  }, [song.url]);
+
+  const title = song.title ?? metadata?.title ?? "Featured track";
+  const artist = song.artist ?? metadata?.artist;
+  const artworkUrl = metadata?.artworkUrl;
+
+  return (
+    <div className="mt-5 flex items-center gap-5">
+      <div
+        className="flex size-20 shrink-0 items-center justify-center rounded-2xl border bg-[radial-gradient(circle_at_30%_20%,rgba(243,89,210,.5),transparent_40%),linear-gradient(145deg,#421070,#08080f)] bg-cover bg-center"
+        style={{
+          borderColor: accentColor,
+          ...(artworkUrl ? { backgroundImage: `url(${artworkUrl})` } : {}),
+        }}
+      >
+        {artworkUrl ? null : (
+          <Music2 aria-hidden="true" className="size-8 text-white" />
+        )}
+      </div>
+      <div className="min-w-0">
+        <h3 className="truncate text-xl font-black text-white">{title}</h3>
+        {artist ? (
+          <p className="mt-1 line-clamp-2 text-white/55">{artist}</p>
+        ) : null}
+        {song.url ? (
+          <a
+            className="mt-3 inline-flex items-center gap-2 text-sm font-bold"
+            href={song.url}
+            rel="noopener noreferrer"
+            style={{ color: accentColor }}
+            target="_blank"
+          >
+            <Headphones aria-hidden="true" className="size-4" />
+            {actionLabel(song.url)}
+          </a>
+        ) : null}
+      </div>
+    </div>
+  );
+}

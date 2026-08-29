@@ -140,7 +140,7 @@ export function SiteHeader() {
                   variant="secondary"
                 >
                   <CircleUserRound aria-hidden="true" className="size-4" />
-                  My Room
+                  My Profile
                 </ButtonLink>
                 <ButtonLink
                   className="w-full md:w-auto"

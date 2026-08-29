@@ -1,110 +1,112 @@
 import { z } from "zod";
 
-export const profileSettingsSchema = z.object({
-  username: z
+const optionalUrl = (max: number) =>
+  z
     .string()
     .trim()
-    .toLowerCase()
-    .min(3, "Use at least 3 characters.")
-    .max(30, "Use no more than 30 characters.")
-    .regex(
-      /^[a-z0-9](?:[a-z0-9_]*[a-z0-9])?$/,
-      "Use lowercase letters, numbers, and underscores only.",
-    ),
-  displayName: z
-    .string()
-    .trim()
-    .min(1, "Add a display name.")
-    .max(80, "Use no more than 80 characters."),
-  bio: z
-    .string()
-    .trim()
-    .max(500, "Use no more than 500 characters.")
-    .transform((value) => value || null),
-  visibility: z.enum(["private", "members", "public"]),
-  discoverable: z.boolean(),
-  accentColor: z
-    .string()
-    .trim()
-    .toLowerCase()
-    .regex(/^#[0-9a-f]{6}$/, "Use a six-digit hex color such as #ff3cac."),
-  landscapeImageFit: z.enum(["cover", "contain"]),
-  landscapeImagePositionX: z.coerce.number().int().min(0).max(100),
-  landscapeImagePositionY: z.coerce.number().int().min(0).max(100),
-  landscapeImageZoom: z.coerce.number().int().min(100).max(200),
-  backgroundImageFit: z.enum(["cover", "contain"]),
-  backgroundImagePositionX: z.coerce.number().int().min(0).max(100),
-  backgroundImagePositionY: z.coerce.number().int().min(0).max(100),
-  backgroundImageZoom: z.coerce.number().int().min(100).max(200),
-  spotlightTitle: z
-    .string()
-    .trim()
-    .max(80, "Use no more than 80 characters.")
-    .transform((value) => value || null),
-  spotlightDescription: z
-    .string()
-    .trim()
-    .max(240, "Use no more than 240 characters.")
-    .transform((value) => value || null),
-  spotlightUrl: z
-    .string()
-    .trim()
-    .max(500, "Use no more than 500 characters.")
+    .max(max, `Use no more than ${max.toLocaleString()} characters.`)
     .refine(
       (value) => !value || /^https?:\/\//i.test(value),
       "Use a complete http:// or https:// link.",
     )
-    .transform((value) => value || null),
+    .transform((value) => value || null);
+
+export const profileSettingsSchema = z
+  .object({
+    username: z
+      .string()
+      .trim()
+      .toLowerCase()
+      .min(3, "Use at least 3 characters.")
+      .max(30, "Use no more than 30 characters.")
+      .regex(
+        /^[a-z0-9](?:[a-z0-9_]*[a-z0-9])?$/,
+        "Use lowercase letters, numbers, and underscores only.",
+      ),
+    displayName: z
+      .string()
+      .trim()
+      .min(1, "Add a display name.")
+      .max(80, "Use no more than 80 characters."),
+    bio: z
+      .string()
+      .trim()
+      .max(500, "Use no more than 500 characters.")
+      .transform((value) => value || null),
+    mood: z
+      .string()
+      .trim()
+      .max(40, "Keep your Mood to 40 characters or fewer.")
+      .transform((value) => value || null),
+    visibility: z.enum(["private", "members", "public"]),
+    discoverable: z.boolean(),
+    accentColor: z
+      .string()
+      .trim()
+      .toLowerCase()
+      .regex(/^#[0-9a-f]{6}$/, "Use a six-digit hex color such as #ff3cac."),
+    landscapeImageFit: z.enum(["cover", "contain"]),
+    landscapeImagePositionX: z.coerce.number().int().min(0).max(100),
+    landscapeImagePositionY: z.coerce.number().int().min(0).max(100),
+    landscapeImageZoom: z.coerce.number().int().min(100).max(200),
+    backgroundImageFit: z.enum(["cover", "contain"]),
+    backgroundImagePositionX: z.coerce.number().int().min(0).max(100),
+    backgroundImagePositionY: z.coerce.number().int().min(0).max(100),
+    backgroundImageZoom: z.coerce.number().int().min(100).max(200),
+    spotlightTitle: z
+      .string()
+      .trim()
+      .max(80, "Use no more than 80 characters.")
+      .transform((value) => value || null),
+    spotlightDescription: z
+      .string()
+      .trim()
+      .max(240, "Use no more than 240 characters.")
+      .transform((value) => value || null),
+    spotlightUrl: optionalUrl(500),
+    viewMyLabel: z
+      .string()
+      .trim()
+      .max(50, "Use no more than 50 characters.")
+      .transform((value) => value || null),
+    viewMyUrl: optionalUrl(500),
     profileSongTitle: z
-  .string()
-  .trim()
-  .max(100, "Use no more than 100 characters.")
-  .transform((value) => value || null),
-
-profileSongArtist: z
-  .string()
-  .trim()
-  .max(100, "Use no more than 100 characters.")
-  .transform((value) => value || null),
-
-profileSongUrl: z
-  .string()
-  .trim()
-  .max(500, "Use no more than 500 characters.")
-  .refine(
-    (value) => !value || /^https?:\/\//i.test(value),
-    "Use a complete http:// or https:// link.",
-  )
-  .transform((value) => value || null),
-
-latestPickCategory: z
-  .string()
-  .trim()
-  .max(40, "Use no more than 40 characters.")
-  .transform((value) => value || null),
-
-latestPickTitle: z
-  .string()
-  .trim()
-  .max(100, "Use no more than 100 characters.")
-  .transform((value) => value || null),
-
-latestPickNote: z
-  .string()
-  .trim()
-  .max(240, "Use no more than 240 characters.")
-  .transform((value) => value || null),
-
-latestPickUrl: z
-  .string()
-  .trim()
-  .max(500, "Use no more than 500 characters.")
-  .refine(
-    (value) => !value || /^https?:\/\//i.test(value),
-    "Use a complete http:// or https:// link.",
-  )
-  .transform((value) => value || null),
-});
+      .string()
+      .trim()
+      .max(100, "Use no more than 100 characters.")
+      .transform((value) => value || null),
+    profileSongArtist: z
+      .string()
+      .trim()
+      .max(100, "Use no more than 100 characters.")
+      .transform((value) => value || null),
+    profileSongUrl: optionalUrl(500),
+    latestPickCategory: z
+      .string()
+      .trim()
+      .max(40, "Use no more than 40 characters.")
+      .transform((value) => value || null),
+    latestPickTitle: z
+      .string()
+      .trim()
+      .max(100, "Use no more than 100 characters.")
+      .transform((value) => value || null),
+    latestPickNote: z
+      .string()
+      .trim()
+      .max(240, "Use no more than 240 characters.")
+      .transform((value) => value || null),
+    latestPickUrl: optionalUrl(500),
+  })
+  .superRefine((value, context) => {
+    if (Boolean(value.viewMyLabel) !== Boolean(value.viewMyUrl)) {
+      context.addIssue({
+        code: "custom",
+        path: value.viewMyLabel ? ["viewMyUrl"] : ["viewMyLabel"],
+        message: "Add both a label and URL, or leave both blank.",
+      });
+    }
+  });
 
 export const profileStatusSchema = z.object({
   statusText: z
@@ -113,60 +115,24 @@ export const profileStatusSchema = z.object({
     .max(180, "Keep your Current Signal to 180 characters or fewer."),
 });
 
+const hexColor = z
+  .string()
+  .trim()
+  .toLowerCase()
+  .regex(/^#[0-9a-f]{6}$/, "Use a six-digit hex color.");
+
 export const profileRoomSettingsSchema = z.object({
   enabled: z.boolean(),
-
-  wallColor: z
-    .string()
-    .trim()
-    .toLowerCase()
-    .regex(/^#[0-9a-f]{6}$/, "Use a six-digit hex color."),
-
-  floorColor: z
-    .string()
-    .trim()
-    .toLowerCase()
-    .regex(/^#[0-9a-f]{6}$/, "Use a six-digit hex color."),
-
-  couchColor: z
-    .string()
-    .trim()
-    .toLowerCase()
-    .regex(/^#[0-9a-f]{6}$/, "Use a six-digit hex color."),
-
-  bookshelfColor: z
-    .string()
-    .trim()
-    .toLowerCase()
-    .regex(/^#[0-9a-f]{6}$/, "Use a six-digit hex color."),
-
-  tvColor: z
-    .string()
-    .trim()
-    .toLowerCase()
-    .regex(/^#[0-9a-f]{6}$/, "Use a six-digit hex color."),
-
-  doorColor: z
-    .string()
-    .trim()
-    .toLowerCase()
-    .regex(/^#[0-9a-f]{6}$/, "Use a six-digit hex color."),
-
-  accessoryColor: z
-    .string()
-    .trim()
-    .toLowerCase()
-    .regex(/^#[0-9a-f]{6}$/, "Use a six-digit hex color."),
-
+  wallColor: hexColor,
+  floorColor: hexColor,
+  couchColor: hexColor,
+  bookshelfColor: hexColor,
+  tvColor: hexColor,
+  doorColor: hexColor,
+  accessoryColor: hexColor,
   lightingTheme: z.enum(["cosmic", "warm", "daylight", "midnight"]),
   currentVibe: z.enum(["chill", "focused", "gaming", "creative", "social"]),
-
-  characterColor: z
-    .string()
-    .trim()
-    .toLowerCase()
-    .regex(/^#[0-9a-f]{6}$/, "Use a six-digit hex color."),
-
+  characterColor: hexColor,
   headAccessory: z.enum([
     "none",
     "headphones",
@@ -177,7 +143,6 @@ export const profileRoomSettingsSchema = z.object({
     "flower",
     "headband",
   ]),
-
   faceAccessory: z.enum(["none", "glasses", "sunglasses"]),
   neckAccessory: z.enum(["none", "scarf", "bandana"]),
   motionEnabled: z.boolean(),

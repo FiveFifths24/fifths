@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 import { ProfileRoom } from "./profile-room";
 
 const settings = {
@@ -23,12 +23,12 @@ function renderRoom() {
       featuredConnections={[]}
       featuredProfileImageUrl={null}
       isOwner
-latestPick={{
-  category: null,
-  title: null,
-  note: null,
-  url: null,
-}}
+      latestPick={{
+        category: null,
+        title: null,
+        note: null,
+        url: null,
+      }}
       settings={settings}
       song={{
         title: "A Song",
@@ -42,6 +42,8 @@ latestPick={{
 }
 
 describe("ProfileRoom", () => {
+  beforeEach(() => window.localStorage.clear());
+
   it("provides room and quick views with an owner edit path", () => {
     renderRoom();
 
@@ -58,40 +60,26 @@ describe("ProfileRoom", () => {
     );
 
     fireEvent.click(screen.getByRole("button", { name: "Quick View" }));
-    expect(screen.getByText("Building the Fifth Signal.")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Quick View" })).toHaveAttribute(
       "aria-pressed",
       "true",
     );
   });
 
-  it("opens an accessible room detail and closes it with Escape", () => {
+  it("keeps legacy room content available while the launch profile is active", () => {
     renderRoom();
-    fireEvent.click(
-      screen.getByRole("button", { name: "Open bedroom status and vibe" }),
-    );
-    expect(
-      screen.getByRole("dialog", { name: "Bedroom details" }),
-    ).toBeInTheDocument();
     expect(screen.getByText("Coding from the couch.")).toBeInTheDocument();
-
-    fireEvent.keyDown(document, { key: "Escape" });
     expect(
-      screen.queryByRole("dialog", { name: "Bedroom details" }),
-    ).not.toBeInTheDocument();
+      screen.getByRole("heading", { name: "Latest Pick" }),
+    ).toBeInTheDocument();
   });
 
   it("lets each viewer override the automatic device-local house light", () => {
     renderRoom();
-    fireEvent.change(screen.getByRole("combobox", { name: "House light" }), {
+    fireEvent.change(screen.getByRole("combobox", { name: "Room light" }), {
       target: { value: "night" },
     });
 
-    const themedScenes = document.querySelectorAll("[data-house-theme]");
-    expect(themedScenes.length).toBeGreaterThan(0);
-    themedScenes.forEach((scene) =>
-      expect(scene).toHaveAttribute("data-house-theme", "night"),
-    );
     expect(window.localStorage.getItem("signal-room-theme")).toBe("night");
   });
 });

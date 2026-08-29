@@ -8,6 +8,7 @@ import {
   unfollowProfileAction,
   unmuteProfileAction,
 } from "./actions";
+import { ShareProfileButton } from "./share-profile-button";
 
 const primary =
   "min-h-11 rounded-full bg-[#992bff] px-5 py-2 text-sm font-bold text-white hover:bg-[#a855f7]";
@@ -61,57 +62,83 @@ export function RelationshipControls({
   friendship: "none" | "incoming" | "outgoing" | "friends";
 }) {
   return (
-    <div className="flex flex-wrap justify-center gap-3 sm:justify-start">
-      <ActionForm
-        action={isFollowing ? unfollowProfileAction : followProfileAction}
-        label={isFollowing ? "Following" : "Follow"}
-        returnTo={returnTo}
-        targetUserId={targetUserId}
-        tone={isFollowing ? "secondary" : "primary"}
-      />
-      {friendship === "none" ? (
+    <div>
+      <div className="flex flex-wrap gap-3">
+        <button
+          aria-disabled="true"
+          className={`${secondary} cursor-not-allowed opacity-45`}
+          title="Direct messages are coming later."
+          type="button"
+        >
+          Send message
+        </button>
         <ActionForm
-          action={sendFriendRequestAction}
-          label="Add friend"
+          action={isFollowing ? unfollowProfileAction : followProfileAction}
+          label={isFollowing ? "Following" : "Follow"}
           returnTo={returnTo}
           targetUserId={targetUserId}
+          tone={isFollowing ? "secondary" : "primary"}
         />
-      ) : null}
-      {friendship === "incoming" ? (
-        <ActionForm
-          action={acceptFriendRequestAction}
-          label="Accept friend request"
-          returnTo={returnTo}
-          targetUserId={targetUserId}
-          tone="primary"
-        />
-      ) : null}
-      {friendship === "outgoing" ? (
-        <span className={`${secondary} inline-flex items-center text-white/50`}>
-          Request sent
-        </span>
-      ) : null}
-      {friendship === "friends" ? (
-        <ActionForm
-          action={removeFriendshipAction}
-          label="Remove friend"
-          returnTo={returnTo}
-          targetUserId={targetUserId}
-        />
-      ) : null}
-      <ActionForm
-        action={isMuted ? unmuteProfileAction : muteProfileAction}
-        label={isMuted ? "Unmute" : "Mute"}
-        returnTo={returnTo}
-        targetUserId={targetUserId}
-      />
-      <ActionForm
-        action={blockProfileAction}
-        label="Block"
-        returnTo={returnTo}
-        targetUserId={targetUserId}
-        tone="danger"
-      />
+        {friendship === "none" ? (
+          <ActionForm
+            action={sendFriendRequestAction}
+            label="Add friend"
+            returnTo={returnTo}
+            targetUserId={targetUserId}
+          />
+        ) : null}
+        {friendship === "incoming" ? (
+          <ActionForm
+            action={acceptFriendRequestAction}
+            label="Accept friend request"
+            returnTo={returnTo}
+            targetUserId={targetUserId}
+            tone="primary"
+          />
+        ) : null}
+        {friendship === "outgoing" ? (
+          <span
+            className={`${secondary} inline-flex items-center text-white/50`}
+          >
+            Request sent
+          </span>
+        ) : null}
+        <ShareProfileButton path={returnTo} />
+      </div>
+      <details className="relative mt-4 w-fit">
+        <summary className="cursor-pointer list-none text-sm font-bold text-white/45 transition hover:text-white">
+          More actions ···
+        </summary>
+        <div className="mt-3 flex flex-wrap gap-3 rounded-2xl border border-white/10 bg-black/70 p-4">
+          {friendship === "friends" ? (
+            <ActionForm
+              action={removeFriendshipAction}
+              label="Remove friend"
+              returnTo={returnTo}
+              targetUserId={targetUserId}
+            />
+          ) : null}
+          <ActionForm
+            action={isMuted ? unmuteProfileAction : muteProfileAction}
+            label={isMuted ? "Unmute" : "Mute"}
+            returnTo={returnTo}
+            targetUserId={targetUserId}
+          />
+          <ActionForm
+            action={blockProfileAction}
+            label="Block"
+            returnTo={returnTo}
+            targetUserId={targetUserId}
+            tone="danger"
+          />
+          <a
+            className={`${secondary} inline-flex items-center text-red-200`}
+            href="#report-member"
+          >
+            Report
+          </a>
+        </div>
+      </details>
     </div>
   );
 }

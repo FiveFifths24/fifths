@@ -62,6 +62,7 @@ export function ProfileSettingsForm({
     displayName: string;
     displayNameChangedAt: string | null;
     bio: string;
+    mood: string;
     accentColor: string;
     landscapeUrl: string | null;
     landscapeImageFit: "cover" | "contain";
@@ -77,12 +78,14 @@ export function ProfileSettingsForm({
     spotlightDescription: string;
     spotlightUrl: string;
     profileSongTitle: string;
-profileSongArtist: string;
-profileSongUrl: string;
-latestPickCategory: string;
-latestPickTitle: string;
-latestPickNote: string;
-latestPickUrl: string;
+    profileSongArtist: string;
+    profileSongUrl: string;
+    viewMyLabel: string;
+    viewMyUrl: string;
+    latestPickCategory: string;
+    latestPickTitle: string;
+    latestPickNote: string;
+    latestPickUrl: string;
     visibility: "private" | "members" | "public";
     discoverable: boolean;
   };
@@ -169,6 +172,26 @@ latestPickUrl: string;
       <div>
         <label
           className="mb-2 block text-sm font-bold text-white"
+          htmlFor="profile-mood"
+        >
+          Mood
+        </label>
+        <input
+          className={inputClass}
+          defaultValue={profile.mood}
+          id="profile-mood"
+          maxLength={40}
+          name="mood"
+          placeholder="Inspired, cozy, chaotic…"
+        />
+        <FieldMessage
+          error={firstFieldError(state, "mood")}
+          hint="Optional. This stays visible until you change or clear it."
+        />
+      </div>
+      <div>
+        <label
+          className="mb-2 block text-sm font-bold text-white"
           htmlFor="profile-avatar"
         >
           Profile Photo
@@ -183,23 +206,23 @@ latestPickUrl: string;
         <FieldMessage hint="One JPG, PNG, or WebP image, up to 5 MB." />
       </div>
       <div>
-  <label
-    className="mb-2 block text-sm font-bold text-white"
-    htmlFor="featured-profile-image"
-  >
-    Featured Profile Image
-  </label>
+        <label
+          className="mb-2 block text-sm font-bold text-white"
+          htmlFor="featured-profile-image"
+        >
+          Featured Profile Image
+        </label>
 
-  <input
-    accept="image/jpeg,image/png,image/webp"
-    className={inputClass}
-    id="featured-profile-image"
-    name="featuredProfileImage"
-    type="file"
-  />
+        <input
+          accept="image/jpeg,image/png,image/webp"
+          className={inputClass}
+          id="featured-profile-image"
+          name="featuredProfileImage"
+          type="file"
+        />
 
-  <FieldMessage hint="A separate image featured prominently in Quick View. JPG, PNG, or WebP, up to 5 MB." />
-</div>
+        <FieldMessage hint="A separate image featured prominently on your profile. JPG, PNG, or WebP, up to 5 MB." />
+      </div>
       <ProfileMediaEditor
         background={{
           currentUrl: profile.backgroundUrl,
@@ -251,200 +274,201 @@ latestPickUrl: string;
         />
       </div>
       <fieldset className="rounded-2xl border border-white/10 bg-black/25 p-5">
-  <legend className="px-2 text-sm font-bold text-white">
-    Featured Music
-  </legend>
+        <legend className="px-2 text-sm font-bold text-white">
+          Featured Music
+        </legend>
 
-  <p className="mb-5 text-xs leading-5 text-white/45">
-    Share the song you&apos;re listening to right now, a favorite track, or a
-    link to a playlist.
-  </p>
+        <p className="mb-5 text-xs leading-5 text-white/45">
+          Share the song you&apos;re listening to right now, a favorite track,
+          or a link to a playlist.
+        </p>
 
-  <div className="space-y-4">
-    <div>
-      <label
-        className="mb-2 block text-xs font-bold text-white/55"
-        htmlFor="profile-song-title"
-      >
-        Song Title
-      </label>
+        <div className="space-y-4">
+          <div>
+            <label
+              className="mb-2 block text-xs font-bold text-white/55"
+              htmlFor="profile-song-title"
+            >
+              Song Title
+            </label>
 
-      <input
-        className={inputClass}
-        defaultValue={profile.profileSongTitle}
-        id="profile-song-title"
-        maxLength={100}
-        name="profileSongTitle"
-        placeholder="What song are you playing?"
-      />
+            <input
+              className={inputClass}
+              defaultValue={profile.profileSongTitle}
+              id="profile-song-title"
+              maxLength={100}
+              name="profileSongTitle"
+              placeholder="What song are you playing?"
+            />
 
-      <FieldMessage
-        error={firstFieldError(state, "profileSongTitle")}
-        hint="Up to 100 characters."
-      />
-    </div>
+            <FieldMessage
+              error={firstFieldError(state, "profileSongTitle")}
+              hint="Up to 100 characters."
+            />
+          </div>
 
-    <div>
-      <label
-        className="mb-2 block text-xs font-bold text-white/55"
-        htmlFor="profile-song-artist"
-      >
-        Artist
-      </label>
+          <div>
+            <label
+              className="mb-2 block text-xs font-bold text-white/55"
+              htmlFor="profile-song-artist"
+            >
+              Artist
+            </label>
 
-      <input
-        className={inputClass}
-        defaultValue={profile.profileSongArtist}
-        id="profile-song-artist"
-        maxLength={100}
-        name="profileSongArtist"
-        placeholder="Artist name"
-      />
+            <input
+              className={inputClass}
+              defaultValue={profile.profileSongArtist}
+              id="profile-song-artist"
+              maxLength={100}
+              name="profileSongArtist"
+              placeholder="Artist name"
+            />
 
-      <FieldMessage
-        error={firstFieldError(state, "profileSongArtist")}
-        hint="Up to 100 characters."
-      />
-    </div>
+            <FieldMessage
+              error={firstFieldError(state, "profileSongArtist")}
+              hint="Up to 100 characters."
+            />
+          </div>
 
-    <div>
-      <label
-        className="mb-2 block text-xs font-bold text-white/55"
-        htmlFor="profile-song-url"
-      >
-        Song or Playlist Link
-      </label>
+          <div>
+            <label
+              className="mb-2 block text-xs font-bold text-white/55"
+              htmlFor="profile-song-url"
+            >
+              Song or Playlist Link
+            </label>
 
-      <input
-        className={inputClass}
-        defaultValue={profile.profileSongUrl}
-        id="profile-song-url"
-        maxLength={500}
-        name="profileSongUrl"
-        placeholder="https://open.spotify.com/..."
-        type="url"
-      />
+            <input
+              className={inputClass}
+              defaultValue={profile.profileSongUrl}
+              id="profile-song-url"
+              maxLength={500}
+              name="profileSongUrl"
+              placeholder="https://open.spotify.com/..."
+              type="url"
+            />
 
-      <FieldMessage
-        error={firstFieldError(state, "profileSongUrl")}
-        hint="Optional Spotify, Apple Music, YouTube, or other complete link."
-      />
-    </div>
-  </div>
-</fieldset>
+            <FieldMessage
+              error={firstFieldError(state, "profileSongUrl")}
+              hint="Optional Spotify, Apple Music, YouTube, or other complete link."
+            />
+          </div>
+        </div>
+      </fieldset>
 
-<fieldset className="rounded-2xl border border-white/10 bg-black/25 p-5">
-  <legend className="px-2 text-sm font-bold text-white">
-    Latest Pick
-  </legend>
+      <fieldset className="rounded-2xl border border-white/10 bg-black/25 p-5">
+        <legend className="px-2 text-sm font-bold text-white">
+          Latest Pick
+        </legend>
 
-  <p className="mb-5 text-xs leading-5 text-white/45">
-    Share something you&apos;re currently into — a game, book, movie, food,
-    show, place, product, or anything else you&apos;d recommend.
-  </p>
+        <p className="mb-5 text-xs leading-5 text-white/45">
+          Share something you&apos;re currently into — a game, book, movie,
+          food, show, place, product, or anything else you&apos;d recommend.
+        </p>
 
-  <div className="space-y-4">
-    <div>
-      <label
-        className="mb-2 block text-xs font-bold text-white/55"
-        htmlFor="latest-pick-category"
-      >
-        Category
-      </label>
+        <div className="space-y-4">
+          <div>
+            <label
+              className="mb-2 block text-xs font-bold text-white/55"
+              htmlFor="latest-pick-category"
+            >
+              Category
+            </label>
 
-      <input
-        className={inputClass}
-        defaultValue={profile.latestPickCategory}
-        id="latest-pick-category"
-        maxLength={40}
-        name="latestPickCategory"
-        placeholder="Game, Book, Movie, Food..."
-      />
+            <input
+              className={inputClass}
+              defaultValue={profile.latestPickCategory}
+              id="latest-pick-category"
+              maxLength={40}
+              name="latestPickCategory"
+              placeholder="Game, Book, Movie, Food..."
+            />
 
-      <FieldMessage
-        error={firstFieldError(state, "latestPickCategory")}
-        hint="Up to 40 characters."
-      />
-    </div>
+            <FieldMessage
+              error={firstFieldError(state, "latestPickCategory")}
+              hint="Up to 40 characters."
+            />
+          </div>
 
-    <div>
-      <label
-        className="mb-2 block text-xs font-bold text-white/55"
-        htmlFor="latest-pick-title"
-      >
-        Pick
-      </label>
+          <div>
+            <label
+              className="mb-2 block text-xs font-bold text-white/55"
+              htmlFor="latest-pick-title"
+            >
+              Pick
+            </label>
 
-      <input
-        className={inputClass}
-        defaultValue={profile.latestPickTitle}
-        id="latest-pick-title"
-        maxLength={100}
-        name="latestPickTitle"
-        placeholder="What are you recommending?"
-      />
+            <input
+              className={inputClass}
+              defaultValue={profile.latestPickTitle}
+              id="latest-pick-title"
+              maxLength={100}
+              name="latestPickTitle"
+              placeholder="What are you recommending?"
+            />
 
-      <FieldMessage
-        error={firstFieldError(state, "latestPickTitle")}
-        hint="Up to 100 characters."
-      />
-    </div>
+            <FieldMessage
+              error={firstFieldError(state, "latestPickTitle")}
+              hint="Up to 100 characters."
+            />
+          </div>
 
-    <div>
-      <label
-        className="mb-2 block text-xs font-bold text-white/55"
-        htmlFor="latest-pick-note"
-      >
-        Short Note
-      </label>
+          <div>
+            <label
+              className="mb-2 block text-xs font-bold text-white/55"
+              htmlFor="latest-pick-note"
+            >
+              Short Note
+            </label>
 
-      <textarea
-        className={`${inputClass} min-h-24`}
-        defaultValue={profile.latestPickNote}
-        id="latest-pick-note"
-        maxLength={240}
-        name="latestPickNote"
-        placeholder="Why is this your latest pick?"
-      />
+            <textarea
+              className={`${inputClass} min-h-24`}
+              defaultValue={profile.latestPickNote}
+              id="latest-pick-note"
+              maxLength={240}
+              name="latestPickNote"
+              placeholder="Why is this your latest pick?"
+            />
 
-      <FieldMessage
-        error={firstFieldError(state, "latestPickNote")}
-        hint="Optional. Up to 240 characters."
-      />
-    </div>
+            <FieldMessage
+              error={firstFieldError(state, "latestPickNote")}
+              hint="Optional. Up to 240 characters."
+            />
+          </div>
 
-    <div>
-      <label
-        className="mb-2 block text-xs font-bold text-white/55"
-        htmlFor="latest-pick-url"
-      >
-        Link
-      </label>
+          <div>
+            <label
+              className="mb-2 block text-xs font-bold text-white/55"
+              htmlFor="latest-pick-url"
+            >
+              Link
+            </label>
 
-      <input
-        className={inputClass}
-        defaultValue={profile.latestPickUrl}
-        id="latest-pick-url"
-        maxLength={500}
-        name="latestPickUrl"
-        placeholder="https://..."
-        type="url"
-      />
+            <input
+              className={inputClass}
+              defaultValue={profile.latestPickUrl}
+              id="latest-pick-url"
+              maxLength={500}
+              name="latestPickUrl"
+              placeholder="https://..."
+              type="url"
+            />
 
-      <FieldMessage
-        error={firstFieldError(state, "latestPickUrl")}
-        hint="Optional complete link."
-      />
-    </div>
-  </div>
-</fieldset>
+            <FieldMessage
+              error={firstFieldError(state, "latestPickUrl")}
+              hint="Optional complete link."
+            />
+          </div>
+        </div>
+      </fieldset>
 
       <fieldset className="rounded-2xl border border-white/10 bg-black/25 p-5">
         <legend className="px-2 text-sm font-bold text-white">
           Current Focus
         </legend>
         <p className="mb-5 text-xs leading-5 text-white/45">
-          Share what currently has your attention — a project, school, cosplay, event, goal, or anything else.
+          Share what currently has your attention — a project, school, cosplay,
+          event, goal, or anything else.
         </p>
         <div className="space-y-4">
           <div>
@@ -497,6 +521,49 @@ latestPickUrl: string;
             <FieldMessage
               error={firstFieldError(state, "spotlightUrl")}
               hint="Optional complete link beginning with http:// or https://."
+            />
+          </div>
+        </div>
+      </fieldset>
+      <fieldset className="rounded-2xl border border-white/10 bg-black/25 p-5">
+        <legend className="px-2 text-sm font-bold text-white">View My</legend>
+        <p className="mb-5 text-xs leading-5 text-white/45">
+          Feature one outside link you want visitors to click right now.
+        </p>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label className="sr-only" htmlFor="view-my-label">
+              View My label
+            </label>
+            <input
+              className={inputClass}
+              defaultValue={profile.viewMyLabel}
+              id="view-my-label"
+              maxLength={50}
+              name="viewMyLabel"
+              placeholder="Latest Video"
+            />
+            <FieldMessage
+              error={firstFieldError(state, "viewMyLabel")}
+              hint="Examples: Twitch, Portfolio, Substack, Shop."
+            />
+          </div>
+          <div>
+            <label className="sr-only" htmlFor="view-my-url">
+              View My URL
+            </label>
+            <input
+              className={inputClass}
+              defaultValue={profile.viewMyUrl}
+              id="view-my-url"
+              maxLength={500}
+              name="viewMyUrl"
+              placeholder="https://example.com"
+              type="url"
+            />
+            <FieldMessage
+              error={firstFieldError(state, "viewMyUrl")}
+              hint="Add both fields, or leave both blank."
             />
           </div>
         </div>

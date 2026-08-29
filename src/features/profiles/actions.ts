@@ -64,6 +64,7 @@ export async function updateProfileSettingsAction(
     username: formData.get("username"),
     displayName: formData.get("displayName"),
     bio: formData.get("bio"),
+    mood: formData.get("mood"),
     visibility: formData.get("visibility"),
     discoverable: formData.get("discoverable") === "on",
     accentColor: formData.get("accentColor"),
@@ -78,13 +79,15 @@ export async function updateProfileSettingsAction(
     spotlightTitle: formData.get("spotlightTitle"),
     spotlightDescription: formData.get("spotlightDescription"),
     spotlightUrl: formData.get("spotlightUrl"),
+    viewMyLabel: formData.get("viewMyLabel"),
+    viewMyUrl: formData.get("viewMyUrl"),
     profileSongTitle: formData.get("profileSongTitle"),
-profileSongArtist: formData.get("profileSongArtist"),
-profileSongUrl: formData.get("profileSongUrl"),
-latestPickCategory: formData.get("latestPickCategory"),
-latestPickTitle: formData.get("latestPickTitle"),
-latestPickNote: formData.get("latestPickNote"),
-latestPickUrl: formData.get("latestPickUrl"),
+    profileSongArtist: formData.get("profileSongArtist"),
+    profileSongUrl: formData.get("profileSongUrl"),
+    latestPickCategory: formData.get("latestPickCategory"),
+    latestPickTitle: formData.get("latestPickTitle"),
+    latestPickNote: formData.get("latestPickNote"),
+    latestPickUrl: formData.get("latestPickUrl"),
   });
   if (!parsed.success) {
     return {
@@ -105,41 +108,34 @@ latestPickUrl: formData.get("latestPickUrl"),
     const { data: current } = await supabase
       .from("profiles")
       .select(
-  "username, avatar_url, cover_image_url, background_image_url, featured_profile_image_url",
-)
+        "username, avatar_url, cover_image_url, background_image_url, featured_profile_image_url",
+      )
       .eq("id", userData.user.id)
       .maybeSingle();
-const avatarPath = await uploadProfileImage(
-  "avatar",
-  formData.get("avatar"),
-  userData.user.id,
-  current?.avatar_url ?? null,
-);
-
-const landscapePath = await uploadProfileImage(
-  "landscape",
-  formData.get("landscape"),
-  userData.user.id,
-  current?.cover_image_url ?? null,
-);
-
-const backgroundPath = await uploadProfileImage(
-  "background",
-  formData.get("background"),
-  userData.user.id,
-  current?.background_image_url ?? null,
-);
-
-const featuredPath = await uploadProfileImage(
-  "featured",
-  formData.get("featuredProfileImage"),
-  userData.user.id,
-  current?.featured_profile_image_url ?? null,
-);
-console.log("FEATURED UPLOAD DEBUG", {
-  formValue: formData.get("featuredProfileImage"),
-  featuredPath,
-});
+    const avatarPath = await uploadProfileImage(
+      "avatar",
+      formData.get("avatar"),
+      userData.user.id,
+      current?.avatar_url ?? null,
+    );
+    const landscapePath = await uploadProfileImage(
+      "landscape",
+      formData.get("landscape"),
+      userData.user.id,
+      current?.cover_image_url ?? null,
+    );
+    const backgroundPath = await uploadProfileImage(
+      "background",
+      formData.get("background"),
+      userData.user.id,
+      current?.background_image_url ?? null,
+    );
+    const featuredPath = await uploadProfileImage(
+      "featured",
+      formData.get("featuredProfileImage"),
+      userData.user.id,
+      current?.featured_profile_image_url ?? null,
+    );
     const { error } = await supabase.rpc("update_profile_experience", {
       p_username: parsed.data.username,
       p_display_name: parsed.data.displayName,
@@ -161,14 +157,17 @@ console.log("FEATURED UPLOAD DEBUG", {
       p_spotlight_title: parsed.data.spotlightTitle,
       p_spotlight_description: parsed.data.spotlightDescription,
       p_spotlight_url: parsed.data.spotlightUrl,
+      p_mood: parsed.data.mood,
+      p_view_my_label: parsed.data.viewMyLabel,
+      p_view_my_url: parsed.data.viewMyUrl,
       p_profile_song_title: parsed.data.profileSongTitle,
-p_profile_song_artist: parsed.data.profileSongArtist,
-p_profile_song_url: parsed.data.profileSongUrl,
-p_latest_pick_category: parsed.data.latestPickCategory,
-p_latest_pick_title: parsed.data.latestPickTitle,
-p_latest_pick_note: parsed.data.latestPickNote,
-p_latest_pick_url: parsed.data.latestPickUrl,
-    } as never);
+      p_profile_song_artist: parsed.data.profileSongArtist,
+      p_profile_song_url: parsed.data.profileSongUrl,
+      p_latest_pick_category: parsed.data.latestPickCategory,
+      p_latest_pick_title: parsed.data.latestPickTitle,
+      p_latest_pick_note: parsed.data.latestPickNote,
+      p_latest_pick_url: parsed.data.latestPickUrl,
+    });
     if (error) {
       const errorMessage = error.message.toUpperCase();
       return {
@@ -182,33 +181,25 @@ p_latest_pick_url: parsed.data.latestPickUrl,
               : "Your profile could not be updated.",
       };
     }
-const { error: featuredImageError } = await supabase.rpc(
-  "set_featured_profile_image",
-  {
-    p_featured_profile_image_url: featuredPath ?? "",
-  },
-);
-console.log("FEATURED SAVE DEBUG", {
-  featuredPath,
-  featuredImageError,
-});
-
-if (featuredImageError) {
-  return {
-    status: "error",
-    message: "Your featured profile image could not be saved.",
-  };
-}
-const activePaths = new Set(
-  [avatarPath, landscapePath, backgroundPath, featuredPath].filter(Boolean),
-);
-const replacedPaths = [
-  current?.avatar_url,
-  current?.cover_image_url,
-  current?.background_image_url,
-  current?.featured_profile_image_url,
-]
-    .filter((currentPath): currentPath is string =>
+    const { error: featuredImageError } = await supabase.rpc(
+      "set_featured_profile_image",
+      { p_featured_profile_image_url: featuredPath ?? "" },
+    );
+    if (featuredImageError) {
+      return {
+        status: "error",
+        message: "Your featured profile image could not be saved.",
+      };
+    }
+    const activePaths = new Set(
+      [avatarPath, landscapePath, backgroundPath, featuredPath].filter(Boolean),
+    );
+    const replacedPaths = [
+      current?.avatar_url,
+      current?.cover_image_url,
+      current?.background_image_url,
+      current?.featured_profile_image_url,
+    ].filter((currentPath): currentPath is string =>
       Boolean(currentPath && !activePaths.has(currentPath)),
     );
     if (replacedPaths.length) {
@@ -236,6 +227,28 @@ const replacedPaths = [
             ? "Your image could not be uploaded. Please try again."
             : "Profile updates require the latest Supabase migration and media bucket.",
     };
+  }
+}
+
+export async function touchProfilePresenceAction() {
+  try {
+    const supabase = await createClient();
+    await supabase.rpc("touch_profile_presence");
+  } catch {
+    // Presence is best-effort and must never interrupt navigation.
+  }
+}
+
+export async function recordProfileViewAction(profileId: string) {
+  const parsed = targetProfileSchema.safeParse({ targetUserId: profileId });
+  if (!parsed.success) return;
+  try {
+    const supabase = await createClient();
+    await supabase.rpc("record_profile_view", {
+      p_profile_id: parsed.data.targetUserId,
+    });
+  } catch {
+    // Aggregate traffic is best-effort and must never block profile viewing.
   }
 }
 
@@ -277,23 +290,23 @@ export async function updateProfileRoomAction(
   _previousState: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
-const parsed = profileRoomSettingsSchema.safeParse({
-  enabled: formData.get("enabled") === "on",
-  wallColor: formData.get("wallColor"),
-  floorColor: formData.get("floorColor"),
-  couchColor: formData.get("couchColor"),
-  bookshelfColor: formData.get("bookshelfColor"),
-  tvColor: formData.get("tvColor"),
-  doorColor: formData.get("doorColor"),
-  accessoryColor: formData.get("accessoryColor"),
-  lightingTheme: formData.get("lightingTheme"),
-  currentVibe: formData.get("currentVibe"),
-  characterColor: formData.get("characterColor"),
-  headAccessory: formData.get("headAccessory"),
-  faceAccessory: formData.get("faceAccessory"),
-  neckAccessory: formData.get("neckAccessory"),
-  motionEnabled: formData.get("motionEnabled") === "on",
-});
+  const parsed = profileRoomSettingsSchema.safeParse({
+    enabled: formData.get("enabled") === "on",
+    wallColor: formData.get("wallColor"),
+    floorColor: formData.get("floorColor"),
+    couchColor: formData.get("couchColor"),
+    bookshelfColor: formData.get("bookshelfColor"),
+    tvColor: formData.get("tvColor"),
+    doorColor: formData.get("doorColor"),
+    accessoryColor: formData.get("accessoryColor"),
+    lightingTheme: formData.get("lightingTheme"),
+    currentVibe: formData.get("currentVibe"),
+    characterColor: formData.get("characterColor"),
+    headAccessory: formData.get("headAccessory"),
+    faceAccessory: formData.get("faceAccessory"),
+    neckAccessory: formData.get("neckAccessory"),
+    motionEnabled: formData.get("motionEnabled") === "on",
+  });
   if (!parsed.success) {
     return {
       status: "error",
@@ -319,22 +332,22 @@ const parsed = profileRoomSettingsSchema.safeParse({
     p_motion_enabled: parsed.data.motionEnabled,
   });
   const { error: layerColorError } = await supabase.rpc(
-  "update_profile_room_layer_colors",
-  {
-    p_floor_color: parsed.data.floorColor,
-    p_couch_color: parsed.data.couchColor,
-    p_bookshelf_color: parsed.data.bookshelfColor,
-    p_tv_color: parsed.data.tvColor,
-    p_door_color: parsed.data.doorColor,
-    p_accessory_color: parsed.data.accessoryColor,
-  },
-);
-if (error || layerColorError) {
-  return {
-    status: "error",
-    message: "My Room requires the latest Supabase migration.",
-  };
-}
+    "update_profile_room_layer_colors",
+    {
+      p_floor_color: parsed.data.floorColor,
+      p_couch_color: parsed.data.couchColor,
+      p_bookshelf_color: parsed.data.bookshelfColor,
+      p_tv_color: parsed.data.tvColor,
+      p_door_color: parsed.data.doorColor,
+      p_accessory_color: parsed.data.accessoryColor,
+    },
+  );
+  if (error || layerColorError) {
+    return {
+      status: "error",
+      message: "My Room requires the latest Supabase migration.",
+    };
+  }
 
   const { data: profile } = await supabase
     .from("profiles")

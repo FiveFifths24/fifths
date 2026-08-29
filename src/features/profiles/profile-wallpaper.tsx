@@ -23,6 +23,16 @@ export function ProfileWallpaper({
           aria-hidden="true"
           className="pointer-events-none fixed inset-0 z-0 overflow-hidden"
         >
+          {fit === "contain" ? (
+            <div
+              className="absolute inset-0 bg-repeat opacity-70"
+              style={{
+                backgroundImage: `url(${JSON.stringify(backgroundUrl)})`,
+                backgroundPosition: `${positionX}% ${positionY}%`,
+                backgroundSize: "min(46rem, 72vw) auto",
+              }}
+            />
+          ) : null}
           <ProfileImageLayer
             fit={fit}
             imageUrl={backgroundUrl}
