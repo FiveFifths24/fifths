@@ -48,6 +48,11 @@ export type Database = {
           onboarding_completed_at: string | null;
           created_at: string;
           updated_at: string;
+          featured_profile_image_url: string | null
+latest_pick_category: string | null
+latest_pick_note: string | null
+latest_pick_title: string | null
+latest_pick_url: string | null
         };
         Insert: {
           id: string;
@@ -87,6 +92,11 @@ export type Database = {
           onboarding_completed_at?: string | null;
           created_at?: string;
           updated_at?: string;
+          featured_profile_image_url?: string | null
+latest_pick_category?: string | null
+latest_pick_note?: string | null
+latest_pick_title?: string | null
+latest_pick_url?: string | null
         };
         Update: Partial<Database["public"]["Tables"]["profiles"]["Insert"]>;
         Relationships: [];
@@ -96,6 +106,12 @@ export type Database = {
           user_id: string;
           enabled: boolean;
           wall_color: string;
+          floor_color: string;
+couch_color: string;
+bookshelf_color: string;
+tv_color: string;
+door_color: string;
+accessory_color: string;
           lighting_theme: "cosmic" | "warm" | "daylight" | "midnight";
           current_vibe: "chill" | "focused" | "gaming" | "creative" | "social";
           character_color: string;
@@ -121,6 +137,12 @@ export type Database = {
           user_id: string;
           enabled?: boolean;
           wall_color?: string;
+          floor_color?: string;
+couch_color?: string;
+bookshelf_color?: string;
+tv_color?: string;
+door_color?: string;
+accessory_color?: string;
           lighting_theme?: "cosmic" | "warm" | "daylight" | "midnight";
           current_vibe?: "chill" | "focused" | "gaming" | "creative" | "social";
           character_color?: string;
@@ -1245,6 +1267,17 @@ export type Database = {
         Args: { p_campaign_id: string };
         Returns: boolean;
       };
+      update_profile_room_layer_colors: {
+  Args: {
+    p_accessory_color: string;
+    p_bookshelf_color: string;
+    p_couch_color: string;
+    p_door_color: string;
+    p_floor_color: string;
+    p_tv_color: string;
+  };
+  Returns: undefined;
+};
       create_realm_campaign: {
         Args: {
           p_circle_id: string | null;
@@ -1440,34 +1473,37 @@ p_profile_song_url: string | null;
         };
         Returns: undefined;
       };
-      get_profile_room: {
-        Args: { p_user_id: string };
-        Returns: Array<{
-          enabled: boolean;
-          wall_color: string;
-          lighting_theme: "cosmic" | "warm" | "daylight" | "midnight";
-          current_vibe: "chill" | "focused" | "gaming" | "creative" | "social";
-          character_color: string;
-          character_shape: "ghost" | "blob" | "orbit";
-          character_expression: "smile" | "calm" | "wink";
-          character_accessory: "none" | "headphones" | "glasses" | "beanie";
-          motion_enabled: boolean;
-          profile_song_title: string | null;
-          profile_song_artist: string | null;
-          profile_song_url: string | null;
-          head_accessory:
-            | "none"
-            | "headphones"
-            | "beanie"
-            | "bow"
-            | "hat"
-            | "crown"
-            | "flower"
-            | "headband";
-          face_accessory: "none" | "glasses" | "sunglasses";
-          neck_accessory: "none" | "scarf" | "bandana";
-        }>;
-      };
+get_profile_room: {
+  Args: { p_user_id: string };
+  Returns: {
+    accessory_color: string;
+    bookshelf_color: string;
+    character_accessory: string;
+    character_color: string;
+    character_expression: string;
+    character_shape: string;
+    couch_color: string;
+current_vibe: "chill" | "focused" | "gaming" | "creative" | "social";    door_color: string;
+    enabled: boolean;
+face_accessory: "none" | "glasses" | "sunglasses";    floor_color: string;
+head_accessory:
+  | "none"
+  | "headphones"
+  | "beanie"
+  | "bow"
+  | "hat"
+  | "crown"
+  | "flower"
+  | "headband";
+  lighting_theme: "cosmic" | "warm" | "daylight" | "midnight";    motion_enabled: boolean;
+neck_accessory: "none" | "scarf" | "bandana";
+    profile_song_artist: string;
+    profile_song_title: string;
+    profile_song_url: string;
+    tv_color: string;
+    wall_color: string;
+  }[];
+};
       set_profile_status: {
         Args: { p_status_text: string };
         Returns: undefined;
@@ -1515,6 +1551,10 @@ p_profile_song_url: string | null;
         };
         Returns: undefined;
       };
+      set_featured_profile_image: {
+  Args: { p_featured_profile_image_url: string };
+  Returns: undefined;
+};
       get_public_profile: {
         Args: { p_username: string };
         Returns: Array<{

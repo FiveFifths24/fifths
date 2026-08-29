@@ -51,8 +51,8 @@ export function FeaturedConnectionsForm({
           Add friends before choosing featured connections.
         </p>
       )}
-      <SubmitButton pendingLabel="Saving connections…">
-        Save featured connections
+      <SubmitButton pendingLabel="Saving Connections…">
+        Save Featured Connections
       </SubmitButton>
     </form>
   );

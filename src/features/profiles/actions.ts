@@ -29,7 +29,7 @@ function safeReturnPath(value: FormDataEntryValue | null) {
 }
 
 async function uploadProfileImage(
-  kind: "avatar" | "landscape" | "background",
+  kind: "avatar" | "landscape" | "background" | "featured",
   file: FormDataEntryValue | null,
   userId: string,
   currentPath: string | null,
@@ -81,6 +81,10 @@ export async function updateProfileSettingsAction(
     profileSongTitle: formData.get("profileSongTitle"),
 profileSongArtist: formData.get("profileSongArtist"),
 profileSongUrl: formData.get("profileSongUrl"),
+latestPickCategory: formData.get("latestPickCategory"),
+latestPickTitle: formData.get("latestPickTitle"),
+latestPickNote: formData.get("latestPickNote"),
+latestPickUrl: formData.get("latestPickUrl"),
   });
   if (!parsed.success) {
     return {
@@ -100,27 +104,42 @@ profileSongUrl: formData.get("profileSongUrl"),
       };
     const { data: current } = await supabase
       .from("profiles")
-      .select("username, avatar_url, cover_image_url, background_image_url")
+      .select(
+  "username, avatar_url, cover_image_url, background_image_url, featured_profile_image_url",
+)
       .eq("id", userData.user.id)
       .maybeSingle();
-    const avatarPath = await uploadProfileImage(
-      "avatar",
-      formData.get("avatar"),
-      userData.user.id,
-      current?.avatar_url ?? null,
-    );
-    const landscapePath = await uploadProfileImage(
-      "landscape",
-      formData.get("landscape"),
-      userData.user.id,
-      current?.cover_image_url ?? null,
-    );
-    const backgroundPath = await uploadProfileImage(
-      "background",
-      formData.get("background"),
-      userData.user.id,
-      current?.background_image_url ?? null,
-    );
+const avatarPath = await uploadProfileImage(
+  "avatar",
+  formData.get("avatar"),
+  userData.user.id,
+  current?.avatar_url ?? null,
+);
+
+const landscapePath = await uploadProfileImage(
+  "landscape",
+  formData.get("landscape"),
+  userData.user.id,
+  current?.cover_image_url ?? null,
+);
+
+const backgroundPath = await uploadProfileImage(
+  "background",
+  formData.get("background"),
+  userData.user.id,
+  current?.background_image_url ?? null,
+);
+
+const featuredPath = await uploadProfileImage(
+  "featured",
+  formData.get("featuredProfileImage"),
+  userData.user.id,
+  current?.featured_profile_image_url ?? null,
+);
+console.log("FEATURED UPLOAD DEBUG", {
+  formValue: formData.get("featuredProfileImage"),
+  featuredPath,
+});
     const { error } = await supabase.rpc("update_profile_experience", {
       p_username: parsed.data.username,
       p_display_name: parsed.data.displayName,
@@ -145,7 +164,11 @@ profileSongUrl: formData.get("profileSongUrl"),
       p_profile_song_title: parsed.data.profileSongTitle,
 p_profile_song_artist: parsed.data.profileSongArtist,
 p_profile_song_url: parsed.data.profileSongUrl,
-    });
+p_latest_pick_category: parsed.data.latestPickCategory,
+p_latest_pick_title: parsed.data.latestPickTitle,
+p_latest_pick_note: parsed.data.latestPickNote,
+p_latest_pick_url: parsed.data.latestPickUrl,
+    } as never);
     if (error) {
       const errorMessage = error.message.toUpperCase();
       return {
@@ -159,14 +182,33 @@ p_profile_song_url: parsed.data.profileSongUrl,
               : "Your profile could not be updated.",
       };
     }
-    const activePaths = new Set(
-      [avatarPath, landscapePath, backgroundPath].filter(Boolean),
-    );
-    const replacedPaths = [
-      current?.avatar_url,
-      current?.cover_image_url,
-      current?.background_image_url,
-    ].filter((currentPath): currentPath is string =>
+const { error: featuredImageError } = await supabase.rpc(
+  "set_featured_profile_image",
+  {
+    p_featured_profile_image_url: featuredPath ?? "",
+  },
+);
+console.log("FEATURED SAVE DEBUG", {
+  featuredPath,
+  featuredImageError,
+});
+
+if (featuredImageError) {
+  return {
+    status: "error",
+    message: "Your featured profile image could not be saved.",
+  };
+}
+const activePaths = new Set(
+  [avatarPath, landscapePath, backgroundPath, featuredPath].filter(Boolean),
+);
+const replacedPaths = [
+  current?.avatar_url,
+  current?.cover_image_url,
+  current?.background_image_url,
+  current?.featured_profile_image_url,
+]
+    .filter((currentPath): currentPath is string =>
       Boolean(currentPath && !activePaths.has(currentPath)),
     );
     if (replacedPaths.length) {
@@ -235,17 +277,23 @@ export async function updateProfileRoomAction(
   _previousState: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
-  const parsed = profileRoomSettingsSchema.safeParse({
-    enabled: formData.get("enabled") === "on",
-    wallColor: formData.get("wallColor"),
-    lightingTheme: formData.get("lightingTheme"),
-    currentVibe: formData.get("currentVibe"),
-    characterColor: formData.get("characterColor"),
-    headAccessory: formData.get("headAccessory"),
-    faceAccessory: formData.get("faceAccessory"),
-    neckAccessory: formData.get("neckAccessory"),
-    motionEnabled: formData.get("motionEnabled") === "on",
-  });
+const parsed = profileRoomSettingsSchema.safeParse({
+  enabled: formData.get("enabled") === "on",
+  wallColor: formData.get("wallColor"),
+  floorColor: formData.get("floorColor"),
+  couchColor: formData.get("couchColor"),
+  bookshelfColor: formData.get("bookshelfColor"),
+  tvColor: formData.get("tvColor"),
+  doorColor: formData.get("doorColor"),
+  accessoryColor: formData.get("accessoryColor"),
+  lightingTheme: formData.get("lightingTheme"),
+  currentVibe: formData.get("currentVibe"),
+  characterColor: formData.get("characterColor"),
+  headAccessory: formData.get("headAccessory"),
+  faceAccessory: formData.get("faceAccessory"),
+  neckAccessory: formData.get("neckAccessory"),
+  motionEnabled: formData.get("motionEnabled") === "on",
+});
   if (!parsed.success) {
     return {
       status: "error",
@@ -270,12 +318,23 @@ export async function updateProfileRoomAction(
     p_neck_accessory: parsed.data.neckAccessory,
     p_motion_enabled: parsed.data.motionEnabled,
   });
-  if (error) {
-    return {
-      status: "error",
-      message: "My Room requires the latest Supabase migration.",
-    };
-  }
+  const { error: layerColorError } = await supabase.rpc(
+  "update_profile_room_layer_colors",
+  {
+    p_floor_color: parsed.data.floorColor,
+    p_couch_color: parsed.data.couchColor,
+    p_bookshelf_color: parsed.data.bookshelfColor,
+    p_tv_color: parsed.data.tvColor,
+    p_door_color: parsed.data.doorColor,
+    p_accessory_color: parsed.data.accessoryColor,
+  },
+);
+if (error || layerColorError) {
+  return {
+    status: "error",
+    message: "My Room requires the latest Supabase migration.",
+  };
+}
 
   const { data: profile } = await supabase
     .from("profiles")

@@ -52,6 +52,7 @@ export default async function MemberProfilePage({
     landscapeUrl,
     experienceResult,
     featuredResult,
+    latestPickResult,
     roomResult,
   ] = await Promise.all([
     supabase
@@ -76,11 +77,29 @@ export default async function MemberProfilePage({
     signProfileMedia(supabase, profile.avatar_url),
     signProfileMedia(supabase, profile.cover_image_url),
     supabase.rpc("get_profile_experience", { p_user_id: profile.id }),
-    supabase.rpc("get_featured_connections", { p_owner_id: profile.id }),
-    supabase.rpc("get_profile_room", { p_user_id: profile.id }),
+supabase.rpc("get_featured_connections", { p_owner_id: profile.id }),
+
+supabase
+  .from("profiles")
+.select(
+  "latest_pick_category, latest_pick_title, latest_pick_note, latest_pick_url, featured_profile_image_url",
+)
+  .eq("id", profile.id)
+  .maybeSingle(),
+
+supabase.rpc("get_profile_room", { p_user_id: profile.id }),
   ]);
   const experience = experienceResult.data?.[0];
   const room = roomResult.data?.[0];
+  const featuredProfileImageUrl = await signProfileMedia(
+  supabase,
+  latestPickResult.data?.featured_profile_image_url ?? null,
+);
+console.log("FEATURED IMAGE DEBUG", {
+  rawPath: latestPickResult.data?.featured_profile_image_url ?? null,
+  signedUrl: featuredProfileImageUrl,
+  queryError: latestPickResult.error?.message ?? null,
+});
   const accentColor = experience?.profile_accent_color ?? "#a855f7";
   const backgroundUrl = await signProfileMedia(
     supabase,
@@ -120,8 +139,8 @@ export default async function MemberProfilePage({
   className="overflow-hidden rounded-[2rem] border bg-black/20 shadow-[0_28px_90px_rgba(0,0,0,.45)] backdrop-blur-[2px]"
   style={cardStyle}
 >
-  <div className="relative min-h-[390px] overflow-hidden bg-[radial-gradient(circle_at_75%_20%,rgba(243,89,210,.22),transparent_30%),linear-gradient(135deg,#160626,#070711_58%,#071b20)]">
-    <ProfileImageLayer
+<div className="relative min-h-[470px] overflow-hidden bg-[radial-gradient(circle_at_75%_20%,rgba(243,89,210,.22),transparent_30%),linear-gradient(135deg,#160626,#070711_58%,#071b20)] sm:min-h-[470px] lg:min-h-[390px]">
+      <ProfileImageLayer
       fit={experience?.landscape_image_fit ?? "cover"}
       imageUrl={landscapeUrl}
       overlayClassName="bg-gradient-to-b from-black/10 via-black/20 to-black/55"
@@ -130,16 +149,16 @@ export default async function MemberProfilePage({
       zoom={experience?.landscape_image_zoom ?? 100}
     />
 
-    <div className="absolute inset-x-0 bottom-0 z-10 p-4 sm:p-7">
+    <div className="absolute inset-x-0 bottom-0 z-10 p-3 pt-20 sm:p-7 sm:pt-20 lg:pt-7">
       <div
-        className="flex flex-col gap-6 rounded-[1.75rem] border bg-black/55 p-5 shadow-2xl backdrop-blur-xl sm:p-6 lg:flex-row lg:items-center lg:justify-between"
+        className="flex flex-col gap-4 rounded-[1.5rem] border bg-black/55 px-4 pt-7 pb-7 text-center shadow-2xl backdrop-blur-xl sm:gap-6 sm:rounded-[1.75rem] sm:px-6 sm:pt-8 sm:pb-8 sm:text-left lg:flex-row lg:items-center lg:justify-between lg:py-6"
         style={cardStyle}
       >
         <div className="flex min-w-0 flex-col items-center gap-5 sm:flex-row">
           <div className="relative shrink-0">
             <div
               aria-label={`${profile.display_name}'s profile photo`}
-              className="size-28 rounded-full border-4 border-black bg-gradient-to-br from-[#992bff] to-[#f359d2] bg-cover bg-center shadow-2xl"
+              className="size-24 rounded-full border-4 border-black bg-gradient-to-br from-[#992bff] to-[#f359d2] bg-cover bg-center shadow-2xl sm:size-28"
               role="img"
               style={{
                 borderColor: accentColor,
@@ -164,7 +183,7 @@ export default async function MemberProfilePage({
           </div>
 
           <div className="min-w-0 text-center sm:text-left">
-            <h1 className="display-type text-5xl text-white capitalize sm:text-6xl">
+            <h1 className="display-type text-4xl text-white capitalize sm:text-6xl">
               {profile.display_name}
             </h1>
 
@@ -188,7 +207,7 @@ export default async function MemberProfilePage({
 
         <div className="shrink-0">
           {isOwnProfile ? (
-            <div className="flex flex-wrap justify-center gap-3 lg:justify-end">
+            <div className="flex flex-col justify-center gap-3 sm:flex-row lg:justify-end">
               <ButtonLink href="/account#edit-my-room">
                 Edit My Room
               </ButtonLink>
@@ -217,6 +236,13 @@ export default async function MemberProfilePage({
 
         <ProfileRoom
           accentColor={accentColor}
+          featuredProfileImageUrl={featuredProfileImageUrl}
+          latestPick={{
+  category: latestPickResult.data?.latest_pick_category ?? null,
+  title: latestPickResult.data?.latest_pick_title ?? null,
+  note: latestPickResult.data?.latest_pick_note ?? null,
+  url: latestPickResult.data?.latest_pick_url ?? null,
+}}
           bio={profile.bio}
           displayName={profile.display_name}
           featuredConnections={featuredConnections.map((connection) => ({
@@ -229,6 +255,12 @@ export default async function MemberProfilePage({
           settings={{
             enabled: room?.enabled ?? true,
             wallColor: room?.wall_color ?? "#241039",
+            floorColor: room?.floor_color ?? "#4a403c",
+couchColor: room?.couch_color ?? "#4a4048",
+bookshelfColor: room?.bookshelf_color ?? "#594139",
+tvColor: room?.tv_color ?? "#262329",
+doorColor: room?.door_color ?? "#4a3935",
+accessoryColor: room?.accessory_color ?? "#5a5059",
             lightingTheme: room?.lighting_theme ?? "cosmic",
             currentVibe: room?.current_vibe ?? "chill",
             characterColor: room?.character_color ?? "#f359d2",

@@ -61,6 +61,16 @@ export function ProfileRoomSettingsForm({
   );
   const [wallColor, setWallColor] = useState(settings.wallColor);
   const [characterColor, setCharacterColor] = useState(settings.characterColor);
+  const [floorColor, setFloorColor] = useState(settings.floorColor ?? "#4a403c");
+const [couchColor, setCouchColor] = useState(settings.couchColor ?? "#4a4048");
+const [bookshelfColor, setBookshelfColor] = useState(
+  settings.bookshelfColor ?? "#594139",
+);
+const [tvColor, setTvColor] = useState(settings.tvColor ?? "#262329");
+const [doorColor, setDoorColor] = useState(settings.doorColor ?? "#4a3935");
+const [accessoryColor, setAccessoryColor] = useState(
+  settings.accessoryColor ?? "#5a5059",
+);
 
   return (
     <form action={action} className="space-y-6">
@@ -89,6 +99,48 @@ export function ProfileRoomSettingsForm({
           onChange={setWallColor}
           value={wallColor}
         />
+<ColorField
+  label="Floor Color"
+  name="floorColor"
+  onChange={setFloorColor}
+  value={floorColor}
+/>
+
+<ColorField
+  label="Couch & Chair Color"
+  name="couchColor"
+  onChange={setCouchColor}
+  value={couchColor}
+/>
+
+<ColorField
+  label="Bookshelf Color"
+  name="bookshelfColor"
+  onChange={setBookshelfColor}
+  value={bookshelfColor}
+/>
+
+<ColorField
+  label="TV & Console Color"
+  name="tvColor"
+  onChange={setTvColor}
+  value={tvColor}
+/>
+
+<ColorField
+  label="Door & Window Trim Color"
+  name="doorColor"
+  onChange={setDoorColor}
+  value={doorColor}
+/>
+
+<ColorField
+  label="Accessory & Decor Color"
+  name="accessoryColor"
+  onChange={setAccessoryColor}
+  value={accessoryColor}
+/>
+
         <ColorField
           label="Character Color"
           name="characterColor"
@@ -224,7 +276,7 @@ export function ProfileRoomSettingsForm({
         </span>
       </label>
 
-      <SubmitButton pendingLabel="Saving room…">Save My Room</SubmitButton>
+      <SubmitButton pendingLabel="Saving Room…">Save My Room</SubmitButton>
     </form>
   );
 }

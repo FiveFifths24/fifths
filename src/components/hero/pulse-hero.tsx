@@ -401,17 +401,17 @@ export function PulseHero() {
               No Ads. No Algorithmic Feed.
             </p>
 
-            <h1 className="display-type mx-auto max-w-[44rem] text-[clamp(2rem,11vw,5rem)] leading-[0.96] tracking-[-0.045em] text-[#f4f2ef] lg:mx-0 lg:text-[clamp(3.8rem,4.2vw,4.85rem)]">
+            <h1 className="display-type mx-auto max-w-[36rem] text-[clamp(2rem,11vw,5rem)] leading-[0.96] tracking-[-0.045em] text-[#f4f2ef] lg:mx-0 lg:text-[clamp(3.8rem,4.2vw,4.85rem)]">
               <span className="block text-white">
-                Real-Time Capacity Meets Real-World
+                Find Your Space.
               </span>
 
               <span className="mt-1 block bg-[linear-gradient(90deg,#1800ad,#6c14ce,#f359d2)] bg-clip-text text-[4.5rem] leading-[0.9] text-transparent [-webkit-text-fill-color:transparent] sm:text-[5.25rem] lg:text-[7rem] xl:text-[7.5rem]">
-                Connections
+                Match Your Energy
               </span>
             </h1>
 
-            <p className="mx-auto mt-7 max-w-[38rem] text-base leading-7 text-white/65 sm:text-lg sm:leading-8 lg:mx-0">
+            <p className="mx-auto mt-7 max-w-[36rem] text-base leading-7 text-white/65 sm:text-lg sm:leading-8 lg:mx-0">
               SIGNAL converts your real-time mental, emotional, and physical
               capacity into meaningful ways to connect, create, and participate.
             </p>

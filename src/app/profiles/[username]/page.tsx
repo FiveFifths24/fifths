@@ -164,6 +164,13 @@ export default async function PublicProfilePage({
 
           <ProfileRoom
             accentColor={accentColor}
+            featuredProfileImageUrl={null}
+latestPick={{
+  category: null,
+  title: null,
+  note: null,
+  url: null,
+}}
             bio={profile.bio}
             displayName={profile.display_name}
             featuredConnections={[]}

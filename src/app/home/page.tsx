@@ -563,7 +563,7 @@ export default async function PersonalHomePage({
                 </div>
 
                 <div>
-                  <p className="font-bold text-white">Check your Pulse first</p>
+                  <p className="font-bold text-white">Check Your Pulse First</p>
 
                   <p className="mt-1 max-w-xl text-sm leading-6 text-white/45">
                     A current Pulse helps SIGNAL personalize this feed and bring
@@ -662,7 +662,7 @@ export default async function PersonalHomePage({
               <Activity aria-hidden="true" className="size-8 text-[#f359d2]" />
 
               <h3 className="mt-4 text-xl font-bold text-white">
-                Your Pulse shapes your feed.
+                Your Pulse Shapes Your Feed.
               </h3>
 
               <p className="mt-2 max-w-lg text-sm leading-6 text-white/45">

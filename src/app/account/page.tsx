@@ -162,17 +162,23 @@ export default async function AccountPage({
             </p>
             <div className="mt-5">
               <ProfileRoomSettingsForm
-                settings={{
-                  enabled: room?.enabled ?? true,
-                  wallColor: room?.wall_color ?? "#241039",
-                  lightingTheme: room?.lighting_theme ?? "cosmic",
-                  currentVibe: room?.current_vibe ?? "chill",
-                  characterColor: room?.character_color ?? "#f359d2",
-                  headAccessory: room?.head_accessory ?? "headphones",
-                  faceAccessory: room?.face_accessory ?? "none",
-                  neckAccessory: room?.neck_accessory ?? "none",
-                  motionEnabled: room?.motion_enabled ?? true,
-                }}
+settings={{
+  enabled: room?.enabled ?? true,
+  wallColor: room?.wall_color ?? "#241039",
+  floorColor: room?.floor_color ?? "#4a403c",
+  couchColor: room?.couch_color ?? "#4a4048",
+  bookshelfColor: room?.bookshelf_color ?? "#594139",
+  tvColor: room?.tv_color ?? "#262329",
+  doorColor: room?.door_color ?? "#4a3935",
+  accessoryColor: room?.accessory_color ?? "#5a5059",
+  lightingTheme: room?.lighting_theme ?? "cosmic",
+  currentVibe: room?.current_vibe ?? "chill",
+  characterColor: room?.character_color ?? "#f359d2",
+  headAccessory: room?.head_accessory ?? "headphones",
+  faceAccessory: room?.face_accessory ?? "none",
+  neckAccessory: room?.neck_accessory ?? "none",
+  motionEnabled: room?.motion_enabled ?? true,
+}}
               />
             </div>
           </div>
@@ -228,6 +234,10 @@ export default async function AccountPage({
                 profileSongTitle: profile.profile_song_title ?? "",
 profileSongArtist: profile.profile_song_artist ?? "",
 profileSongUrl: profile.profile_song_url ?? "",
+latestPickCategory: profile.latest_pick_category ?? "",
+latestPickTitle: profile.latest_pick_title ?? "",
+latestPickNote: profile.latest_pick_note ?? "",
+latestPickUrl: profile.latest_pick_url ?? "",
                 visibility: profile.visibility,
                 discoverable: profile.discoverable,
               }}

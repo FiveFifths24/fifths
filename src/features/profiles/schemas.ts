@@ -76,8 +76,35 @@ profileSongUrl: z
     "Use a complete http:// or https:// link.",
   )
   .transform((value) => value || null),
-});
 
+latestPickCategory: z
+  .string()
+  .trim()
+  .max(40, "Use no more than 40 characters.")
+  .transform((value) => value || null),
+
+latestPickTitle: z
+  .string()
+  .trim()
+  .max(100, "Use no more than 100 characters.")
+  .transform((value) => value || null),
+
+latestPickNote: z
+  .string()
+  .trim()
+  .max(240, "Use no more than 240 characters.")
+  .transform((value) => value || null),
+
+latestPickUrl: z
+  .string()
+  .trim()
+  .max(500, "Use no more than 500 characters.")
+  .refine(
+    (value) => !value || /^https?:\/\//i.test(value),
+    "Use a complete http:// or https:// link.",
+  )
+  .transform((value) => value || null),
+});
 
 export const profileStatusSchema = z.object({
   statusText: z
@@ -88,18 +115,58 @@ export const profileStatusSchema = z.object({
 
 export const profileRoomSettingsSchema = z.object({
   enabled: z.boolean(),
+
   wallColor: z
     .string()
     .trim()
     .toLowerCase()
     .regex(/^#[0-9a-f]{6}$/, "Use a six-digit hex color."),
+
+  floorColor: z
+    .string()
+    .trim()
+    .toLowerCase()
+    .regex(/^#[0-9a-f]{6}$/, "Use a six-digit hex color."),
+
+  couchColor: z
+    .string()
+    .trim()
+    .toLowerCase()
+    .regex(/^#[0-9a-f]{6}$/, "Use a six-digit hex color."),
+
+  bookshelfColor: z
+    .string()
+    .trim()
+    .toLowerCase()
+    .regex(/^#[0-9a-f]{6}$/, "Use a six-digit hex color."),
+
+  tvColor: z
+    .string()
+    .trim()
+    .toLowerCase()
+    .regex(/^#[0-9a-f]{6}$/, "Use a six-digit hex color."),
+
+  doorColor: z
+    .string()
+    .trim()
+    .toLowerCase()
+    .regex(/^#[0-9a-f]{6}$/, "Use a six-digit hex color."),
+
+  accessoryColor: z
+    .string()
+    .trim()
+    .toLowerCase()
+    .regex(/^#[0-9a-f]{6}$/, "Use a six-digit hex color."),
+
   lightingTheme: z.enum(["cosmic", "warm", "daylight", "midnight"]),
   currentVibe: z.enum(["chill", "focused", "gaming", "creative", "social"]),
+
   characterColor: z
     .string()
     .trim()
     .toLowerCase()
     .regex(/^#[0-9a-f]{6}$/, "Use a six-digit hex color."),
+
   headAccessory: z.enum([
     "none",
     "headphones",
@@ -110,13 +177,14 @@ export const profileRoomSettingsSchema = z.object({
     "flower",
     "headband",
   ]),
+
   faceAccessory: z.enum(["none", "glasses", "sunglasses"]),
   neckAccessory: z.enum(["none", "scarf", "bandana"]),
   motionEnabled: z.boolean(),
 });
 
 export const featuredConnectionsSchema = z.object({
-  featuredUserIds: z.array(z.uuid()).max(8, "Choose no more than 3 friends."),
+  featuredUserIds: z.array(z.uuid()).max(3, "Choose no more than 3 friends."),
 });
 
 export const targetProfileSchema = z.object({ targetUserId: z.uuid() });

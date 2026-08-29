@@ -21,7 +21,14 @@ function renderRoom() {
       bio="Building the Fifth Signal."
       displayName="Seven"
       featuredConnections={[]}
+      featuredProfileImageUrl={null}
       isOwner
+latestPick={{
+  category: null,
+  title: null,
+  note: null,
+  url: null,
+}}
       settings={settings}
       song={{
         title: "A Song",
