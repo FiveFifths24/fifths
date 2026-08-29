@@ -68,13 +68,15 @@ const [bookshelfColor, setBookshelfColor] = useState(
 );
 const [tvColor, setTvColor] = useState(settings.tvColor ?? "#262329");
 const [doorColor, setDoorColor] = useState(settings.doorColor ?? "#4a3935");
-const [accessoryColor, setAccessoryColor] = useState(
-  settings.accessoryColor ?? "#5a5059",
-);
 
   return (
     <form action={action} className="space-y-6">
       <ActionStatus state={state} />
+      <input
+  type="hidden"
+  name="accessoryColor"
+  value="#5a5059"
+/>
       <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-white/10 bg-black/25 p-5 has-checked:border-[#ca9aff]/70">
         <input
           className="mt-0.5 size-5 accent-[#a855f7]"
@@ -134,12 +136,6 @@ const [accessoryColor, setAccessoryColor] = useState(
   value={doorColor}
 />
 
-<ColorField
-  label="Accessory & Decor Color"
-  name="accessoryColor"
-  onChange={setAccessoryColor}
-  value={accessoryColor}
-/>
 
         <ColorField
           label="Character Color"

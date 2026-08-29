@@ -76,15 +76,15 @@ const roomFeatureLabels: Record<RoomFeatureKey, string> = {
 const ROOM_ASSETS = {
   base: "/images/modules/base.png",
 
-masks: {
-  walls: "/images/modules/wall.png",
-  floor: "/images/modules/floor.png",
-  couches: "/images/modules/couches.png",
-  bookshelves: "/images/modules/bookshelves.png",
-  tv: "/images/modules/tv.png",
-  doors: "/images/modules/doors.png",
-  accessories: "/images/modules/accessories.png",
-},
+  masks: {
+    walls: "/images/modules/wall.svg",
+    floor: "/images/modules/floor.svg",
+    couches: "/images/modules/couches.svg",
+    bookshelves: "/images/modules/bookshelves.svg",
+    tv: "/images/modules/tv.svg",
+    doors: "/images/modules/doors.svg",
+    accessories: "/images/modules/accessories.svg",
+  },
 } as const;
 
 function safeHex(value: string | null | undefined, fallback: string) {
@@ -198,222 +198,6 @@ function DetailBlock({
   );
 }
 
-function RoomScene({
-  settings,
-  accentColor,
-  theme,
-  displayName,
-  onOpen,
-}: {
-  settings: ProfileRoomSettings;
-  accentColor: string;
-  theme: HouseTheme;
-  displayName: string;
-  onOpen: (feature: RoomFeatureKey) => void;
-}) {
-  const wallColor = safeHex(settings.wallColor, "#262128");
-const floorColor = safeHex(settings.floorColor, "#4a403c");
-const couchColor = safeHex(settings.couchColor, "#4a4048");
-const bookshelfColor = safeHex(settings.bookshelfColor, "#594139");
-const tvColor = safeHex(settings.tvColor, "#262329");
-const doorColor = safeHex(settings.doorColor, "#4a3935");
-const accessoryColor = safeHex(settings.accessoryColor, "#5a5059");
-
-  return (
-    <div
-      aria-label={`${displayName}'s interactive profile room`}
-className="relative aspect-[16/9] overflow-hidden rounded-[2rem] border border-white/15 bg-white/[0.025] shadow-[0_35px_100px_rgba(0,0,0,.28)] backdrop-blur-xl"
-      role="img"
-    >
-{/* 1. FLOOR */}
-<img
-  alt=""
-  aria-hidden="true"
-  className="absolute inset-0 size-full object-contain"
-  src="/images/modules/floor.png"
-/>
-
-<MaskTint
-  color={floorColor}
-  maskUrl={ROOM_ASSETS.masks.floor}
-  opacity={0.55}
-/>
-
-{/* 2. WALL */}
-<img
-  alt=""
-  aria-hidden="true"
-  className="absolute inset-0 size-full object-contain"
-  src="/images/modules/wall.png"
-/>
-
-<MaskTint
-  color={wallColor}
-  maskUrl={ROOM_ASSETS.masks.walls}
-  opacity={0.65}
-/>
-
-{/* 3. DOORS / WINDOWS */}
-<img
-  alt=""
-  aria-hidden="true"
-  className="absolute inset-0 size-full object-contain"
-  src="/images/modules/doors.png"
-/>
-
-<MaskTint
-  color={doorColor}
-  maskUrl={ROOM_ASSETS.masks.doors}
-  opacity={0.5}
-/>
-
-{/* 4. BOOKSHELVES */}
-<img
-  alt=""
-  aria-hidden="true"
-  className="absolute inset-0 size-full object-contain"
-  src="/images/modules/bookshelves.png"
-/>
-
-<MaskTint
-  color={bookshelfColor}
-  maskUrl={ROOM_ASSETS.masks.bookshelves}
-  opacity={0.55}
-/>
-
-{/* 5. TV / CONSOLE */}
-<img
-  alt=""
-  aria-hidden="true"
-  className="absolute inset-0 size-full object-contain"
-  src="/images/modules/tv.png"
-/>
-
-<MaskTint
-  color={tvColor}
-  maskUrl={ROOM_ASSETS.masks.tv}
-  opacity={0.5}
-/>
-
-{/* 6. COUCHES / CHAIRS / TABLE */}
-<img
-  alt=""
-  aria-hidden="true"
-  className="absolute inset-0 size-full object-contain"
-  src="/images/modules/couches.png"
-/>
-
-<MaskTint
-  color={couchColor}
-  maskUrl={ROOM_ASSETS.masks.couches}
-  opacity={0.6}
-/>
-
-{/* 7. ACCESSORIES / DECOR */}
-<img
-  alt=""
-  aria-hidden="true"
-  className="absolute inset-0 size-full object-contain"
-  src="/images/modules/accessories.png"
-/>
-
-<MaskTint
-  color={accessoryColor}
-  maskUrl={ROOM_ASSETS.masks.accessories}
-  opacity={0.45}
-/>
-
-      {/* Viewer-local day/night atmosphere. The candles remain warm and untouched. */}
-      {theme === "day" ? (
-        <>
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 z-[3] bg-[linear-gradient(180deg,rgba(189,225,255,.12),rgba(255,235,188,.05)_46%,rgba(255,255,255,0)_78%)]"
-          />
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute top-[8%] left-[30%] z-[4] h-[53%] w-[26%] rounded-[12%] bg-[#bfe4ff]/14 blur-[18px]"
-          />
-        </>
-      ) : (
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 z-[3] bg-[linear-gradient(180deg,rgba(3,7,18,.08),rgba(8,5,18,.16))]"
-        />
-      )}
-
-
-{/* TV — Music */}
-<Hotspot
-  accentColor={accentColor}
-  label="Open Featured Music"
-  onClick={() => onOpen("music")}
-  style={{ left: "34%", top: "34%" }}
->
-  <Music2 aria-hidden="true" className="size-4" />
-</Hotspot>
-
-{/* Bookshelves — Latest Pick */}
-<Hotspot
-  accentColor={accentColor}
-  label="Open Latest Pick"
-  onClick={() => onOpen("latest")}
-  style={{ left: "35%", top: "16%" }}
->
-  <Sparkles aria-hidden="true" className="size-4" />
-</Hotspot>
-
-{/* Coffee table — Current Signal */}
-<Hotspot
-  accentColor={accentColor}
-  label="Open Current Signal"
-  onClick={() => onOpen("signal")}
-  style={{ left: "53%", top: "52%" }}
->
-  <Radio aria-hidden="true" className="size-4" />
-</Hotspot>
-
-{/* Lounge chair — Current Focus */}
-<Hotspot
-  accentColor={accentColor}
-  label="Open Current Focus"
-  onClick={() => onOpen("focus")}
-  style={{ left: "48%", top: "39%" }}
->
-  <LampDesk aria-hidden="true" className="size-4" />
-</Hotspot>
-
-{/* Wall display — Featured image */}
-<Hotspot
-  accentColor={accentColor}
-  label="Open Featured Profile Image"
-  onClick={() => onOpen("featured")}
-  style={{ left: "27%", top: "29%" }}
->
-  <Images aria-hidden="true" className="size-4" />
-</Hotspot>
-
-<Hotspot
-  accentColor={accentColor}
-  label="Open Social Links"
-  onClick={() => onOpen("socials")}
-  style={{ left: "60%", top: "69%" }}
->
-  <LinkIcon aria-hidden="true" className="size-4" />
-</Hotspot>
-
-{/* Right chair — Friends */}
-<Hotspot
-  accentColor={accentColor}
-  label="Open Friend Spotlight"
-  onClick={() => onOpen("friends")}
-  style={{ left: "69%", top: "55%" }}
->
-  <UsersRound aria-hidden="true" className="size-4" />
-</Hotspot>
-    </div>
-  );
-}
 
 export function ProfileRoom({
   settings,
@@ -452,7 +236,7 @@ export function ProfileRoom({
   isOwner?: boolean;
 }) {
   const [musicArtworkUrl, setMusicArtworkUrl] = useState<string | null>(null);
-  const [view, setView] = useState<"room" | "quick">("quick");
+  const [view, setView] = useState<"room" | "quick">("room");
   const [selectedFeature, setSelectedFeature] = useState<RoomFeatureKey | null>(null);
   const [localTheme, setLocalTheme] = useState<HouseTheme>("day");
   const [themePreference, setThemePreference] = useState<ThemePreference>("auto");
@@ -766,7 +550,6 @@ export function ProfileRoom({
         </div>
       </div>
 
-      {view === "quick" ? (
         <div className="grid gap-5 lg:grid-cols-[minmax(360px,1.05fr)_minmax(0,1.45fr)]">
           <div className="space-y-4">
             <DetailBlock
@@ -1008,16 +791,6 @@ export function ProfileRoom({
             </DetailBlock>
           </div>
         </div>
-      ) : (
-        <RoomScene
-          accentColor={accentColor}
-          displayName={displayName}
-          onOpen={setSelectedFeature}
-          settings={settings}
-          theme={theme}
-        />
-      )}
-
       {isOwner ? (
         <div className="mt-6 flex justify-center">
           <Link

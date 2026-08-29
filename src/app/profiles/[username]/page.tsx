@@ -177,6 +177,12 @@ latestPick={{
             settings={{
               enabled: room?.enabled ?? true,
               wallColor: room?.wall_color ?? "#241039",
+              floorColor: room?.floor_color ?? "#4a403c",
+couchColor: room?.couch_color ?? "#4a4048",
+bookshelfColor: room?.bookshelf_color ?? "#594139",
+tvColor: room?.tv_color ?? "#262329",
+doorColor: room?.door_color ?? "#4a3935",
+accessoryColor: room?.accessory_color ?? "#5a5059",
               lightingTheme: room?.lighting_theme ?? "cosmic",
               currentVibe: room?.current_vibe ?? "chill",
               characterColor: room?.character_color ?? "#f359d2",
