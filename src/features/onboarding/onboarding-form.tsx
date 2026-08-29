@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useRef, useState } from "react";
+import { useActionState, useLayoutEffect, useRef, useState } from "react";
 
 import { ActionStatus } from "@/components/forms/action-status";
 import { SubmitButton } from "@/components/forms/submit-button";
@@ -9,6 +9,12 @@ import { firstFieldError, initialActionState } from "@/features/auth/state";
 import type { Interest, Skill } from "@/types/database";
 
 import { completeOnboardingAction } from "./actions";
+import {
+  captureOnboardingDraft,
+  restoreOnboardingDraft,
+  type OnboardingDraft,
+} from "./onboarding-draft";
+import { onboardingUsernameSchema } from "./schemas";
 
 const steps = [
   {
@@ -40,7 +46,7 @@ const steps = [
   },
   {
     number: "06",
-    title: "You're SIGNAL Profile Is Ready.",
+    title: "Your SIGNAL Profile Is Ready.",
   },
 ] as const;
 
@@ -296,7 +302,9 @@ export function OnboardingForm({
 }) {
   const [currentStep, setCurrentStep] = useState(0);
   const [stepError, setStepError] = useState<string | null>(null);
+  const [usernameError, setUsernameError] = useState<string | undefined>();
   const formRef = useRef<HTMLFormElement>(null);
+  const draftRef = useRef<OnboardingDraft | null>(null);
 
   const [state, action] = useActionState(
     completeOnboardingAction,
@@ -307,6 +315,14 @@ export function OnboardingForm({
   const isFinalStep = currentStep === steps.length - 1;
   const progress = ((currentStep + 1) / steps.length) * 100;
   const activeStep = steps[currentStep] ?? steps[0];
+
+  useLayoutEffect(() => {
+    if (state.status !== "error" || !draftRef.current || !formRef.current) {
+      return;
+    }
+
+    restoreOnboardingDraft(formRef.current, draftRef.current);
+  }, [state]);
 
   function goBack() {
     setCurrentStep((step) => Math.max(0, step - 1));
@@ -325,6 +341,23 @@ export function OnboardingForm({
     if (!currentSection) return;
 
     setStepError(null);
+
+    if (currentStep === 0) {
+      const username = currentSection.querySelector<HTMLInputElement>(
+        'input[name="username"]',
+      );
+      const result = onboardingUsernameSchema.safeParse(username?.value ?? "");
+
+      if (!result.success) {
+        setUsernameError(
+          result.error.issues[0]?.message ?? "Check your handle.",
+        );
+        username?.focus();
+        return;
+      }
+
+      setUsernameError(undefined);
+    }
 
     if (currentStep === 2) {
       const selectedInterests =
@@ -346,9 +379,9 @@ export function OnboardingForm({
         return;
       }
 
-      if (selectedInterests.length > 12) {
+      if (selectedInterests.length > 20) {
         setStepError(
-          `Choose no more than 12 interests. You currently have ${selectedInterests.length} selected.`,
+          `Choose no more than 20 interests. You currently have ${selectedInterests.length} selected.`,
         );
         return;
       }
@@ -407,6 +440,9 @@ export function OnboardingForm({
       action={action}
       aria-label="Complete your SIGNAL profile"
       className="space-y-8"
+      onSubmit={(event) => {
+        draftRef.current = captureOnboardingDraft(event.currentTarget);
+      }}
     >
       <div>
         <div className="flex items-center justify-between gap-4">
@@ -477,12 +513,14 @@ export function OnboardingForm({
           <TextField
             autoCapitalize="none"
             autoComplete="username"
-            error={firstFieldError(state, "username")}
+            error={usernameError ?? firstFieldError(state, "username")}
             hint="Your unique SIGNAL @handle. Use lowercase letters, numbers, and underscores."
             label="Choose Your SIGNAL Handle"
             name="username"
             placeholder="your_name"
-            maxLength={12}
+            maxLength={20}
+            onChange={() => setUsernameError(undefined)}
+            pattern="[a-z0-9](?:[a-z0-9_]*[a-z0-9])?"
             required
           />
 

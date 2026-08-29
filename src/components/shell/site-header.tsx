@@ -1,12 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { CircleUserRound, House, Menu, Settings, X } from "lucide-react";
+import {
+  CircleUserRound,
+  House,
+  LogOut,
+  Menu,
+  Settings,
+  X,
+} from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useState } from "react";
 
 import { ButtonLink } from "@/components/ui/button-link";
 import { Container } from "@/components/ui/container";
+import { signOutAction } from "@/features/auth/actions";
 import { cn } from "@/lib/cn";
 import { createClient } from "@/lib/supabase/client";
 
@@ -150,6 +158,15 @@ export function SiteHeader() {
                   <Settings aria-hidden="true" className="size-4" />
                   Account
                 </ButtonLink>
+                <form action={signOutAction} className="w-full md:w-auto">
+                  <button
+                    className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full border border-neutral-700 px-6 py-3 text-sm font-bold text-white transition hover:border-[#f359d2]/60 hover:bg-white/5 md:w-auto"
+                    type="submit"
+                  >
+                    <LogOut aria-hidden="true" className="size-4" />
+                    Log Out
+                  </button>
+                </form>
               </>
             ) : (
               <ButtonLink

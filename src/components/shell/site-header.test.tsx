@@ -3,6 +3,8 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { SiteHeader } from "./site-header";
 
+const authState = vi.hoisted(() => ({ user: null as { id: string } | null }));
+
 vi.mock("next/navigation", () => ({
   usePathname: () => "/",
 }));
@@ -12,7 +14,7 @@ vi.mock("@/lib/supabase/client", () => ({
     auth: {
       getUser: vi.fn().mockResolvedValue({
         data: {
-          user: null,
+          user: authState.user,
         },
         error: null,
       }),
@@ -29,10 +31,11 @@ vi.mock("@/lib/supabase/client", () => ({
 
 describe("SiteHeader", () => {
   beforeEach(() => {
-    render(<SiteHeader />);
+    authState.user = null;
   });
 
   it("shows the SIGNAL brand when signed out", () => {
+    render(<SiteHeader />);
     expect(
       screen.getByRole("link", {
         name: "SIGNAL powered by FIVE FIFTHS",
@@ -53,6 +56,7 @@ describe("SiteHeader", () => {
   });
 
   it("opens and closes the account menu accessibly", () => {
+    render(<SiteHeader />);
     const openButton = screen.getByRole("button", {
       name: "Open navigation menu",
     });
@@ -84,5 +88,18 @@ describe("SiteHeader", () => {
     fireEvent.click(closeButton);
 
     expect(document.getElementById(menuId!)).not.toBeInTheDocument();
+  });
+
+  it("shows a persistent Log Out action in the signed-in menu", async () => {
+    authState.user = { id: "00000000-0000-4000-8000-000000000001" };
+    render(<SiteHeader />);
+
+    fireEvent.click(
+      await screen.findByRole("button", { name: "Open navigation menu" }),
+    );
+
+    expect(
+      await screen.findByRole("button", { name: "Log Out" }),
+    ).toHaveAttribute("type", "submit");
   });
 });

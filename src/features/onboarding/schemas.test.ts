@@ -36,14 +36,35 @@ describe("onboarding validation", () => {
     }
   });
 
-  it("limits taxonomy selections to twelve", () => {
+  it("accepts 20-character handles and rejects longer handles", () => {
+    expect(
+      onboardingSchema.safeParse({
+        ...validOnboarding,
+        username: "a1234567890123456789",
+      }).success,
+    ).toBe(true);
+    expect(
+      onboardingSchema.safeParse({
+        ...validOnboarding,
+        username: "a12345678901234567890",
+      }).success,
+    ).toBe(false);
+  });
+
+  it("allows twenty interests but not twenty-one", () => {
     const interestIds = Array.from(
-      { length: 13 },
+      { length: 20 },
       (_, index) =>
         `aaaaaaaa-aaaa-4aaa-8aaa-${index.toString().padStart(12, "0")}`,
     );
     expect(
       onboardingSchema.safeParse({ ...validOnboarding, interestIds }).success,
+    ).toBe(true);
+    expect(
+      onboardingSchema.safeParse({
+        ...validOnboarding,
+        interestIds: [...interestIds, "aaaaaaaa-aaaa-4aaa-8aaa-000000000020"],
+      }).success,
     ).toBe(false);
   });
 });

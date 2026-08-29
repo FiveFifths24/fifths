@@ -18,7 +18,7 @@ export const profileSettingsSchema = z
       .trim()
       .toLowerCase()
       .min(3, "Use at least 3 characters.")
-      .max(30, "Use no more than 30 characters.")
+      .max(20, "Use no more than 20 characters.")
       .regex(
         /^[a-z0-9](?:[a-z0-9_]*[a-z0-9])?$/,
         "Use lowercase letters, numbers, and underscores only.",

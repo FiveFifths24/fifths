@@ -3,7 +3,7 @@ import { z } from "zod";
 const interestSelection = z
   .array(z.uuid())
   .min(1, "Choose at least one interest.")
-  .max(12, "Choose no more than 12 interests.");
+  .max(20, "Choose no more than 20 interests.");
 
 const skillSelection = z
   .array(z.uuid())
@@ -23,17 +23,19 @@ const checkbox = z.preprocess(
   z.boolean(),
 );
 
+export const onboardingUsernameSchema = z
+  .string()
+  .trim()
+  .toLowerCase()
+  .min(3, "Use at least 3 characters.")
+  .max(20, "Use no more than 20 characters.")
+  .regex(
+    /^[a-z0-9](?:[a-z0-9_]*[a-z0-9])?$/,
+    "Use lowercase letters, numbers, and underscores only.",
+  );
+
 export const onboardingSchema = z.object({
-  username: z
-    .string()
-    .trim()
-    .toLowerCase()
-    .min(3, "Use at least 3 characters.")
-    .max(12, "Use no more than 12 characters.")
-    .regex(
-      /^[a-z0-9](?:[a-z0-9_]*[a-z0-9])?$/,
-      "Use lowercase letters, numbers, and underscores only.",
-    ),
+  username: onboardingUsernameSchema,
 
   displayName: z
     .string()

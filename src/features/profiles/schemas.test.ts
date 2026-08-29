@@ -40,6 +40,46 @@ describe("profile settings schema", () => {
     ).toBe(true);
   });
 
+  it("limits SIGNAL handles to twenty characters", () => {
+    const base = {
+      username: "a1234567890123456789",
+      displayName: "Seven",
+      bio: "",
+      mood: "",
+      visibility: "members",
+      discoverable: true,
+      accentColor: "#ff3cac",
+      landscapeImageFit: "cover",
+      landscapeImagePositionX: 50,
+      landscapeImagePositionY: 50,
+      landscapeImageZoom: 100,
+      backgroundImageFit: "cover",
+      backgroundImagePositionX: 50,
+      backgroundImagePositionY: 50,
+      backgroundImageZoom: 100,
+      spotlightTitle: "",
+      spotlightDescription: "",
+      spotlightUrl: "",
+      viewMyLabel: "",
+      viewMyUrl: "",
+      profileSongTitle: "",
+      profileSongArtist: "",
+      profileSongUrl: "",
+      latestPickCategory: "",
+      latestPickTitle: "",
+      latestPickNote: "",
+      latestPickUrl: "",
+    };
+
+    expect(profileSettingsSchema.safeParse(base).success).toBe(true);
+    expect(
+      profileSettingsSchema.safeParse({
+        ...base,
+        username: "a12345678901234567890",
+      }).success,
+    ).toBe(false);
+  });
+
   it("rejects animated-profile-era unsafe inputs and oversized bios", () => {
     expect(
       profileSettingsSchema.safeParse({

@@ -116,7 +116,7 @@ export function ProfileSettingsForm({
             className={`${inputClass} read-only:cursor-not-allowed read-only:opacity-55`}
             defaultValue={profile.username}
             id="profile-username"
-            maxLength={30}
+            maxLength={20}
             minLength={3}
             name="username"
             pattern="[a-z0-9](?:[a-z0-9_]*[a-z0-9])?"
