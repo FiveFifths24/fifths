@@ -46,37 +46,44 @@ export function ProfileSoundtrack({
   const artist = song.artist ?? metadata?.artist;
   const artworkUrl = metadata?.artworkUrl;
 
-  return (
-    <div className="mt-5 flex items-center gap-5">
-      <div
-        className="flex size-20 shrink-0 items-center justify-center rounded-2xl border bg-[radial-gradient(circle_at_30%_20%,rgba(243,89,210,.5),transparent_40%),linear-gradient(145deg,#421070,#08080f)] bg-cover bg-center"
-        style={{
-          borderColor: accentColor,
-          ...(artworkUrl ? { backgroundImage: `url(${artworkUrl})` } : {}),
-        }}
-      >
-        {artworkUrl ? null : (
-          <Music2 aria-hidden="true" className="size-8 text-white" />
-        )}
-      </div>
-      <div className="min-w-0">
-        <h3 className="truncate text-xl font-black text-white">{title}</h3>
-        {artist ? (
-          <p className="mt-1 line-clamp-2 text-white/55">{artist}</p>
-        ) : null}
-        {song.url ? (
-          <a
-            className="mt-3 inline-flex items-center gap-2 text-sm font-bold"
-            href={song.url}
-            rel="noopener noreferrer"
-            style={{ color: accentColor }}
-            target="_blank"
-          >
-            <Headphones aria-hidden="true" className="size-4" />
-            {actionLabel(song.url)}
-          </a>
-        ) : null}
-      </div>
+return (
+  <div
+    className="relative mt-5 min-h-[15rem] overflow-hidden rounded-2xl border bg-[radial-gradient(circle_at_30%_20%,rgba(243,89,210,.35),transparent_40%),linear-gradient(145deg,#421070,#08080f)] bg-cover bg-center"
+    style={{
+      borderColor: accentColor,
+      ...(artworkUrl ? { backgroundImage: `url(${artworkUrl})` } : {}),
+    }}
+  >
+    <div className="absolute inset-0 bg-black/65" />
+
+    <div className="relative z-10 flex min-h-[15rem] flex-col items-center justify-center px-6 py-8 text-center">
+      {!artworkUrl ? (
+        <Music2 aria-hidden="true" className="mb-4 size-8 text-white/80" />
+      ) : null}
+
+      <h3 className="max-w-full text-xl font-black text-white">
+        {title}
+      </h3>
+
+      {artist ? (
+        <p className="mt-2 line-clamp-2 text-white/65">
+          {artist}
+        </p>
+      ) : null}
+
+      {song.url ? (
+        <a
+          className="mt-5 inline-flex items-center justify-center gap-2 text-sm font-bold"
+          href={song.url}
+          rel="noopener noreferrer"
+          style={{ color: accentColor }}
+          target="_blank"
+        >
+          <Headphones aria-hidden="true" className="size-4" />
+          {actionLabel(song.url)}
+        </a>
+      ) : null}
     </div>
-  );
+  </div>
+);
 }

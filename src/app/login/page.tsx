@@ -25,7 +25,7 @@ export default async function LoginPage({
             className="font-bold text-white underline decoration-neutral-600 underline-offset-4"
             href="/signup"
           >
-            Create an account
+            Create An Account
           </Link>
         </>
       }

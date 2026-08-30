@@ -256,7 +256,7 @@ export default async function RealmApplicationsPage({
           </div>
         ) : (
           <div className="mt-7">
-            <PreviewState title="No active campaigns">
+            <PreviewState title="No Active Campaigns">
               Accepted campaign participation will appear here.
             </PreviewState>
           </div>

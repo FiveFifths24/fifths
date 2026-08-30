@@ -29,7 +29,7 @@ export function CampaignApplicationForm({
           className="mb-2 block text-sm font-bold text-neutral-100"
           htmlFor="motivation"
         >
-          Why this campaign fits
+          Why This Campaign Fits
         </label>
         <textarea
           aria-describedby="motivation-description"
@@ -57,7 +57,7 @@ export function CampaignApplicationForm({
           className="mb-2 block text-sm font-bold text-neutral-100"
           htmlFor="availability"
         >
-          Broad availability
+          Broad Availability
         </label>
         <textarea
           aria-describedby="availability-description"
@@ -87,7 +87,7 @@ export function CampaignApplicationForm({
           className="mb-2 block text-sm font-bold text-neutral-100"
           htmlFor="experienceLevel"
         >
-          Experience comfort
+          Experience Comfort
         </label>
         <select
           className={control}
@@ -96,7 +96,7 @@ export function CampaignApplicationForm({
           name="experienceLevel"
           required
         >
-          <option value="new">New and learning</option>
+          <option value="new">New & Learning</option>
           <option value="comfortable">Comfortable</option>
           <option value="experienced">Experienced</option>
         </select>
@@ -114,7 +114,7 @@ export function CampaignApplicationForm({
         </span>
       </label>
       <SubmitButton pendingLabel="Submitting application…">
-        Submit private application
+        Submit Private Application
       </SubmitButton>
     </form>
   );

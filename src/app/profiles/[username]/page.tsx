@@ -31,22 +31,43 @@ export default async function PublicProfilePage({
   const profile = data?.[0];
   if (!profile) notFound();
 
-  const [avatarUrl, landscapeUrl, experienceResult, featuredResult] =
-    await Promise.all([
-      signProfileMedia(supabase, profile.avatar_url),
+const [
+  avatarUrl,
+  landscapeUrl,
+  experienceResult,
+  featuredResult,
+  currentFieldsResult,
+] = await Promise.all([
+        signProfileMedia(supabase, profile.avatar_url),
       signProfileMedia(supabase, profile.cover_image_url),
       supabase.rpc("get_profile_experience", { p_user_id: profile.id }),
-      userData.user
-        ? supabase.rpc("get_featured_connections", { p_owner_id: profile.id })
-        : Promise.resolve({ data: [] }),
-    ]);
+userData.user
+  ? supabase.rpc("get_featured_connections", { p_owner_id: profile.id })
+  : Promise.resolve({ data: [] }),
+
+supabase
+  .from("profiles")
+.select(
+  "current_game, current_game_description, current_game_url, current_reading, current_reading_description, current_reading_url, current_food, current_food_description, current_food_url, featured_profile_image_2_url",
+)
+  .eq("id", profile.id)
+  .maybeSingle(),
+]);
   const experience = experienceResult.data?.[0];
   if (!experience) notFound();
   const accentColor = experience.profile_accent_color ?? "#a855f7";
-  const [backgroundUrl, featuredProfileImageUrl] = await Promise.all([
-    signProfileMedia(supabase, experience.background_image_url),
-    signProfileMedia(supabase, experience.featured_profile_image_url),
-  ]);
+const [
+  backgroundUrl,
+  featuredProfileImageUrl,
+  featuredProfileImageUrl2,
+] = await Promise.all([
+  signProfileMedia(supabase, experience.background_image_url),
+  signProfileMedia(supabase, experience.featured_profile_image_url),
+  signProfileMedia(
+    supabase,
+    currentFieldsResult.data?.featured_profile_image_2_url ?? null,
+  ),
+]);
   const featuredConnections = await Promise.all(
     (featuredResult.data ?? []).map(async (connection) => ({
       id: connection.id,
@@ -95,6 +116,20 @@ export default async function PublicProfilePage({
             spotlightTitle: experience.spotlight_title,
             spotlightDescription: experience.spotlight_description,
             spotlightUrl: experience.spotlight_url,
+currentGame: currentFieldsResult.data?.current_game ?? null,
+currentGameDescription:
+  currentFieldsResult.data?.current_game_description ?? null,
+currentGameUrl: currentFieldsResult.data?.current_game_url ?? null,
+
+currentReading: currentFieldsResult.data?.current_reading ?? null,
+currentReadingDescription:
+  currentFieldsResult.data?.current_reading_description ?? null,
+currentReadingUrl: currentFieldsResult.data?.current_reading_url ?? null,
+
+currentFood: currentFieldsResult.data?.current_food ?? null,
+currentFoodDescription:
+  currentFieldsResult.data?.current_food_description ?? null,
+currentFoodUrl: currentFieldsResult.data?.current_food_url ?? null,
             viewMyLabel: experience.view_my_label,
             viewMyUrl: experience.view_my_url,
             songTitle: experience.profile_song_title,
@@ -109,9 +144,10 @@ export default async function PublicProfilePage({
             landscapePositionY: experience.landscape_image_position_y,
             landscapeZoom: experience.landscape_image_zoom,
           }}
-          featuredConnections={featuredConnections}
-          featuredProfileImageUrl={featuredProfileImageUrl}
-          isOwner={false}
+featuredConnections={featuredConnections}
+featuredProfileImageUrl={featuredProfileImageUrl}
+featuredProfileImageUrl2={featuredProfileImageUrl2}
+isOwner={false}
           profile={{
             id: profile.id,
             username: profile.username,

@@ -9,7 +9,7 @@ const tabs = [
   },
   {
     href: "/account/safety",
-    label: "Safety & connections",
+    label: "Safety & Connections",
     icon: ShieldCheck,
   },
 ] as const;

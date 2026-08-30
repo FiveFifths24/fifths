@@ -15,6 +15,17 @@ const experience = {
   spotlightTitle: "Five Fifths eHub",
   spotlightDescription: "Currently building.",
   spotlightUrl: "https://example.com/focus",
+currentGame: "World of Warcraft",
+currentGameDescription: "Running around Azeroth again.",
+currentGameUrl: "https://example.com/game",
+
+currentReading: "A great article",
+currentReadingDescription: "Worth the read.",
+currentReadingUrl: "https://example.com/reading",
+
+currentFood: "Sushi",
+currentFoodDescription: "Currently obsessed.",
+currentFoodUrl: "https://example.com/food",
   viewMyLabel: "Latest Video",
   viewMyUrl: "https://example.com/video",
   songTitle: "A Song",
@@ -58,7 +69,7 @@ describe("ProfileLaunchView", () => {
       screen.getByRole("heading", { name: "Top Friends" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { name: "Profile Soundtrack" }),
+      screen.getByRole("heading", { name: "Soundtrack" }),
     ).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /Latest Video/ })).toHaveAttribute(
       "href",

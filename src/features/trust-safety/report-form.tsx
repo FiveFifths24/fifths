@@ -118,7 +118,7 @@ export function ReportForm({
             className="mb-2 block text-sm font-bold text-white"
             htmlFor="report-target"
           >
-            Concern about
+            Concern About
           </label>
           <select
             className={selectClass}
@@ -182,7 +182,7 @@ export function ReportForm({
         name="contextUrl"
       />
       <SubmitButton pendingLabel="Submitting report…" variant="danger">
-        Submit private report
+        Submit Private Report
       </SubmitButton>
     </form>
   );

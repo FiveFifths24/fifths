@@ -9,6 +9,51 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      direct_conversations: {
+  Row: {
+    id: string;
+    user_id_a: string;
+    user_id_b: string;
+    created_at: string;
+    updated_at: string;
+  };
+  Insert: {
+    id?: string;
+    user_id_a: string;
+    user_id_b: string;
+    created_at?: string;
+    updated_at?: string;
+  };
+  Update: Partial<
+    Database["public"]["Tables"]["direct_conversations"]["Insert"]
+  >;
+  Relationships: [];
+};
+
+direct_messages: {
+  Row: {
+    id: string;
+    conversation_id: string;
+    sender_id: string;
+    body: string;
+    created_at: string;
+    edited_at: string | null;
+    deleted_at: string | null;
+  };
+  Insert: {
+    id?: string;
+    conversation_id: string;
+    sender_id: string;
+    body: string;
+    created_at?: string;
+    edited_at?: string | null;
+    deleted_at?: string | null;
+  };
+  Update: Partial<
+    Database["public"]["Tables"]["direct_messages"]["Insert"]
+  >;
+  Relationships: [];
+};
       profiles: {
         Row: {
           id: string;
@@ -34,10 +79,23 @@ export type Database = {
           background_image_position_y: number;
           background_image_zoom: number;
           profile_accent_color: string;
-          spotlight_title: string | null;
-          spotlight_description: string | null;
-          spotlight_url: string | null;
-          mood: string | null;
+spotlight_title: string | null;
+spotlight_description: string | null;
+spotlight_url: string | null;
+
+current_game: string | null;
+current_reading: string | null;
+current_food: string | null;
+current_game_description: string | null;
+current_game_url: string | null;
+
+current_reading_description: string | null;
+current_reading_url: string | null;
+
+current_food_description: string | null;
+current_food_url: string | null;
+
+mood: string | null;
           last_seen_at: string | null;
           view_my_label: string | null;
           view_my_url: string | null;
@@ -53,6 +111,7 @@ export type Database = {
           created_at: string;
           updated_at: string;
           featured_profile_image_url: string | null;
+          featured_profile_image_2_url: string | null;
           latest_pick_category: string | null;
           latest_pick_note: string | null;
           latest_pick_title: string | null;
@@ -82,10 +141,15 @@ export type Database = {
           background_image_position_y?: number;
           background_image_zoom?: number;
           profile_accent_color?: string;
-          spotlight_title?: string | null;
-          spotlight_description?: string | null;
-          spotlight_url?: string | null;
-          mood?: string | null;
+spotlight_title?: string | null;
+spotlight_description?: string | null;
+spotlight_url?: string | null;
+
+current_game?: string | null;
+current_reading?: string | null;
+current_food?: string | null;
+
+mood?: string | null;
           last_seen_at?: string | null;
           view_my_label?: string | null;
           view_my_url?: string | null;
@@ -101,6 +165,7 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
           featured_profile_image_url?: string | null;
+          featured_profile_image_2_url?: string | null;
           latest_pick_category?: string | null;
           latest_pick_note?: string | null;
           latest_pick_title?: string | null;
@@ -1025,6 +1090,20 @@ export type Database = {
         };
         Returns: undefined;
       };
+      get_or_create_direct_conversation: {
+  Args: {
+    p_target_user_id: string;
+  };
+  Returns: string;
+};
+
+send_direct_message: {
+  Args: {
+    p_conversation_id: string;
+    p_body: string;
+  };
+  Returns: string;
+};
       has_role: {
         Args: { requested_role: Database["public"]["Enums"]["app_role"] };
         Returns: boolean;
@@ -1610,6 +1689,29 @@ export type Database = {
         Args: { p_featured_profile_image_url: string };
         Returns: undefined;
       };
+set_profile_current_fields: {
+  Args: {
+    p_current_game: string | null;
+    p_current_game_description: string | null;
+    p_current_game_url: string | null;
+
+    p_current_reading: string | null;
+    p_current_reading_description: string | null;
+    p_current_reading_url: string | null;
+
+    p_current_food: string | null;
+    p_current_food_description: string | null;
+    p_current_food_url: string | null;
+  };
+  Returns: undefined;
+};
+
+set_second_featured_profile_image: {
+  Args: {
+    p_featured_profile_image_2_url: string;
+  };
+  Returns: undefined;
+};
       get_public_profile: {
         Args: { p_username: string };
         Returns: Array<{

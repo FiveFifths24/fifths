@@ -67,7 +67,7 @@ export default async function CircleMembershipsPage({
   if (membershipResult.error) {
     return (
       <StatusMessage tone="error">
-        Circle memberships could not load. Confirm the Phase 5 migration.
+        Circle memberships could not load. 
       </StatusMessage>
     );
   }
@@ -126,13 +126,13 @@ export default async function CircleMembershipsPage({
       ====================================================== */}
       {messages?.invitation === "accepted" ? (
         <StatusMessage className="mt-8" tone="success">
-          Circle invitation accepted.
+          Circle Invitation Accepted.
         </StatusMessage>
       ) : null}
 
       {messages?.invitation === "declined" ? (
         <StatusMessage className="mt-8" tone="success">
-          Circle invitation declined.
+          Circle Invitation Declined.
         </StatusMessage>
       ) : null}
 
@@ -215,7 +215,7 @@ export default async function CircleMembershipsPage({
 
                           <div>
                             <p className="text-sm font-bold text-white">
-                              You&apos;re invited.
+                              You&apos;re Invited.
                             </p>
 
                             <p className="mt-1 text-sm leading-6 text-white/55">
@@ -246,7 +246,7 @@ export default async function CircleMembershipsPage({
                               className={`${buttonClass} w-full border-0 bg-gradient-to-r from-[#6c14ce] via-[#a855f7] to-[#ee54a7] text-white shadow-lg shadow-[#6c14ce]/20 hover:brightness-110`}
                               type="submit"
                             >
-                              Accept invitation
+                              Accept Invitation
                             </button>
                           </form>
 
@@ -278,7 +278,7 @@ export default async function CircleMembershipsPage({
                     ) : membership.status === "requested" ? (
                       <div className="mt-7 border-t border-[#ee54a7]/15 pt-6">
                         <p className="text-sm font-bold text-white/80">
-                          Membership requested
+                          Membership Requested
                         </p>
 
                         <p className="mt-1 text-sm leading-6 text-white/55">
@@ -367,7 +367,7 @@ export default async function CircleMembershipsPage({
 
         <div>
           <p className="font-bold text-white/80">
-            Community membership stays intentional.
+            Community Membership Stays Intentional.
           </p>
 
           <p className="mt-1">

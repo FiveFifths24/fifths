@@ -33,10 +33,23 @@ export type ProfileLaunchExperience = {
   followerCount: number;
   followingCount: number;
   profileViewCount: number;
-  spotlightTitle: string | null;
-  spotlightDescription: string | null;
-  spotlightUrl: string | null;
-  viewMyLabel: string | null;
+spotlightTitle: string | null;
+spotlightDescription: string | null;
+spotlightUrl: string | null;
+
+currentGame: string | null;
+currentGameDescription: string | null;
+currentGameUrl: string | null;
+
+currentReading: string | null;
+currentReadingDescription: string | null;
+currentReadingUrl: string | null;
+
+currentFood: string | null;
+currentFoodDescription: string | null;
+currentFoodUrl: string | null;
+
+viewMyLabel: string | null;
   viewMyUrl: string | null;
   songTitle: string | null;
   songArtist: string | null;
@@ -74,12 +87,12 @@ function Module({
       className={`rounded-[1.75rem] border bg-black/65 p-6 shadow-[0_22px_70px_rgba(0,0,0,.34)] backdrop-blur-md sm:p-8 ${className}`}
       style={{ borderColor: `${accentColor}99` }}
     >
-      <h2
-        className="text-xs font-black tracking-[0.22em] uppercase"
-        style={{ color: accentColor }}
-      >
-        {title}
-      </h2>
+<h2
+  className="text-center text-xs font-black tracking-[0.22em] uppercase"
+  style={{ color: accentColor }}
+>
+  {title}
+</h2>
       {children}
     </section>
   );
@@ -93,8 +106,9 @@ export function ProfileLaunchView({
   headerAction,
   contactActions,
   safetySection,
-  featuredProfileImageUrl,
-  trackView = false,
+featuredProfileImageUrl,
+featuredProfileImageUrl2,
+trackView = false,
 }: {
   profile: {
     id: string;
@@ -111,17 +125,25 @@ export function ProfileLaunchView({
   headerAction?: ReactNode;
   contactActions?: ReactNode;
   safetySection?: ReactNode;
-  featuredProfileImageUrl?: string | null;
-  trackView?: boolean;
+featuredProfileImageUrl?: string | null;
+featuredProfileImageUrl2?: string | null;
+trackView?: boolean;
 }) {
   const accentStyle = {
     borderColor: experience.accentColor,
   } satisfies CSSProperties;
   const presence = formatPresence(experience.lastSeenAt);
   const aboutVisible = Boolean(profile.bio) || isOwner;
-  const focusVisible = Boolean(
-    experience.spotlightTitle || experience.spotlightDescription,
-  );
+const currentlyVisible = Boolean(
+  experience.spotlightTitle ||
+    experience.spotlightDescription ||
+    experience.currentGame ||
+    experience.currentGameDescription ||
+    experience.currentReading ||
+    experience.currentReadingDescription ||
+    experience.currentFood ||
+    experience.currentFoodDescription,
+);
   const musicVisible = Boolean(
     experience.songTitle || experience.songArtist || experience.songUrl,
   );
@@ -236,12 +258,12 @@ export function ProfileLaunchView({
       </div>
 
       {experience.statusText ? (
-        <Module
-          accentColor={experience.accentColor}
-          className="mt-12 sm:ml-auto sm:max-w-4xl"
-          title="Current Signal"
-        >
-          <div className="mt-4 flex gap-3">
+<Module
+  accentColor={experience.accentColor}
+  className="mx-auto mt-12 max-w-4xl text-center"
+  title="Current Signal"
+>
+            <div className="mt-4 flex items-center justify-center gap-3">
             <Radio
               aria-hidden="true"
               className="mt-1 size-5 shrink-0"
@@ -252,205 +274,392 @@ export function ProfileLaunchView({
             </p>
           </div>
           {isOwner && experience.statusExpiresAt ? (
-            <p className="mt-3 text-right text-xs text-white/40">
+            <p className="mt-3 text-center text-xs text-white/40">
               <ProfileStatusCountdown expiresAt={experience.statusExpiresAt} />
             </p>
           ) : null}
         </Module>
       ) : null}
 
-      {aboutVisible ? (
-        <Module
-          accentColor={experience.accentColor}
-          className="mx-auto mt-14 max-w-4xl text-center"
-          title="About Me"
-        >
-          {profile.bio ? (
-            <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-white/80">
-              {profile.bio}
-            </p>
-          ) : (
-            <p className="mt-5 text-white/50">
-              Add an About Me so visitors can get to know you.
-            </p>
-          )}
-        </Module>
-      ) : null}
-
-      {focusVisible ? (
-        <Module
-          accentColor={experience.accentColor}
-          className="mt-14 max-w-3xl"
-          title="Current Focus"
-        >
-          <h3 className="mt-5 text-2xl font-black text-white">
-            {experience.spotlightTitle ?? "What I’m working on"}
-          </h3>
-          {experience.spotlightDescription ? (
-            <p className="mt-3 max-w-2xl leading-7 text-white/65">
-              {experience.spotlightDescription}
-            </p>
-          ) : null}
-          {experience.spotlightUrl ? (
-            <a
-              className="mt-5 inline-flex items-center gap-2 font-bold"
-              href={experience.spotlightUrl}
-              rel="noopener noreferrer"
-              style={{ color: experience.accentColor }}
-              target="_blank"
-            >
-              Take a look <ArrowUpRight aria-hidden="true" className="size-4" />
-            </a>
-          ) : null}
-        </Module>
-      ) : null}
-
-      {featuredProfileImageUrl || latestVisible ? (
-        <div className="mt-14 grid items-start gap-8 lg:grid-cols-2">
-          {featuredProfileImageUrl ? (
-            <Module accentColor={experience.accentColor} title="Featured Photo">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                alt={`${profile.displayName}'s featured profile image`}
-                className="mt-5 max-h-[34rem] w-full rounded-2xl object-contain"
-                src={featuredProfileImageUrl}
-              />
-            </Module>
-          ) : null}
-          {latestVisible ? (
-            <Module
-              accentColor={experience.accentColor}
-              title={experience.latestPickCategory ?? "Latest Pick"}
-            >
-              <h3 className="mt-5 text-2xl font-black text-white">
-                {experience.latestPickTitle ?? "Worth checking out"}
-              </h3>
-              {experience.latestPickNote ? (
-                <p className="mt-3 leading-7 text-white/65">
-                  {experience.latestPickNote}
-                </p>
-              ) : null}
-              {experience.latestPickUrl ? (
-                <a
-                  className="mt-5 inline-flex items-center gap-2 font-bold"
-                  href={experience.latestPickUrl}
-                  rel="noopener noreferrer"
-                  style={{ color: experience.accentColor }}
-                  target="_blank"
-                >
-                  Open pick{" "}
-                  <ArrowUpRight aria-hidden="true" className="size-4" />
-                </a>
-              ) : null}
-            </Module>
-          ) : null}
-        </div>
-      ) : null}
-
-      {featuredConnections.length || isOwner ? (
-        <Module
-          accentColor={experience.accentColor}
-          className="mt-14"
-          title="Top Friends"
-        >
-          {featuredConnections.length ? (
-            <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-8">
-              {featuredConnections.map((connection) => (
-                <Link
-                  className="group min-w-0 text-center"
-                  href={`/home/profiles/${connection.username}`}
-                  key={connection.id}
-                >
-                  <span
-                    className="mx-auto block size-16 rounded-full border-2 bg-gradient-to-br from-[#992bff] to-[#f359d2] bg-cover bg-center transition group-hover:-translate-y-1"
-                    style={{
-                      borderColor: experience.accentColor,
-                      ...(connection.avatarUrl
-                        ? {
-                            backgroundImage: `url(${JSON.stringify(connection.avatarUrl).slice(1, -1)})`,
-                          }
-                        : {}),
-                    }}
-                  />
-                  <span className="mt-2 block truncate text-sm font-bold text-white">
-                    {connection.displayName}
-                  </span>
-                </Link>
-              ))}
-            </div>
-          ) : (
-            <p className="mt-5 text-white/50">
-              Choose the friends you want to feature here.
-            </p>
-          )}
-        </Module>
-      ) : null}
-
-      {musicVisible || viewMyVisible ? (
-        <div className="mt-14 grid items-start gap-8 lg:grid-cols-[1.25fr_.75fr]">
-          {musicVisible ? (
-            <Module
-              accentColor={experience.accentColor}
-              title="Profile Soundtrack"
-            >
-              <ProfileSoundtrack
-                accentColor={experience.accentColor}
-                song={{
-                  title: experience.songTitle,
-                  artist: experience.songArtist,
-                  url: experience.songUrl,
-                }}
-              />
-            </Module>
-          ) : null}
-          {viewMyVisible ? (
-            <Module accentColor={experience.accentColor} title="View My">
-              <a
-                className="mt-5 flex min-h-20 items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/[0.035] px-5 text-xl font-black text-white transition hover:bg-white/[0.07]"
-                href={experience.viewMyUrl!}
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                {experience.viewMyLabel}
-                <ArrowUpRight
-                  aria-hidden="true"
-                  className="size-5"
-                  style={{ color: experience.accentColor }}
-                />
-              </a>
-            </Module>
-          ) : null}
-        </div>
-      ) : null}
-
+{aboutVisible || musicVisible ? (
+  <div className="mt-14 grid items-stretch gap-6 lg:grid-cols-[7fr_3fr]">
+    {aboutVisible ? (
       <Module
         accentColor={experience.accentColor}
-        className="mt-14 sm:ml-auto sm:max-w-4xl"
-        title="Contact Me"
+        className="h-full text-center"
+        title="About Me"
       >
-        <div className="mt-5">
-          {isOwner ? (
-            <div className="flex flex-wrap items-center gap-3">
-              <ButtonLink href="/account">Customize Profile</ButtonLink>
-              <span className="text-sm text-white/45">
-                This is how visitors can connect with you.
-              </span>
-            </div>
-          ) : (
-            contactActions
-          )}
-        </div>
-        <p className="mt-5 flex items-center gap-2 text-xs text-white/35">
-          <CalendarDays aria-hidden="true" className="size-4" />
-          Joined SIGNAL{" "}
-          {new Intl.DateTimeFormat("en", {
-            month: "long",
-            year: "numeric",
-          }).format(new Date(profile.createdAt))}
-        </p>
+        {profile.bio ? (
+          <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-white/80">
+            {profile.bio}
+          </p>
+        ) : (
+          <p className="mt-5 text-white/50">
+            Add an About Me so visitors can get to know you.
+          </p>
+        )}
       </Module>
+    ) : null}
+
+    {musicVisible ? (
+      <Module
+        accentColor={experience.accentColor}
+        className="h-full"
+        title="Soundtrack"
+      >
+        <ProfileSoundtrack
+          accentColor={experience.accentColor}
+          song={{
+            title: experience.songTitle,
+            artist: experience.songArtist,
+            url: experience.songUrl,
+          }}
+        />
+      </Module>
+    ) : null}
+  </div>
+) : null}
+
+      {featuredProfileImageUrl || featuredProfileImageUrl2 ? (
+  <div className="mt-14 grid items-start gap-8 lg:grid-cols-2">
+    {featuredProfileImageUrl ? (
+      <Module
+        accentColor={experience.accentColor}
+        title="Featured Photo"
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          alt={`${profile.displayName}'s first featured profile image`}
+          className="mt-5 h-[34rem] w-full rounded-2xl object-cover"
+          src={featuredProfileImageUrl}
+        />
+      </Module>
+    ) : null}
+
+    {featuredProfileImageUrl2 ? (
+      <Module
+        accentColor={experience.accentColor}
+        title="Featured Photo"
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          alt={`${profile.displayName}'s second featured profile image`}
+          className="mt-5 h-[34rem] w-full rounded-2xl object-cover"
+          src={featuredProfileImageUrl2}
+        />
+      </Module>
+    ) : null}
+  </div>
+) : null}
+
+{currentlyVisible ? (
+  <Module
+    accentColor={experience.accentColor}
+    className="mt-14 text-center"
+    title="Currently"
+  >
+    <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-5">
+        <p
+          className="text-[0.68rem] font-black tracking-[0.2em] uppercase"
+          style={{ color: experience.accentColor }}
+        >
+          Focus
+        </p>
+
+        <h3 className="mt-3 text-lg font-black text-white">
+          {experience.spotlightTitle ?? "Nothing shared yet"}
+        </h3>
+
+        {experience.spotlightDescription ? (
+          <p className="mt-2 text-sm leading-6 text-white/50">
+            {experience.spotlightDescription}
+          </p>
+        ) : null}
+
+        {experience.spotlightUrl ? (
+          <a
+            className="mt-4 inline-flex items-center gap-2 text-sm font-bold"
+            href={experience.spotlightUrl}
+            rel="noopener noreferrer"
+            style={{ color: experience.accentColor }}
+            target="_blank"
+          >
+            See What I'm On
+            <ArrowUpRight aria-hidden="true" className="size-4" />
+          </a>
+        ) : null}
+      </div>
+
+      <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-5">
+        <p
+          className="text-[0.68rem] font-black tracking-[0.2em] uppercase"
+          style={{ color: experience.accentColor }}
+        >
+          Game
+        </p>
+
+        <h3 className="mt-3 text-lg font-black text-white">
+          {experience.currentGame ?? "Nothing shared yet"}
+        </h3>
+
+        {experience.currentGameDescription ? (
+          <p className="mt-2 text-sm leading-6 text-white/50">
+            {experience.currentGameDescription}
+          </p>
+        ) : null}
+
+        {experience.currentGameUrl ? (
+          <a
+            className="mt-4 inline-flex items-center gap-2 text-sm font-bold"
+            href={experience.currentGameUrl}
+            rel="noopener noreferrer"
+            style={{ color: experience.accentColor }}
+            target="_blank"
+          >
+            Check It Out
+            <ArrowUpRight aria-hidden="true" className="size-4" />
+          </a>
+        ) : null}
+      </div>
+
+      <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-5">
+        <p
+          className="text-[0.68rem] font-black tracking-[0.2em] uppercase"
+          style={{ color: experience.accentColor }}
+        >
+          Reading
+        </p>
+
+        <h3 className="mt-3 text-lg font-black text-white">
+          {experience.currentReading ?? "Nothing shared yet"}
+        </h3>
+
+        {experience.currentReadingDescription ? (
+          <p className="mt-2 text-sm leading-6 text-white/50">
+            {experience.currentReadingDescription}
+          </p>
+        ) : null}
+
+        {experience.currentReadingUrl ? (
+          <a
+            className="mt-4 inline-flex items-center gap-2 text-sm font-bold"
+            href={experience.currentReadingUrl}
+            rel="noopener noreferrer"
+            style={{ color: experience.accentColor }}
+            target="_blank"
+          >
+            Read With Me
+            <ArrowUpRight aria-hidden="true" className="size-4" />
+          </a>
+        ) : null}
+      </div>
+
+      <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-5">
+        <p
+          className="text-[0.68rem] font-black tracking-[0.2em] uppercase"
+          style={{ color: experience.accentColor }}
+        >
+          Food
+        </p>
+
+        <h3 className="mt-3 text-lg font-black text-white">
+          {experience.currentFood ?? "Nothing shared yet"}
+        </h3>
+
+        {experience.currentFoodDescription ? (
+          <p className="mt-2 text-sm leading-6 text-white/50">
+            {experience.currentFoodDescription}
+          </p>
+        ) : null}
+
+        {experience.currentFoodUrl ? (
+          <a
+            className="mt-4 inline-flex items-center gap-2 text-sm font-bold"
+            href={experience.currentFoodUrl}
+            rel="noopener noreferrer"
+            style={{ color: experience.accentColor }}
+            target="_blank"
+          >
+            See The Details
+            <ArrowUpRight aria-hidden="true" className="size-4" />
+          </a>
+        ) : null}
+      </div>
+    </div>
+  </Module>
+) : null}
+
+{featuredConnections.length || isOwner ? (
+  <Module
+    accentColor={experience.accentColor}
+    className="mt-14 text-center"
+    title="Top Friends"
+  >
+{featuredConnections.length ? (
+  <>
+    <div className="mx-auto mt-6 grid max-w-sm grid-cols-3 justify-items-center gap-5 lg:hidden">
+      {featuredConnections.slice(0, 3).map((connection) => (
+        <Link
+          className="group min-w-0 text-center"
+          href={`/home/profiles/${connection.username}`}
+          key={connection.id}
+        >
+          <span
+            className="mx-auto block size-16 rounded-full border-2 bg-gradient-to-br from-[#992bff] to-[#f359d2] bg-cover bg-center transition group-hover:-translate-y-1"
+            style={{
+              borderColor: experience.accentColor,
+              ...(connection.avatarUrl
+                ? {
+                    backgroundImage: `url(${JSON.stringify(
+                      connection.avatarUrl,
+                    ).slice(1, -1)})`,
+                  }
+                : {}),
+            }}
+          />
+
+          <span className="mt-2 block truncate text-sm font-bold text-white">
+            {connection.displayName}
+          </span>
+        </Link>
+      ))}
+    </div>
+
+    <div className="mx-auto mt-6 hidden max-w-5xl grid-cols-8 justify-items-center gap-5 lg:grid">
+      {featuredConnections.slice(0, 8).map((connection) => (
+        <Link
+          className="group min-w-0 text-center"
+          href={`/home/profiles/${connection.username}`}
+          key={connection.id}
+        >
+          <span
+            className="mx-auto block size-16 rounded-full border-2 bg-gradient-to-br from-[#992bff] to-[#f359d2] bg-cover bg-center transition group-hover:-translate-y-1"
+            style={{
+              borderColor: experience.accentColor,
+              ...(connection.avatarUrl
+                ? {
+                    backgroundImage: `url(${JSON.stringify(
+                      connection.avatarUrl,
+                    ).slice(1, -1)})`,
+                  }
+                : {}),
+            }}
+          />
+
+          <span className="mt-2 block truncate text-sm font-bold text-white">
+            {connection.displayName}
+          </span>
+        </Link>
+      ))}
+    </div>
+  </>
+) : (
+        <p className="mt-5 text-white/50">
+        Choose the friends you want to feature here.
+      </p>
+    )}
+  </Module>
+) : null}
+
+<div className="mt-14 grid items-stretch gap-6 lg:grid-cols-[3fr_7fr]">
+  <section
+    className="flex h-full flex-col rounded-[1.75rem] border bg-black/70 p-6 shadow-[0_22px_70px_rgba(0,0,0,.38)] backdrop-blur-md sm:p-7"
+    style={{ borderColor: `${experience.accentColor}99` }}
+  >
+<div className="flex h-full flex-col items-center justify-center text-center">
+  <p className="text-xs font-black tracking-[0.32em] text-[#54b7ff] uppercase">
+    Contact Me
+  </p>
+
+  <div className="mt-6 w-full max-w-md">
+    {contactActions ? (
+      contactActions
+    ) : (
+      <p className="text-sm leading-6 text-white/50">
+        Visitors will see your connection options here.
+      </p>
+    )}
+  </div>
+</div>
+  </section>
+
+  <section
+    className="relative flex h-full flex-col overflow-hidden rounded-[1.75rem] border bg-black/70 p-6 shadow-[0_22px_70px_rgba(0,0,0,.38)] backdrop-blur-md sm:p-7"
+    style={{ borderColor: `${experience.accentColor}99` }}
+  >
+    <div
+      aria-hidden="true"
+      className="pointer-events-none absolute -top-24 right-0 size-72 rounded-full opacity-10 blur-3xl"
+      style={{ backgroundColor: experience.accentColor }}
+    />
+
+    <div className="relative flex h-full flex-col">
+      <h2
+        className="text-center text-xs font-black tracking-[0.22em] uppercase"
+        style={{ color: experience.accentColor }}
+      >
+        Around the Web
+      </h2>
+
+      <p className="mt-3 text-center text-sm text-white/45">
+        More places to find {profile.displayName}.
+      </p>
+
+      <div className="mt-6 flex-1">
+        {viewMyVisible ? (
+          <a
+            className="group flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/[0.035] px-5 py-5 transition hover:border-white/20 hover:bg-white/[0.07]"
+            href={experience.viewMyUrl!}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <div>
+              <p className="text-xs font-bold tracking-[0.14em] text-white/35 uppercase">
+                Featured Link
+              </p>
+
+              <p className="mt-1 text-lg font-black text-white">
+                {experience.viewMyLabel}
+              </p>
+            </div>
+
+            <ArrowUpRight
+              aria-hidden="true"
+              className="size-5 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+              style={{ color: experience.accentColor }}
+            />
+          </a>
+        ) : (
+          <div className="flex min-h-24 items-center justify-center rounded-2xl border border-dashed border-white/10 bg-white/[0.025] px-5 text-center">
+            <p className="text-sm text-white/40">
+              {isOwner
+                ? "Your preferred links will appear here."
+                : "No external links shared yet."}
+            </p>
+          </div>
+        )}
+      </div>
+
+      <p className="mt-6 flex items-center justify-end gap-2 text-xs text-white/35">
+        <CalendarDays aria-hidden="true" className="size-4" />
+        Joined SIGNAL{" "}
+        {new Intl.DateTimeFormat("en", {
+          month: "long",
+          year: "numeric",
+        }).format(new Date(profile.createdAt))}
+      </p>
+    </div>
+  </section>
+</div>
 
       {safetySection}
+
+      {isOwner ? (
+        <div className="mt-14 flex justify-center">
+          <ButtonLink href="/account">Customize Profile</ButtonLink>
+        </div>
+      ) : null}
     </div>
   );
 }

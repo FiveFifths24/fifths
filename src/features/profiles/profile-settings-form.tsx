@@ -74,10 +74,23 @@ export function ProfileSettingsForm({
     backgroundImagePositionX: number;
     backgroundImagePositionY: number;
     backgroundImageZoom: number;
-    spotlightTitle: string;
-    spotlightDescription: string;
-    spotlightUrl: string;
-    profileSongTitle: string;
+spotlightTitle: string;
+spotlightDescription: string;
+spotlightUrl: string;
+
+currentGame: string;
+currentGameDescription: string;
+currentGameUrl: string;
+
+currentReading: string;
+currentReadingDescription: string;
+currentReadingUrl: string;
+
+currentFood: string;
+currentFoodDescription: string;
+currentFoodUrl: string;
+
+profileSongTitle: string;
     profileSongArtist: string;
     profileSongUrl: string;
     viewMyLabel: string;
@@ -205,24 +218,45 @@ export function ProfileSettingsForm({
         />
         <FieldMessage hint="One JPG, PNG, or WebP image, up to 5 MB." />
       </div>
-      <div>
-        <label
-          className="mb-2 block text-sm font-bold text-white"
-          htmlFor="featured-profile-image"
-        >
-          Featured Profile Image
-        </label>
+<div className="grid gap-5 sm:grid-cols-2">
+  <div>
+    <label
+      className="mb-2 block text-sm font-bold text-white"
+      htmlFor="featured-profile-image"
+    >
+      Featured Photo 1
+    </label>
 
-        <input
-          accept="image/jpeg,image/png,image/webp"
-          className={inputClass}
-          id="featured-profile-image"
-          name="featuredProfileImage"
-          type="file"
-        />
+    <input
+      accept="image/jpeg,image/png,image/webp"
+      className={inputClass}
+      id="featured-profile-image"
+      name="featuredProfileImage"
+      type="file"
+    />
 
-        <FieldMessage hint="A separate image featured prominently on your profile. JPG, PNG, or WebP, up to 5 MB." />
-      </div>
+    <FieldMessage hint="JPG, PNG, or WebP, up to 5 MB." />
+  </div>
+
+  <div>
+    <label
+      className="mb-2 block text-sm font-bold text-white"
+      htmlFor="featured-profile-image-2"
+    >
+      Featured Photo 2
+    </label>
+
+    <input
+      accept="image/jpeg,image/png,image/webp"
+      className={inputClass}
+      id="featured-profile-image-2"
+      name="featuredProfileImage2"
+      type="file"
+    />
+
+    <FieldMessage hint="JPG, PNG, or WebP, up to 5 MB." />
+  </div>
+</div>
       <ProfileMediaEditor
         background={{
           currentUrl: profile.backgroundUrl,
@@ -462,69 +496,287 @@ export function ProfileSettingsForm({
         </div>
       </fieldset>
 
-      <fieldset className="rounded-2xl border border-white/10 bg-black/25 p-5">
-        <legend className="px-2 text-sm font-bold text-white">
-          Current Focus
-        </legend>
-        <p className="mb-5 text-xs leading-5 text-white/45">
-          Share what currently has your attention — a project, school, cosplay,
-          event, goal, or anything else.
-        </p>
-        <div className="space-y-4">
-          <div>
-            <label className="sr-only" htmlFor="spotlight-title">
-              Spotlight Title
-            </label>
-            <input
-              className={inputClass}
-              defaultValue={profile.spotlightTitle}
-              id="spotlight-title"
-              maxLength={80}
-              name="spotlightTitle"
-              placeholder="Tell everyone who/what you're spotlighting!"
-            />
-            <FieldMessage
-              error={firstFieldError(state, "spotlightTitle")}
-              hint="Up to 80 characters."
-            />
-          </div>
-          <div>
-            <label className="sr-only" htmlFor="spotlight-description">
-              Spotlight Description
-            </label>
-            <textarea
-              className={`${inputClass} min-h-24`}
-              defaultValue={profile.spotlightDescription}
-              id="spotlight-description"
-              maxLength={240}
-              name="spotlightDescription"
-              placeholder="Give us a short description for why you're selecting this spotlight!"
-            />
-            <FieldMessage
-              error={firstFieldError(state, "spotlightDescription")}
-              hint="Up to 240 characters."
-            />
-          </div>
-          <div>
-            <label className="sr-only" htmlFor="spotlight-url">
-              Spotlight Link
-            </label>
-            <input
-              className={inputClass}
-              defaultValue={profile.spotlightUrl}
-              id="spotlight-url"
-              maxLength={500}
-              name="spotlightUrl"
-              placeholder="https://…"
-              type="url"
-            />
-            <FieldMessage
-              error={firstFieldError(state, "spotlightUrl")}
-              hint="Optional complete link beginning with http:// or https://."
-            />
-          </div>
-        </div>
-      </fieldset>
+<fieldset className="rounded-2xl border border-white/10 bg-black/25 p-5">
+  <legend className="px-2 text-sm font-bold text-white">
+    Currently
+  </legend>
+
+  <p className="mb-5 text-xs leading-5 text-white/45">
+    Share a few things that are part of your world right now.
+  </p>
+
+  <div className="space-y-4">
+    <div>
+      <label className="sr-only" htmlFor="spotlight-title">
+        Spotlight Title
+      </label>
+      <input
+        className={inputClass}
+        defaultValue={profile.spotlightTitle}
+        id="spotlight-title"
+        maxLength={80}
+        name="spotlightTitle"
+        placeholder="Tell everyone who/what you're spotlighting!"
+      />
+      <FieldMessage
+        error={firstFieldError(state, "spotlightTitle")}
+        hint="Up to 80 characters."
+      />
+    </div>
+
+    <div>
+      <label className="sr-only" htmlFor="spotlight-description">
+        Spotlight Description
+      </label>
+      <textarea
+        className={`${inputClass} min-h-24`}
+        defaultValue={profile.spotlightDescription}
+        id="spotlight-description"
+        maxLength={240}
+        name="spotlightDescription"
+        placeholder="Give us a short description for why you're selecting this spotlight!"
+      />
+      <FieldMessage
+        error={firstFieldError(state, "spotlightDescription")}
+        hint="Up to 240 characters."
+      />
+    </div>
+
+    <div>
+      <label className="sr-only" htmlFor="spotlight-url">
+        Spotlight Link
+      </label>
+      <input
+        className={inputClass}
+        defaultValue={profile.spotlightUrl}
+        id="spotlight-url"
+        maxLength={500}
+        name="spotlightUrl"
+        placeholder="https://…"
+        type="url"
+      />
+      <FieldMessage
+        error={firstFieldError(state, "spotlightUrl")}
+        hint="Optional complete link beginning with http:// or https://."
+      />
+    </div>
+  </div>
+
+<div className="mt-6 grid gap-5 lg:grid-cols-3">
+  <div className="space-y-4">
+    <div>
+      <label
+        className="mb-2 block text-xs font-bold text-white/55"
+        htmlFor="current-game"
+      >
+        Current Game
+      </label>
+
+      <input
+        className={inputClass}
+        defaultValue={profile.currentGame}
+        id="current-game"
+        maxLength={100}
+        name="currentGame"
+        placeholder="Cyberpunk 2077"
+      />
+
+      <FieldMessage
+        error={firstFieldError(state, "currentGame")}
+        hint="What are you playing right now?"
+      />
+    </div>
+
+    <div>
+      <label
+        className="mb-2 block text-xs font-bold text-white/55"
+        htmlFor="current-game-description"
+      >
+        Game Subtitle
+      </label>
+
+      <input
+        className={inputClass}
+        defaultValue={profile.currentGameDescription}
+        id="current-game-description"
+        maxLength={240}
+        name="currentGameDescription"
+        placeholder="Night City has me in a chokehold."
+      />
+
+      <FieldMessage
+        error={firstFieldError(state, "currentGameDescription")}
+        hint="Optional short note."
+      />
+    </div>
+
+    <div>
+      <label
+        className="mb-2 block text-xs font-bold text-white/55"
+        htmlFor="current-game-url"
+      >
+        Game Link
+      </label>
+
+      <input
+        className={inputClass}
+        defaultValue={profile.currentGameUrl}
+        id="current-game-url"
+        name="currentGameUrl"
+        placeholder="https://..."
+        type="url"
+      />
+
+      <FieldMessage
+        error={firstFieldError(state, "currentGameUrl")}
+        hint="Optional link."
+      />
+    </div>
+  </div>
+
+  <div className="space-y-4">
+    <div>
+      <label
+        className="mb-2 block text-xs font-bold text-white/55"
+        htmlFor="current-reading"
+      >
+        Current Book / Blog
+      </label>
+
+      <input
+        className={inputClass}
+        defaultValue={profile.currentReading}
+        id="current-reading"
+        maxLength={100}
+        name="currentReading"
+        placeholder="What are you reading?"
+      />
+
+      <FieldMessage
+        error={firstFieldError(state, "currentReading")}
+        hint="Book, article, blog, newsletter, etc."
+      />
+    </div>
+
+    <div>
+      <label
+        className="mb-2 block text-xs font-bold text-white/55"
+        htmlFor="current-reading-description"
+      >
+        Reading Subtitle
+      </label>
+
+      <input
+        className={inputClass}
+        defaultValue={profile.currentReadingDescription}
+        id="current-reading-description"
+        maxLength={240}
+        name="currentReadingDescription"
+        placeholder="I cannot put this down."
+      />
+
+      <FieldMessage
+        error={firstFieldError(state, "currentReadingDescription")}
+        hint="Optional short note."
+      />
+    </div>
+
+    <div>
+      <label
+        className="mb-2 block text-xs font-bold text-white/55"
+        htmlFor="current-reading-url"
+      >
+        Reading Link
+      </label>
+
+      <input
+        className={inputClass}
+        defaultValue={profile.currentReadingUrl}
+        id="current-reading-url"
+        name="currentReadingUrl"
+        placeholder="https://..."
+        type="url"
+      />
+
+      <FieldMessage
+        error={firstFieldError(state, "currentReadingUrl")}
+        hint="Optional link."
+      />
+    </div>
+  </div>
+
+  <div className="space-y-4">
+    <div>
+      <label
+        className="mb-2 block text-xs font-bold text-white/55"
+        htmlFor="current-food"
+      >
+        Current Food
+      </label>
+
+      <input
+        className={inputClass}
+        defaultValue={profile.currentFood}
+        id="current-food"
+        maxLength={100}
+        name="currentFood"
+        placeholder="Sushi, tacos, ramen..."
+      />
+
+      <FieldMessage
+        error={firstFieldError(state, "currentFood")}
+        hint="What are you eating or craving lately?"
+      />
+    </div>
+
+    <div>
+      <label
+        className="mb-2 block text-xs font-bold text-white/55"
+        htmlFor="current-food-description"
+      >
+        Food Subtitle
+      </label>
+
+      <input
+        className={inputClass}
+        defaultValue={profile.currentFoodDescription}
+        id="current-food-description"
+        maxLength={240}
+        name="currentFoodDescription"
+        placeholder="Extra parmesan. Always."
+      />
+
+      <FieldMessage
+        error={firstFieldError(state, "currentFoodDescription")}
+        hint="Optional short note."
+      />
+    </div>
+
+    <div>
+      <label
+        className="mb-2 block text-xs font-bold text-white/55"
+        htmlFor="current-food-url"
+      >
+        Food Link
+      </label>
+
+      <input
+        className={inputClass}
+        defaultValue={profile.currentFoodUrl}
+        id="current-food-url"
+        name="currentFoodUrl"
+        placeholder="https://..."
+        type="url"
+      />
+
+      <FieldMessage
+        error={firstFieldError(state, "currentFoodUrl")}
+        hint="Optional link."
+      />
+    </div>
+  </div>
+</div>
+</fieldset>
       <fieldset className="rounded-2xl border border-white/10 bg-black/25 p-5">
         <legend className="px-2 text-sm font-bold text-white">View My</legend>
         <p className="mb-5 text-xs leading-5 text-white/45">

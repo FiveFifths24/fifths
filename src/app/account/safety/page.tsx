@@ -14,7 +14,7 @@ import {
 } from "@/features/profiles/actions";
 import { createClient } from "@/lib/supabase/server";
 
-export const metadata: Metadata = { title: "Safety & connections" };
+export const metadata: Metadata = { title: "Safety & Connections" };
 export const dynamic = "force-dynamic";
 
 export default async function AccountSafetyPage({
@@ -78,7 +78,7 @@ export default async function AccountSafetyPage({
               Your SIGNAL controls
             </p>
             <h1 className="display-type mt-4 text-5xl text-white sm:text-7xl">
-              Safety & connections.
+              Safety & Connections.
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-7 text-white/60 sm:text-lg sm:leading-8">
               Manage who can reach you and what appears in your SIGNAL

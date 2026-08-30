@@ -64,6 +64,47 @@ export const profileSettingsSchema = z
       .max(240, "Use no more than 240 characters.")
       .transform((value) => value || null),
     spotlightUrl: optionalUrl(500),
+currentGame: z
+  .string()
+  .trim()
+  .max(100, "Use no more than 100 characters.")
+  .transform((value) => value || null),
+
+currentGameDescription: z
+  .string()
+  .trim()
+  .max(240, "Use no more than 240 characters.")
+  .transform((value) => value || null),
+
+currentGameUrl: optionalUrl(500),
+
+currentReading: z
+  .string()
+  .trim()
+  .max(100, "Use no more than 100 characters.")
+  .transform((value) => value || null),
+
+currentReadingDescription: z
+  .string()
+  .trim()
+  .max(240, "Use no more than 240 characters.")
+  .transform((value) => value || null),
+
+currentReadingUrl: optionalUrl(500),
+
+currentFood: z
+  .string()
+  .trim()
+  .max(100, "Use no more than 100 characters.")
+  .transform((value) => value || null),
+
+currentFoodDescription: z
+  .string()
+  .trim()
+  .max(240, "Use no more than 240 characters.")
+  .transform((value) => value || null),
+
+currentFoodUrl: optionalUrl(500),
     viewMyLabel: z
       .string()
       .trim()
@@ -149,7 +190,7 @@ export const profileRoomSettingsSchema = z.object({
 });
 
 export const featuredConnectionsSchema = z.object({
-  featuredUserIds: z.array(z.uuid()).max(3, "Choose no more than 3 friends."),
+  featuredUserIds: z.array(z.uuid()).max(8, "Choose no more than 8 friends."),
 });
 
 export const targetProfileSchema = z.object({ targetUserId: z.uuid() });

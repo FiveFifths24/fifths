@@ -10,6 +10,7 @@ import { RelationshipControls } from "@/features/profiles/relationship-controls"
 import { friendshipState } from "@/features/profiles/relationship-data";
 import { ReportForm } from "@/features/trust-safety/report-form";
 import { createClient } from "@/lib/supabase/server";
+import { FlashStatusMessage } from "@/components/ui/flash-status-message";
 
 export const dynamic = "force-dynamic";
 
@@ -42,16 +43,17 @@ export default async function MemberProfilePage({
   if (!profile) notFound();
   const isOwnProfile = profile.id === userData.user.id;
 
-  const [
-    friendshipResult,
-    followResult,
-    muteResult,
-    avatarUrl,
-    landscapeUrl,
-    experienceResult,
-    featuredResult,
-  ] = await Promise.all([
-    supabase
+const [
+  friendshipResult,
+  followResult,
+  muteResult,
+  avatarUrl,
+  landscapeUrl,
+  experienceResult,
+  featuredResult,
+  currentFieldsResult,
+] = await Promise.all([
+      supabase
       .from("profile_friendships")
       .select("*")
       .or(
@@ -74,14 +76,29 @@ export default async function MemberProfilePage({
     signProfileMedia(supabase, profile.cover_image_url),
     supabase.rpc("get_profile_experience", { p_user_id: profile.id }),
     supabase.rpc("get_featured_connections", { p_owner_id: profile.id }),
+    supabase
+  .from("profiles")
+.select(
+  "current_game, current_game_description, current_game_url, current_reading, current_reading_description, current_reading_url, current_food, current_food_description, current_food_url, featured_profile_image_2_url",
+)
+  .eq("id", profile.id)
+  .maybeSingle(),
   ]);
   const experience = experienceResult.data?.[0];
   if (!experience) notFound();
   const accentColor = experience.profile_accent_color ?? "#a855f7";
-  const [backgroundUrl, featuredProfileImageUrl] = await Promise.all([
-    signProfileMedia(supabase, experience.background_image_url),
-    signProfileMedia(supabase, experience.featured_profile_image_url),
-  ]);
+const [
+  backgroundUrl,
+  featuredProfileImageUrl,
+  featuredProfileImageUrl2,
+] = await Promise.all([
+  signProfileMedia(supabase, experience.background_image_url),
+  signProfileMedia(supabase, experience.featured_profile_image_url),
+  signProfileMedia(
+    supabase,
+    currentFieldsResult.data?.featured_profile_image_2_url ?? null,
+  ),
+]);
   const featuredConnections = await Promise.all(
     (featuredResult.data ?? []).map(async (connection) => ({
       id: connection.id,
@@ -101,11 +118,11 @@ export default async function MemberProfilePage({
       zoom={experience.background_image_zoom}
     >
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-20">
-        {parameters?.social === "updated" ? (
-          <StatusMessage className="mb-6" tone="success">
-            Your connection settings were updated.
-          </StatusMessage>
-        ) : null}
+{parameters?.social === "updated" ? (
+  <FlashStatusMessage param="social" value="updated">
+    Your Friend Request Was Sent.
+  </FlashStatusMessage>
+) : null}
         {parameters?.social === "error" ? (
           <StatusMessage className="mb-6" tone="error">
             That connection could not be changed.
@@ -116,6 +133,7 @@ export default async function MemberProfilePage({
           contactActions={
             !isOwnProfile ? (
               <RelationshipControls
+              accentColor={accentColor}
                 friendship={friendshipState(
                   friendshipResult.data ?? undefined,
                   userData.user.id,
@@ -140,6 +158,20 @@ export default async function MemberProfilePage({
             spotlightTitle: experience.spotlight_title,
             spotlightDescription: experience.spotlight_description,
             spotlightUrl: experience.spotlight_url,
+currentGame: currentFieldsResult.data?.current_game ?? null,
+currentGameDescription:
+  currentFieldsResult.data?.current_game_description ?? null,
+currentGameUrl: currentFieldsResult.data?.current_game_url ?? null,
+
+currentReading: currentFieldsResult.data?.current_reading ?? null,
+currentReadingDescription:
+  currentFieldsResult.data?.current_reading_description ?? null,
+currentReadingUrl: currentFieldsResult.data?.current_reading_url ?? null,
+
+currentFood: currentFieldsResult.data?.current_food ?? null,
+currentFoodDescription:
+  currentFieldsResult.data?.current_food_description ?? null,
+currentFoodUrl: currentFieldsResult.data?.current_food_url ?? null,
             viewMyLabel: experience.view_my_label,
             viewMyUrl: experience.view_my_url,
             songTitle: experience.profile_song_title,
@@ -156,14 +188,23 @@ export default async function MemberProfilePage({
           }}
           featuredConnections={featuredConnections}
           featuredProfileImageUrl={featuredProfileImageUrl}
-          headerAction={
-            isOwnProfile ? (
-              <ButtonLink href="/account" variant="secondary">
-                <Pencil aria-hidden="true" className="size-4" />
-                Customize Profile
-              </ButtonLink>
-            ) : undefined
-          }
+          featuredProfileImageUrl2={featuredProfileImageUrl2}
+headerAction={
+  isOwnProfile ? (
+    <ButtonLink
+      href="/account"
+      variant="secondary"
+      style={{
+        borderColor: accentColor,
+        color: accentColor,
+        boxShadow: `0 0 0 1px ${accentColor}25`,
+      }}
+    >
+      <Pencil aria-hidden="true" className="size-4" />
+      Customize Profile
+    </ButtonLink>
+  ) : undefined
+}
           isOwner={isOwnProfile}
           profile={{
             id: profile.id,
@@ -174,30 +215,32 @@ export default async function MemberProfilePage({
             avatarUrl,
             landscapeUrl,
           }}
-          safetySection={
-            !isOwnProfile ? (
-              <details
-                className="mt-8 rounded-[1.5rem] border border-red-900/45 bg-red-950/35 p-6 backdrop-blur-md"
-                id="report-member"
-              >
-                <summary className="flex cursor-pointer list-none items-center gap-3 font-bold text-red-200">
-                  <Flag aria-hidden="true" className="size-5" />
-                  Report this member
-                </summary>
-                <div className="mt-6 border-t border-red-900/40 pt-6">
-                  <ReportForm
-                    defaultContextUrl={returnTo}
-                    defaultTarget="member"
-                    lockTarget
-                  />
-                </div>
-                <p className="mt-5 flex items-center gap-2 text-xs text-white/35">
-                  <ShieldCheck aria-hidden="true" className="size-4" />
-                  Reports are private and reviewed by authorized moderators.
-                </p>
-              </details>
-            ) : undefined
-          }
+safetySection={
+  !isOwnProfile ? (
+    <details
+      className="mx-auto mt-8 w-full max-w-2xl text-center"
+      id="report-member"
+    >
+      <summary className="mx-auto inline-flex cursor-pointer list-none items-center justify-center gap-2 rounded-full bg-red-600 px-5 py-2.5 text-sm font-bold text-white shadow-[0_10px_25px_rgba(220,38,38,.25)] transition hover:bg-red-500">
+        <Flag aria-hidden="true" className="size-4" />
+        Report This Member
+      </summary>
+
+      <div className="mt-4 rounded-[1.5rem] border border-red-900/35 bg-red-950/45 p-5 text-left backdrop-blur-md">
+        <ReportForm
+          defaultContextUrl={returnTo}
+          defaultTarget="member"
+          lockTarget
+        />
+
+        <p className="mt-4 flex items-center gap-2 text-xs text-white/35">
+          <ShieldCheck aria-hidden="true" className="size-4" />
+          Reports are private and reviewed by authorized moderators.
+        </p>
+      </div>
+    </details>
+  ) : undefined
+}
           trackView={!isOwnProfile}
         />
       </div>
