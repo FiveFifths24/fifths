@@ -76,10 +76,10 @@ export async function updateProfileSettingsAction(
     backgroundImagePositionX: formData.get("backgroundImagePositionX"),
     backgroundImagePositionY: formData.get("backgroundImagePositionY"),
     backgroundImageZoom: formData.get("backgroundImageZoom"),
-spotlightTitle: formData.get("spotlightTitle"),
-spotlightDescription: formData.get("spotlightDescription"),
-spotlightUrl: formData.get("spotlightUrl"),
-
+spotlightCategory: formData.get("spotlightCategory") ?? "",
+spotlightTitle: formData.get("spotlightTitle") ?? "",
+spotlightDescription: formData.get("spotlightDescription") ?? "",
+spotlightUrl: formData.get("spotlightUrl") ?? "",
 currentGame: formData.get("currentGame"),
 currentGameDescription: formData.get("currentGameDescription"),
 currentGameUrl: formData.get("currentGameUrl"),
@@ -102,13 +102,18 @@ viewMyLabel: formData.get("viewMyLabel"),
     latestPickNote: formData.get("latestPickNote"),
     latestPickUrl: formData.get("latestPickUrl"),
   });
-  if (!parsed.success) {
-    return {
-      status: "error",
-      message: "Check the highlighted profile details and try again.",
-      fieldErrors: parsed.error.flatten().fieldErrors,
-    };
-  }
+if (!parsed.success) {
+  console.error(
+    "PROFILE SETTINGS VALIDATION:",
+    parsed.error.flatten().fieldErrors,
+  );
+
+  return {
+    status: "error",
+    message: "Check the highlighted profile details and try again.",
+    fieldErrors: parsed.error.flatten().fieldErrors,
+  };
+}
 
   try {
     const supabase = await createClient();
@@ -200,6 +205,19 @@ viewMyLabel: formData.get("viewMyLabel"),
               : "Your profile could not be updated.",
       };
     }
+const { error: spotlightCategoryError } = await supabase.rpc(
+  "set_spotlight_category",
+  {
+    p_spotlight_category: parsed.data.spotlightCategory ?? "",
+  },
+);
+
+if (spotlightCategoryError) {
+  return {
+    status: "error",
+    message: "Your Current Focus category could not be saved.",
+  };
+}
 const { error: currentFieldsError } = await supabase.rpc(
   "set_profile_current_fields",
   {

@@ -53,6 +53,13 @@ export const profileSettingsSchema = z
     backgroundImagePositionX: z.coerce.number().int().min(0).max(100),
     backgroundImagePositionY: z.coerce.number().int().min(0).max(100),
     backgroundImageZoom: z.coerce.number().int().min(100).max(200),
+    spotlightCategory: z
+  .string()
+  .trim()
+  .max(40, "Focus category must be 40 characters or fewer.")
+  .optional()
+  .or(z.literal("")),
+  
     spotlightTitle: z
       .string()
       .trim()
@@ -64,6 +71,7 @@ export const profileSettingsSchema = z
       .max(240, "Use no more than 240 characters.")
       .transform((value) => value || null),
     spotlightUrl: optionalUrl(500),
+    
 currentGame: z
   .string()
   .trim()

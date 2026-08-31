@@ -74,6 +74,7 @@ export function ProfileSettingsForm({
     backgroundImagePositionX: number;
     backgroundImagePositionY: number;
     backgroundImageZoom: number;
+spotlightCategory: string;
 spotlightTitle: string;
 spotlightDescription: string;
 spotlightUrl: string;
@@ -392,7 +393,7 @@ profileSongTitle: string;
 
       <fieldset className="rounded-2xl border border-white/10 bg-black/25 p-5">
         <legend className="px-2 text-sm font-bold text-white">
-          Latest Pick
+          Latest Indulgence
         </legend>
 
         <p className="mb-5 text-xs leading-5 text-white/45">
@@ -500,29 +501,35 @@ profileSongTitle: string;
   <legend className="px-2 text-sm font-bold text-white">
     Currently
   </legend>
+  
 
   <p className="mb-5 text-xs leading-5 text-white/45">
     Share a few things that are part of your world right now.
   </p>
 
   <div className="space-y-4">
-    <div>
-      <label className="sr-only" htmlFor="spotlight-title">
-        Spotlight Title
-      </label>
-      <input
-        className={inputClass}
-        defaultValue={profile.spotlightTitle}
-        id="spotlight-title"
-        maxLength={80}
-        name="spotlightTitle"
-        placeholder="Tell everyone who/what you're spotlighting!"
-      />
-      <FieldMessage
-        error={firstFieldError(state, "spotlightTitle")}
-        hint="Up to 80 characters."
-      />
-    </div>
+<div>
+  <label
+    className="mb-2 block text-xs font-bold text-white/55"
+    htmlFor="spotlight-category"
+  >
+    Focus Category
+  </label>
+
+  <input
+    className={inputClass}
+    defaultValue={profile.spotlightCategory}
+    id="spotlight-category"
+    maxLength={40}
+    name="spotlightCategory"
+    placeholder="Lifestyle, Work, Fitness, Creative..."
+  />
+
+  <FieldMessage
+    error={firstFieldError(state, "spotlightCategory")}
+    hint="Optional. Up to 40 characters."
+  />
+</div>
 
     <div>
       <label className="sr-only" htmlFor="spotlight-description">

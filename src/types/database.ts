@@ -79,6 +79,7 @@ direct_messages: {
           background_image_position_y: number;
           background_image_zoom: number;
           profile_accent_color: string;
+          spotlight_category: string | null;
 spotlight_title: string | null;
 spotlight_description: string | null;
 spotlight_url: string | null;
@@ -141,6 +142,7 @@ mood: string | null;
           background_image_position_y?: number;
           background_image_zoom?: number;
           profile_accent_color?: string;
+          spotlight_category?: string | null;
 spotlight_title?: string | null;
 spotlight_description?: string | null;
 spotlight_url?: string | null;
@@ -1079,6 +1081,12 @@ mood?: string | null;
     };
     Views: Record<string, never>;
     Functions: {
+      set_spotlight_category: {
+  Args: {
+    p_spotlight_category: string;
+  };
+  Returns: undefined;
+};
       complete_onboarding: {
         Args: {
           p_username: string;

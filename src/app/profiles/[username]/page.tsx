@@ -113,6 +113,7 @@ const [
             followerCount: experience.follower_count,
             followingCount: experience.following_count,
             profileViewCount: experience.profile_view_count,
+            spotlightCategory: null,
             spotlightTitle: experience.spotlight_title,
             spotlightDescription: experience.spotlight_description,
             spotlightUrl: experience.spotlight_url,

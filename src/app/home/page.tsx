@@ -465,7 +465,7 @@ export default async function PersonalHomePage({
             </>
           ) : (
             <div className="mt-6">
-              <PreviewState title="No Pulse recorded">
+              <PreviewState title="No Pulse Recorded">
                 Check in when you are ready. FIFTHS does not infer your energy
                 or show demonstration activity in your private Home.
               </PreviewState>

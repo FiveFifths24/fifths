@@ -12,6 +12,7 @@ const experience = {
   followerCount: 34,
   followingCount: 5,
   profileViewCount: 82,
+  spotlightCategory: null,
   spotlightTitle: "Five Fifths eHub",
   spotlightDescription: "Currently building.",
   spotlightUrl: "https://example.com/focus",

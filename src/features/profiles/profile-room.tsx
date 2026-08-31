@@ -60,8 +60,7 @@ type RoomFeatureKey =
   | "latest"
   | "friends"
   | "music"
-  | "featured"
-  | "socials";
+  | "featured";
 
 const roomFeatureLabels: Record<RoomFeatureKey, string> = {
   signal: "Current Signal",
@@ -70,7 +69,6 @@ const roomFeatureLabels: Record<RoomFeatureKey, string> = {
   friends: "Friend Spotlight",
   music: "Music",
   featured: "Featured Profile Image",
-  socials: "Social Links",
 };
 
 const ROOM_ASSETS = {
@@ -236,7 +234,6 @@ export function ProfileRoom({
   isOwner?: boolean;
 }) {
   const [musicArtworkUrl, setMusicArtworkUrl] = useState<string | null>(null);
-  const [view, setView] = useState<"room" | "quick">("room");
   const [selectedFeature, setSelectedFeature] = useState<RoomFeatureKey | null>(null);
   const [localTheme, setLocalTheme] = useState<HouseTheme>("day");
   const [themePreference, setThemePreference] = useState<ThemePreference>("auto");
@@ -479,7 +476,6 @@ export function ProfileRoom({
 
 
     ),
-    socials: undefined
   };
 
   const sceneStyle = {
@@ -530,27 +526,11 @@ export function ProfileRoom({
             </select>
           </label>
 
-          <div
-            aria-label="Choose profile view"
-            className="flex rounded-full border border-white/10 bg-black/45 p-1"
-            role="group"
-          >
-            {(["room", "quick"] as const).map((option) => (
-              <button
-                aria-pressed={view === option}
-                className="min-h-10 rounded-full px-4 text-sm font-bold text-white/55 transition focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none aria-pressed:bg-white/10 aria-pressed:text-white"
-                key={option}
-                onClick={() => setView(option)}
-                type="button"
-              >
-                {option === "room" ? "Room View" : "Quick View"}
-              </button>
-            ))}
-          </div>
         </div>
       </div>
 
-        <div className="grid gap-5 lg:grid-cols-[minmax(360px,1.05fr)_minmax(0,1.45fr)]">
+<></>
+  <div className="grid gap-5 lg:grid-cols-[minmax(360px,1.05fr)_minmax(0,1.45fr)]">
           <div className="space-y-4">
             <DetailBlock
               icon={<Radio aria-hidden="true" className="size-4" />}
@@ -685,79 +665,6 @@ export function ProfileRoom({
                       )}
                     </div>
 
-<div className="flex flex-wrap justify-center gap-2">
-  <a
-    href="https://instagram.com/username"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-white/75 transition hover:bg-white/10 hover:text-white"
-  >
-    Instagram
-  </a>
-
-  <a
-    href="https://tiktok.com/@username"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-white/75 transition hover:bg-white/10 hover:text-white"
-  >
-    TikTok
-  </a>
-
-  <a
-    href="https://youtube.com/@username"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-white/75 transition hover:bg-white/10 hover:text-white"
-  >
-    YouTube
-  </a>
-
-  <a
-    href="https://example.com"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-white/75 transition hover:bg-white/10 hover:text-white"
-  >
-    Website
-  </a>
-
-  <a
-    href="https://linkedin.com/in/username"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-white/75 transition hover:bg-white/10 hover:text-white"
-  >
-    LinkedIn
-  </a>
-
-  <a
-    href="https://facebook.com/username"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-white/75 transition hover:bg-white/10 hover:text-white"
-  >
-    Facebook
-  </a>
-
-  <a
-    href="https://twitch.tv/username"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-white/75 transition hover:bg-white/10 hover:text-white"
-  >
-    Twitch
-  </a>
-
-  <a
-    href="https://linktr.ee/username"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-white/75 transition hover:bg-white/10 hover:text-white"
-  >
-    One Link
-  </a>
-</div>
 
                     <div className="min-w-0 flex-1">
                       <p className="text-xs font-bold tracking-[0.16em] text-white/40 uppercase">
@@ -786,11 +693,12 @@ export function ProfileRoom({
                   </div>
                 </div>
               ) : (
-                <p className="text-white/50">No featured music yet.</p>
+                <p className="text-white/50">No Featured Music Yet.</p>
               )}
             </DetailBlock>
           </div>
-        </div>
+  </div>
+
       {isOwner ? (
         <div className="mt-6 flex justify-center">
           <Link

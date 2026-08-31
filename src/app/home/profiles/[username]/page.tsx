@@ -79,7 +79,7 @@ const [
     supabase
   .from("profiles")
 .select(
-  "current_game, current_game_description, current_game_url, current_reading, current_reading_description, current_reading_url, current_food, current_food_description, current_food_url, featured_profile_image_2_url",
+  "spotlight_category, current_game, current_game_description, current_game_url, current_reading, current_reading_description, current_reading_url, current_food, current_food_description, current_food_url, featured_profile_image_2_url",
 )
   .eq("id", profile.id)
   .maybeSingle(),
@@ -158,6 +158,7 @@ const [
             spotlightTitle: experience.spotlight_title,
             spotlightDescription: experience.spotlight_description,
             spotlightUrl: experience.spotlight_url,
+            spotlightCategory: currentFieldsResult.data?.spotlight_category ?? null,
 currentGame: currentFieldsResult.data?.current_game ?? null,
 currentGameDescription:
   currentFieldsResult.data?.current_game_description ?? null,
