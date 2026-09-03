@@ -43,17 +43,17 @@ export default async function MemberProfilePage({
   if (!profile) notFound();
   const isOwnProfile = profile.id === userData.user.id;
 
-const [
-  friendshipResult,
-  followResult,
-  muteResult,
-  avatarUrl,
-  landscapeUrl,
-  experienceResult,
-  featuredResult,
-  currentFieldsResult,
-] = await Promise.all([
-      supabase
+  const [
+    friendshipResult,
+    followResult,
+    muteResult,
+    avatarUrl,
+    landscapeUrl,
+    experienceResult,
+    featuredResult,
+    currentFieldsResult,
+  ] = await Promise.all([
+    supabase
       .from("profile_friendships")
       .select("*")
       .or(
@@ -77,28 +77,25 @@ const [
     supabase.rpc("get_profile_experience", { p_user_id: profile.id }),
     supabase.rpc("get_featured_connections", { p_owner_id: profile.id }),
     supabase
-  .from("profiles")
-.select(
-  "spotlight_category, current_game, current_game_description, current_game_url, current_reading, current_reading_description, current_reading_url, current_food, current_food_description, current_food_url, featured_profile_image_2_url",
-)
-  .eq("id", profile.id)
-  .maybeSingle(),
+      .from("profiles")
+      .select(
+        "spotlight_category, current_game, current_game_description, current_game_url, current_reading, current_reading_description, current_reading_url, current_food, current_food_description, current_food_url, featured_profile_image_2_url",
+      )
+      .eq("id", profile.id)
+      .maybeSingle(),
   ]);
   const experience = experienceResult.data?.[0];
   if (!experience) notFound();
   const accentColor = experience.profile_accent_color ?? "#a855f7";
-const [
-  backgroundUrl,
-  featuredProfileImageUrl,
-  featuredProfileImageUrl2,
-] = await Promise.all([
-  signProfileMedia(supabase, experience.background_image_url),
-  signProfileMedia(supabase, experience.featured_profile_image_url),
-  signProfileMedia(
-    supabase,
-    currentFieldsResult.data?.featured_profile_image_2_url ?? null,
-  ),
-]);
+  const [backgroundUrl, featuredProfileImageUrl, featuredProfileImageUrl2] =
+    await Promise.all([
+      signProfileMedia(supabase, experience.background_image_url),
+      signProfileMedia(supabase, experience.featured_profile_image_url),
+      signProfileMedia(
+        supabase,
+        currentFieldsResult.data?.featured_profile_image_2_url ?? null,
+      ),
+    ]);
   const featuredConnections = await Promise.all(
     (featuredResult.data ?? []).map(async (connection) => ({
       id: connection.id,
@@ -118,11 +115,11 @@ const [
       zoom={experience.background_image_zoom}
     >
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-20">
-{parameters?.social === "updated" ? (
-  <FlashStatusMessage param="social" value="updated">
-    Your Friend Request Was Sent.
-  </FlashStatusMessage>
-) : null}
+        {parameters?.social === "updated" ? (
+          <FlashStatusMessage param="social" value="updated">
+            Your Friend Request Was Sent.
+          </FlashStatusMessage>
+        ) : null}
         {parameters?.social === "error" ? (
           <StatusMessage className="mb-6" tone="error">
             That connection could not be changed.
@@ -132,38 +129,39 @@ const [
         <ProfileLaunchView
           contactActions={
             !isOwnProfile ? (
-<RelationshipControls
-  accentColor={accentColor}
-  friendship={friendshipState(
-    friendshipResult.data ?? undefined,
-    userData.user.id,
-  )}
-  isFollowing={Boolean(followResult.data)}
-  isMuted={Boolean(muteResult.data)}
-  returnTo={returnTo}
-  targetUserId={profile.id}
-  reportSection={
-    <details className="w-full text-center">
-      <summary className="flex min-h-11 w-full cursor-pointer list-none items-center justify-center gap-2 rounded-2xl border border-red-500/20 bg-red-500/10 px-5 py-3 text-sm font-bold text-red-200 transition hover:border-red-500/40 hover:bg-red-500/15">
-        <Flag aria-hidden="true" className="size-4" />
-        Report
-      </summary>
+              <RelationshipControls
+                accentColor={accentColor}
+                friendship={friendshipState(
+                  friendshipResult.data ?? undefined,
+                  userData.user.id,
+                )}
+                isFollowing={Boolean(followResult.data)}
+                isMuted={Boolean(muteResult.data)}
+                returnTo={returnTo}
+                targetUserId={profile.id}
+                reportSection={
+                  <details className="w-full text-center">
+                    <summary className="flex min-h-11 w-full cursor-pointer list-none items-center justify-center gap-2 rounded-2xl border border-red-500/20 bg-red-500/10 px-5 py-3 text-sm font-bold text-red-200 transition hover:border-red-500/40 hover:bg-red-500/15">
+                      <Flag aria-hidden="true" className="size-4" />
+                      Report
+                    </summary>
 
-      <div className="mt-3 rounded-[1.25rem] border border-red-900/35 bg-red-950/35 p-4 text-left">
-        <ReportForm
-          defaultContextUrl={returnTo}
-          defaultTarget="member"
-          lockTarget
-        />
+                    <div className="mt-3 rounded-[1.25rem] border border-red-900/35 bg-red-950/35 p-4 text-left">
+                      <ReportForm
+                        defaultContextUrl={returnTo}
+                        defaultTarget="member"
+                        lockTarget
+                      />
 
-        <p className="mt-4 flex items-center gap-2 text-xs text-white/35">
-          <ShieldCheck aria-hidden="true" className="size-4" />
-          Reports are private and reviewed by authorized moderators.
-        </p>
-      </div>
-    </details>
-  }
-/>
+                      <p className="mt-4 flex items-center gap-2 text-xs text-white/35">
+                        <ShieldCheck aria-hidden="true" className="size-4" />
+                        Reports are private and reviewed by authorized
+                        moderators.
+                      </p>
+                    </div>
+                  </details>
+                }
+              />
             ) : undefined
           }
           experience={{
@@ -179,21 +177,23 @@ const [
             spotlightTitle: experience.spotlight_title,
             spotlightDescription: experience.spotlight_description,
             spotlightUrl: experience.spotlight_url,
-            spotlightCategory: currentFieldsResult.data?.spotlight_category ?? null,
-currentGame: currentFieldsResult.data?.current_game ?? null,
-currentGameDescription:
-  currentFieldsResult.data?.current_game_description ?? null,
-currentGameUrl: currentFieldsResult.data?.current_game_url ?? null,
+            spotlightCategory:
+              currentFieldsResult.data?.spotlight_category ?? null,
+            currentGame: currentFieldsResult.data?.current_game ?? null,
+            currentGameDescription:
+              currentFieldsResult.data?.current_game_description ?? null,
+            currentGameUrl: currentFieldsResult.data?.current_game_url ?? null,
 
-currentReading: currentFieldsResult.data?.current_reading ?? null,
-currentReadingDescription:
-  currentFieldsResult.data?.current_reading_description ?? null,
-currentReadingUrl: currentFieldsResult.data?.current_reading_url ?? null,
+            currentReading: currentFieldsResult.data?.current_reading ?? null,
+            currentReadingDescription:
+              currentFieldsResult.data?.current_reading_description ?? null,
+            currentReadingUrl:
+              currentFieldsResult.data?.current_reading_url ?? null,
 
-currentFood: currentFieldsResult.data?.current_food ?? null,
-currentFoodDescription:
-  currentFieldsResult.data?.current_food_description ?? null,
-currentFoodUrl: currentFieldsResult.data?.current_food_url ?? null,
+            currentFood: currentFieldsResult.data?.current_food ?? null,
+            currentFoodDescription:
+              currentFieldsResult.data?.current_food_description ?? null,
+            currentFoodUrl: currentFieldsResult.data?.current_food_url ?? null,
             viewMyLabel: experience.view_my_label,
             viewMyUrl: experience.view_my_url,
             songTitle: experience.profile_song_title,
@@ -211,22 +211,22 @@ currentFoodUrl: currentFieldsResult.data?.current_food_url ?? null,
           featuredConnections={featuredConnections}
           featuredProfileImageUrl={featuredProfileImageUrl}
           featuredProfileImageUrl2={featuredProfileImageUrl2}
-headerAction={
-  isOwnProfile ? (
-    <ButtonLink
-      href="/account"
-      variant="secondary"
-      style={{
-        borderColor: accentColor,
-        color: accentColor,
-        boxShadow: `0 0 0 1px ${accentColor}25`,
-      }}
-    >
-      <Pencil aria-hidden="true" className="size-4" />
-      Customize Profile
-    </ButtonLink>
-  ) : undefined
-}
+          headerAction={
+            isOwnProfile ? (
+              <ButtonLink
+                href="/account"
+                variant="secondary"
+                style={{
+                  borderColor: accentColor,
+                  color: accentColor,
+                  boxShadow: `0 0 0 1px ${accentColor}25`,
+                }}
+              >
+                <Pencil aria-hidden="true" className="size-4" />
+                Customize Profile
+              </ButtonLink>
+            ) : undefined
+          }
           isOwner={isOwnProfile}
           profile={{
             id: profile.id,

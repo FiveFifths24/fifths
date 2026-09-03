@@ -77,7 +77,7 @@ export default async function CirclesDiscoveryPage() {
   if (circleResult.error) {
     return (
       <StatusMessage tone="error">
-         Circle discovery is temporarily unavailable. Please try again shortly.
+        Circle discovery is temporarily unavailable. Please try again shortly.
       </StatusMessage>
     );
   }

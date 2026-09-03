@@ -54,12 +54,12 @@ export const profileSettingsSchema = z
     backgroundImagePositionY: z.coerce.number().int().min(0).max(100),
     backgroundImageZoom: z.coerce.number().int().min(100).max(200),
     spotlightCategory: z
-  .string()
-  .trim()
-  .max(40, "Focus category must be 40 characters or fewer.")
-  .optional()
-  .or(z.literal("")),
-  
+      .string()
+      .trim()
+      .max(40, "Focus category must be 40 characters or fewer.")
+      .optional()
+      .or(z.literal("")),
+
     spotlightTitle: z
       .string()
       .trim()
@@ -71,48 +71,48 @@ export const profileSettingsSchema = z
       .max(240, "Use no more than 240 characters.")
       .transform((value) => value || null),
     spotlightUrl: optionalUrl(500),
-    
-currentGame: z
-  .string()
-  .trim()
-  .max(100, "Use no more than 100 characters.")
-  .transform((value) => value || null),
 
-currentGameDescription: z
-  .string()
-  .trim()
-  .max(240, "Use no more than 240 characters.")
-  .transform((value) => value || null),
+    currentGame: z
+      .string()
+      .trim()
+      .max(100, "Use no more than 100 characters.")
+      .transform((value) => value || null),
 
-currentGameUrl: optionalUrl(500),
+    currentGameDescription: z
+      .string()
+      .trim()
+      .max(240, "Use no more than 240 characters.")
+      .transform((value) => value || null),
 
-currentReading: z
-  .string()
-  .trim()
-  .max(100, "Use no more than 100 characters.")
-  .transform((value) => value || null),
+    currentGameUrl: optionalUrl(500),
 
-currentReadingDescription: z
-  .string()
-  .trim()
-  .max(240, "Use no more than 240 characters.")
-  .transform((value) => value || null),
+    currentReading: z
+      .string()
+      .trim()
+      .max(100, "Use no more than 100 characters.")
+      .transform((value) => value || null),
 
-currentReadingUrl: optionalUrl(500),
+    currentReadingDescription: z
+      .string()
+      .trim()
+      .max(240, "Use no more than 240 characters.")
+      .transform((value) => value || null),
 
-currentFood: z
-  .string()
-  .trim()
-  .max(100, "Use no more than 100 characters.")
-  .transform((value) => value || null),
+    currentReadingUrl: optionalUrl(500),
 
-currentFoodDescription: z
-  .string()
-  .trim()
-  .max(240, "Use no more than 240 characters.")
-  .transform((value) => value || null),
+    currentFood: z
+      .string()
+      .trim()
+      .max(100, "Use no more than 100 characters.")
+      .transform((value) => value || null),
 
-currentFoodUrl: optionalUrl(500),
+    currentFoodDescription: z
+      .string()
+      .trim()
+      .max(240, "Use no more than 240 characters.")
+      .transform((value) => value || null),
+
+    currentFoodUrl: optionalUrl(500),
     viewMyLabel: z
       .string()
       .trim()

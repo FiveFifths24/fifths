@@ -41,7 +41,8 @@ export default async function SavedOpportunitiesPage() {
   if (savedResult.error) {
     return (
       <StatusMessage tone="error">
-        Saved opportunities are temporarily unavailable. Please try again shortly.
+        Saved opportunities are temporarily unavailable. Please try again
+        shortly.
       </StatusMessage>
     );
   }

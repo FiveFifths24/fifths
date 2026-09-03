@@ -36,10 +36,7 @@ function ActionForm({
       <input name="targetUserId" type="hidden" value={targetUserId} />
       <input name="returnTo" type="hidden" value={returnTo} />
 
-      <button
-        className={tone === "danger" ? danger : secondary}
-        type="submit"
-      >
+      <button className={tone === "danger" ? danger : secondary} type="submit">
         {label}
       </button>
     </form>
@@ -55,7 +52,7 @@ export function RelationshipControls({
   accentColor,
   reportSection,
 }: {
-    targetUserId: string;
+  targetUserId: string;
   returnTo: string;
   isFollowing: boolean;
   isMuted: boolean;
@@ -63,24 +60,27 @@ export function RelationshipControls({
   accentColor: string;
   reportSection?: ReactNode;
 }) {
-return (
-  <div className="w-full">
-    <div className="grid w-full grid-cols-2 gap-3 md:flex md:flex-wrap md:items-center md:justify-center">
-              <form action={openDirectConversationAction} className="w-full md:w-auto">
+  return (
+    <div className="w-full">
+      <div className="grid w-full grid-cols-2 gap-3 md:flex md:flex-wrap md:items-center md:justify-center">
+        <form
+          action={openDirectConversationAction}
+          className="w-full md:w-auto"
+        >
           <input name="targetUserId" type="hidden" value={targetUserId} />
 
-      <button
-        className="flex min-h-11 w-full items-center justify-center rounded-full border px-6 py-2.5 text-center text-sm font-bold text-white shadow-[0_10px_28px_rgba(0,0,0,.2)] transition hover:brightness-110 md:w-auto"
-        style={{
-          borderColor: `${accentColor}99`,
-          background: `linear-gradient(135deg, ${accentColor}50 0%, ${accentColor}d9 50%, ${accentColor}75 100%)`,
-          boxShadow: `0 10px 28px ${accentColor}22`,
-        }}
-        type="submit"
-      >
-        Send Message
-      </button>
-    </form>
+          <button
+            className="flex min-h-11 w-full items-center justify-center rounded-full border px-6 py-2.5 text-center text-sm font-bold text-white shadow-[0_10px_28px_rgba(0,0,0,.2)] transition hover:brightness-110 md:w-auto"
+            style={{
+              borderColor: `${accentColor}99`,
+              background: `linear-gradient(135deg, ${accentColor}50 0%, ${accentColor}d9 50%, ${accentColor}75 100%)`,
+              boxShadow: `0 10px 28px ${accentColor}22`,
+            }}
+            type="submit"
+          >
+            Send Message
+          </button>
+        </form>
 
         {friendship === "none" ? (
           <ActionForm
@@ -122,9 +122,8 @@ return (
         <ShareProfileButton path={returnTo} accentColor={""} />
       </div>
 
-<details 
-className="group relative mt-4 w-full">
-          <summary className="flex min-h-11 cursor-pointer list-none items-center justify-center rounded-2xl border border-white/8 bg-black/25 px-5 py-3 text-sm font-bold text-white transition hover:border-white/15 hover:bg-white/[0.03] hover:text-white/70">
+      <details className="group relative mt-4 w-full">
+        <summary className="flex min-h-11 cursor-pointer list-none items-center justify-center rounded-2xl border border-white/8 bg-black/25 px-5 py-3 text-sm font-bold text-white transition hover:border-white/15 hover:bg-white/[0.03] hover:text-white/70">
           More Actions ···
         </summary>
 
@@ -153,11 +152,7 @@ className="group relative mt-4 w-full">
             tone="danger"
           />
 
-{reportSection ? (
-  <div className="mt-1">
-    {reportSection}
-  </div>
-) : null}
+          {reportSection ? <div className="mt-1">{reportSection}</div> : null}
         </div>
       </details>
     </div>

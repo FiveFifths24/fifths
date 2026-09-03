@@ -80,7 +80,7 @@ export default async function CreatorCommonsPage() {
   if (opportunityResult.error) {
     return (
       <StatusMessage tone="error">
-         Creator Commons is temporarily unavailable. Please try again shortly.
+        Creator Commons is temporarily unavailable. Please try again shortly.
       </StatusMessage>
     );
   }

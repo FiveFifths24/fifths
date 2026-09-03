@@ -83,7 +83,8 @@ export default async function SafetyPage() {
 
       {unavailable ? (
         <StatusMessage className="mt-6" tone="error">
-          Trust and safety history is temporarily unavailable. Please try again shortly.
+          Trust and safety history is temporarily unavailable. Please try again
+          shortly.
         </StatusMessage>
       ) : null}
 

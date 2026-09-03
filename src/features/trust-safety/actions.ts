@@ -98,7 +98,8 @@ export async function submitReportAction(
   } catch {
     return {
       status: "error",
-      message: "Safety reports are temporarily unavailable. Please try again shortly.",
+      message:
+        "Safety reports are temporarily unavailable. Please try again shortly.",
     };
   }
 }

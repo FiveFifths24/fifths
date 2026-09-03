@@ -36,13 +36,13 @@ export type ProfileRoomSettings = {
   neckAccessory: "none" | "scarf" | "bandana";
   motionEnabled: boolean;
 
-// Layer colors for the new illustrated room.
-floorColor?: string | null;
-couchColor?: string | null;
-bookshelfColor?: string | null;
-tvColor?: string | null;
-doorColor?: string | null;
-accessoryColor?: string | null;
+  // Layer colors for the new illustrated room.
+  floorColor?: string | null;
+  couchColor?: string | null;
+  bookshelfColor?: string | null;
+  tvColor?: string | null;
+  doorColor?: string | null;
+  accessoryColor?: string | null;
 };
 
 export type RoomConnection = {
@@ -55,12 +55,7 @@ export type RoomConnection = {
 type HouseTheme = "day" | "night";
 type ThemePreference = "auto" | HouseTheme;
 type RoomFeatureKey =
-  | "signal"
-  | "focus"
-  | "latest"
-  | "friends"
-  | "music"
-  | "featured";
+  "signal" | "focus" | "latest" | "friends" | "music" | "featured";
 
 const roomFeatureLabels: Record<RoomFeatureKey, string> = {
   signal: "Current Signal",
@@ -135,7 +130,7 @@ function Hotspot({
   return (
     <button
       aria-label={label}
-className="group absolute z-20 inline-flex size-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-white/10 text-white/75 shadow-md backdrop-blur-xl transition duration-200 hover:scale-110 hover:border-white/60 hover:bg-white/20 hover:text-white focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none motion-reduce:transform-none"
+      className="group absolute z-20 inline-flex size-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-white/10 text-white/75 shadow-md backdrop-blur-xl transition duration-200 hover:scale-110 hover:border-white/60 hover:bg-white/20 hover:text-white focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none motion-reduce:transform-none"
       onClick={onClick}
       style={{ ...style, boxShadow: `0 0 0 2px ${accentColor}55` }}
       title={label}
@@ -196,7 +191,6 @@ function DetailBlock({
   );
 }
 
-
 export function ProfileRoom({
   settings,
   accentColor,
@@ -234,9 +228,12 @@ export function ProfileRoom({
   isOwner?: boolean;
 }) {
   const [musicArtworkUrl, setMusicArtworkUrl] = useState<string | null>(null);
-  const [selectedFeature, setSelectedFeature] = useState<RoomFeatureKey | null>(null);
+  const [selectedFeature, setSelectedFeature] = useState<RoomFeatureKey | null>(
+    null,
+  );
   const [localTheme, setLocalTheme] = useState<HouseTheme>("day");
-  const [themePreference, setThemePreference] = useState<ThemePreference>("auto");
+  const [themePreference, setThemePreference] =
+    useState<ThemePreference>("auto");
 
   const validSongUrl =
     song.url && /^https?:\/\//i.test(song.url) ? song.url : null;
@@ -245,7 +242,8 @@ export function ProfileRoom({
     ? "apple"
     : validSongUrl?.includes("open.spotify.com")
       ? "spotify"
-      : validSongUrl?.includes("youtube.com") || validSongUrl?.includes("youtu.be")
+      : validSongUrl?.includes("youtube.com") ||
+          validSongUrl?.includes("youtu.be")
         ? "youtube"
         : "other";
 
@@ -284,7 +282,8 @@ export function ProfileRoom({
 
         setMusicArtworkUrl(metadata.artworkUrl ?? null);
       } catch (error) {
-        if (error instanceof DOMException && error.name === "AbortError") return;
+        if (error instanceof DOMException && error.name === "AbortError")
+          return;
         setMusicArtworkUrl(null);
       }
     }
@@ -301,7 +300,10 @@ export function ProfileRoom({
     try {
       const stored = window.localStorage.getItem("signal-room-theme");
       if (stored === "auto" || stored === "day" || stored === "night") {
-        preferenceTimer = window.setTimeout(() => setThemePreference(stored), 0);
+        preferenceTimer = window.setTimeout(
+          () => setThemePreference(stored),
+          0,
+        );
       }
     } catch {
       // Automatic still works when localStorage is unavailable.
@@ -349,7 +351,11 @@ export function ProfileRoom({
         icon={<Radio aria-hidden="true" className="size-4" />}
         title="Current Signal"
       >
-        {statusText ? <p>{statusText}</p> : <p>{displayName} is between signals right now.</p>}
+        {statusText ? (
+          <p>{statusText}</p>
+        ) : (
+          <p>{displayName} is between signals right now.</p>
+        )}
         {statusCountdown ? (
           <div className="mt-2 text-xs text-white/40">{statusCountdown}</div>
         ) : null}
@@ -364,7 +370,9 @@ export function ProfileRoom({
         {spotlight.title ? (
           <>
             <p className="font-bold text-white">{spotlight.title}</p>
-            {spotlight.description ? <p className="mt-1">{spotlight.description}</p> : null}
+            {spotlight.description ? (
+              <p className="mt-1">{spotlight.description}</p>
+            ) : null}
             {spotlight.url ? (
               <a
                 className="mt-3 inline-flex font-bold hover:underline"
@@ -439,8 +447,12 @@ export function ProfileRoom({
       >
         {song.title || song.artist ? (
           <>
-            <p className="font-bold text-white">{song.title || "Featured song"}</p>
-            {song.artist ? <p className="text-white/50">{song.artist}</p> : null}
+            <p className="font-bold text-white">
+              {song.title || "Featured song"}
+            </p>
+            {song.artist ? (
+              <p className="text-white/50">{song.artist}</p>
+            ) : null}
             {validSongUrl ? (
               <a
                 className="mt-3 inline-flex font-bold hover:underline"
@@ -468,13 +480,12 @@ export function ProfileRoom({
           <img
             alt={`${displayName}'s featured profile`}
             className="mx-auto mt-2 max-h-[55vh] w-auto max-w-full rounded-[1.25rem] border border-white/10 object-contain"
-            src={featuredProfileImageUrl} />
+            src={featuredProfileImageUrl}
+          />
         ) : (
           <p>No Featured Profile Image Yet.</p>
         )}
       </DetailBlock>
-
-
     ),
   };
 
@@ -511,7 +522,9 @@ export function ProfileRoom({
             <select
               aria-label="Room light"
               className="bg-transparent text-white outline-none"
-              onChange={(event) => chooseTheme(event.target.value as ThemePreference)}
+              onChange={(event) =>
+                chooseTheme(event.target.value as ThemePreference)
+              }
               value={themePreference}
             >
               <option className="bg-[#111118]" value="auto">
@@ -525,179 +538,197 @@ export function ProfileRoom({
               </option>
             </select>
           </label>
-
         </div>
       </div>
 
-<></>
-  <div className="grid gap-5 lg:grid-cols-[minmax(360px,1.05fr)_minmax(0,1.45fr)]">
-          <div className="space-y-4">
+      <></>
+      <div className="grid gap-5 lg:grid-cols-[minmax(360px,1.05fr)_minmax(0,1.45fr)]">
+        <div className="space-y-4">
+          <DetailBlock
+            icon={<Radio aria-hidden="true" className="size-4" />}
+            title="Current Signal"
+          >
+            {statusText ? (
+              <p>{statusText}</p>
+            ) : (
+              <p>{displayName} is between signals right now.</p>
+            )}
+            {statusCountdown ? (
+              <div className="mt-2 text-xs text-white/40">
+                {statusCountdown}
+              </div>
+            ) : null}
+          </DetailBlock>
+
+          {spotlight.title ? (
             <DetailBlock
-              icon={<Radio aria-hidden="true" className="size-4" />}
-              title="Current Signal"
+              icon={<LampDesk aria-hidden="true" className="size-4" />}
+              title="Current Focus"
             >
-              {statusText ? <p>{statusText}</p> : <p>{displayName} is between signals right now.</p>}
-              {statusCountdown ? (
-                <div className="mt-2 text-xs text-white/40">{statusCountdown}</div>
+              <p className="font-bold text-white">{spotlight.title}</p>
+              {spotlight.description ? (
+                <p className="mt-1">{spotlight.description}</p>
+              ) : null}
+              {spotlight.url ? (
+                <a
+                  className="mt-3 inline-flex font-bold hover:underline"
+                  href={spotlight.url}
+                  rel="noreferrer"
+                  style={{ color: accentColor }}
+                  target="_blank"
+                >
+                  Open Spotlight
+                </a>
               ) : null}
             </DetailBlock>
+          ) : null}
 
-            {spotlight.title ? (
-              <DetailBlock
-                icon={<LampDesk aria-hidden="true" className="size-4" />}
-                title="Current Focus"
-              >
-                <p className="font-bold text-white">{spotlight.title}</p>
-                {spotlight.description ? <p className="mt-1">{spotlight.description}</p> : null}
-                {spotlight.url ? (
+          <DetailBlock
+            icon={<Sparkles aria-hidden="true" className="size-4" />}
+            title="Latest Pick"
+          >
+            {latestPick.title ? (
+              <>
+                {latestPick.category ? (
+                  <p className="text-xs font-bold tracking-[0.14em] text-white/45 uppercase">
+                    {latestPick.category}
+                  </p>
+                ) : null}
+                <p className="mt-2 font-bold text-white">{latestPick.title}</p>
+                {latestPick.note ? (
+                  <p className="mt-2 text-white/65">{latestPick.note}</p>
+                ) : null}
+                {latestPick.url ? (
                   <a
                     className="mt-3 inline-flex font-bold hover:underline"
-                    href={spotlight.url}
+                    href={latestPick.url}
                     rel="noreferrer"
                     style={{ color: accentColor }}
                     target="_blank"
                   >
-                    Open Spotlight
+                    View Pick
                   </a>
                 ) : null}
-              </DetailBlock>
-            ) : null}
+              </>
+            ) : (
+              <p className="text-white/50">
+                Add a book, game, movie, food, or other current favorite.
+              </p>
+            )}
+          </DetailBlock>
 
-            <DetailBlock
-              icon={<Sparkles aria-hidden="true" className="size-4" />}
-              title="Latest Pick"
-            >
-              {latestPick.title ? (
-                <>
-                  {latestPick.category ? (
-                    <p className="text-xs font-bold tracking-[0.14em] text-white/45 uppercase">
-                      {latestPick.category}
-                    </p>
-                  ) : null}
-                  <p className="mt-2 font-bold text-white">{latestPick.title}</p>
-                  {latestPick.note ? <p className="mt-2 text-white/65">{latestPick.note}</p> : null}
-                  {latestPick.url ? (
-                    <a
-                      className="mt-3 inline-flex font-bold hover:underline"
-                      href={latestPick.url}
-                      rel="noreferrer"
-                      style={{ color: accentColor }}
-                      target="_blank"
-                    >
-                      View Pick
-                    </a>
-                  ) : null}
-                </>
-              ) : (
-                <p className="text-white/50">
-                  Add a book, game, movie, food, or other current favorite.
-                </p>
-              )}
-            </DetailBlock>
+          <DetailBlock
+            icon={<UsersRound aria-hidden="true" className="size-4" />}
+            title="Friend Spotlight"
+          >
+            {featuredConnections.length ? (
+              <div className="mx-auto grid max-w-md grid-cols-2 gap-3 sm:grid-cols-3">
+                {featuredConnections.slice(0, 3).map((connection) => (
+                  <Frame connection={connection} key={connection.id} />
+                ))}
+              </div>
+            ) : (
+              <p>No Friends Featured Yet.</p>
+            )}
+          </DetailBlock>
+        </div>
 
-            <DetailBlock
-              icon={<UsersRound aria-hidden="true" className="size-4" />}
-              title="Friend Spotlight"
-            >
-              {featuredConnections.length ? (
-                <div className="mx-auto grid max-w-md grid-cols-2 gap-3 sm:grid-cols-3">
-                  {featuredConnections.slice(0, 3).map((connection) => (
-                    <Frame connection={connection} key={connection.id} />
-                  ))}
+        <div className="space-y-5 self-start">
+          <div
+            className="relative overflow-hidden rounded-[1.5rem] border bg-black/35 backdrop-blur-sm"
+            style={{ borderColor: accentColor }}
+          >
+            {featuredProfileImageUrl ? (
+              <>
+                <div
+                  className="absolute inset-0 scale-110 bg-cover bg-center opacity-30 blur-2xl"
+                  style={{ backgroundImage: `url(${featuredProfileImageUrl})` }}
+                />
+                <img
+                  alt={`${displayName}'s featured profile`}
+                  className="relative z-10 block h-auto w-full object-contain"
+                  src={featuredProfileImageUrl}
+                />
+              </>
+            ) : (
+              <div className="flex min-h-[320px] items-center justify-center p-8 text-center">
+                <div>
+                  <Images
+                    aria-hidden="true"
+                    className="mx-auto size-10 text-white/35"
+                  />
+                  <p className="mt-4 text-sm font-bold text-white/70">
+                    Featured Profile Image
+                  </p>
+                  <p className="mt-1 text-xs text-white/40">
+                    Add a separate image to feature in your Quick View.
+                  </p>
                 </div>
-              ) : (
-                <p>No Friends Featured Yet.</p>
-              )}
-            </DetailBlock>
+              </div>
+            )}
           </div>
 
-          <div className="space-y-5 self-start">
-            <div
-              className="relative overflow-hidden rounded-[1.5rem] border bg-black/35 backdrop-blur-sm"
-              style={{ borderColor: accentColor }}
-            >
-              {featuredProfileImageUrl ? (
-                <>
+          <DetailBlock
+            icon={<Music2 aria-hidden="true" className="size-4" />}
+            title="Music"
+          >
+            {song.title ? (
+              <div className="relative overflow-hidden rounded-[1.25rem] border border-white/10 bg-white/[0.03]">
+                <div className="flex flex-col items-center gap-4 p-4 text-center lg:flex-row lg:text-left">
                   <div
-                    className="absolute inset-0 scale-110 bg-cover bg-center opacity-30 blur-2xl"
-                    style={{ backgroundImage: `url(${featuredProfileImageUrl})` }}
-                  />
-                  <img
-                    alt={`${displayName}'s featured profile`}
-                    className="relative z-10 block h-auto w-full object-contain"
-                    src={featuredProfileImageUrl}
-                  />
-                </>
-              ) : (
-                <div className="flex min-h-[320px] items-center justify-center p-8 text-center">
-                  <div>
-                    <Images aria-hidden="true" className="mx-auto size-10 text-white/35" />
-                    <p className="mt-4 text-sm font-bold text-white/70">
-                      Featured Profile Image
-                    </p>
-                    <p className="mt-1 text-xs text-white/40">
-                      Add a separate image to feature in your Quick View.
-                    </p>
+                    className="relative flex aspect-square w-28 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-black/40"
+                    style={{ borderColor: "var(--room-accent)" }}
+                  >
+                    {musicArtworkUrl ? (
+                      <img
+                        alt={`${song.title ?? "Featured track"} artwork`}
+                        className="size-full object-cover"
+                        src={musicArtworkUrl}
+                      />
+                    ) : (
+                      <Music2
+                        aria-hidden="true"
+                        className="size-10 text-white/25"
+                      />
+                    )}
                   </div>
-                </div>
-              )}
-            </div>
 
-            <DetailBlock
-              icon={<Music2 aria-hidden="true" className="size-4" />}
-              title="Music"
-            >
-              {song.title ? (
-                <div className="relative overflow-hidden rounded-[1.25rem] border border-white/10 bg-white/[0.03]">
-                  <div className="flex flex-col items-center gap-4 p-4 text-center lg:flex-row lg:text-left">
-                    <div
-                      className="relative flex aspect-square w-28 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-black/40"
-                      style={{ borderColor: "var(--room-accent)" }}
-                    >
-                      {musicArtworkUrl ? (
-                        <img
-                          alt={`${song.title ?? "Featured track"} artwork`}
-                          className="size-full object-cover"
-                          src={musicArtworkUrl}
-                        />
-                      ) : (
-                        <Music2 aria-hidden="true" className="size-10 text-white/25" />
-                      )}
-                    </div>
-
-
-                    <div className="min-w-0 flex-1">
-                      <p className="text-xs font-bold tracking-[0.16em] text-white/40 uppercase">
-                        Featured Track
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs font-bold tracking-[0.16em] text-white/40 uppercase">
+                      Featured Track
+                    </p>
+                    <p className="mt-2 truncate text-lg font-bold text-white">
+                      {song.title}
+                    </p>
+                    {song.artist ? (
+                      <p className="mt-1 truncate text-sm text-white/55">
+                        {song.artist}
                       </p>
-                      <p className="mt-2 truncate text-lg font-bold text-white">{song.title}</p>
-                      {song.artist ? (
-                        <p className="mt-1 truncate text-sm text-white/55">{song.artist}</p>
-                      ) : null}
-                      {validSongUrl ? (
-                        <a
-                          className="relative z-20 mt-4 inline-flex cursor-pointer items-center gap-2 text-sm font-bold hover:underline"
-                          href={validSongUrl}
-                          rel="noopener noreferrer"
-                          style={{ color: accentColor }}
-                          target="_blank"
-                        >
-                          {musicLinkLabel}
-                        </a>
-                      ) : (
-                        <p className="mt-4 text-xs text-white/35">
-                          Add a valid music link to listen.
-                        </p>
-                      )}
-                    </div>
+                    ) : null}
+                    {validSongUrl ? (
+                      <a
+                        className="relative z-20 mt-4 inline-flex cursor-pointer items-center gap-2 text-sm font-bold hover:underline"
+                        href={validSongUrl}
+                        rel="noopener noreferrer"
+                        style={{ color: accentColor }}
+                        target="_blank"
+                      >
+                        {musicLinkLabel}
+                      </a>
+                    ) : (
+                      <p className="mt-4 text-xs text-white/35">
+                        Add a valid music link to listen.
+                      </p>
+                    )}
                   </div>
                 </div>
-              ) : (
-                <p className="text-white/50">No Featured Music Yet.</p>
-              )}
-            </DetailBlock>
-          </div>
-  </div>
+              </div>
+            ) : (
+              <p className="text-white/50">No Featured Music Yet.</p>
+            )}
+          </DetailBlock>
+        </div>
+      </div>
 
       {isOwner ? (
         <div className="mt-6 flex justify-center">

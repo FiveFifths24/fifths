@@ -45,37 +45,35 @@ export default async function NotificationsPage({
         Notifications are temporarily unavailable. Please try again shortly.
       </StatusMessage>
     );
-const notifications = result.data ?? [];
+  const notifications = result.data ?? [];
 
-const autoReadIds = notifications
-  .filter(
-    (item) =>
-      !item.read_at &&
-      !item.action_url?.startsWith("/home/messages"),
-  )
-  .map((item) => item.id);
+  const autoReadIds = notifications
+    .filter(
+      (item) => !item.read_at && !item.action_url?.startsWith("/home/messages"),
+    )
+    .map((item) => item.id);
 
-if (autoReadIds.length) {
-  await Promise.all(
-    autoReadIds.map((notificationId) =>
-      supabase.rpc("mark_notification_read", {
-        p_notification_id: notificationId,
-      }),
-    ),
+  if (autoReadIds.length) {
+    await Promise.all(
+      autoReadIds.map((notificationId) =>
+        supabase.rpc("mark_notification_read", {
+          p_notification_id: notificationId,
+        }),
+      ),
+    );
+  }
+
+  const autoReadIdSet = new Set(autoReadIds);
+  const visibleNotifications = notifications.map((item) =>
+    autoReadIdSet.has(item.id)
+      ? {
+          ...item,
+          read_at: new Date().toISOString(),
+        }
+      : item,
   );
-}
 
-const autoReadIdSet = new Set(autoReadIds);
-const visibleNotifications = notifications.map((item) =>
-  autoReadIdSet.has(item.id)
-    ? {
-        ...item,
-        read_at: new Date().toISOString(),
-      }
-    : item,
-);
-
-const unread = visibleNotifications.filter((item) => !item.read_at).length;
+  const unread = visibleNotifications.filter((item) => !item.read_at).length;
   return (
     <div>
       <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
@@ -87,7 +85,8 @@ const unread = visibleNotifications.filter((item) => !item.read_at).length;
             Your Updates, All In One Place
           </h1>
           <p className="mt-5 max-w-3xl text-lg leading-8 text-neutral-300">
-            Friend requests, activity, and important updates from across SIGNAL will appear here.
+            Friend requests, activity, and important updates from across SIGNAL
+            will appear here.
           </p>
         </div>
       </div>
@@ -101,73 +100,73 @@ const unread = visibleNotifications.filter((item) => !item.read_at).length;
           Notification status could not be updated.
         </StatusMessage>
       ) : null}
-<p className="mt-8 text-sm font-bold text-white/45">
-  {unread === 1 ? "1 Unread" : `${unread} Unread`}
-</p>
+      <p className="mt-8 text-sm font-bold text-white/45">
+        {unread === 1 ? "1 Unread" : `${unread} Unread`}
+      </p>
       {visibleNotifications.length ? (
         <ol className="mt-6 space-y-4">
           {visibleNotifications.map((item) => {
-  const isMessageNotification =
-    item.action_url?.startsWith("/home/messages") ?? false;
+            const isMessageNotification =
+              item.action_url?.startsWith("/home/messages") ?? false;
 
-  return (
-<li
-  className={`rounded-[1.75rem] border p-5 shadow-[0_18px_50px_rgba(0,0,0,.25)] backdrop-blur-xl transition sm:p-6 ${
-    item.read_at
-      ? "border-white/10 bg-black/40"
-      : "border-[#f359d2]/45 bg-[linear-gradient(135deg,rgba(108,20,206,.16),rgba(243,89,210,.08),rgba(0,0,0,.55))]"
-  }`}
-  key={item.id}
->
+            return (
+              <li
+                className={`rounded-[1.75rem] border p-5 shadow-[0_18px_50px_rgba(0,0,0,.25)] backdrop-blur-xl transition sm:p-6 ${
+                  item.read_at
+                    ? "border-white/10 bg-black/40"
+                    : "border-[#f359d2]/45 bg-[linear-gradient(135deg,rgba(108,20,206,.16),rgba(243,89,210,.08),rgba(0,0,0,.55))]"
+                }`}
+                key={item.id}
+              >
                 <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                  <div className="flex flex-wrap gap-2">
-                    <Badge>{formatNotificationKind(item.kind)}</Badge>
-                    {!item.read_at ? (
-<Badge className="border-[#8b5cf6]/45 bg-[#8b5cf6]/10 text-[#ddd0ff]">
-  Unread
-</Badge>
+                  <div>
+                    <div className="flex flex-wrap gap-2">
+                      <Badge>{formatNotificationKind(item.kind)}</Badge>
+                      {!item.read_at ? (
+                        <Badge className="border-[#8b5cf6]/45 bg-[#8b5cf6]/10 text-[#ddd0ff]">
+                          Unread
+                        </Badge>
+                      ) : null}
+                    </div>
+                    <h2 className="mt-3 text-xl font-black text-white sm:text-2xl">
+                      {formatNotificationTitle(item.title)}
+                    </h2>
+
+                    <p className="mt-2 max-w-2xl text-sm leading-6 text-white/55">
+                      {item.body}
+                    </p>
+                  </div>
+                  <div className="flex shrink-0 flex-wrap gap-3">
+                    {item.action_url ? (
+                      <ButtonLink
+                        href={item.action_url}
+                        className="border-0 bg-[linear-gradient(90deg,#6c14ce,#f359d2)] text-white shadow-[0_10px_30px_rgba(108,20,206,.25)] hover:brightness-110"
+                      >
+                        Open
+                      </ButtonLink>
+                    ) : null}
+
+                    {!item.read_at && isMessageNotification ? (
+                      <form action={markNotificationReadAction}>
+                        <input
+                          name="notificationId"
+                          type="hidden"
+                          value={item.id}
+                        />
+
+                        <button
+                          className="min-h-12 rounded-full border border-white/15 bg-black/30 px-5 text-sm font-bold text-white/70 transition hover:border-[#f359d2]/50 hover:text-white"
+                          type="submit"
+                        >
+                          Mark Read
+                        </button>
+                      </form>
                     ) : null}
                   </div>
-<h2 className="mt-3 text-xl font-black text-white sm:text-2xl">
-  {formatNotificationTitle(item.title)}
-</h2>
-
-<p className="mt-2 max-w-2xl text-sm leading-6 text-white/55">
-  {item.body}
-</p>
                 </div>
-<div className="flex shrink-0 flex-wrap gap-3">
-  {item.action_url ? (
-    <ButtonLink
-      href={item.action_url}
-      className="border-0 bg-[linear-gradient(90deg,#6c14ce,#f359d2)] text-white shadow-[0_10px_30px_rgba(108,20,206,.25)] hover:brightness-110"
-    >
-      Open
-    </ButtonLink>
-  ) : null}
-
-{!item.read_at && isMessageNotification ? (
-  <form action={markNotificationReadAction}>
-          <input
-        name="notificationId"
-        type="hidden"
-        value={item.id}
-      />
-
-      <button
-        className="min-h-12 rounded-full border border-white/15 bg-black/30 px-5 text-sm font-bold text-white/70 transition hover:border-[#f359d2]/50 hover:text-white"
-        type="submit"
-      >
-        Mark Read
-      </button>
-    </form>
-  ) : null}
-</div>
-              </div>
-            </li>
+              </li>
             );
-})}
+          })}
         </ol>
       ) : (
         <div className="mt-7">

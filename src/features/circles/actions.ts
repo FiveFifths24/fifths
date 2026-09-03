@@ -183,7 +183,7 @@ export async function leaveCircleAction(
     return {
       status: "error",
       message:
-         "Membership is temporarily unavailable. Please try again shortly.",
+        "Membership is temporarily unavailable. Please try again shortly.",
     };
   }
 

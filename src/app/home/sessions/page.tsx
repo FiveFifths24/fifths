@@ -32,9 +32,7 @@ export default async function SessionsPage() {
     return <AccountUnavailable />;
   }
 
-  const publicCutoff = new Date(
-  Date.now() - 24 * 60 * 60 * 1000,
-).toISOString();
+  const publicCutoff = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
   const { data: userData } = await supabase.auth.getUser();
 
   const [sessionResult, modeResult, interestResult, pulseResult] =
@@ -42,9 +40,9 @@ export default async function SessionsPage() {
       supabase
         .from("sessions")
         .select("*")
-.eq("status", "published")
-.gt("ends_at", publicCutoff)
-.order("starts_at")
+        .eq("status", "published")
+        .gt("ends_at", publicCutoff)
+        .order("starts_at")
         .limit(60),
 
       supabase.from("modes").select("id, slug, name").order("sort_order"),

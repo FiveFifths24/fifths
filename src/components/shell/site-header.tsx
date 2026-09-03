@@ -142,34 +142,34 @@ export function SiteHeader() {
                   <House aria-hidden="true" className="size-4" />
                   Home
                 </ButtonLink>
-<ButtonLink
-  className="w-full md:w-auto"
-  href="/profile"
-  onClick={() => setOpen(false)}
-  variant="secondary"
->
-  <CircleUserRound aria-hidden="true" className="size-4" />
-  My Profile
-</ButtonLink>
+                <ButtonLink
+                  className="w-full md:w-auto"
+                  href="/profile"
+                  onClick={() => setOpen(false)}
+                  variant="secondary"
+                >
+                  <CircleUserRound aria-hidden="true" className="size-4" />
+                  My Profile
+                </ButtonLink>
 
-<ButtonLink
-  className="w-full md:w-auto"
-  href="/home/notifications"
-  onClick={() => setOpen(false)}
-  variant="secondary"
->
-  <Bell aria-hidden="true" className="size-4" />
-  Notifications
-</ButtonLink>
+                <ButtonLink
+                  className="w-full md:w-auto"
+                  href="/home/notifications"
+                  onClick={() => setOpen(false)}
+                  variant="secondary"
+                >
+                  <Bell aria-hidden="true" className="size-4" />
+                  Notifications
+                </ButtonLink>
 
-<ButtonLink
-  className="w-full md:w-auto"
-  href="/account"
-  onClick={() => setOpen(false)}
->
-  <Settings aria-hidden="true" className="size-4" />
-  Account
-</ButtonLink>
+                <ButtonLink
+                  className="w-full md:w-auto"
+                  href="/account"
+                  onClick={() => setOpen(false)}
+                >
+                  <Settings aria-hidden="true" className="size-4" />
+                  Account
+                </ButtonLink>
                 <form action={signOutAction} className="w-full md:w-auto">
                   <button
                     className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full border border-neutral-700 px-6 py-3 text-sm font-bold text-white transition hover:border-[#f359d2]/60 hover:bg-white/5 md:w-auto"

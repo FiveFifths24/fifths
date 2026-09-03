@@ -67,7 +67,7 @@ export default async function CircleMembershipsPage({
   if (membershipResult.error) {
     return (
       <StatusMessage tone="error">
-        Circle memberships could not load. 
+        Circle memberships could not load.
       </StatusMessage>
     );
   }

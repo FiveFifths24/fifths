@@ -71,7 +71,7 @@ export default async function ManageCirclePage({
   if (circleResult.error) {
     return (
       <StatusMessage tone="error">
-         Circle management is temporarily unavailable. Please try again shortly.
+        Circle management is temporarily unavailable. Please try again shortly.
       </StatusMessage>
     );
   }

@@ -30,12 +30,12 @@ export function ShareProfileButton({
   }
 
   return (
-<button
-  className="flex min-h-11 w-full items-center justify-center rounded-full border border-white/10 bg-white/[0.035] px-5 py-2.5 text-center text-sm font-bold text-white transition hover:border-white/20 hover:bg-white/[0.07] md:w-auto"
-  onClick={share}
-  type="button"
->
-  {copied ? "Profile Link Copied" : "Share Profile"}
-</button>
+    <button
+      className="flex min-h-11 w-full items-center justify-center rounded-full border border-white/10 bg-white/[0.035] px-5 py-2.5 text-center text-sm font-bold text-white transition hover:border-white/20 hover:bg-white/[0.07] md:w-auto"
+      onClick={share}
+      type="button"
+    >
+      {copied ? "Profile Link Copied" : "Share Profile"}
+    </button>
   );
 }

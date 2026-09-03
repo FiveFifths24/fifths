@@ -33,31 +33,31 @@ export default async function MessagesPage() {
       : conversation.user_id_a,
   );
 
-const { data: memberProfiles, error: profilesError } = otherUserIds.length
-  ? await supabase.rpc("get_member_profiles", {
-      p_discoverable_only: false,
-      p_username: null,
-    })
-  : { data: [], error: null };
+  const { data: memberProfiles, error: profilesError } = otherUserIds.length
+    ? await supabase.rpc("get_member_profiles", {
+        p_discoverable_only: false,
+        p_username: null,
+      })
+    : { data: [], error: null };
 
-if (profilesError) {
-  console.error("message profile lookup failed:", profilesError);
-}
+  if (profilesError) {
+    console.error("message profile lookup failed:", profilesError);
+  }
 
-const relevantProfiles = (memberProfiles ?? []).filter((profile) =>
-  otherUserIds.includes(profile.id),
-);
+  const relevantProfiles = (memberProfiles ?? []).filter((profile) =>
+    otherUserIds.includes(profile.id),
+  );
 
-const signedProfiles = await Promise.all(
-  relevantProfiles.map(async (profile) => ({
-    ...profile,
-    avatarUrl: await signProfileMedia(supabase, profile.avatar_url),
-  })),
-);
+  const signedProfiles = await Promise.all(
+    relevantProfiles.map(async (profile) => ({
+      ...profile,
+      avatarUrl: await signProfileMedia(supabase, profile.avatar_url),
+    })),
+  );
 
-const profileMap = new Map(
-  signedProfiles.map((profile) => [profile.id, profile]),
-);
+  const profileMap = new Map(
+    signedProfiles.map((profile) => [profile.id, profile]),
+  );
 
   const conversationIds = conversationRows.map(
     (conversation) => conversation.id,
@@ -145,15 +145,15 @@ const profileMap = new Map(
                     aria-label={`${displayName}'s profile photo`}
                     className="size-14 shrink-0 rounded-full border-2 border-[#f359d2]/70 bg-gradient-to-br from-[#992bff] to-[#f359d2] bg-cover bg-center"
                     role="img"
-style={
-  profile?.avatarUrl
-    ? {
-        backgroundImage: `url(${JSON.stringify(
-          profile.avatarUrl,
-        ).slice(1, -1)})`,
-      }
-    : undefined
-}
+                    style={
+                      profile?.avatarUrl
+                        ? {
+                            backgroundImage: `url(${JSON.stringify(
+                              profile.avatarUrl,
+                            ).slice(1, -1)})`,
+                          }
+                        : undefined
+                    }
                   />
 
                   <div className="min-w-0 flex-1">

@@ -59,8 +59,7 @@ export async function recordPulseCheckInAction(
   } catch {
     return {
       status: "error",
-      message:
-         "Pulse is temporarily unavailable. Please try again shortly.",
+      message: "Pulse is temporarily unavailable. Please try again shortly.",
     };
   }
 

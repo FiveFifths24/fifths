@@ -59,7 +59,8 @@ export default async function ModerationPage({
   if (reportResult.error || feedbackResult.error)
     return (
       <StatusMessage tone="error">
-        The moderation workspace is temporarily unavailable or you may not have access.
+        The moderation workspace is temporarily unavailable or you may not have
+        access.
       </StatusMessage>
     );
   const reports = reportResult.data ?? [];
@@ -80,13 +81,14 @@ export default async function ModerationPage({
         Human Review, With Limits.
       </h1>
       <p className="mt-5 max-w-3xl text-lg leading-8 text-neutral-300">
-         Keep report details private and use only approved internal channels. Some
-  moderation tools are still limited while this workspace continues to develop.
+        Keep report details private and use only approved internal channels.
+        Some moderation tools are still limited while this workspace continues
+        to develop.
       </p>
       <StatusMessage className="mt-7">
-        Do not share report details in public channels. Some moderation tools, including
-account actions, content removal, evidence uploads, automated decisions, and
-emergency-response features, are not currently available.
+        Do not share report details in public channels. Some moderation tools,
+        including account actions, content removal, evidence uploads, automated
+        decisions, and emergency-response features, are not currently available.
       </StatusMessage>
       {parameters?.review === "updated" ? (
         <StatusMessage className="mt-5" tone="success">

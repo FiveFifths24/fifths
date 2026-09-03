@@ -61,22 +61,22 @@ export function ProfileRoomSettingsForm({
   );
   const [wallColor, setWallColor] = useState(settings.wallColor);
   const [characterColor, setCharacterColor] = useState(settings.characterColor);
-  const [floorColor, setFloorColor] = useState(settings.floorColor ?? "#4a403c");
-const [couchColor, setCouchColor] = useState(settings.couchColor ?? "#4a4048");
-const [bookshelfColor, setBookshelfColor] = useState(
-  settings.bookshelfColor ?? "#594139",
-);
-const [tvColor, setTvColor] = useState(settings.tvColor ?? "#262329");
-const [doorColor, setDoorColor] = useState(settings.doorColor ?? "#4a3935");
+  const [floorColor, setFloorColor] = useState(
+    settings.floorColor ?? "#4a403c",
+  );
+  const [couchColor, setCouchColor] = useState(
+    settings.couchColor ?? "#4a4048",
+  );
+  const [bookshelfColor, setBookshelfColor] = useState(
+    settings.bookshelfColor ?? "#594139",
+  );
+  const [tvColor, setTvColor] = useState(settings.tvColor ?? "#262329");
+  const [doorColor, setDoorColor] = useState(settings.doorColor ?? "#4a3935");
 
   return (
     <form action={action} className="space-y-6">
       <ActionStatus state={state} />
-      <input
-  type="hidden"
-  name="accessoryColor"
-  value="#5a5059"
-/>
+      <input type="hidden" name="accessoryColor" value="#5a5059" />
       <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-white/10 bg-black/25 p-5 has-checked:border-[#ca9aff]/70">
         <input
           className="mt-0.5 size-5 accent-[#a855f7]"
@@ -101,41 +101,40 @@ const [doorColor, setDoorColor] = useState(settings.doorColor ?? "#4a3935");
           onChange={setWallColor}
           value={wallColor}
         />
-<ColorField
-  label="Floor Color"
-  name="floorColor"
-  onChange={setFloorColor}
-  value={floorColor}
-/>
+        <ColorField
+          label="Floor Color"
+          name="floorColor"
+          onChange={setFloorColor}
+          value={floorColor}
+        />
 
-<ColorField
-  label="Couch & Chair Color"
-  name="couchColor"
-  onChange={setCouchColor}
-  value={couchColor}
-/>
+        <ColorField
+          label="Couch & Chair Color"
+          name="couchColor"
+          onChange={setCouchColor}
+          value={couchColor}
+        />
 
-<ColorField
-  label="Bookshelf Color"
-  name="bookshelfColor"
-  onChange={setBookshelfColor}
-  value={bookshelfColor}
-/>
+        <ColorField
+          label="Bookshelf Color"
+          name="bookshelfColor"
+          onChange={setBookshelfColor}
+          value={bookshelfColor}
+        />
 
-<ColorField
-  label="TV & Console Color"
-  name="tvColor"
-  onChange={setTvColor}
-  value={tvColor}
-/>
+        <ColorField
+          label="TV & Console Color"
+          name="tvColor"
+          onChange={setTvColor}
+          value={tvColor}
+        />
 
-<ColorField
-  label="Door & Window Trim Color"
-  name="doorColor"
-  onChange={setDoorColor}
-  value={doorColor}
-/>
-
+        <ColorField
+          label="Door & Window Trim Color"
+          name="doorColor"
+          onChange={setDoorColor}
+          value={doorColor}
+        />
 
         <ColorField
           label="Character Color"

@@ -167,14 +167,13 @@ function ProfilePreview({
 
         {person.mood ? (
           <p className="mt-3 text-sm text-white/65">
-            <span className="font-bold text-white/45">Mood:</span>{" "}
-            {person.mood}
+            <span className="font-bold text-white/45">Mood:</span> {person.mood}
           </p>
         ) : null}
 
         {presence ? (
           <p
-            className={`mt-2 text-xs font-bold uppercase tracking-[0.12em] ${
+            className={`mt-2 text-xs font-bold tracking-[0.12em] uppercase ${
               online ? "text-emerald-300" : "text-white/35"
             }`}
           >
@@ -215,7 +214,7 @@ function ProfilePreview({
         ) : null}
 
         <div
-  className="relative z-20 mx-auto mt-4 inline-flex min-h-9 items-center justify-center gap-2 rounded-full border px-4 text-xs font-bold text-white transition group-hover:bg-white/5"
+          className="relative z-20 mx-auto mt-4 inline-flex min-h-9 items-center justify-center gap-2 rounded-full border px-4 text-xs font-bold text-white transition group-hover:bg-white/5"
           style={{ borderColor: `${person.accentColor}80` }}
         >
           View Profile
@@ -307,10 +306,10 @@ export default async function PeoplePage({
   searchParams,
 }: {
   searchParams?: Promise<{
-  q?: string;
-  interest?: string;
-  social?: string;
-}>;
+    q?: string;
+    interest?: string;
+    social?: string;
+  }>;
 }) {
   const parameters = await searchParams;
   const supabase = await createClient();
@@ -324,12 +323,12 @@ export default async function PeoplePage({
   const userId = userData.user.id;
 
   const [
-  peopleResult,
-  friendshipsResult,
-  followsResult,
-  interestsResult,
-  profileInterestsResult,
-] = await Promise.all([
+    peopleResult,
+    friendshipsResult,
+    followsResult,
+    interestsResult,
+    profileInterestsResult,
+  ] = await Promise.all([
     supabase.rpc("get_member_profiles", {
       p_discoverable_only: false,
       p_username: null,
@@ -344,21 +343,20 @@ export default async function PeoplePage({
       .from("profile_follows")
       .select("follower_id, followed_id")
       .or(`follower_id.eq.${userId},followed_id.eq.${userId}`),
-      supabase
-  .from("interests")
-  .select("id, name")
-  .eq("active", true)
-  .order("name"),
+    supabase
+      .from("interests")
+      .select("id, name")
+      .eq("active", true)
+      .order("name"),
 
-supabase
-  .from("profile_interests")
-  .select("user_id, interest_id"),
+    supabase.from("profile_interests").select("user_id, interest_id"),
   ]);
 
   if (peopleResult.error || friendshipsResult.error || followsResult.error) {
     return (
       <StatusMessage tone="error">
-        People and connections are temporarily unavailable. Please try again shortly.
+        People and connections are temporarily unavailable. Please try again
+        shortly.
       </StatusMessage>
     );
   }
@@ -366,87 +364,80 @@ supabase
   const query = parameters?.q?.trim().toLowerCase() ?? "";
   const selectedInterest = parameters?.interest ?? "";
 
-const profileInterestIds = new Map<string, Set<string>>();
+  const profileInterestIds = new Map<string, Set<string>>();
 
-for (const item of profileInterestsResult.data ?? []) {
-  const current =
-    profileInterestIds.get(item.user_id) ?? new Set<string>();
+  for (const item of profileInterestsResult.data ?? []) {
+    const current = profileInterestIds.get(item.user_id) ?? new Set<string>();
 
-  current.add(item.interest_id);
-  profileInterestIds.set(item.user_id, current);
-}
+    current.add(item.interest_id);
+    profileInterestIds.set(item.user_id, current);
+  }
 
-const rawVisiblePeople = (peopleResult.data ?? []).filter(
-  (profile) => profile.id !== userId,
-);
+  const rawVisiblePeople = (peopleResult.data ?? []).filter(
+    (profile) => profile.id !== userId,
+  );
 
-const visibleIds = rawVisiblePeople.map((profile) => profile.id);
+  const visibleIds = rawVisiblePeople.map((profile) => profile.id);
 
-const { data: appearanceRows } = visibleIds.length
-  ? await supabase
-      .from("profiles")
-      .select(
-        "id, mood, last_seen_at, profile_accent_color, background_image_url",
-      )
-      .in("id", visibleIds)
-  : { data: [] };
+  const { data: appearanceRows } = visibleIds.length
+    ? await supabase
+        .from("profiles")
+        .select(
+          "id, mood, last_seen_at, profile_accent_color, background_image_url",
+        )
+        .in("id", visibleIds)
+    : { data: [] };
 
-const appearanceById = new Map(
-  (appearanceRows ?? []).map((profile) => [profile.id, profile]),
-);
+  const appearanceById = new Map(
+    (appearanceRows ?? []).map((profile) => [profile.id, profile]),
+  );
 
-const allVisiblePeople: PreviewPerson[] = await Promise.all(
-  rawVisiblePeople.map(async (profile) => {
-    const appearance = appearanceById.get(profile.id);
+  const allVisiblePeople: PreviewPerson[] = await Promise.all(
+    rawVisiblePeople.map(async (profile) => {
+      const appearance = appearanceById.get(profile.id);
 
-    return {
-      id: profile.id,
-      username: profile.username,
-      displayName: profile.display_name,
-      bio: profile.bio,
+      return {
+        id: profile.id,
+        username: profile.username,
+        displayName: profile.display_name,
+        bio: profile.bio,
 
-      mood: appearance?.mood ?? null,
-      lastSeenAt: appearance?.last_seen_at ?? null,
+        mood: appearance?.mood ?? null,
+        lastSeenAt: appearance?.last_seen_at ?? null,
 
-      accentColor:
-        appearance?.profile_accent_color || "#f359d2",
+        accentColor: appearance?.profile_accent_color || "#f359d2",
 
-      avatarUrl: await signProfileMedia(
-        supabase,
-        profile.avatar_url ?? null,
-      ),
+        avatarUrl: await signProfileMedia(supabase, profile.avatar_url ?? null),
 
-      backgroundUrl: await signProfileMedia(
-        supabase,
-        appearance?.background_image_url ??
-          profile.cover_image_url ??
-          null,
-      ),
-    };
-  }),
-);
+        backgroundUrl: await signProfileMedia(
+          supabase,
+          appearance?.background_image_url ?? profile.cover_image_url ?? null,
+        ),
+      };
+    }),
+  );
 
   const visibleById = new Map(
     rawVisiblePeople.map((profile) => [profile.id, profile]),
   );
 
-const people = allVisiblePeople.filter((profile) => {
-  const rawProfile = visibleById.get(profile.id);
+  const people = allVisiblePeople.filter((profile) => {
+    const rawProfile = visibleById.get(profile.id);
 
-  if (!rawProfile?.discoverable) return false;
+    if (!rawProfile?.discoverable) return false;
 
-  const matchesSearch =
-    !query ||
-    `${profile.displayName} ${profile.username} ${profile.bio ?? ""}`
-      .toLowerCase()
-      .includes(query);
+    const matchesSearch =
+      !query ||
+      `${profile.displayName} ${profile.username} ${profile.bio ?? ""}`
+        .toLowerCase()
+        .includes(query);
 
-  const matchesInterest =
-    !selectedInterest ||
-    profileInterestIds.get(profile.id)?.has(selectedInterest);
+    const matchesInterest =
+      !selectedInterest ||
+      profileInterestIds.get(profile.id)?.has(selectedInterest);
 
-  return matchesSearch && matchesInterest;
-});
+    return matchesSearch && matchesInterest;
+  });
 
   const friendships = friendshipsResult.data ?? [];
 
@@ -513,30 +504,30 @@ const people = allVisiblePeople.filter((profile) => {
           Search People
         </label>
         <div className="relative">
-  <label className="sr-only" htmlFor="interest-filter">
-    Filter By Interest
-  </label>
+          <label className="sr-only" htmlFor="interest-filter">
+            Filter By Interest
+          </label>
 
-  <SlidersHorizontal
-    aria-hidden="true"
-    className="pointer-events-none absolute top-1/2 left-4 size-4 -translate-y-1/2 text-white/35"
-  />
+          <SlidersHorizontal
+            aria-hidden="true"
+            className="pointer-events-none absolute top-1/2 left-4 size-4 -translate-y-1/2 text-white/35"
+          />
 
-  <select
-    className="min-h-14 w-full appearance-none rounded-full border border-white/10 bg-black/45 pr-10 pl-11 text-sm font-bold text-white/70 outline-none backdrop-blur-xl transition hover:border-white/20 focus:border-[#ca9aff]/70 sm:w-52"
-    defaultValue={selectedInterest}
-    id="interest-filter"
-    name="interest"
-  >
-    <option value="">Filter By Interests</option>
+          <select
+            className="min-h-14 w-full appearance-none rounded-full border border-white/10 bg-black/45 pr-10 pl-11 text-sm font-bold text-white/70 backdrop-blur-xl transition outline-none hover:border-white/20 focus:border-[#ca9aff]/70 sm:w-52"
+            defaultValue={selectedInterest}
+            id="interest-filter"
+            name="interest"
+          >
+            <option value="">Filter By Interests</option>
 
-    {(interestsResult.data ?? []).map((interest) => (
-      <option key={interest.id} value={interest.id}>
-        {interest.name}
-      </option>
-    ))}
-  </select>
-</div>
+            {(interestsResult.data ?? []).map((interest) => (
+              <option key={interest.id} value={interest.id}>
+                {interest.name}
+              </option>
+            ))}
+          </select>
+        </div>
 
         <div className="relative min-w-0 flex-1">
           <Search
@@ -545,7 +536,7 @@ const people = allVisiblePeople.filter((profile) => {
           />
 
           <input
-            className="min-h-14 w-full rounded-full border border-white/10 bg-black/45 pr-5 pl-12 text-white shadow-xl backdrop-blur-xl outline-none transition placeholder:text-white/25 focus:border-[#ca9aff]/70"
+            className="min-h-14 w-full rounded-full border border-white/10 bg-black/45 pr-5 pl-12 text-white shadow-xl backdrop-blur-xl transition outline-none placeholder:text-white/25 focus:border-[#ca9aff]/70"
             defaultValue={parameters?.q}
             id="people-search"
             name="q"
@@ -655,7 +646,6 @@ const people = allVisiblePeople.filter((profile) => {
       ) : null}
 
       <section className="mt-20" aria-labelledby="discover-title">
-
         {people.length ? (
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {people.map((profile) => (
@@ -675,9 +665,7 @@ const people = allVisiblePeople.filter((profile) => {
               className="mx-auto size-6 text-[#f359d2]"
             />
 
-            <p className="mt-4 font-bold text-white">
-              No Profiles Found.
-            </p>
+            <p className="mt-4 font-bold text-white">No Profiles Found.</p>
 
             <p className="mt-2 text-sm leading-6 text-white/40">
               Try another name, username, or bio keyword.

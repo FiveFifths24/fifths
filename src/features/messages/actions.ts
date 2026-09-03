@@ -28,9 +28,7 @@ export async function openDirectConversationAction(formData: FormData) {
 }
 
 export async function sendDirectMessageAction(formData: FormData) {
-  const conversationId = String(
-    formData.get("conversationId") ?? "",
-  ).trim();
+  const conversationId = String(formData.get("conversationId") ?? "").trim();
 
   const body = String(formData.get("body") ?? "").trim();
 

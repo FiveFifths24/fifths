@@ -131,7 +131,7 @@ export async function createCampaignAction(
     return {
       status: "error",
       message:
-          "Fifth Realm is temporarily unavailable. Please try again shortly.",
+        "Fifth Realm is temporarily unavailable. Please try again shortly.",
     };
   }
   redirect(`/home/realm/manage/${campaignId}?created=1`);

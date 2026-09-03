@@ -58,10 +58,10 @@ export function ModuleOverview({ module }: { module: PlatformModule }) {
               module.memberHref ? "Implementation status" : "Product preview"
             }
           >
-{module.memberHref
-  ? "This feature is available to members, though some functionality may still be limited during setup."
-  : "This feature is still in development and will become available in a future update."}
-            </PreviewState>
+            {module.memberHref
+              ? "This feature is available to members, though some functionality may still be limited during setup."
+              : "This feature is still in development and will become available in a future update."}
+          </PreviewState>
         </Container>
       </section>
 

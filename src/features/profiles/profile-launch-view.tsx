@@ -14,10 +14,7 @@ import {
   UtensilsCrossed,
 } from "lucide-react";
 import type { ReactNode } from "react";
-import {
-  ProfileImageLayer,
-  type ProfileImageFit,
-} from "./profile-image-layer";
+import { ProfileImageLayer, type ProfileImageFit } from "./profile-image-layer";
 import { ProfileSoundtrack } from "./profile-soundtrack";
 import { ProfileStatusCountdown } from "./profile-status-countdown";
 import { ProfileViewTracker } from "./profile-view-tracker";
@@ -42,10 +39,10 @@ export type ProfileLaunchExperience = {
   followingCount: number;
   profileViewCount: number;
 
-spotlightCategory: string | null;
-spotlightTitle: string | null;
-spotlightDescription: string | null;
-spotlightUrl: string | null;
+  spotlightCategory: string | null;
+  spotlightTitle: string | null;
+  spotlightDescription: string | null;
+  spotlightUrl: string | null;
 
   currentGame: string | null;
   currentGameDescription: string | null;
@@ -246,28 +243,26 @@ export function ProfileLaunchView({
 
   const currentlyVisible = Boolean(
     experience.spotlightTitle ||
-      experience.spotlightDescription ||
-      experience.spotlightUrl ||
-      experience.currentGame ||
-      experience.currentGameDescription ||
-      experience.currentGameUrl ||
-      experience.currentReading ||
-      experience.currentReadingDescription ||
-      experience.currentReadingUrl ||
-      experience.currentFood ||
-      experience.currentFoodDescription ||
-      experience.currentFoodUrl,
+    experience.spotlightDescription ||
+    experience.spotlightUrl ||
+    experience.currentGame ||
+    experience.currentGameDescription ||
+    experience.currentGameUrl ||
+    experience.currentReading ||
+    experience.currentReadingDescription ||
+    experience.currentReadingUrl ||
+    experience.currentFood ||
+    experience.currentFoodDescription ||
+    experience.currentFoodUrl,
   );
 
   const latestVisible = Boolean(
     experience.latestPickTitle ||
-      experience.latestPickNote ||
-      experience.latestPickUrl,
+    experience.latestPickNote ||
+    experience.latestPickUrl,
   );
 
-  const viewMyVisible = Boolean(
-    experience.viewMyLabel && experience.viewMyUrl,
-  );
+  const viewMyVisible = Boolean(experience.viewMyLabel && experience.viewMyUrl);
 
   const featuredPhotos = [
     featuredProfileImageUrl,
@@ -305,117 +300,114 @@ export function ProfileLaunchView({
           PROFILE HERO
           This is the ONLY major section intentionally left aligned.
           ========================================================= */}
-<GlassPanel
-  accentColor={accentColor}
-  className="relative overflow-hidden p-0"
->
-  <div className="relative min-h-[32rem] overflow-hidden sm:min-h-[34rem] lg:min-h-[30rem]">
-    <ProfileImageLayer
-      fit={experience.landscapeFit}
-      imageUrl={profile.landscapeUrl}
-      positionX={experience.landscapePositionX}
-      positionY={experience.landscapePositionY}
-      zoom={experience.landscapeZoom}
-    />
+      <GlassPanel
+        accentColor={accentColor}
+        className="relative overflow-hidden p-0"
+      >
+        <div className="relative min-h-[32rem] overflow-hidden sm:min-h-[34rem] lg:min-h-[30rem]">
+          <ProfileImageLayer
+            fit={experience.landscapeFit}
+            imageUrl={profile.landscapeUrl}
+            positionX={experience.landscapePositionX}
+            positionY={experience.landscapePositionY}
+            zoom={experience.landscapeZoom}
+          />
 
+          <div className="relative z-10 flex min-h-[32rem] items-end p-6 sm:min-h-[34rem] sm:p-8 lg:min-h-[30rem] lg:items-center lg:p-10">
+            <div className="mx-auto w-full max-w-xl text-center lg:mx-0 lg:text-left">
+              {/* Avatar */}
+              <div
+                aria-label={`${profile.displayName}'s profile photo`}
+                className="mx-auto size-24 rounded-full border-4 bg-gradient-to-br from-[#992bff] to-[#f359d2] bg-cover bg-center shadow-2xl sm:size-28 lg:mx-0"
+                role="img"
+                style={{
+                  borderColor: accentColor,
+                  ...(profile.avatarUrl
+                    ? {
+                        backgroundImage: `url(${JSON.stringify(
+                          profile.avatarUrl,
+                        ).slice(1, -1)})`,
+                      }
+                    : {}),
+                }}
+              />
 
+              {/* Name + quick info */}
+              <h1 className="display-type mt-5 text-5xl leading-none text-white capitalize sm:text-6xl lg:text-7xl">
+                {profile.displayName}
+              </h1>
 
-    <div className="relative z-10 flex min-h-[32rem] items-end p-6 sm:min-h-[34rem] sm:p-8 lg:min-h-[30rem] lg:items-center lg:p-10">
-      <div className="mx-auto w-full max-w-xl text-center lg:mx-0 lg:text-left">
-        {/* Avatar */}
-        <div
-          aria-label={`${profile.displayName}'s profile photo`}
-          className="mx-auto size-24 rounded-full border-4 bg-gradient-to-br from-[#992bff] to-[#f359d2] bg-cover bg-center shadow-2xl sm:size-28 lg:mx-0"
-          role="img"
-          style={{
-            borderColor: accentColor,
-            ...(profile.avatarUrl
-              ? {
-                  backgroundImage: `url(${JSON.stringify(
-                    profile.avatarUrl,
-                  ).slice(1, -1)})`,
-                }
-              : {}),
-          }}
-        />
+              <p
+                className="mt-2 text-base font-black"
+                style={{ color: accentColor }}
+              >
+                @{profile.username}
+              </p>
 
-        {/* Name + quick info */}
-        <h1 className="display-type mt-5 text-5xl leading-none text-white capitalize sm:text-6xl lg:text-7xl">
-          {profile.displayName}
-        </h1>
+              {profile.bio ? (
+                <p className="mt-5 max-w-md text-base leading-7 text-white/75 sm:text-lg">
+                  {profile.bio}
+                </p>
+              ) : null}
 
-        <p
-          className="mt-2 text-base font-black"
-          style={{ color: accentColor }}
-        >
-          @{profile.username}
-        </p>
+              <div className="mt-5 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm lg:justify-start">
+                <span
+                  className="inline-flex items-center gap-2 font-black"
+                  style={{ color: accentColor }}
+                >
+                  <span
+                    aria-hidden="true"
+                    className="size-2.5 rounded-full shadow-[0_0_14px_currentColor]"
+                    style={{ backgroundColor: accentColor }}
+                  />
+                  {presence}
+                </span>
 
-        {profile.bio ? (
-          <p className="mt-5 max-w-md text-base leading-7 text-white/75 sm:text-lg">
-            {profile.bio}
-          </p>
-        ) : null}
+                {experience.mood ? (
+                  <span className="text-white/55">
+                    Mood:{" "}
+                    <span className="font-bold text-white/80">
+                      {experience.mood}
+                    </span>
+                  </span>
+                ) : null}
 
-        <div className="mt-5 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm lg:justify-start">
-          <span
-            className="inline-flex items-center gap-2 font-black"
-            style={{ color: accentColor }}
-          >
-            <span
-              aria-hidden="true"
-              className="size-2.5 rounded-full shadow-[0_0_14px_currentColor]"
-              style={{ backgroundColor: accentColor }}
-            />
-            {presence}
-          </span>
+                {joinedDate ? (
+                  <span className="inline-flex items-center gap-1.5 text-white/45">
+                    <CalendarDays aria-hidden="true" className="size-4" />
+                    Joined {joinedDate}
+                  </span>
+                ) : null}
+              </div>
 
-          {experience.mood ? (
-            <span className="text-white/55">
-              Mood:{" "}
-              <span className="font-bold text-white/80">
-                {experience.mood}
-              </span>
-            </span>
-          ) : null}
-
-          {joinedDate ? (
-            <span className="inline-flex items-center gap-1.5 text-white/45">
-              <CalendarDays aria-hidden="true" className="size-4" />
-              Joined {joinedDate}
-            </span>
-          ) : null}
+              {viewMyVisible ? (
+                <div className="mt-6 flex justify-center lg:justify-start">
+                  <a
+                    className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border bg-black/55 px-5 py-2.5 text-sm font-black backdrop-blur-md transition hover:-translate-y-0.5 hover:bg-black/80"
+                    href={experience.viewMyUrl!}
+                    rel="noopener noreferrer"
+                    style={{
+                      borderColor: `${accentColor}88`,
+                      color: accentColor,
+                    }}
+                    target="_blank"
+                  >
+                    {experience.viewMyLabel}
+                    <ArrowUpRight aria-hidden="true" className="size-4" />
+                  </a>
+                </div>
+              ) : null}
+            </div>
+          </div>
         </div>
-
-{viewMyVisible ? (
-  <div className="mt-6 flex justify-center lg:justify-start">
-    <a
-      className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border bg-black/55 px-5 py-2.5 text-sm font-black backdrop-blur-md transition hover:-translate-y-0.5 hover:bg-black/80"
-      href={experience.viewMyUrl!}
-      rel="noopener noreferrer"
-      style={{
-        borderColor: `${accentColor}88`,
-        color: accentColor,
-      }}
-      target="_blank"
-    >
-      {experience.viewMyLabel}
-      <ArrowUpRight aria-hidden="true" className="size-4" />
-    </a>
-  </div>
-) : null}
-      </div>
-    </div>
-  </div>
-</GlassPanel>
-
+      </GlassPanel>
 
       {/* ======================
           PROFILE STATS
           ====================== */}
-<GlassPanel accentColor={accentColor} className="mt-5 p-2 sm:p-5">
-  <div className="grid grid-cols-4 gap-1.5 sm:gap-3">
-              {stats.map(({ label, count, icon: Icon }) => (
+      <GlassPanel accentColor={accentColor} className="mt-5 p-2 sm:p-5">
+        <div className="grid grid-cols-4 gap-1.5 sm:gap-3">
+          {stats.map(({ label, count, icon: Icon }) => (
             <div
               className="flex min-h-[4.75rem] flex-col items-center justify-center rounded-xl border border-white/[0.06] bg-white/[0.03] px-1 py-2 text-center sm:min-h-24 sm:rounded-2xl sm:px-3 sm:py-4"
               key={label}
@@ -431,8 +423,8 @@ export function ProfileLaunchView({
               </p>
 
               <p className="mt-0.5 text-[0.6rem] leading-tight text-white/45 sm:text-xs">
-  {label}
-</p>
+                {label}
+              </p>
             </div>
           ))}
         </div>
@@ -450,9 +442,7 @@ export function ProfileLaunchView({
           accentColor={accentColor}
           className="mx-auto mt-10 max-w-4xl p-6 text-center sm:p-8"
         >
-          <SectionLabel accentColor={accentColor}>
-            Current Signal
-          </SectionLabel>
+          <SectionLabel accentColor={accentColor}>Current Signal</SectionLabel>
 
           <div className="mt-5 flex flex-col items-center justify-center gap-3">
             <div
@@ -489,9 +479,7 @@ export function ProfileLaunchView({
           accentColor={accentColor}
           className="mx-auto mt-10 max-w-5xl p-6 text-center sm:p-8"
         >
-          <SectionLabel accentColor={accentColor}>
-            Soundtrack
-          </SectionLabel>
+          <SectionLabel accentColor={accentColor}>Soundtrack</SectionLabel>
 
           <div className="mx-auto mt-5 max-w-3xl">
             <ProfileSoundtrack
@@ -506,126 +494,126 @@ export function ProfileLaunchView({
         </GlassPanel>
       ) : null}
 
-{/* ======================
+      {/* ======================
     LATEST PICK + FOCUS
     ====================== */}
-{latestVisible ||
-experience.spotlightTitle ||
-experience.spotlightDescription ? (
-  <div className="mx-auto mt-10 grid max-w-5xl gap-5 md:grid-cols-2">
-    {latestVisible ? (
-      <GlassPanel
-        accentColor={accentColor}
-        className="flex min-h-[13rem] flex-col items-center justify-center px-6 py-7 text-center"
-      >
-        <div
-          className="flex size-10 items-center justify-center rounded-full border"
-          style={{
-            borderColor: `${accentColor}55`,
-            backgroundColor: `${accentColor}12`,
-            color: accentColor,
-          }}
-        >
-          <Sparkles aria-hidden="true" className="size-4" />
+      {latestVisible ||
+      experience.spotlightTitle ||
+      experience.spotlightDescription ? (
+        <div className="mx-auto mt-10 grid max-w-5xl gap-5 md:grid-cols-2">
+          {latestVisible ? (
+            <GlassPanel
+              accentColor={accentColor}
+              className="flex min-h-[13rem] flex-col items-center justify-center px-6 py-7 text-center"
+            >
+              <div
+                className="flex size-10 items-center justify-center rounded-full border"
+                style={{
+                  borderColor: `${accentColor}55`,
+                  backgroundColor: `${accentColor}12`,
+                  color: accentColor,
+                }}
+              >
+                <Sparkles aria-hidden="true" className="size-4" />
+              </div>
+
+              <div className="mt-3">
+                <SectionLabel accentColor={accentColor}>
+                  Latest Indulgence
+                </SectionLabel>
+              </div>
+
+              {experience.latestPickCategory ? (
+                <p className="mt-3 text-[0.68rem] font-bold tracking-[0.12em] text-white/35 uppercase">
+                  {experience.latestPickCategory}
+                </p>
+              ) : null}
+
+              {experience.latestPickTitle ? (
+                <h3 className="mt-2 text-xl font-black text-white">
+                  {experience.latestPickTitle}
+                </h3>
+              ) : null}
+
+              {experience.latestPickNote ? (
+                <p className="mt-2 max-w-sm text-sm leading-6 text-white/50">
+                  {experience.latestPickNote}
+                </p>
+              ) : null}
+
+              {experience.latestPickUrl ? (
+                <a
+                  className="mt-4 inline-flex items-center justify-center gap-2 text-sm font-bold hover:underline"
+                  href={experience.latestPickUrl}
+                  rel="noopener noreferrer"
+                  style={{ color: accentColor }}
+                  target="_blank"
+                >
+                  View Pick
+                  <ArrowUpRight aria-hidden="true" className="size-4" />
+                </a>
+              ) : null}
+            </GlassPanel>
+          ) : null}
+
+          {experience.spotlightTitle ||
+          experience.spotlightDescription ||
+          experience.spotlightUrl ? (
+            <GlassPanel
+              accentColor={accentColor}
+              className="flex min-h-[13rem] flex-col items-center justify-center px-6 py-7 text-center"
+            >
+              <div
+                className="flex size-10 items-center justify-center rounded-full border"
+                style={{
+                  borderColor: `${accentColor}55`,
+                  backgroundColor: `${accentColor}12`,
+                  color: accentColor,
+                }}
+              >
+                <Radio aria-hidden="true" className="size-4" />
+              </div>
+
+              <div className="mt-3">
+                <SectionLabel accentColor={accentColor}>
+                  Current Focus
+                </SectionLabel>
+              </div>
+
+              {experience.spotlightCategory ? (
+                <p className="mt-3 text-[0.68rem] font-bold tracking-[0.12em] text-white/35 uppercase">
+                  {experience.spotlightCategory}
+                </p>
+              ) : null}
+
+              {experience.spotlightTitle ? (
+                <h3 className="mt-3 text-xl font-black text-white">
+                  {experience.spotlightTitle}
+                </h3>
+              ) : null}
+
+              {experience.spotlightDescription ? (
+                <p className="mt-2 max-w-sm text-sm leading-6 text-white/50">
+                  {experience.spotlightDescription}
+                </p>
+              ) : null}
+
+              {experience.spotlightUrl ? (
+                <a
+                  className="mt-4 inline-flex items-center justify-center gap-2 text-sm font-bold hover:underline"
+                  href={experience.spotlightUrl}
+                  rel="noopener noreferrer"
+                  style={{ color: accentColor }}
+                  target="_blank"
+                >
+                  See What I&apos;m On
+                  <ArrowUpRight aria-hidden="true" className="size-4" />
+                </a>
+              ) : null}
+            </GlassPanel>
+          ) : null}
         </div>
-
-        <div className="mt-3">
-          <SectionLabel accentColor={accentColor}>
-            Latest Indulgence
-          </SectionLabel>
-        </div>
-
-        {experience.latestPickCategory ? (
-          <p className="mt-3 text-[0.68rem] font-bold tracking-[0.12em] text-white/35 uppercase">
-            {experience.latestPickCategory}
-          </p>
-        ) : null}
-
-        {experience.latestPickTitle ? (
-          <h3 className="mt-2 text-xl font-black text-white">
-            {experience.latestPickTitle}
-          </h3>
-        ) : null}
-
-        {experience.latestPickNote ? (
-          <p className="mt-2 max-w-sm text-sm leading-6 text-white/50">
-            {experience.latestPickNote}
-          </p>
-        ) : null}
-
-        {experience.latestPickUrl ? (
-          <a
-            className="mt-4 inline-flex items-center justify-center gap-2 text-sm font-bold hover:underline"
-            href={experience.latestPickUrl}
-            rel="noopener noreferrer"
-            style={{ color: accentColor }}
-            target="_blank"
-          >
-            View Pick
-            <ArrowUpRight aria-hidden="true" className="size-4" />
-          </a>
-        ) : null}
-      </GlassPanel>
-    ) : null}
-
-    {experience.spotlightTitle ||
-    experience.spotlightDescription ||
-    experience.spotlightUrl ? (
-      <GlassPanel
-        accentColor={accentColor}
-        className="flex min-h-[13rem] flex-col items-center justify-center px-6 py-7 text-center"
-      >
-        <div
-          className="flex size-10 items-center justify-center rounded-full border"
-          style={{
-            borderColor: `${accentColor}55`,
-            backgroundColor: `${accentColor}12`,
-            color: accentColor,
-          }}
-        >
-          <Radio aria-hidden="true" className="size-4" />
-        </div>
-
-        <div className="mt-3">
-          <SectionLabel accentColor={accentColor}>
-            Current Focus
-          </SectionLabel>
-        </div>
-
-        {experience.spotlightCategory ? (
-  <p className="mt-3 text-[0.68rem] font-bold tracking-[0.12em] text-white/35 uppercase">
-    {experience.spotlightCategory}
-  </p>
-) : null}
-
-        {experience.spotlightTitle ? (
-          <h3 className="mt-3 text-xl font-black text-white">
-            {experience.spotlightTitle}
-          </h3>
-        ) : null}
-
-        {experience.spotlightDescription ? (
-          <p className="mt-2 max-w-sm text-sm leading-6 text-white/50">
-            {experience.spotlightDescription}
-          </p>
-        ) : null}
-
-        {experience.spotlightUrl ? (
-          <a
-            className="mt-4 inline-flex items-center justify-center gap-2 text-sm font-bold hover:underline"
-            href={experience.spotlightUrl}
-            rel="noopener noreferrer"
-            style={{ color: accentColor }}
-            target="_blank"
-          >
-            See What I&apos;m On
-            <ArrowUpRight aria-hidden="true" className="size-4" />
-          </a>
-        ) : null}
-      </GlassPanel>
-    ) : null}
-  </div>
-) : null}
+      ) : null}
 
       {/* ======================
           FEATURED PHOTOS
@@ -636,9 +624,7 @@ experience.spotlightDescription ? (
           accentColor={accentColor}
           className="mt-10 p-5 text-center sm:p-7"
         >
-          <SectionLabel accentColor={accentColor}>
-            Featured Photos
-          </SectionLabel>
+          <SectionLabel accentColor={accentColor}>Featured Photos</SectionLabel>
 
           <div
             className={`mx-auto mt-6 grid max-w-5xl gap-4 ${
@@ -678,9 +664,7 @@ experience.spotlightDescription ? (
           accentColor={accentColor}
           className="mt-10 p-6 text-center sm:p-8"
         >
-          <SectionLabel accentColor={accentColor}>
-            Currently
-          </SectionLabel>
+          <SectionLabel accentColor={accentColor}>Currently</SectionLabel>
 
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <CurrentCard
@@ -696,7 +680,9 @@ experience.spotlightDescription ? (
             <CurrentCard
               accentColor={accentColor}
               description={experience.currentGameDescription}
-              icon={<Gamepad2 aria-hidden="true" className="size-4 sm:size-5" />}
+              icon={
+                <Gamepad2 aria-hidden="true" className="size-4 sm:size-5" />
+              }
               label="Playing"
               linkLabel="Check It Out"
               title={experience.currentGame}
@@ -706,7 +692,9 @@ experience.spotlightDescription ? (
             <CurrentCard
               accentColor={accentColor}
               description={experience.currentReadingDescription}
-              icon={<BookOpen aria-hidden="true" className="size-4 sm:size-5" />}
+              icon={
+                <BookOpen aria-hidden="true" className="size-4 sm:size-5" />
+              }
               label="Reading"
               linkLabel="Read With Me"
               title={experience.currentReading}
@@ -717,7 +705,10 @@ experience.spotlightDescription ? (
               accentColor={accentColor}
               description={experience.currentFoodDescription}
               icon={
-                <UtensilsCrossed aria-hidden="true" className="size-4 sm:size-5" />
+                <UtensilsCrossed
+                  aria-hidden="true"
+                  className="size-4 sm:size-5"
+                />
               }
               label="Eating"
               linkLabel="Check It Out"
@@ -727,8 +718,6 @@ experience.spotlightDescription ? (
           </div>
         </GlassPanel>
       ) : null}
-
-
 
       {/* ======================
           OWNER EMPTY STATE
@@ -755,82 +744,79 @@ experience.spotlightDescription ? (
           </h2>
 
           <p className="mx-auto mt-2 max-w-lg text-sm leading-6 text-white/50">
-            Add featured photos, music, a current signal, favorite things,
-            and friends to bring your profile to life.
+            Add featured photos, music, a current signal, favorite things, and
+            friends to bring your profile to life.
           </p>
         </GlassPanel>
       ) : null}
 
-{(!isOwner && contactActions) || featuredConnections.length ? (
-  <div className="mt-12 grid gap-5 lg:grid-cols-[0.3fr_0.7fr]">
-    {!isOwner && contactActions ? (
-      <GlassPanel
-        accentColor={accentColor}
-        className="p-5 text-center sm:p-6"
-      >
-        <SectionLabel accentColor={accentColor}>
-          Contact Me
-        </SectionLabel>
-
-        <p className="mx-auto mt-2 max-w-sm text-sm text-white/40">
-          Connect, message, follow, or share this profile.
-        </p>
-
-<div className="mx-auto mt-6 flex max-w-sm flex-wrap items-center justify-center gap-4">
-  {contactActions}
-</div>
-      </GlassPanel>
-    ) : null}
-
-    {featuredConnections.length ? (
-      <GlassPanel
-        accentColor={accentColor}
-        className="p-6 text-center sm:p-8"
-      >
-        <SectionLabel accentColor={accentColor}>
-          Friend Spotlight
-        </SectionLabel>
-
-        <p className="mt-2 text-sm text-white/40">
-          People in {profile.displayName}&apos;s orbit.
-        </p>
-
-        <div className="mx-auto mt-7 flex max-w-4xl flex-wrap items-start justify-center gap-7 sm:gap-10">
-          {featuredConnections.slice(0, 6).map((connection) => (
-            <Link
-              className="group flex w-24 flex-col items-center text-center outline-none"
-              href={`/home/profiles/${connection.username}`}
-              key={connection.id}
+      {(!isOwner && contactActions) || featuredConnections.length ? (
+        <div className="mt-12 grid gap-5 lg:grid-cols-[0.3fr_0.7fr]">
+          {!isOwner && contactActions ? (
+            <GlassPanel
+              accentColor={accentColor}
+              className="p-5 text-center sm:p-6"
             >
-              <span
-                className="block size-20 rounded-full border-2 bg-gradient-to-br from-[#992bff] to-[#f359d2] bg-cover bg-center shadow-lg transition duration-200 group-hover:-translate-y-1 group-hover:scale-105 group-focus-visible:ring-2 group-focus-visible:ring-white"
-                style={{
-                  borderColor: accentColor,
-                  ...(connection.avatarUrl
-                    ? {
-                        backgroundImage: `url(${JSON.stringify(
-                          connection.avatarUrl,
-                        ).slice(1, -1)})`,
-                      }
-                    : {}),
-                }}
-              />
+              <SectionLabel accentColor={accentColor}>Contact Me</SectionLabel>
 
-              <span className="mt-3 max-w-full truncate text-sm font-black text-white">
-                {connection.displayName}
-              </span>
+              <p className="mx-auto mt-2 max-w-sm text-sm text-white/40">
+                Connect, message, follow, or share this profile.
+              </p>
 
-              <span className="mt-0.5 max-w-full truncate text-xs text-white/40">
-                @{connection.username}
-              </span>
-            </Link>
-          ))}
+              <div className="mx-auto mt-6 flex max-w-sm flex-wrap items-center justify-center gap-4">
+                {contactActions}
+              </div>
+            </GlassPanel>
+          ) : null}
+
+          {featuredConnections.length ? (
+            <GlassPanel
+              accentColor={accentColor}
+              className="p-6 text-center sm:p-8"
+            >
+              <SectionLabel accentColor={accentColor}>
+                Friend Spotlight
+              </SectionLabel>
+
+              <p className="mt-2 text-sm text-white/40">
+                People in {profile.displayName}&apos;s orbit.
+              </p>
+
+              <div className="mx-auto mt-7 flex max-w-4xl flex-wrap items-start justify-center gap-7 sm:gap-10">
+                {featuredConnections.slice(0, 6).map((connection) => (
+                  <Link
+                    className="group flex w-24 flex-col items-center text-center outline-none"
+                    href={`/home/profiles/${connection.username}`}
+                    key={connection.id}
+                  >
+                    <span
+                      className="block size-20 rounded-full border-2 bg-gradient-to-br from-[#992bff] to-[#f359d2] bg-cover bg-center shadow-lg transition duration-200 group-hover:-translate-y-1 group-hover:scale-105 group-focus-visible:ring-2 group-focus-visible:ring-white"
+                      style={{
+                        borderColor: accentColor,
+                        ...(connection.avatarUrl
+                          ? {
+                              backgroundImage: `url(${JSON.stringify(
+                                connection.avatarUrl,
+                              ).slice(1, -1)})`,
+                            }
+                          : {}),
+                      }}
+                    />
+
+                    <span className="mt-3 max-w-full truncate text-sm font-black text-white">
+                      {connection.displayName}
+                    </span>
+
+                    <span className="mt-0.5 max-w-full truncate text-xs text-white/40">
+                      @{connection.username}
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            </GlassPanel>
+          ) : null}
         </div>
-      </GlassPanel>
-    ) : null}
-  </div>
-) : null}
-
+      ) : null}
     </div>
   );
 }

@@ -402,9 +402,7 @@ export function PulseHero() {
             </p>
 
             <h1 className="display-type mx-auto max-w-[36rem] text-[clamp(2rem,11vw,5rem)] leading-[0.96] tracking-[-0.045em] text-[#f4f2ef] lg:mx-0 lg:text-[clamp(3rem,3.4vw,4rem)]">
-              <span className="block text-white">
-                Find Your Space.
-              </span>
+              <span className="block text-white">Find Your Space.</span>
 
               <span className="mt-1 block bg-[linear-gradient(30deg,#1800ad,#6c14ce,#f359d2)] bg-clip-text text-[4.5rem] leading-[0.9] text-transparent [-webkit-text-fill-color:transparent] sm:text-[5.25rem] lg:text-[7rem] xl:text-[7.5rem]">
                 Match Your Energy

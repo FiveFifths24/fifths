@@ -41,25 +41,25 @@ export default async function DirectConversationPage({
       ? conversation.user_id_b
       : conversation.user_id_a;
 
-const { data: memberProfiles, error: profileError } = await supabase.rpc(
-  "get_member_profiles",
-  {
-    p_discoverable_only: false,
-    p_username: null,
-  },
-);
+  const { data: memberProfiles, error: profileError } = await supabase.rpc(
+    "get_member_profiles",
+    {
+      p_discoverable_only: false,
+      p_username: null,
+    },
+  );
 
-if (profileError) {
-  console.error("message profile lookup failed:", profileError);
-}
+  if (profileError) {
+    console.error("message profile lookup failed:", profileError);
+  }
 
-const otherProfile = memberProfiles?.find(
-  (profile) => profile.id === otherUserId,
-);
-const otherAvatarUrl = otherProfile
-  ? await signProfileMedia(supabase, otherProfile.avatar_url)
-  : null;
-  
+  const otherProfile = memberProfiles?.find(
+    (profile) => profile.id === otherUserId,
+  );
+  const otherAvatarUrl = otherProfile
+    ? await signProfileMedia(supabase, otherProfile.avatar_url)
+    : null;
+
   const { data: messages, error: messagesError } = await supabase
     .from("direct_messages")
     .select(
@@ -101,15 +101,15 @@ const otherAvatarUrl = otherProfile
               aria-label={`${displayName}'s profile photo`}
               className="size-11 shrink-0 rounded-full border-2 border-[#f359d2]/70 bg-gradient-to-br from-[#992bff] to-[#f359d2] bg-cover bg-center"
               role="img"
-style={
-  otherAvatarUrl
-    ? {
-        backgroundImage: `url(${JSON.stringify(
-          otherAvatarUrl,
-        ).slice(1, -1)})`,
-      }
-    : undefined
-}
+              style={
+                otherAvatarUrl
+                  ? {
+                      backgroundImage: `url(${JSON.stringify(
+                        otherAvatarUrl,
+                      ).slice(1, -1)})`,
+                    }
+                  : undefined
+              }
             />
 
             <div className="min-w-0">
@@ -123,7 +123,6 @@ style={
             </div>
           </Link>
         </header>
-
 
         <div className="flex min-h-[32rem] flex-col">
           <div className="flex-1 space-y-4 px-4 py-6 sm:px-7">
@@ -145,7 +144,7 @@ style={
                           : "max-w-[82%] rounded-[1.4rem] rounded-bl-md border border-white/10 bg-white/[0.055] px-4 py-3 text-white sm:max-w-[70%]"
                       }
                     >
-                      <p className="whitespace-pre-wrap break-words text-sm leading-6">
+                      <p className="text-sm leading-6 break-words whitespace-pre-wrap">
                         {message.deleted_at
                           ? "This message was deleted."
                           : message.body}
@@ -184,15 +183,11 @@ style={
             action={sendDirectMessageAction}
             className="border-t border-white/10 bg-black/35 p-4 sm:p-5"
           >
-            <input
-              name="conversationId"
-              type="hidden"
-              value={conversationId}
-            />
+            <input name="conversationId" type="hidden" value={conversationId} />
 
             <div className="flex items-end gap-3">
               <textarea
-                className="min-h-12 max-h-40 flex-1 resize-y rounded-2xl border border-white/10 bg-white/[0.045] px-4 py-3 text-sm text-white outline-none transition placeholder:text-white/25 focus:border-[#f359d2]/55 focus:bg-white/[0.065]"
+                className="max-h-40 min-h-12 flex-1 resize-y rounded-2xl border border-white/10 bg-white/[0.045] px-4 py-3 text-sm text-white transition outline-none placeholder:text-white/25 focus:border-[#f359d2]/55 focus:bg-white/[0.065]"
                 maxLength={2000}
                 name="body"
                 placeholder={`Message ${displayName}...`}

@@ -76,23 +76,23 @@ export async function updateProfileSettingsAction(
     backgroundImagePositionX: formData.get("backgroundImagePositionX"),
     backgroundImagePositionY: formData.get("backgroundImagePositionY"),
     backgroundImageZoom: formData.get("backgroundImageZoom"),
-spotlightCategory: formData.get("spotlightCategory") ?? "",
-spotlightTitle: formData.get("spotlightTitle") ?? "",
-spotlightDescription: formData.get("spotlightDescription") ?? "",
-spotlightUrl: formData.get("spotlightUrl") ?? "",
-currentGame: formData.get("currentGame"),
-currentGameDescription: formData.get("currentGameDescription"),
-currentGameUrl: formData.get("currentGameUrl"),
+    spotlightCategory: formData.get("spotlightCategory") ?? "",
+    spotlightTitle: formData.get("spotlightTitle") ?? "",
+    spotlightDescription: formData.get("spotlightDescription") ?? "",
+    spotlightUrl: formData.get("spotlightUrl") ?? "",
+    currentGame: formData.get("currentGame"),
+    currentGameDescription: formData.get("currentGameDescription"),
+    currentGameUrl: formData.get("currentGameUrl"),
 
-currentReading: formData.get("currentReading"),
-currentReadingDescription: formData.get("currentReadingDescription"),
-currentReadingUrl: formData.get("currentReadingUrl"),
+    currentReading: formData.get("currentReading"),
+    currentReadingDescription: formData.get("currentReadingDescription"),
+    currentReadingUrl: formData.get("currentReadingUrl"),
 
-currentFood: formData.get("currentFood"),
-currentFoodDescription: formData.get("currentFoodDescription"),
-currentFoodUrl: formData.get("currentFoodUrl"),
+    currentFood: formData.get("currentFood"),
+    currentFoodDescription: formData.get("currentFoodDescription"),
+    currentFoodUrl: formData.get("currentFoodUrl"),
 
-viewMyLabel: formData.get("viewMyLabel"),
+    viewMyLabel: formData.get("viewMyLabel"),
     viewMyUrl: formData.get("viewMyUrl"),
     profileSongTitle: formData.get("profileSongTitle"),
     profileSongArtist: formData.get("profileSongArtist"),
@@ -102,18 +102,18 @@ viewMyLabel: formData.get("viewMyLabel"),
     latestPickNote: formData.get("latestPickNote"),
     latestPickUrl: formData.get("latestPickUrl"),
   });
-if (!parsed.success) {
-  console.error(
-    "PROFILE SETTINGS VALIDATION:",
-    parsed.error.flatten().fieldErrors,
-  );
+  if (!parsed.success) {
+    console.error(
+      "PROFILE SETTINGS VALIDATION:",
+      parsed.error.flatten().fieldErrors,
+    );
 
-  return {
-    status: "error",
-    message: "Check the highlighted profile details and try again.",
-    fieldErrors: parsed.error.flatten().fieldErrors,
-  };
-}
+    return {
+      status: "error",
+      message: "Check the highlighted profile details and try again.",
+      fieldErrors: parsed.error.flatten().fieldErrors,
+    };
+  }
 
   try {
     const supabase = await createClient();
@@ -125,9 +125,9 @@ if (!parsed.success) {
       };
     const { data: current } = await supabase
       .from("profiles")
-.select(
-  "username, avatar_url, cover_image_url, background_image_url, featured_profile_image_url, featured_profile_image_2_url",
-)
+      .select(
+        "username, avatar_url, cover_image_url, background_image_url, featured_profile_image_url, featured_profile_image_2_url",
+      )
       .eq("id", userData.user.id)
       .maybeSingle();
     const avatarPath = await uploadProfileImage(
@@ -155,11 +155,11 @@ if (!parsed.success) {
       current?.featured_profile_image_url ?? null,
     );
     const featuredPath2 = await uploadProfileImage(
-  "featured-2",
-  formData.get("featuredProfileImage2"),
-  userData.user.id,
-  current?.featured_profile_image_2_url ?? null,
-);
+      "featured-2",
+      formData.get("featuredProfileImage2"),
+      userData.user.id,
+      current?.featured_profile_image_2_url ?? null,
+    );
     const { error } = await supabase.rpc("update_profile_experience", {
       p_username: parsed.data.username,
       p_display_name: parsed.data.displayName,
@@ -205,44 +205,44 @@ if (!parsed.success) {
               : "Your profile could not be updated.",
       };
     }
-const { error: spotlightCategoryError } = await supabase.rpc(
-  "set_spotlight_category",
-  {
-    p_spotlight_category: parsed.data.spotlightCategory ?? "",
-  },
-);
+    const { error: spotlightCategoryError } = await supabase.rpc(
+      "set_spotlight_category",
+      {
+        p_spotlight_category: parsed.data.spotlightCategory ?? "",
+      },
+    );
 
-if (spotlightCategoryError) {
-  return {
-    status: "error",
-    message: "Your Current Focus category could not be saved.",
-  };
-}
-const { error: currentFieldsError } = await supabase.rpc(
-  "set_profile_current_fields",
-  {
-    p_current_game: parsed.data.currentGame,
-    p_current_game_description: parsed.data.currentGameDescription,
-    p_current_game_url: parsed.data.currentGameUrl,
+    if (spotlightCategoryError) {
+      return {
+        status: "error",
+        message: "Your Current Focus category could not be saved.",
+      };
+    }
+    const { error: currentFieldsError } = await supabase.rpc(
+      "set_profile_current_fields",
+      {
+        p_current_game: parsed.data.currentGame,
+        p_current_game_description: parsed.data.currentGameDescription,
+        p_current_game_url: parsed.data.currentGameUrl,
 
-    p_current_reading: parsed.data.currentReading,
-    p_current_reading_description: parsed.data.currentReadingDescription,
-    p_current_reading_url: parsed.data.currentReadingUrl,
+        p_current_reading: parsed.data.currentReading,
+        p_current_reading_description: parsed.data.currentReadingDescription,
+        p_current_reading_url: parsed.data.currentReadingUrl,
 
-    p_current_food: parsed.data.currentFood,
-    p_current_food_description: parsed.data.currentFoodDescription,
-    p_current_food_url: parsed.data.currentFoodUrl,
-  },
-);
+        p_current_food: parsed.data.currentFood,
+        p_current_food_description: parsed.data.currentFoodDescription,
+        p_current_food_url: parsed.data.currentFoodUrl,
+      },
+    );
 
-if (currentFieldsError) {
-  console.error("set_profile_current_fields failed:", currentFieldsError);
+    if (currentFieldsError) {
+      console.error("set_profile_current_fields failed:", currentFieldsError);
 
-  return {
-    status: "error",
-    message: `Current profile update failed: ${currentFieldsError.message}`,
-  };
-}
+      return {
+        status: "error",
+        message: `Current profile update failed: ${currentFieldsError.message}`,
+      };
+    }
     const { error: featuredImageError } = await supabase.rpc(
       "set_featured_profile_image",
       { p_featured_profile_image_url: featuredPath ?? "" },
@@ -253,36 +253,35 @@ if (currentFieldsError) {
         message: "Your featured profile image could not be saved.",
       };
     }
-const { error: featuredImage2Error } = await supabase.rpc(
-  "set_second_featured_profile_image",
-  {
-    p_featured_profile_image_2_url: featuredPath2 ?? "",
-  },
-);
+    const { error: featuredImage2Error } = await supabase.rpc(
+      "set_second_featured_profile_image",
+      {
+        p_featured_profile_image_2_url: featuredPath2 ?? "",
+      },
+    );
 
-if (featuredImage2Error) {
-  return {
-    status: "error",
-    message: "Your second featured profile image could not be saved.",
-  };
-}
-const activePaths = new Set(
-  [
-    avatarPath,
-    landscapePath,
-    backgroundPath,
-    featuredPath,
-    featuredPath2,
-  ].filter(Boolean),
-);
-const replacedPaths = [
-  current?.avatar_url,
-  current?.cover_image_url,
-  current?.background_image_url,
-  current?.featured_profile_image_url,
-  current?.featured_profile_image_2_url,
-]
-    .filter((currentPath): currentPath is string =>
+    if (featuredImage2Error) {
+      return {
+        status: "error",
+        message: "Your second featured profile image could not be saved.",
+      };
+    }
+    const activePaths = new Set(
+      [
+        avatarPath,
+        landscapePath,
+        backgroundPath,
+        featuredPath,
+        featuredPath2,
+      ].filter(Boolean),
+    );
+    const replacedPaths = [
+      current?.avatar_url,
+      current?.cover_image_url,
+      current?.background_image_url,
+      current?.featured_profile_image_url,
+      current?.featured_profile_image_2_url,
+    ].filter((currentPath): currentPath is string =>
       Boolean(currentPath && !activePaths.has(currentPath)),
     );
     if (replacedPaths.length) {
@@ -506,14 +505,13 @@ async function runRelationshipAction(
   const { error } = await supabase.rpc(rpcName, {
     [argumentName]: parsed.data.targetUserId,
   } as never);
-revalidatePath("/home/people");
-revalidatePath(returnTo.split("?")[0] ?? returnTo);
+  revalidatePath("/home/people");
+  revalidatePath(returnTo.split("?")[0] ?? returnTo);
 
-redirect(returnTo);
+  redirect(returnTo);
 }
 
 export async function followProfileAction(formData: FormData) {
-  
   return runRelationshipAction(formData, "follow_profile");
 }
 export async function unfollowProfileAction(formData: FormData) {

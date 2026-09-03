@@ -138,7 +138,7 @@ export async function submitOpportunityResponseAction(
     return {
       status: "error",
       message:
-         "Responses are temporarily unavailable. Please try again shortly.",
+        "Responses are temporarily unavailable. Please try again shortly.",
     };
   }
 
