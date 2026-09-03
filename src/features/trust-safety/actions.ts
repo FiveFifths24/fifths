@@ -50,7 +50,7 @@ export async function submitFeedbackAction(
   } catch {
     return {
       status: "error",
-      message: "Feedback requires the Phase 10 Supabase migration.",
+      message: "Feedback is temporarily unavailable. Please try again shortly.",
     };
   }
 }
@@ -98,7 +98,8 @@ export async function submitReportAction(
   } catch {
     return {
       status: "error",
-      message: "Safety reports require the Phase 10 Supabase migration.",
+      message:
+        "Safety reports are temporarily unavailable. Please try again shortly.",
     };
   }
 }

@@ -16,6 +16,10 @@ import {
 } from "@/features/creator-commons/opportunity-data";
 import { CampaignCard } from "@/features/fifth-realm/campaign-card";
 import {
+  filterMemberContent,
+  loadContentPreferences,
+} from "@/features/profiles/content-filters";
+import {
   assembleCampaignCards,
   toCampaignRecommendationCandidates,
 } from "@/features/fifth-realm/campaign-data";
@@ -150,8 +154,7 @@ export default async function PersonalHomePage({
   if (pulseResult.error) {
     return (
       <StatusMessage tone="error">
-        Your personal Home could not load Pulse data. Confirm that the Phase 3
-        migration has been applied to the connected Supabase project.
+        Your Home is temporarily unavailable. Please try again shortly.
       </StatusMessage>
     );
   }
@@ -172,10 +175,33 @@ export default async function PersonalHomePage({
   const displayName = profile?.display_name ?? "You";
   const modes = modeResult.data ?? [];
   const mode = pulse ? modes.find((item) => item.id === pulse.mode_id) : null;
-  const sessions = sessionResult.data ?? [];
-  const circles = circleResult.data ?? [];
-  const opportunities = opportunityResult.data ?? [];
-  const campaigns = campaignResult.data ?? [];
+  const contentPreferences = user
+    ? await loadContentPreferences(supabase, user.id)
+    : { hiddenUserIds: new Set<string>(), blockedWords: [] };
+  const sessions = filterMemberContent(
+    sessionResult.data ?? [],
+    contentPreferences,
+    (item) => item.host_user_id,
+    (item) => `${item.title} ${item.summary} ${item.description}`,
+  );
+  const circles = filterMemberContent(
+    circleResult.data ?? [],
+    contentPreferences,
+    (item) => item.created_by,
+    (item) => `${item.name} ${item.summary} ${item.description}`,
+  );
+  const opportunities = filterMemberContent(
+    opportunityResult.data ?? [],
+    contentPreferences,
+    (item) => item.created_by,
+    (item) => `${item.title} ${item.summary} ${item.description}`,
+  );
+  const campaigns = filterMemberContent(
+    campaignResult.data ?? [],
+    contentPreferences,
+    (item) => item.created_by,
+    (item) => `${item.title} ${item.summary} ${item.premise}`,
+  );
   const [
     sessionLinkResult,
     circleLinkResult,
@@ -438,7 +464,7 @@ export default async function PersonalHomePage({
             </>
           ) : (
             <div className="mt-6">
-              <PreviewState title="No Pulse recorded">
+              <PreviewState title="No Pulse Recorded">
                 Check in when you are ready. FIFTHS does not infer your energy
                 or show demonstration activity in your private Home.
               </PreviewState>
@@ -536,7 +562,7 @@ export default async function PersonalHomePage({
                 </div>
 
                 <div>
-                  <p className="font-bold text-white">Check your Pulse first</p>
+                  <p className="font-bold text-white">Check Your Pulse First</p>
 
                   <p className="mt-1 max-w-xl text-sm leading-6 text-white/45">
                     A current Pulse helps SIGNAL personalize this feed and bring
@@ -635,7 +661,7 @@ export default async function PersonalHomePage({
               <Activity aria-hidden="true" className="size-8 text-[#f359d2]" />
 
               <h3 className="mt-4 text-xl font-bold text-white">
-                Your Pulse shapes your feed.
+                Your Pulse Shapes Your Feed.
               </h3>
 
               <p className="mt-2 max-w-lg text-sm leading-6 text-white/45">

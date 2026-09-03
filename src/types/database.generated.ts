@@ -1,0 +1,3298 @@
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[];
+
+export type Database = {
+  // Allows to automatically instantiate createClient with right options
+  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
+  __InternalSupabase: {
+    PostgrestVersion: "14.5";
+  };
+  public: {
+    Tables: {
+      attendance_records: {
+        Row: {
+          marked_at: string;
+          marked_by: string;
+          session_id: string;
+          status: Database["public"]["Enums"]["attendance_status"];
+          user_id: string;
+        };
+        Insert: {
+          marked_at?: string;
+          marked_by: string;
+          session_id: string;
+          status: Database["public"]["Enums"]["attendance_status"];
+          user_id: string;
+        };
+        Update: {
+          marked_at?: string;
+          marked_by?: string;
+          session_id?: string;
+          status?: Database["public"]["Enums"]["attendance_status"];
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "attendance_records_session_id_user_id_fkey";
+            columns: ["session_id", "user_id"];
+            isOneToOne: true;
+            referencedRelation: "registrations";
+            referencedColumns: ["session_id", "user_id"];
+          },
+        ];
+      };
+      campaign_applications: {
+        Row: {
+          accepted_at: string | null;
+          availability: string;
+          campaign_id: string;
+          declined_at: string | null;
+          experience_level: Database["public"]["Enums"]["campaign_experience_level"];
+          motivation: string;
+          safety_acknowledged: boolean;
+          status: Database["public"]["Enums"]["campaign_application_status"];
+          submitted_at: string;
+          updated_at: string;
+          user_id: string;
+          withdrawn_at: string | null;
+        };
+        Insert: {
+          accepted_at?: string | null;
+          availability: string;
+          campaign_id: string;
+          declined_at?: string | null;
+          experience_level: Database["public"]["Enums"]["campaign_experience_level"];
+          motivation: string;
+          safety_acknowledged?: boolean;
+          status?: Database["public"]["Enums"]["campaign_application_status"];
+          submitted_at?: string;
+          updated_at?: string;
+          user_id: string;
+          withdrawn_at?: string | null;
+        };
+        Update: {
+          accepted_at?: string | null;
+          availability?: string;
+          campaign_id?: string;
+          declined_at?: string | null;
+          experience_level?: Database["public"]["Enums"]["campaign_experience_level"];
+          motivation?: string;
+          safety_acknowledged?: boolean;
+          status?: Database["public"]["Enums"]["campaign_application_status"];
+          submitted_at?: string;
+          updated_at?: string;
+          user_id?: string;
+          withdrawn_at?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "campaign_applications_campaign_id_fkey";
+            columns: ["campaign_id"];
+            isOneToOne: false;
+            referencedRelation: "realm_campaigns";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "campaign_applications_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      campaign_interests: {
+        Row: {
+          campaign_id: string;
+          created_at: string;
+          interest_id: string;
+        };
+        Insert: {
+          campaign_id: string;
+          created_at?: string;
+          interest_id: string;
+        };
+        Update: {
+          campaign_id?: string;
+          created_at?: string;
+          interest_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "campaign_interests_campaign_id_fkey";
+            columns: ["campaign_id"];
+            isOneToOne: false;
+            referencedRelation: "realm_campaigns";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "campaign_interests_interest_id_fkey";
+            columns: ["interest_id"];
+            isOneToOne: false;
+            referencedRelation: "interests";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      campaign_members: {
+        Row: {
+          campaign_id: string;
+          ended_at: string | null;
+          joined_at: string;
+          role: Database["public"]["Enums"]["campaign_member_role"];
+          status: Database["public"]["Enums"]["campaign_membership_status"];
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          campaign_id: string;
+          ended_at?: string | null;
+          joined_at?: string;
+          role?: Database["public"]["Enums"]["campaign_member_role"];
+          status?: Database["public"]["Enums"]["campaign_membership_status"];
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          campaign_id?: string;
+          ended_at?: string | null;
+          joined_at?: string;
+          role?: Database["public"]["Enums"]["campaign_member_role"];
+          status?: Database["public"]["Enums"]["campaign_membership_status"];
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "campaign_members_campaign_id_fkey";
+            columns: ["campaign_id"];
+            isOneToOne: false;
+            referencedRelation: "realm_campaigns";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "campaign_members_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      circle_interests: {
+        Row: {
+          circle_id: string;
+          created_at: string;
+          interest_id: string;
+        };
+        Insert: {
+          circle_id: string;
+          created_at?: string;
+          interest_id: string;
+        };
+        Update: {
+          circle_id?: string;
+          created_at?: string;
+          interest_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "circle_interests_circle_id_fkey";
+            columns: ["circle_id"];
+            isOneToOne: false;
+            referencedRelation: "circles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "circle_interests_interest_id_fkey";
+            columns: ["interest_id"];
+            isOneToOne: false;
+            referencedRelation: "interests";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      circle_members: {
+        Row: {
+          circle_id: string;
+          created_at: string;
+          ended_at: string | null;
+          invited_by: string | null;
+          joined_at: string | null;
+          requested_at: string | null;
+          role: Database["public"]["Enums"]["circle_member_role"];
+          status: Database["public"]["Enums"]["circle_membership_status"];
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          circle_id: string;
+          created_at?: string;
+          ended_at?: string | null;
+          invited_by?: string | null;
+          joined_at?: string | null;
+          requested_at?: string | null;
+          role?: Database["public"]["Enums"]["circle_member_role"];
+          status: Database["public"]["Enums"]["circle_membership_status"];
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          circle_id?: string;
+          created_at?: string;
+          ended_at?: string | null;
+          invited_by?: string | null;
+          joined_at?: string | null;
+          requested_at?: string | null;
+          role?: Database["public"]["Enums"]["circle_member_role"];
+          status?: Database["public"]["Enums"]["circle_membership_status"];
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "circle_members_circle_id_fkey";
+            columns: ["circle_id"];
+            isOneToOne: false;
+            referencedRelation: "circles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "circle_members_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      circles: {
+        Row: {
+          created_at: string;
+          created_by: string;
+          description: string;
+          format: Database["public"]["Enums"]["participation_format"];
+          id: string;
+          join_policy: Database["public"]["Enums"]["circle_join_policy"];
+          location_label: string | null;
+          maximum_energy: number;
+          minimum_energy: number;
+          mode_id: string;
+          name: string;
+          published_at: string | null;
+          rules: string;
+          slug: string;
+          social_intensity: Database["public"]["Enums"]["pulse_social_intensity"];
+          status: Database["public"]["Enums"]["circle_status"];
+          stimulation_level: Database["public"]["Enums"]["pulse_stimulation_level"];
+          summary: string;
+          updated_at: string;
+          visibility: Database["public"]["Enums"]["circle_visibility"];
+        };
+        Insert: {
+          created_at?: string;
+          created_by: string;
+          description: string;
+          format: Database["public"]["Enums"]["participation_format"];
+          id?: string;
+          join_policy?: Database["public"]["Enums"]["circle_join_policy"];
+          location_label?: string | null;
+          maximum_energy: number;
+          minimum_energy: number;
+          mode_id: string;
+          name: string;
+          published_at?: string | null;
+          rules: string;
+          slug: string;
+          social_intensity: Database["public"]["Enums"]["pulse_social_intensity"];
+          status?: Database["public"]["Enums"]["circle_status"];
+          stimulation_level: Database["public"]["Enums"]["pulse_stimulation_level"];
+          summary: string;
+          updated_at?: string;
+          visibility?: Database["public"]["Enums"]["circle_visibility"];
+        };
+        Update: {
+          created_at?: string;
+          created_by?: string;
+          description?: string;
+          format?: Database["public"]["Enums"]["participation_format"];
+          id?: string;
+          join_policy?: Database["public"]["Enums"]["circle_join_policy"];
+          location_label?: string | null;
+          maximum_energy?: number;
+          minimum_energy?: number;
+          mode_id?: string;
+          name?: string;
+          published_at?: string | null;
+          rules?: string;
+          slug?: string;
+          social_intensity?: Database["public"]["Enums"]["pulse_social_intensity"];
+          status?: Database["public"]["Enums"]["circle_status"];
+          stimulation_level?: Database["public"]["Enums"]["pulse_stimulation_level"];
+          summary?: string;
+          updated_at?: string;
+          visibility?: Database["public"]["Enums"]["circle_visibility"];
+        };
+        Relationships: [
+          {
+            foreignKeyName: "circles_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "circles_mode_id_fkey";
+            columns: ["mode_id"];
+            isOneToOne: false;
+            referencedRelation: "modes";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      creator_opportunities: {
+        Row: {
+          accepted_count: number;
+          circle_id: string | null;
+          close_reason:
+            | Database["public"]["Enums"]["creator_opportunity_close_reason"]
+            | null;
+          closed_at: string | null;
+          completed_at: string | null;
+          created_at: string;
+          created_by: string;
+          creator_display_name: string;
+          deliverables: string;
+          description: string;
+          estimated_minutes: number;
+          format: Database["public"]["Enums"]["participation_format"];
+          id: string;
+          is_paid: boolean;
+          kind: Database["public"]["Enums"]["creator_opportunity_kind"];
+          location_label: string | null;
+          maximum_energy: number;
+          minimum_energy: number;
+          mode_id: string;
+          positions: number;
+          published_at: string | null;
+          response_deadline: string;
+          social_intensity: Database["public"]["Enums"]["pulse_social_intensity"];
+          status: Database["public"]["Enums"]["creator_opportunity_status"];
+          stimulation_level: Database["public"]["Enums"]["pulse_stimulation_level"];
+          summary: string;
+          timezone: string;
+          title: string;
+          updated_at: string;
+        };
+        Insert: {
+          accepted_count?: number;
+          circle_id?: string | null;
+          close_reason?:
+            | Database["public"]["Enums"]["creator_opportunity_close_reason"]
+            | null;
+          closed_at?: string | null;
+          completed_at?: string | null;
+          created_at?: string;
+          created_by: string;
+          creator_display_name: string;
+          deliverables: string;
+          description: string;
+          estimated_minutes: number;
+          format: Database["public"]["Enums"]["participation_format"];
+          id?: string;
+          is_paid?: boolean;
+          kind: Database["public"]["Enums"]["creator_opportunity_kind"];
+          location_label?: string | null;
+          maximum_energy: number;
+          minimum_energy: number;
+          mode_id: string;
+          positions: number;
+          published_at?: string | null;
+          response_deadline: string;
+          social_intensity: Database["public"]["Enums"]["pulse_social_intensity"];
+          status?: Database["public"]["Enums"]["creator_opportunity_status"];
+          stimulation_level: Database["public"]["Enums"]["pulse_stimulation_level"];
+          summary: string;
+          timezone: string;
+          title: string;
+          updated_at?: string;
+        };
+        Update: {
+          accepted_count?: number;
+          circle_id?: string | null;
+          close_reason?:
+            | Database["public"]["Enums"]["creator_opportunity_close_reason"]
+            | null;
+          closed_at?: string | null;
+          completed_at?: string | null;
+          created_at?: string;
+          created_by?: string;
+          creator_display_name?: string;
+          deliverables?: string;
+          description?: string;
+          estimated_minutes?: number;
+          format?: Database["public"]["Enums"]["participation_format"];
+          id?: string;
+          is_paid?: boolean;
+          kind?: Database["public"]["Enums"]["creator_opportunity_kind"];
+          location_label?: string | null;
+          maximum_energy?: number;
+          minimum_energy?: number;
+          mode_id?: string;
+          positions?: number;
+          published_at?: string | null;
+          response_deadline?: string;
+          social_intensity?: Database["public"]["Enums"]["pulse_social_intensity"];
+          status?: Database["public"]["Enums"]["creator_opportunity_status"];
+          stimulation_level?: Database["public"]["Enums"]["pulse_stimulation_level"];
+          summary?: string;
+          timezone?: string;
+          title?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "creator_opportunities_circle_id_fkey";
+            columns: ["circle_id"];
+            isOneToOne: false;
+            referencedRelation: "circles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "creator_opportunities_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "creator_opportunities_mode_id_fkey";
+            columns: ["mode_id"];
+            isOneToOne: false;
+            referencedRelation: "modes";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      direct_conversations: {
+        Row: {
+          created_at: string;
+          id: string;
+          updated_at: string;
+          user_id_a: string;
+          user_id_b: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          updated_at?: string;
+          user_id_a: string;
+          user_id_b: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          updated_at?: string;
+          user_id_a?: string;
+          user_id_b?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "direct_conversations_user_id_a_fkey";
+            columns: ["user_id_a"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "direct_conversations_user_id_b_fkey";
+            columns: ["user_id_b"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      direct_messages: {
+        Row: {
+          body: string;
+          conversation_id: string;
+          created_at: string;
+          deleted_at: string | null;
+          edited_at: string | null;
+          id: string;
+          sender_id: string;
+        };
+        Insert: {
+          body: string;
+          conversation_id: string;
+          created_at?: string;
+          deleted_at?: string | null;
+          edited_at?: string | null;
+          id?: string;
+          sender_id: string;
+        };
+        Update: {
+          body?: string;
+          conversation_id?: string;
+          created_at?: string;
+          deleted_at?: string | null;
+          edited_at?: string | null;
+          id?: string;
+          sender_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "direct_messages_conversation_id_fkey";
+            columns: ["conversation_id"];
+            isOneToOne: false;
+            referencedRelation: "direct_conversations";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "direct_messages_sender_id_fkey";
+            columns: ["sender_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      interests: {
+        Row: {
+          active: boolean;
+          created_at: string;
+          description: string | null;
+          id: string;
+          name: string;
+          realm_enabled: boolean;
+          slug: string;
+        };
+        Insert: {
+          active?: boolean;
+          created_at?: string;
+          description?: string | null;
+          id?: string;
+          name: string;
+          realm_enabled?: boolean;
+          slug: string;
+        };
+        Update: {
+          active?: boolean;
+          created_at?: string;
+          description?: string | null;
+          id?: string;
+          name?: string;
+          realm_enabled?: boolean;
+          slug?: string;
+        };
+        Relationships: [];
+      };
+      member_feedback: {
+        Row: {
+          area: Database["public"]["Enums"]["feedback_area"];
+          consent_to_contact: boolean;
+          created_at: string;
+          id: string;
+          message: string;
+          reviewed_at: string | null;
+          reviewed_by: string | null;
+          status: Database["public"]["Enums"]["feedback_status"];
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          area: Database["public"]["Enums"]["feedback_area"];
+          consent_to_contact?: boolean;
+          created_at?: string;
+          id?: string;
+          message: string;
+          reviewed_at?: string | null;
+          reviewed_by?: string | null;
+          status?: Database["public"]["Enums"]["feedback_status"];
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          area?: Database["public"]["Enums"]["feedback_area"];
+          consent_to_contact?: boolean;
+          created_at?: string;
+          id?: string;
+          message?: string;
+          reviewed_at?: string | null;
+          reviewed_by?: string | null;
+          status?: Database["public"]["Enums"]["feedback_status"];
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "member_feedback_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      modes: {
+        Row: {
+          active: boolean;
+          created_at: string;
+          description: string;
+          id: string;
+          name: string;
+          slug: string;
+          sort_order: number;
+        };
+        Insert: {
+          active?: boolean;
+          created_at?: string;
+          description: string;
+          id?: string;
+          name: string;
+          slug: string;
+          sort_order?: number;
+        };
+        Update: {
+          active?: boolean;
+          created_at?: string;
+          description?: string;
+          id?: string;
+          name?: string;
+          slug?: string;
+          sort_order?: number;
+        };
+        Relationships: [];
+      };
+      notifications: {
+        Row: {
+          action_url: string | null;
+          body: string;
+          created_at: string;
+          dedupe_key: string | null;
+          id: string;
+          kind: Database["public"]["Enums"]["notification_kind"];
+          read_at: string | null;
+          title: string;
+          user_id: string;
+        };
+        Insert: {
+          action_url?: string | null;
+          body: string;
+          created_at?: string;
+          dedupe_key?: string | null;
+          id?: string;
+          kind: Database["public"]["Enums"]["notification_kind"];
+          read_at?: string | null;
+          title: string;
+          user_id: string;
+        };
+        Update: {
+          action_url?: string | null;
+          body?: string;
+          created_at?: string;
+          dedupe_key?: string | null;
+          id?: string;
+          kind?: Database["public"]["Enums"]["notification_kind"];
+          read_at?: string | null;
+          title?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "notifications_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      opportunity_interests: {
+        Row: {
+          created_at: string;
+          interest_id: string;
+          opportunity_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          interest_id: string;
+          opportunity_id: string;
+        };
+        Update: {
+          created_at?: string;
+          interest_id?: string;
+          opportunity_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "opportunity_interests_interest_id_fkey";
+            columns: ["interest_id"];
+            isOneToOne: false;
+            referencedRelation: "interests";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "opportunity_interests_opportunity_id_fkey";
+            columns: ["opportunity_id"];
+            isOneToOne: false;
+            referencedRelation: "creator_opportunities";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      opportunity_responses: {
+        Row: {
+          accepted_at: string | null;
+          availability: string;
+          completed_at: string | null;
+          creator_confirmed_at: string | null;
+          declined_at: string | null;
+          opportunity_id: string;
+          participant_confirmed_at: string | null;
+          statement: string;
+          status: Database["public"]["Enums"]["opportunity_response_status"];
+          submitted_at: string;
+          updated_at: string;
+          user_id: string;
+          withdrawn_at: string | null;
+        };
+        Insert: {
+          accepted_at?: string | null;
+          availability: string;
+          completed_at?: string | null;
+          creator_confirmed_at?: string | null;
+          declined_at?: string | null;
+          opportunity_id: string;
+          participant_confirmed_at?: string | null;
+          statement: string;
+          status?: Database["public"]["Enums"]["opportunity_response_status"];
+          submitted_at?: string;
+          updated_at?: string;
+          user_id: string;
+          withdrawn_at?: string | null;
+        };
+        Update: {
+          accepted_at?: string | null;
+          availability?: string;
+          completed_at?: string | null;
+          creator_confirmed_at?: string | null;
+          declined_at?: string | null;
+          opportunity_id?: string;
+          participant_confirmed_at?: string | null;
+          statement?: string;
+          status?: Database["public"]["Enums"]["opportunity_response_status"];
+          submitted_at?: string;
+          updated_at?: string;
+          user_id?: string;
+          withdrawn_at?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "opportunity_responses_opportunity_id_fkey";
+            columns: ["opportunity_id"];
+            isOneToOne: false;
+            referencedRelation: "creator_opportunities";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "opportunity_responses_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      opportunity_skills: {
+        Row: {
+          created_at: string;
+          opportunity_id: string;
+          skill_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          opportunity_id: string;
+          skill_id: string;
+        };
+        Update: {
+          created_at?: string;
+          opportunity_id?: string;
+          skill_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "opportunity_skills_opportunity_id_fkey";
+            columns: ["opportunity_id"];
+            isOneToOne: false;
+            referencedRelation: "creator_opportunities";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "opportunity_skills_skill_id_fkey";
+            columns: ["skill_id"];
+            isOneToOne: false;
+            referencedRelation: "skills";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      passport_entries: {
+        Row: {
+          activity_kind: Database["public"]["Enums"]["passport_activity_kind"];
+          created_at: string;
+          id: string;
+          occurred_at: string;
+          revocation_kind:
+            Database["public"]["Enums"]["passport_revocation_kind"] | null;
+          revocation_reason: string | null;
+          revoked_at: string | null;
+          revoked_by: string | null;
+          source_module: Database["public"]["Enums"]["passport_source_module"];
+          source_record_id: string;
+          source_title: string;
+          status: Database["public"]["Enums"]["passport_entry_status"];
+          updated_at: string;
+          user_id: string;
+          verified_at: string;
+          verified_by: string | null;
+        };
+        Insert: {
+          activity_kind: Database["public"]["Enums"]["passport_activity_kind"];
+          created_at?: string;
+          id?: string;
+          occurred_at: string;
+          revocation_kind?:
+            Database["public"]["Enums"]["passport_revocation_kind"] | null;
+          revocation_reason?: string | null;
+          revoked_at?: string | null;
+          revoked_by?: string | null;
+          source_module: Database["public"]["Enums"]["passport_source_module"];
+          source_record_id: string;
+          source_title: string;
+          status?: Database["public"]["Enums"]["passport_entry_status"];
+          updated_at?: string;
+          user_id: string;
+          verified_at?: string;
+          verified_by?: string | null;
+        };
+        Update: {
+          activity_kind?: Database["public"]["Enums"]["passport_activity_kind"];
+          created_at?: string;
+          id?: string;
+          occurred_at?: string;
+          revocation_kind?:
+            Database["public"]["Enums"]["passport_revocation_kind"] | null;
+          revocation_reason?: string | null;
+          revoked_at?: string | null;
+          revoked_by?: string | null;
+          source_module?: Database["public"]["Enums"]["passport_source_module"];
+          source_record_id?: string;
+          source_title?: string;
+          status?: Database["public"]["Enums"]["passport_entry_status"];
+          updated_at?: string;
+          user_id?: string;
+          verified_at?: string;
+          verified_by?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "passport_entries_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      profile_accessibility_preferences: {
+        Row: {
+          accessible_restroom: boolean;
+          additional_notes: string | null;
+          asl_interpretation: boolean;
+          breaks_available: boolean;
+          captioning: boolean;
+          created_at: string;
+          low_sensory_environment: boolean;
+          mobility_device_access: boolean;
+          seating_available: boolean;
+          step_free_access: boolean;
+          updated_at: string;
+          user_id: string;
+          virtual_participation: boolean;
+          written_instructions: boolean;
+        };
+        Insert: {
+          accessible_restroom?: boolean;
+          additional_notes?: string | null;
+          asl_interpretation?: boolean;
+          breaks_available?: boolean;
+          captioning?: boolean;
+          created_at?: string;
+          low_sensory_environment?: boolean;
+          mobility_device_access?: boolean;
+          seating_available?: boolean;
+          step_free_access?: boolean;
+          updated_at?: string;
+          user_id: string;
+          virtual_participation?: boolean;
+          written_instructions?: boolean;
+        };
+        Update: {
+          accessible_restroom?: boolean;
+          additional_notes?: string | null;
+          asl_interpretation?: boolean;
+          breaks_available?: boolean;
+          captioning?: boolean;
+          created_at?: string;
+          low_sensory_environment?: boolean;
+          mobility_device_access?: boolean;
+          seating_available?: boolean;
+          step_free_access?: boolean;
+          updated_at?: string;
+          user_id?: string;
+          virtual_participation?: boolean;
+          written_instructions?: boolean;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "profile_accessibility_preferences_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: true;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      profile_blocked_words: {
+        Row: {
+          created_at: string;
+          id: string;
+          user_id: string;
+          word: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          user_id: string;
+          word: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          user_id?: string;
+          word?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "profile_blocked_words_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      profile_blocks: {
+        Row: {
+          blocked_display_name: string | null;
+          blocked_id: string;
+          blocked_username: string | null;
+          blocker_id: string;
+          created_at: string;
+        };
+        Insert: {
+          blocked_display_name?: string | null;
+          blocked_id: string;
+          blocked_username?: string | null;
+          blocker_id: string;
+          created_at?: string;
+        };
+        Update: {
+          blocked_display_name?: string | null;
+          blocked_id?: string;
+          blocked_username?: string | null;
+          blocker_id?: string;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "profile_blocks_blocked_id_fkey";
+            columns: ["blocked_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "profile_blocks_blocker_id_fkey";
+            columns: ["blocker_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      profile_connection_preferences: {
+        Row: {
+          allow_circle_invites: boolean;
+          allow_event_invites: boolean;
+          allow_friend_requests: boolean;
+          created_at: string;
+          open_to_activity_partners: boolean;
+          open_to_creative_collaboration: boolean;
+          open_to_friends: boolean;
+          open_to_gaming: boolean;
+          open_to_mentorship: boolean;
+          open_to_professional_networking: boolean;
+          open_to_travel_groups: boolean;
+          open_to_volunteering: boolean;
+          prefer_local: boolean;
+          prefer_virtual: boolean;
+          show_in_mutual_connections: boolean;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          allow_circle_invites?: boolean;
+          allow_event_invites?: boolean;
+          allow_friend_requests?: boolean;
+          created_at?: string;
+          open_to_activity_partners?: boolean;
+          open_to_creative_collaboration?: boolean;
+          open_to_friends?: boolean;
+          open_to_gaming?: boolean;
+          open_to_mentorship?: boolean;
+          open_to_professional_networking?: boolean;
+          open_to_travel_groups?: boolean;
+          open_to_volunteering?: boolean;
+          prefer_local?: boolean;
+          prefer_virtual?: boolean;
+          show_in_mutual_connections?: boolean;
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          allow_circle_invites?: boolean;
+          allow_event_invites?: boolean;
+          allow_friend_requests?: boolean;
+          created_at?: string;
+          open_to_activity_partners?: boolean;
+          open_to_creative_collaboration?: boolean;
+          open_to_friends?: boolean;
+          open_to_gaming?: boolean;
+          open_to_mentorship?: boolean;
+          open_to_professional_networking?: boolean;
+          open_to_travel_groups?: boolean;
+          open_to_volunteering?: boolean;
+          prefer_local?: boolean;
+          prefer_virtual?: boolean;
+          show_in_mutual_connections?: boolean;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "profile_connection_preferences_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: true;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      profile_featured_connections: {
+        Row: {
+          created_at: string;
+          display_order: number;
+          featured_id: string;
+          owner_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          display_order: number;
+          featured_id: string;
+          owner_id: string;
+        };
+        Update: {
+          created_at?: string;
+          display_order?: number;
+          featured_id?: string;
+          owner_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "profile_featured_connections_featured_id_fkey";
+            columns: ["featured_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "profile_featured_connections_owner_id_fkey";
+            columns: ["owner_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      profile_follows: {
+        Row: {
+          created_at: string;
+          followed_id: string;
+          follower_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          followed_id: string;
+          follower_id: string;
+        };
+        Update: {
+          created_at?: string;
+          followed_id?: string;
+          follower_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "profile_follows_followed_id_fkey";
+            columns: ["followed_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "profile_follows_follower_id_fkey";
+            columns: ["follower_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      profile_friendships: {
+        Row: {
+          created_at: string;
+          requested_by: string;
+          responded_at: string | null;
+          status: Database["public"]["Enums"]["friendship_status"];
+          user_id_a: string;
+          user_id_b: string;
+        };
+        Insert: {
+          created_at?: string;
+          requested_by: string;
+          responded_at?: string | null;
+          status?: Database["public"]["Enums"]["friendship_status"];
+          user_id_a: string;
+          user_id_b: string;
+        };
+        Update: {
+          created_at?: string;
+          requested_by?: string;
+          responded_at?: string | null;
+          status?: Database["public"]["Enums"]["friendship_status"];
+          user_id_a?: string;
+          user_id_b?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "profile_friendships_requested_by_fkey";
+            columns: ["requested_by"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "profile_friendships_user_id_a_fkey";
+            columns: ["user_id_a"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "profile_friendships_user_id_b_fkey";
+            columns: ["user_id_b"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      profile_interests: {
+        Row: {
+          created_at: string;
+          interest_id: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          interest_id: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          interest_id?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "profile_interests_interest_id_fkey";
+            columns: ["interest_id"];
+            isOneToOne: false;
+            referencedRelation: "interests";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "profile_interests_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      profile_mutes: {
+        Row: {
+          created_at: string;
+          muted_display_name: string | null;
+          muted_id: string;
+          muted_username: string | null;
+          muter_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          muted_display_name?: string | null;
+          muted_id: string;
+          muted_username?: string | null;
+          muter_id: string;
+        };
+        Update: {
+          created_at?: string;
+          muted_display_name?: string | null;
+          muted_id?: string;
+          muted_username?: string | null;
+          muter_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "profile_mutes_muted_id_fkey";
+            columns: ["muted_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "profile_mutes_muter_id_fkey";
+            columns: ["muter_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      profile_rooms: {
+        Row: {
+          accessory_color: string | null;
+          bookshelf_color: string | null;
+          character_accessory: string;
+          character_color: string;
+          character_expression: string;
+          character_shape: string;
+          couch_color: string | null;
+          created_at: string;
+          current_vibe: string;
+          door_color: string | null;
+          enabled: boolean;
+          face_accessory: string;
+          floor_color: string | null;
+          head_accessory: string;
+          lighting_theme: string;
+          motion_enabled: boolean;
+          neck_accessory: string;
+          tv_color: string | null;
+          updated_at: string;
+          user_id: string;
+          wall_color: string;
+        };
+        Insert: {
+          accessory_color?: string | null;
+          bookshelf_color?: string | null;
+          character_accessory?: string;
+          character_color?: string;
+          character_expression?: string;
+          character_shape?: string;
+          couch_color?: string | null;
+          created_at?: string;
+          current_vibe?: string;
+          door_color?: string | null;
+          enabled?: boolean;
+          face_accessory?: string;
+          floor_color?: string | null;
+          head_accessory?: string;
+          lighting_theme?: string;
+          motion_enabled?: boolean;
+          neck_accessory?: string;
+          tv_color?: string | null;
+          updated_at?: string;
+          user_id: string;
+          wall_color?: string;
+        };
+        Update: {
+          accessory_color?: string | null;
+          bookshelf_color?: string | null;
+          character_accessory?: string;
+          character_color?: string;
+          character_expression?: string;
+          character_shape?: string;
+          couch_color?: string | null;
+          created_at?: string;
+          current_vibe?: string;
+          door_color?: string | null;
+          enabled?: boolean;
+          face_accessory?: string;
+          floor_color?: string | null;
+          head_accessory?: string;
+          lighting_theme?: string;
+          motion_enabled?: boolean;
+          neck_accessory?: string;
+          tv_color?: string | null;
+          updated_at?: string;
+          user_id?: string;
+          wall_color?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "profile_rooms_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: true;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      profile_skills: {
+        Row: {
+          created_at: string;
+          skill_id: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          skill_id: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          skill_id?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "profile_skills_skill_id_fkey";
+            columns: ["skill_id"];
+            isOneToOne: false;
+            referencedRelation: "skills";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "profile_skills_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      profile_statuses: {
+        Row: {
+          expires_at: string;
+          status_text: string;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          expires_at: string;
+          status_text: string;
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          expires_at?: string;
+          status_text?: string;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "profile_statuses_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: true;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      profile_view_buckets: {
+        Row: {
+          created_at: string;
+          profile_id: string;
+          viewed_on: string;
+          viewer_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          profile_id: string;
+          viewed_on?: string;
+          viewer_id: string;
+        };
+        Update: {
+          created_at?: string;
+          profile_id?: string;
+          viewed_on?: string;
+          viewer_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "profile_view_buckets_profile_id_fkey";
+            columns: ["profile_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "profile_view_buckets_viewer_id_fkey";
+            columns: ["viewer_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      profiles: {
+        Row: {
+          age_confirmed_at: string | null;
+          avatar_url: string | null;
+          background_image_fit: string;
+          background_image_position_x: number;
+          background_image_position_y: number;
+          background_image_url: string | null;
+          background_image_zoom: number;
+          bio: string | null;
+          city: string | null;
+          country_code: string | null;
+          cover_image_url: string | null;
+          created_at: string;
+          current_food: string | null;
+          current_food_description: string | null;
+          current_food_url: string | null;
+          current_game: string | null;
+          current_game_description: string | null;
+          current_game_url: string | null;
+          current_reading: string | null;
+          current_reading_description: string | null;
+          current_reading_url: string | null;
+          discoverable: boolean;
+          display_name: string | null;
+          display_name_changed_at: string | null;
+          featured_profile_image_2_url: string | null;
+          featured_profile_image_url: string | null;
+          friend_list_visibility: Database["public"]["Enums"]["friend_list_visibility"];
+          id: string;
+          landscape_image_fit: string;
+          landscape_image_position_x: number;
+          landscape_image_position_y: number;
+          landscape_image_zoom: number;
+          last_seen_at: string | null;
+          latest_pick_category: string | null;
+          latest_pick_note: string | null;
+          latest_pick_title: string | null;
+          latest_pick_url: string | null;
+          location_visibility: Database["public"]["Enums"]["location_visibility"];
+          mood: string | null;
+          onboarding_completed_at: string | null;
+          profile_accent_color: string;
+          profile_song_artist: string | null;
+          profile_song_title: string | null;
+          profile_song_url: string | null;
+          pronouns: string | null;
+          region: string | null;
+          spotlight_category: string | null;
+          spotlight_description: string | null;
+          spotlight_title: string | null;
+          spotlight_url: string | null;
+          timezone: string;
+          updated_at: string;
+          username: string | null;
+          username_changed_at: string | null;
+          view_my_label: string | null;
+          view_my_url: string | null;
+          visibility: Database["public"]["Enums"]["profile_visibility"];
+        };
+        Insert: {
+          age_confirmed_at?: string | null;
+          avatar_url?: string | null;
+          background_image_fit?: string;
+          background_image_position_x?: number;
+          background_image_position_y?: number;
+          background_image_url?: string | null;
+          background_image_zoom?: number;
+          bio?: string | null;
+          city?: string | null;
+          country_code?: string | null;
+          cover_image_url?: string | null;
+          created_at?: string;
+          current_food?: string | null;
+          current_food_description?: string | null;
+          current_food_url?: string | null;
+          current_game?: string | null;
+          current_game_description?: string | null;
+          current_game_url?: string | null;
+          current_reading?: string | null;
+          current_reading_description?: string | null;
+          current_reading_url?: string | null;
+          discoverable?: boolean;
+          display_name?: string | null;
+          display_name_changed_at?: string | null;
+          featured_profile_image_2_url?: string | null;
+          featured_profile_image_url?: string | null;
+          friend_list_visibility?: Database["public"]["Enums"]["friend_list_visibility"];
+          id: string;
+          landscape_image_fit?: string;
+          landscape_image_position_x?: number;
+          landscape_image_position_y?: number;
+          landscape_image_zoom?: number;
+          last_seen_at?: string | null;
+          latest_pick_category?: string | null;
+          latest_pick_note?: string | null;
+          latest_pick_title?: string | null;
+          latest_pick_url?: string | null;
+          location_visibility?: Database["public"]["Enums"]["location_visibility"];
+          mood?: string | null;
+          onboarding_completed_at?: string | null;
+          profile_accent_color?: string;
+          profile_song_artist?: string | null;
+          profile_song_title?: string | null;
+          profile_song_url?: string | null;
+          pronouns?: string | null;
+          region?: string | null;
+          spotlight_category?: string | null;
+          spotlight_description?: string | null;
+          spotlight_title?: string | null;
+          spotlight_url?: string | null;
+          timezone?: string;
+          updated_at?: string;
+          username?: string | null;
+          username_changed_at?: string | null;
+          view_my_label?: string | null;
+          view_my_url?: string | null;
+          visibility?: Database["public"]["Enums"]["profile_visibility"];
+        };
+        Update: {
+          age_confirmed_at?: string | null;
+          avatar_url?: string | null;
+          background_image_fit?: string;
+          background_image_position_x?: number;
+          background_image_position_y?: number;
+          background_image_url?: string | null;
+          background_image_zoom?: number;
+          bio?: string | null;
+          city?: string | null;
+          country_code?: string | null;
+          cover_image_url?: string | null;
+          created_at?: string;
+          current_food?: string | null;
+          current_food_description?: string | null;
+          current_food_url?: string | null;
+          current_game?: string | null;
+          current_game_description?: string | null;
+          current_game_url?: string | null;
+          current_reading?: string | null;
+          current_reading_description?: string | null;
+          current_reading_url?: string | null;
+          discoverable?: boolean;
+          display_name?: string | null;
+          display_name_changed_at?: string | null;
+          featured_profile_image_2_url?: string | null;
+          featured_profile_image_url?: string | null;
+          friend_list_visibility?: Database["public"]["Enums"]["friend_list_visibility"];
+          id?: string;
+          landscape_image_fit?: string;
+          landscape_image_position_x?: number;
+          landscape_image_position_y?: number;
+          landscape_image_zoom?: number;
+          last_seen_at?: string | null;
+          latest_pick_category?: string | null;
+          latest_pick_note?: string | null;
+          latest_pick_title?: string | null;
+          latest_pick_url?: string | null;
+          location_visibility?: Database["public"]["Enums"]["location_visibility"];
+          mood?: string | null;
+          onboarding_completed_at?: string | null;
+          profile_accent_color?: string;
+          profile_song_artist?: string | null;
+          profile_song_title?: string | null;
+          profile_song_url?: string | null;
+          pronouns?: string | null;
+          region?: string | null;
+          spotlight_category?: string | null;
+          spotlight_description?: string | null;
+          spotlight_title?: string | null;
+          spotlight_url?: string | null;
+          timezone?: string;
+          updated_at?: string;
+          username?: string | null;
+          username_changed_at?: string | null;
+          view_my_label?: string | null;
+          view_my_url?: string | null;
+          visibility?: Database["public"]["Enums"]["profile_visibility"];
+        };
+        Relationships: [];
+      };
+      pulse_check_in_interests: {
+        Row: {
+          check_in_id: string;
+          created_at: string;
+          interest_id: string;
+        };
+        Insert: {
+          check_in_id: string;
+          created_at?: string;
+          interest_id: string;
+        };
+        Update: {
+          check_in_id?: string;
+          created_at?: string;
+          interest_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "pulse_check_in_interests_check_in_id_fkey";
+            columns: ["check_in_id"];
+            isOneToOne: false;
+            referencedRelation: "pulse_check_ins";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "pulse_check_in_interests_interest_id_fkey";
+            columns: ["interest_id"];
+            isOneToOne: false;
+            referencedRelation: "interests";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      pulse_check_ins: {
+        Row: {
+          available_minutes: number;
+          created_at: string;
+          energy_level: number;
+          expires_at: string;
+          id: string;
+          maximum_travel_miles: number | null;
+          mode_id: string;
+          preferred_format: Database["public"]["Enums"]["participation_format"];
+          social_intensity: Database["public"]["Enums"]["pulse_social_intensity"];
+          stimulation_level: Database["public"]["Enums"]["pulse_stimulation_level"];
+          user_id: string;
+        };
+        Insert: {
+          available_minutes: number;
+          created_at?: string;
+          energy_level: number;
+          expires_at: string;
+          id?: string;
+          maximum_travel_miles?: number | null;
+          mode_id: string;
+          preferred_format: Database["public"]["Enums"]["participation_format"];
+          social_intensity: Database["public"]["Enums"]["pulse_social_intensity"];
+          stimulation_level: Database["public"]["Enums"]["pulse_stimulation_level"];
+          user_id: string;
+        };
+        Update: {
+          available_minutes?: number;
+          created_at?: string;
+          energy_level?: number;
+          expires_at?: string;
+          id?: string;
+          maximum_travel_miles?: number | null;
+          mode_id?: string;
+          preferred_format?: Database["public"]["Enums"]["participation_format"];
+          social_intensity?: Database["public"]["Enums"]["pulse_social_intensity"];
+          stimulation_level?: Database["public"]["Enums"]["pulse_stimulation_level"];
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "pulse_check_ins_mode_id_fkey";
+            columns: ["mode_id"];
+            isOneToOne: false;
+            referencedRelation: "modes";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "pulse_check_ins_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      realm_campaigns: {
+        Row: {
+          active_player_count: number;
+          application_deadline: string;
+          circle_id: string | null;
+          completed_at: string | null;
+          created_at: string;
+          created_by: string;
+          estimated_session_minutes: number;
+          experience_level: Database["public"]["Enums"]["campaign_experience_level"];
+          format: Database["public"]["Enums"]["participation_format"];
+          game_master_display_name: string;
+          genre: string;
+          id: string;
+          location_label: string | null;
+          maximum_energy: number;
+          minimum_energy: number;
+          mode_id: string;
+          player_capacity: number;
+          premise: string;
+          published_at: string | null;
+          recruiting_closed_at: string | null;
+          safety_expectations: string;
+          schedule_summary: string;
+          social_intensity: Database["public"]["Enums"]["pulse_social_intensity"];
+          status: Database["public"]["Enums"]["realm_campaign_status"];
+          stimulation_level: Database["public"]["Enums"]["pulse_stimulation_level"];
+          summary: string;
+          timezone: string;
+          title: string;
+          tone: string;
+          updated_at: string;
+        };
+        Insert: {
+          active_player_count?: number;
+          application_deadline: string;
+          circle_id?: string | null;
+          completed_at?: string | null;
+          created_at?: string;
+          created_by: string;
+          estimated_session_minutes: number;
+          experience_level: Database["public"]["Enums"]["campaign_experience_level"];
+          format: Database["public"]["Enums"]["participation_format"];
+          game_master_display_name: string;
+          genre: string;
+          id?: string;
+          location_label?: string | null;
+          maximum_energy: number;
+          minimum_energy: number;
+          mode_id: string;
+          player_capacity: number;
+          premise: string;
+          published_at?: string | null;
+          recruiting_closed_at?: string | null;
+          safety_expectations: string;
+          schedule_summary: string;
+          social_intensity: Database["public"]["Enums"]["pulse_social_intensity"];
+          status?: Database["public"]["Enums"]["realm_campaign_status"];
+          stimulation_level: Database["public"]["Enums"]["pulse_stimulation_level"];
+          summary: string;
+          timezone: string;
+          title: string;
+          tone: string;
+          updated_at?: string;
+        };
+        Update: {
+          active_player_count?: number;
+          application_deadline?: string;
+          circle_id?: string | null;
+          completed_at?: string | null;
+          created_at?: string;
+          created_by?: string;
+          estimated_session_minutes?: number;
+          experience_level?: Database["public"]["Enums"]["campaign_experience_level"];
+          format?: Database["public"]["Enums"]["participation_format"];
+          game_master_display_name?: string;
+          genre?: string;
+          id?: string;
+          location_label?: string | null;
+          maximum_energy?: number;
+          minimum_energy?: number;
+          mode_id?: string;
+          player_capacity?: number;
+          premise?: string;
+          published_at?: string | null;
+          recruiting_closed_at?: string | null;
+          safety_expectations?: string;
+          schedule_summary?: string;
+          social_intensity?: Database["public"]["Enums"]["pulse_social_intensity"];
+          status?: Database["public"]["Enums"]["realm_campaign_status"];
+          stimulation_level?: Database["public"]["Enums"]["pulse_stimulation_level"];
+          summary?: string;
+          timezone?: string;
+          title?: string;
+          tone?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "realm_campaigns_circle_id_fkey";
+            columns: ["circle_id"];
+            isOneToOne: false;
+            referencedRelation: "circles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "realm_campaigns_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "realm_campaigns_mode_id_fkey";
+            columns: ["mode_id"];
+            isOneToOne: false;
+            referencedRelation: "modes";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      registrations: {
+        Row: {
+          cancelled_at: string | null;
+          registered_at: string;
+          session_id: string;
+          status: Database["public"]["Enums"]["registration_status"];
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          cancelled_at?: string | null;
+          registered_at?: string;
+          session_id: string;
+          status?: Database["public"]["Enums"]["registration_status"];
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          cancelled_at?: string | null;
+          registered_at?: string;
+          session_id?: string;
+          status?: Database["public"]["Enums"]["registration_status"];
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "registrations_session_id_fkey";
+            columns: ["session_id"];
+            isOneToOne: false;
+            referencedRelation: "sessions";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "registrations_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      reports: {
+        Row: {
+          assigned_to: string | null;
+          category: Database["public"]["Enums"]["report_category"];
+          context_url: string | null;
+          created_at: string;
+          details: string;
+          id: string;
+          reporter_user_id: string;
+          resolved_at: string | null;
+          status: Database["public"]["Enums"]["report_status"];
+          summary: string;
+          target_type: Database["public"]["Enums"]["report_target_type"];
+          updated_at: string;
+        };
+        Insert: {
+          assigned_to?: string | null;
+          category: Database["public"]["Enums"]["report_category"];
+          context_url?: string | null;
+          created_at?: string;
+          details: string;
+          id?: string;
+          reporter_user_id: string;
+          resolved_at?: string | null;
+          status?: Database["public"]["Enums"]["report_status"];
+          summary: string;
+          target_type: Database["public"]["Enums"]["report_target_type"];
+          updated_at?: string;
+        };
+        Update: {
+          assigned_to?: string | null;
+          category?: Database["public"]["Enums"]["report_category"];
+          context_url?: string | null;
+          created_at?: string;
+          details?: string;
+          id?: string;
+          reporter_user_id?: string;
+          resolved_at?: string | null;
+          status?: Database["public"]["Enums"]["report_status"];
+          summary?: string;
+          target_type?: Database["public"]["Enums"]["report_target_type"];
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "reports_reporter_user_id_fkey";
+            columns: ["reporter_user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      saved_opportunities: {
+        Row: {
+          created_at: string;
+          opportunity_id: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          opportunity_id: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          opportunity_id?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "saved_opportunities_opportunity_id_fkey";
+            columns: ["opportunity_id"];
+            isOneToOne: false;
+            referencedRelation: "creator_opportunities";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "saved_opportunities_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      session_interests: {
+        Row: {
+          created_at: string;
+          interest_id: string;
+          session_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          interest_id: string;
+          session_id: string;
+        };
+        Update: {
+          created_at?: string;
+          interest_id?: string;
+          session_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "session_interests_interest_id_fkey";
+            columns: ["interest_id"];
+            isOneToOne: false;
+            referencedRelation: "interests";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "session_interests_session_id_fkey";
+            columns: ["session_id"];
+            isOneToOne: false;
+            referencedRelation: "sessions";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      sessions: {
+        Row: {
+          campaign_id: string | null;
+          capacity: number;
+          circle_id: string | null;
+          confirmed_registration_count: number;
+          created_at: string;
+          description: string;
+          ends_at: string;
+          format: Database["public"]["Enums"]["participation_format"];
+          host_display_name: string;
+          host_user_id: string;
+          id: string;
+          location_label: string | null;
+          maximum_energy: number;
+          minimum_energy: number;
+          mode_id: string;
+          published_at: string | null;
+          social_intensity: Database["public"]["Enums"]["pulse_social_intensity"];
+          source_module: Database["public"]["Enums"]["session_source_module"];
+          starts_at: string;
+          status: Database["public"]["Enums"]["session_status"];
+          stimulation_level: Database["public"]["Enums"]["pulse_stimulation_level"];
+          summary: string;
+          timezone: string;
+          title: string;
+          updated_at: string;
+        };
+        Insert: {
+          campaign_id?: string | null;
+          capacity: number;
+          circle_id?: string | null;
+          confirmed_registration_count?: number;
+          created_at?: string;
+          description: string;
+          ends_at: string;
+          format: Database["public"]["Enums"]["participation_format"];
+          host_display_name: string;
+          host_user_id: string;
+          id?: string;
+          location_label?: string | null;
+          maximum_energy: number;
+          minimum_energy: number;
+          mode_id: string;
+          published_at?: string | null;
+          social_intensity: Database["public"]["Enums"]["pulse_social_intensity"];
+          source_module?: Database["public"]["Enums"]["session_source_module"];
+          starts_at: string;
+          status?: Database["public"]["Enums"]["session_status"];
+          stimulation_level: Database["public"]["Enums"]["pulse_stimulation_level"];
+          summary: string;
+          timezone: string;
+          title: string;
+          updated_at?: string;
+        };
+        Update: {
+          campaign_id?: string | null;
+          capacity?: number;
+          circle_id?: string | null;
+          confirmed_registration_count?: number;
+          created_at?: string;
+          description?: string;
+          ends_at?: string;
+          format?: Database["public"]["Enums"]["participation_format"];
+          host_display_name?: string;
+          host_user_id?: string;
+          id?: string;
+          location_label?: string | null;
+          maximum_energy?: number;
+          minimum_energy?: number;
+          mode_id?: string;
+          published_at?: string | null;
+          social_intensity?: Database["public"]["Enums"]["pulse_social_intensity"];
+          source_module?: Database["public"]["Enums"]["session_source_module"];
+          starts_at?: string;
+          status?: Database["public"]["Enums"]["session_status"];
+          stimulation_level?: Database["public"]["Enums"]["pulse_stimulation_level"];
+          summary?: string;
+          timezone?: string;
+          title?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "sessions_campaign_id_fkey";
+            columns: ["campaign_id"];
+            isOneToOne: false;
+            referencedRelation: "realm_campaigns";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "sessions_circle_id_fkey";
+            columns: ["circle_id"];
+            isOneToOne: false;
+            referencedRelation: "circles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "sessions_host_user_id_fkey";
+            columns: ["host_user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "sessions_mode_id_fkey";
+            columns: ["mode_id"];
+            isOneToOne: false;
+            referencedRelation: "modes";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      skills: {
+        Row: {
+          active: boolean;
+          created_at: string;
+          id: string;
+          name: string;
+          slug: string;
+        };
+        Insert: {
+          active?: boolean;
+          created_at?: string;
+          id?: string;
+          name: string;
+          slug: string;
+        };
+        Update: {
+          active?: boolean;
+          created_at?: string;
+          id?: string;
+          name?: string;
+          slug?: string;
+        };
+        Relationships: [];
+      };
+      user_roles: {
+        Row: {
+          granted_at: string;
+          granted_by: string | null;
+          role: Database["public"]["Enums"]["app_role"];
+          user_id: string;
+        };
+        Insert: {
+          granted_at?: string;
+          granted_by?: string | null;
+          role: Database["public"]["Enums"]["app_role"];
+          user_id: string;
+        };
+        Update: {
+          granted_at?: string;
+          granted_by?: string | null;
+          role?: Database["public"]["Enums"]["app_role"];
+          user_id?: string;
+        };
+        Relationships: [];
+      };
+    };
+    Views: {
+      [_ in never]: never;
+    };
+    Functions: {
+      accept_friend_request: {
+        Args: { p_requester_user_id: string };
+        Returns: undefined;
+      };
+      add_blocked_word: { Args: { p_word: string }; Returns: string };
+      block_profile: { Args: { p_target_user_id: string }; Returns: undefined };
+      can_host_circle: { Args: { p_circle_id: string }; Returns: boolean };
+      can_manage_circle: { Args: { p_circle_id: string }; Returns: boolean };
+      can_manage_creator_opportunity: {
+        Args: { p_opportunity_id: string };
+        Returns: boolean;
+      };
+      can_manage_realm_campaign: {
+        Args: { p_campaign_id: string };
+        Returns: boolean;
+      };
+      can_manage_session: { Args: { p_session_id: string }; Returns: boolean };
+      can_moderate_circle: { Args: { p_circle_id: string }; Returns: boolean };
+      can_view_circle: { Args: { p_circle_id: string }; Returns: boolean };
+      can_view_creator_opportunity: {
+        Args: { p_opportunity_id: string };
+        Returns: boolean;
+      };
+      can_view_profile: { Args: { target_user_id: string }; Returns: boolean };
+      can_view_realm_campaign: {
+        Args: { p_campaign_id: string };
+        Returns: boolean;
+      };
+      can_view_session: { Args: { p_session_id: string }; Returns: boolean };
+      cancel_session_registration: {
+        Args: { p_session_id: string };
+        Returns: undefined;
+      };
+      complete_onboarding: {
+        Args: {
+          p_display_name: string;
+          p_interest_ids: string[];
+          p_pronouns: string;
+          p_skill_ids: string[];
+          p_timezone: string;
+          p_username: string;
+        };
+        Returns: undefined;
+      };
+      complete_signal_onboarding: {
+        Args: {
+          p_accessibility_notes: string;
+          p_accessible_restroom: boolean;
+          p_allow_circle_invites: boolean;
+          p_allow_event_invites: boolean;
+          p_allow_friend_requests: boolean;
+          p_asl_interpretation: boolean;
+          p_bio: string;
+          p_breaks_available: boolean;
+          p_captioning: boolean;
+          p_city: string;
+          p_country_code: string;
+          p_discoverable: boolean;
+          p_display_name: string;
+          p_friend_list_visibility: Database["public"]["Enums"]["friend_list_visibility"];
+          p_interest_ids: string[];
+          p_location_visibility: Database["public"]["Enums"]["location_visibility"];
+          p_low_sensory_environment: boolean;
+          p_mobility_device_access: boolean;
+          p_open_to_activity_partners: boolean;
+          p_open_to_creative_collaboration: boolean;
+          p_open_to_friends: boolean;
+          p_open_to_gaming: boolean;
+          p_open_to_mentorship: boolean;
+          p_open_to_professional_networking: boolean;
+          p_open_to_travel_groups: boolean;
+          p_open_to_volunteering: boolean;
+          p_prefer_local: boolean;
+          p_prefer_virtual: boolean;
+          p_pronouns: string;
+          p_region: string;
+          p_seating_available: boolean;
+          p_show_in_mutual_connections: boolean;
+          p_skill_ids: string[];
+          p_step_free_access: boolean;
+          p_timezone: string;
+          p_username: string;
+          p_virtual_participation: boolean;
+          p_written_instructions: boolean;
+        };
+        Returns: undefined;
+      };
+      confirm_opportunity_completion: {
+        Args: { p_opportunity_id: string; p_user_id: string };
+        Returns: undefined;
+      };
+      create_circle: {
+        Args: {
+          p_description: string;
+          p_format: Database["public"]["Enums"]["participation_format"];
+          p_interest_ids: string[];
+          p_join_policy: Database["public"]["Enums"]["circle_join_policy"];
+          p_location_label: string;
+          p_maximum_energy: number;
+          p_minimum_energy: number;
+          p_mode_id: string;
+          p_name: string;
+          p_rules: string;
+          p_slug: string;
+          p_social_intensity: Database["public"]["Enums"]["pulse_social_intensity"];
+          p_stimulation_level: Database["public"]["Enums"]["pulse_stimulation_level"];
+          p_summary: string;
+          p_visibility: Database["public"]["Enums"]["circle_visibility"];
+        };
+        Returns: string;
+      };
+      create_creator_opportunity: {
+        Args: {
+          p_circle_id: string;
+          p_deliverables: string;
+          p_description: string;
+          p_estimated_minutes: number;
+          p_format: Database["public"]["Enums"]["participation_format"];
+          p_interest_ids: string[];
+          p_is_paid: boolean;
+          p_kind: Database["public"]["Enums"]["creator_opportunity_kind"];
+          p_location_label: string;
+          p_maximum_energy: number;
+          p_minimum_energy: number;
+          p_mode_id: string;
+          p_positions: number;
+          p_response_deadline_local: string;
+          p_skill_ids: string[];
+          p_social_intensity: Database["public"]["Enums"]["pulse_social_intensity"];
+          p_stimulation_level: Database["public"]["Enums"]["pulse_stimulation_level"];
+          p_summary: string;
+          p_timezone: string;
+          p_title: string;
+        };
+        Returns: string;
+      };
+      create_realm_campaign: {
+        Args: {
+          p_application_deadline_local: string;
+          p_circle_id: string;
+          p_estimated_session_minutes: number;
+          p_experience_level: Database["public"]["Enums"]["campaign_experience_level"];
+          p_format: Database["public"]["Enums"]["participation_format"];
+          p_genre: string;
+          p_interest_ids: string[];
+          p_location_label: string;
+          p_maximum_energy: number;
+          p_minimum_energy: number;
+          p_mode_id: string;
+          p_player_capacity: number;
+          p_premise: string;
+          p_safety_expectations: string;
+          p_schedule_summary: string;
+          p_social_intensity: Database["public"]["Enums"]["pulse_social_intensity"];
+          p_stimulation_level: Database["public"]["Enums"]["pulse_stimulation_level"];
+          p_summary: string;
+          p_timezone: string;
+          p_title: string;
+          p_tone: string;
+        };
+        Returns: string;
+      };
+      create_session: {
+        Args: {
+          p_capacity: number;
+          p_description: string;
+          p_ends_local: string;
+          p_format: Database["public"]["Enums"]["participation_format"];
+          p_interest_ids: string[];
+          p_location_label: string;
+          p_maximum_energy: number;
+          p_minimum_energy: number;
+          p_mode_id: string;
+          p_social_intensity: Database["public"]["Enums"]["pulse_social_intensity"];
+          p_starts_local: string;
+          p_stimulation_level: Database["public"]["Enums"]["pulse_stimulation_level"];
+          p_summary: string;
+          p_timezone: string;
+          p_title: string;
+        };
+        Returns: string;
+      };
+      direct_conversation_other_user: {
+        Args: { p_conversation_id: string; p_user_id: string };
+        Returns: string;
+      };
+      follow_profile: {
+        Args: { p_target_user_id: string };
+        Returns: undefined;
+      };
+      get_circle_roster: {
+        Args: { p_circle_id: string };
+        Returns: {
+          display_name: string;
+          joined_at: string;
+          member_role: Database["public"]["Enums"]["circle_member_role"];
+          membership_status: Database["public"]["Enums"]["circle_membership_status"];
+          requested_at: string;
+          user_id: string;
+          username: string;
+        }[];
+      };
+      get_creator_opportunity_responses: {
+        Args: { p_opportunity_id: string };
+        Returns: {
+          accepted_at: string;
+          availability: string;
+          completed_at: string;
+          creator_confirmed_at: string;
+          display_name: string;
+          participant_confirmed_at: string;
+          response_status: Database["public"]["Enums"]["opportunity_response_status"];
+          statement: string;
+          submitted_at: string;
+          user_id: string;
+          username: string;
+        }[];
+      };
+      get_featured_connections: {
+        Args: { p_owner_id: string };
+        Returns: {
+          avatar_url: string;
+          display_name: string;
+          display_order: number;
+          id: string;
+          username: string;
+        }[];
+      };
+      get_member_profiles: {
+        Args: { p_discoverable_only?: boolean; p_username?: string };
+        Returns: {
+          avatar_url: string;
+          bio: string;
+          city: string;
+          cover_image_url: string;
+          created_at: string;
+          discoverable: boolean;
+          display_name: string;
+          friend_list_visibility: Database["public"]["Enums"]["friend_list_visibility"];
+          id: string;
+          location_visibility: Database["public"]["Enums"]["location_visibility"];
+          pronouns: string;
+          region: string;
+          username: string;
+          visibility: Database["public"]["Enums"]["profile_visibility"];
+        }[];
+      };
+      get_or_create_direct_conversation: {
+        Args: { p_target_user_id: string };
+        Returns: string;
+      };
+      get_profile_experience: {
+        Args: { p_user_id: string };
+        Returns: {
+          background_image_fit: string;
+          background_image_position_x: number;
+          background_image_position_y: number;
+          background_image_url: string;
+          background_image_zoom: number;
+          featured_profile_image_url: string;
+          follower_count: number;
+          following_count: number;
+          friend_count: number;
+          landscape_image_fit: string;
+          landscape_image_position_x: number;
+          landscape_image_position_y: number;
+          landscape_image_zoom: number;
+          last_seen_at: string;
+          latest_pick_category: string;
+          latest_pick_note: string;
+          latest_pick_title: string;
+          latest_pick_url: string;
+          mood: string;
+          profile_accent_color: string;
+          profile_song_artist: string;
+          profile_song_title: string;
+          profile_song_url: string;
+          profile_view_count: number;
+          spotlight_description: string;
+          spotlight_title: string;
+          spotlight_url: string;
+          status_expires_at: string;
+          status_text: string;
+          view_my_label: string;
+          view_my_url: string;
+        }[];
+      };
+      get_profile_room: {
+        Args: { p_user_id: string };
+        Returns: {
+          accessory_color: string;
+          bookshelf_color: string;
+          character_accessory: string;
+          character_color: string;
+          character_expression: string;
+          character_shape: string;
+          couch_color: string;
+          current_vibe: string;
+          door_color: string;
+          enabled: boolean;
+          face_accessory: string;
+          floor_color: string;
+          head_accessory: string;
+          lighting_theme: string;
+          motion_enabled: boolean;
+          neck_accessory: string;
+          profile_song_artist: string;
+          profile_song_title: string;
+          profile_song_url: string;
+          tv_color: string;
+          wall_color: string;
+        }[];
+      };
+      get_public_profile: {
+        Args: { p_username: string };
+        Returns: {
+          avatar_url: string;
+          bio: string;
+          city: string;
+          cover_image_url: string;
+          created_at: string;
+          display_name: string;
+          id: string;
+          location_visibility: Database["public"]["Enums"]["location_visibility"];
+          pronouns: string;
+          region: string;
+          username: string;
+        }[];
+      };
+      get_realm_campaign_applications: {
+        Args: { p_campaign_id: string };
+        Returns: {
+          application_status: Database["public"]["Enums"]["campaign_application_status"];
+          availability: string;
+          display_name: string;
+          experience_level: Database["public"]["Enums"]["campaign_experience_level"];
+          motivation: string;
+          submitted_at: string;
+          user_id: string;
+          username: string;
+        }[];
+      };
+      get_realm_campaign_roster: {
+        Args: { p_campaign_id: string };
+        Returns: {
+          display_name: string;
+          joined_at: string;
+          member_role: Database["public"]["Enums"]["campaign_member_role"];
+          membership_status: Database["public"]["Enums"]["campaign_membership_status"];
+          user_id: string;
+          username: string;
+        }[];
+      };
+      get_session_roster: {
+        Args: { p_session_id: string };
+        Returns: {
+          attendance_status: Database["public"]["Enums"]["attendance_status"];
+          display_name: string;
+          registration_status: Database["public"]["Enums"]["registration_status"];
+          user_id: string;
+          username: string;
+        }[];
+      };
+      has_role: {
+        Args: { requested_role: Database["public"]["Enums"]["app_role"] };
+        Returns: boolean;
+      };
+      invite_circle_member: {
+        Args: { p_circle_id: string; p_username: string };
+        Returns: undefined;
+      };
+      is_campaign_member: { Args: { p_campaign_id: string }; Returns: boolean };
+      is_circle_member: { Args: { p_circle_id: string }; Returns: boolean };
+      is_direct_conversation_member: {
+        Args: { p_conversation_id: string; p_user_id: string };
+        Returns: boolean;
+      };
+      join_circle: {
+        Args: { p_circle_id: string };
+        Returns: Database["public"]["Enums"]["circle_membership_status"];
+      };
+      leave_circle: { Args: { p_circle_id: string }; Returns: undefined };
+      leave_realm_campaign: {
+        Args: { p_campaign_id: string };
+        Returns: undefined;
+      };
+      mark_all_notifications_read: { Args: never; Returns: undefined };
+      mark_notification_read: {
+        Args: { p_notification_id: string };
+        Returns: undefined;
+      };
+      mark_session_attendance: {
+        Args: {
+          p_session_id: string;
+          p_status: Database["public"]["Enums"]["attendance_status"];
+          p_user_id: string;
+        };
+        Returns: undefined;
+      };
+      mute_profile: { Args: { p_target_user_id: string }; Returns: undefined };
+      profiles_are_blocked: {
+        Args: { first_user_id: string; second_user_id: string };
+        Returns: boolean;
+      };
+      profiles_are_friends: {
+        Args: { first_user_id: string; second_user_id: string };
+        Returns: boolean;
+      };
+      public_profile_media_visible: {
+        Args: { p_object_name: string };
+        Returns: boolean;
+      };
+      realm_interest_is_allowed: {
+        Args: { p_interest_id: string };
+        Returns: boolean;
+      };
+      record_profile_view: { Args: { p_profile_id: string }; Returns: boolean };
+      record_pulse_check_in: {
+        Args: {
+          p_available_minutes: number;
+          p_energy_level: number;
+          p_interest_ids: string[];
+          p_maximum_travel_miles: number;
+          p_mode_id: string;
+          p_preferred_format: Database["public"]["Enums"]["participation_format"];
+          p_social_intensity: Database["public"]["Enums"]["pulse_social_intensity"];
+          p_stimulation_level: Database["public"]["Enums"]["pulse_stimulation_level"];
+        };
+        Returns: string;
+      };
+      register_for_session: {
+        Args: { p_session_id: string };
+        Returns: undefined;
+      };
+      remove_blocked_word: { Args: { p_word_id: string }; Returns: undefined };
+      remove_campaign_member: {
+        Args: { p_campaign_id: string; p_user_id: string };
+        Returns: undefined;
+      };
+      remove_follower: {
+        Args: { p_follower_user_id: string };
+        Returns: undefined;
+      };
+      remove_friendship: {
+        Args: { p_target_user_id: string };
+        Returns: undefined;
+      };
+      respond_to_circle_invitation: {
+        Args: { p_accept: boolean; p_circle_id: string };
+        Returns: undefined;
+      };
+      review_campaign_application: {
+        Args: { p_campaign_id: string; p_decision: string; p_user_id: string };
+        Returns: undefined;
+      };
+      review_circle_membership: {
+        Args: { p_circle_id: string; p_decision: string; p_user_id: string };
+        Returns: undefined;
+      };
+      review_feedback: {
+        Args: {
+          p_feedback_id: string;
+          p_status: Database["public"]["Enums"]["feedback_status"];
+        };
+        Returns: undefined;
+      };
+      review_opportunity_response: {
+        Args: {
+          p_decision: string;
+          p_opportunity_id: string;
+          p_user_id: string;
+        };
+        Returns: undefined;
+      };
+      review_report: {
+        Args: {
+          p_note: string;
+          p_report_id: string;
+          p_status: Database["public"]["Enums"]["report_status"];
+        };
+        Returns: undefined;
+      };
+      revoke_passport_entry: {
+        Args: { p_entry_id: string; p_reason: string };
+        Returns: undefined;
+      };
+      save_creator_opportunity: {
+        Args: { p_opportunity_id: string; p_save: boolean };
+        Returns: undefined;
+      };
+      send_direct_message: {
+        Args: { p_body: string; p_conversation_id: string };
+        Returns: string;
+      };
+      send_friend_request: {
+        Args: { p_target_user_id: string };
+        Returns: undefined;
+      };
+      set_circle_member_role: {
+        Args: {
+          p_circle_id: string;
+          p_role: Database["public"]["Enums"]["circle_member_role"];
+          p_user_id: string;
+        };
+        Returns: undefined;
+      };
+      set_circle_status: {
+        Args: {
+          p_circle_id: string;
+          p_status: Database["public"]["Enums"]["circle_status"];
+        };
+        Returns: undefined;
+      };
+      set_creator_opportunity_status: {
+        Args: {
+          p_opportunity_id: string;
+          p_status: Database["public"]["Enums"]["creator_opportunity_status"];
+        };
+        Returns: undefined;
+      };
+      set_featured_connections: {
+        Args: { p_featured_ids: string[] };
+        Returns: undefined;
+      };
+      set_featured_profile_image: {
+        Args: { p_featured_profile_image_url: string };
+        Returns: undefined;
+      };
+      set_profile_current_fields: {
+        Args: {
+          p_current_food: string;
+          p_current_food_description: string;
+          p_current_food_url: string;
+          p_current_game: string;
+          p_current_game_description: string;
+          p_current_game_url: string;
+          p_current_reading: string;
+          p_current_reading_description: string;
+          p_current_reading_url: string;
+        };
+        Returns: undefined;
+      };
+      set_profile_status: {
+        Args: { p_status_text: string };
+        Returns: undefined;
+      };
+      set_profile_visibility: {
+        Args: {
+          p_visibility: Database["public"]["Enums"]["profile_visibility"];
+        };
+        Returns: undefined;
+      };
+      set_realm_campaign_status: {
+        Args: {
+          p_campaign_id: string;
+          p_status: Database["public"]["Enums"]["realm_campaign_status"];
+        };
+        Returns: undefined;
+      };
+      set_second_featured_profile_image: {
+        Args: { p_featured_profile_image_2_url: string };
+        Returns: undefined;
+      };
+      set_session_campaign: {
+        Args: { p_campaign_id: string; p_session_id: string };
+        Returns: undefined;
+      };
+      set_session_circle: {
+        Args: { p_circle_id: string; p_session_id: string };
+        Returns: undefined;
+      };
+      set_session_status: {
+        Args: {
+          p_session_id: string;
+          p_status: Database["public"]["Enums"]["session_status"];
+        };
+        Returns: undefined;
+      };
+      set_spotlight_category: {
+        Args: { p_spotlight_category: string };
+        Returns: undefined;
+      };
+      submit_campaign_application: {
+        Args: {
+          p_availability: string;
+          p_campaign_id: string;
+          p_experience_level: Database["public"]["Enums"]["campaign_experience_level"];
+          p_motivation: string;
+          p_safety_acknowledged: boolean;
+        };
+        Returns: undefined;
+      };
+      submit_feedback: {
+        Args: {
+          p_area: Database["public"]["Enums"]["feedback_area"];
+          p_consent_to_contact: boolean;
+          p_message: string;
+        };
+        Returns: string;
+      };
+      submit_opportunity_response: {
+        Args: {
+          p_availability: string;
+          p_opportunity_id: string;
+          p_statement: string;
+        };
+        Returns: undefined;
+      };
+      submit_report: {
+        Args: {
+          p_category: Database["public"]["Enums"]["report_category"];
+          p_context_url: string;
+          p_details: string;
+          p_summary: string;
+          p_target_type: Database["public"]["Enums"]["report_target_type"];
+        };
+        Returns: string;
+      };
+      touch_profile_presence: { Args: never; Returns: string };
+      unblock_profile: {
+        Args: { p_target_user_id: string };
+        Returns: undefined;
+      };
+      unfollow_profile: {
+        Args: { p_target_user_id: string };
+        Returns: undefined;
+      };
+      unmute_profile: {
+        Args: { p_target_user_id: string };
+        Returns: undefined;
+      };
+      update_profile_experience:
+        | {
+            Args: {
+              p_avatar_url: string;
+              p_background_image_url: string;
+              p_bio: string;
+              p_cover_image_url: string;
+              p_discoverable: boolean;
+              p_display_name: string;
+              p_profile_accent_color: string;
+              p_spotlight_description: string;
+              p_spotlight_title: string;
+              p_spotlight_url: string;
+              p_username: string;
+              p_visibility: Database["public"]["Enums"]["profile_visibility"];
+            };
+            Returns: undefined;
+          }
+        | {
+            Args: {
+              p_avatar_url: string;
+              p_background_image_fit: string;
+              p_background_image_position_x: number;
+              p_background_image_position_y: number;
+              p_background_image_url: string;
+              p_background_image_zoom: number;
+              p_bio: string;
+              p_cover_image_url: string;
+              p_discoverable: boolean;
+              p_display_name: string;
+              p_landscape_image_fit: string;
+              p_landscape_image_position_x: number;
+              p_landscape_image_position_y: number;
+              p_landscape_image_zoom: number;
+              p_profile_accent_color: string;
+              p_profile_song_artist: string;
+              p_profile_song_title: string;
+              p_profile_song_url: string;
+              p_spotlight_description: string;
+              p_spotlight_title: string;
+              p_spotlight_url: string;
+              p_username: string;
+              p_visibility: Database["public"]["Enums"]["profile_visibility"];
+            };
+            Returns: undefined;
+          }
+        | {
+            Args: {
+              p_avatar_url: string;
+              p_background_image_fit: string;
+              p_background_image_position_x: number;
+              p_background_image_position_y: number;
+              p_background_image_url: string;
+              p_background_image_zoom: number;
+              p_bio: string;
+              p_cover_image_url: string;
+              p_discoverable: boolean;
+              p_display_name: string;
+              p_landscape_image_fit: string;
+              p_landscape_image_position_x: number;
+              p_landscape_image_position_y: number;
+              p_landscape_image_zoom: number;
+              p_latest_pick_category: string;
+              p_latest_pick_note: string;
+              p_latest_pick_title: string;
+              p_latest_pick_url: string;
+              p_mood: string;
+              p_profile_accent_color: string;
+              p_profile_song_artist: string;
+              p_profile_song_title: string;
+              p_profile_song_url: string;
+              p_spotlight_description: string;
+              p_spotlight_title: string;
+              p_spotlight_url: string;
+              p_username: string;
+              p_view_my_label: string;
+              p_view_my_url: string;
+              p_visibility: Database["public"]["Enums"]["profile_visibility"];
+            };
+            Returns: undefined;
+          };
+      update_profile_room: {
+        Args: {
+          p_character_color: string;
+          p_current_vibe: string;
+          p_enabled: boolean;
+          p_face_accessory: string;
+          p_head_accessory: string;
+          p_lighting_theme: string;
+          p_motion_enabled: boolean;
+          p_neck_accessory: string;
+          p_wall_color: string;
+        };
+        Returns: undefined;
+      };
+      update_profile_room_layer_colors: {
+        Args: {
+          p_accessory_color: string;
+          p_bookshelf_color: string;
+          p_couch_color: string;
+          p_door_color: string;
+          p_floor_color: string;
+          p_tv_color: string;
+        };
+        Returns: undefined;
+      };
+      update_profile_settings: {
+        Args: {
+          p_avatar_url: string;
+          p_bio: string;
+          p_cover_image_url: string;
+          p_discoverable: boolean;
+          p_display_name: string;
+          p_username: string;
+          p_visibility: Database["public"]["Enums"]["profile_visibility"];
+        };
+        Returns: undefined;
+      };
+      withdraw_campaign_application: {
+        Args: { p_campaign_id: string };
+        Returns: undefined;
+      };
+      withdraw_opportunity_response: {
+        Args: { p_opportunity_id: string };
+        Returns: undefined;
+      };
+    };
+    Enums: {
+      app_role:
+        | "member"
+        | "host"
+        | "moderator"
+        | "creator"
+        | "game_master"
+        | "organization_admin"
+        | "platform_admin";
+      attendance_status: "attended" | "absent" | "excused";
+      campaign_application_status:
+        "submitted" | "accepted" | "declined" | "withdrawn";
+      campaign_experience_level: "new" | "comfortable" | "experienced";
+      campaign_member_role: "game_master" | "player";
+      campaign_membership_status: "active" | "left" | "removed";
+      circle_join_policy: "open" | "request" | "invite_only";
+      circle_member_role: "owner" | "host" | "moderator" | "member";
+      circle_membership_status:
+        "requested" | "invited" | "active" | "declined" | "removed" | "left";
+      circle_status: "draft" | "published" | "archived";
+      circle_visibility: "public" | "private";
+      creator_opportunity_close_reason: "manual" | "filled" | "deadline";
+      creator_opportunity_kind:
+        "collaboration" | "project" | "volunteer" | "mentorship";
+      creator_opportunity_status:
+        "draft" | "published" | "closed" | "completed" | "cancelled";
+      feedback_area:
+        | "platform"
+        | "pulse"
+        | "sessions"
+        | "circles"
+        | "commons"
+        | "realm"
+        | "passport"
+        | "accessibility"
+        | "safety";
+      feedback_status: "submitted" | "reviewed" | "closed";
+      friend_list_visibility: "private" | "friends" | "members";
+      friendship_status: "pending" | "accepted";
+      location_visibility: "hidden" | "city_region" | "region_only";
+      notification_kind:
+        | "report_received"
+        | "report_updated"
+        | "circle_invitation"
+        | "commons_response"
+        | "realm_application"
+        | "passport_activity"
+        | "system"
+        | "friend_request"
+        | "friend_accepted"
+        | "new_follower";
+      opportunity_response_status:
+        "submitted" | "accepted" | "declined" | "withdrawn" | "completed";
+      participation_format: "in_person" | "online" | "either";
+      passport_activity_kind:
+        | "attended_session"
+        | "hosted_session"
+        | "completed_opportunity"
+        | "led_opportunity"
+        | "completed_campaign"
+        | "led_campaign";
+      passport_entry_status: "verified" | "revoked";
+      passport_revocation_kind: "source_correction" | "administrative";
+      passport_source_module: "sessions" | "circles" | "commons" | "realm";
+      profile_visibility: "private" | "members" | "public";
+      pulse_social_intensity: "solo" | "light" | "social";
+      pulse_stimulation_level: "low" | "moderate" | "high";
+      realm_campaign_status:
+        "draft" | "recruiting" | "active" | "completed" | "cancelled";
+      registration_status: "registered" | "cancelled";
+      report_category:
+        | "harassment"
+        | "hate_or_discrimination"
+        | "threat_or_violence"
+        | "sexual_content"
+        | "spam_or_fraud"
+        | "privacy"
+        | "copyright_or_proprietary_content"
+        | "other";
+      report_status:
+        "submitted" | "reviewing" | "escalated" | "resolved" | "dismissed";
+      report_target_type:
+        | "member"
+        | "session"
+        | "circle"
+        | "opportunity"
+        | "campaign"
+        | "platform";
+      session_source_module: "platform" | "circles" | "commons" | "realm";
+      session_status: "draft" | "published" | "cancelled" | "completed";
+    };
+    CompositeTypes: {
+      [_ in never]: never;
+    };
+  };
+};
+
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">;
+
+type DefaultSchema = DatabaseWithoutInternals[Extract<
+  keyof Database,
+  "public"
+>];
+
+export type Tables<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals;
+  }
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
+    : never) = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals;
+}
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+      Row: infer R;
+    }
+    ? R
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
+        Row: infer R;
+      }
+      ? R
+      : never
+    : never;
+
+export type TablesInsert<
+  DefaultSchemaTableNameOrOptions extends
+    keyof DefaultSchema["Tables"] | { schema: keyof DatabaseWithoutInternals },
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals;
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never) = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals;
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Insert: infer I;
+    }
+    ? I
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Insert: infer I;
+      }
+      ? I
+      : never
+    : never;
+
+export type TablesUpdate<
+  DefaultSchemaTableNameOrOptions extends
+    keyof DefaultSchema["Tables"] | { schema: keyof DatabaseWithoutInternals },
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals;
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never) = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals;
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Update: infer U;
+    }
+    ? U
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Update: infer U;
+      }
+      ? U
+      : never
+    : never;
+
+export type Enums<
+  DefaultSchemaEnumNameOrOptions extends
+    keyof DefaultSchema["Enums"] | { schema: keyof DatabaseWithoutInternals },
+  EnumName extends (DefaultSchemaEnumNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals;
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
+    : never) = never,
+> = DefaultSchemaEnumNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals;
+}
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
+    : never;
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof DefaultSchema["CompositeTypes"]
+    | { schema: keyof DatabaseWithoutInternals },
+  CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals;
+  }
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never) = never,
+> = PublicCompositeTypeNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals;
+}
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
+    : never;
+
+export const Constants = {
+  public: {
+    Enums: {
+      app_role: [
+        "member",
+        "host",
+        "moderator",
+        "creator",
+        "game_master",
+        "organization_admin",
+        "platform_admin",
+      ],
+      attendance_status: ["attended", "absent", "excused"],
+      campaign_application_status: [
+        "submitted",
+        "accepted",
+        "declined",
+        "withdrawn",
+      ],
+      campaign_experience_level: ["new", "comfortable", "experienced"],
+      campaign_member_role: ["game_master", "player"],
+      campaign_membership_status: ["active", "left", "removed"],
+      circle_join_policy: ["open", "request", "invite_only"],
+      circle_member_role: ["owner", "host", "moderator", "member"],
+      circle_membership_status: [
+        "requested",
+        "invited",
+        "active",
+        "declined",
+        "removed",
+        "left",
+      ],
+      circle_status: ["draft", "published", "archived"],
+      circle_visibility: ["public", "private"],
+      creator_opportunity_close_reason: ["manual", "filled", "deadline"],
+      creator_opportunity_kind: [
+        "collaboration",
+        "project",
+        "volunteer",
+        "mentorship",
+      ],
+      creator_opportunity_status: [
+        "draft",
+        "published",
+        "closed",
+        "completed",
+        "cancelled",
+      ],
+      feedback_area: [
+        "platform",
+        "pulse",
+        "sessions",
+        "circles",
+        "commons",
+        "realm",
+        "passport",
+        "accessibility",
+        "safety",
+      ],
+      feedback_status: ["submitted", "reviewed", "closed"],
+      friend_list_visibility: ["private", "friends", "members"],
+      friendship_status: ["pending", "accepted"],
+      location_visibility: ["hidden", "city_region", "region_only"],
+      notification_kind: [
+        "report_received",
+        "report_updated",
+        "circle_invitation",
+        "commons_response",
+        "realm_application",
+        "passport_activity",
+        "system",
+        "friend_request",
+        "friend_accepted",
+        "new_follower",
+      ],
+      opportunity_response_status: [
+        "submitted",
+        "accepted",
+        "declined",
+        "withdrawn",
+        "completed",
+      ],
+      participation_format: ["in_person", "online", "either"],
+      passport_activity_kind: [
+        "attended_session",
+        "hosted_session",
+        "completed_opportunity",
+        "led_opportunity",
+        "completed_campaign",
+        "led_campaign",
+      ],
+      passport_entry_status: ["verified", "revoked"],
+      passport_revocation_kind: ["source_correction", "administrative"],
+      passport_source_module: ["sessions", "circles", "commons", "realm"],
+      profile_visibility: ["private", "members", "public"],
+      pulse_social_intensity: ["solo", "light", "social"],
+      pulse_stimulation_level: ["low", "moderate", "high"],
+      realm_campaign_status: [
+        "draft",
+        "recruiting",
+        "active",
+        "completed",
+        "cancelled",
+      ],
+      registration_status: ["registered", "cancelled"],
+      report_category: [
+        "harassment",
+        "hate_or_discrimination",
+        "threat_or_violence",
+        "sexual_content",
+        "spam_or_fraud",
+        "privacy",
+        "copyright_or_proprietary_content",
+        "other",
+      ],
+      report_status: [
+        "submitted",
+        "reviewing",
+        "escalated",
+        "resolved",
+        "dismissed",
+      ],
+      report_target_type: [
+        "member",
+        "session",
+        "circle",
+        "opportunity",
+        "campaign",
+        "platform",
+      ],
+      session_source_module: ["platform", "circles", "commons", "realm"],
+      session_status: ["draft", "published", "cancelled", "completed"],
+    },
+  },
+} as const;

@@ -67,7 +67,7 @@ export default async function ManageCirclesPage() {
   if (membershipResult.error || circlesResult.error) {
     return (
       <StatusMessage tone="error">
-        Circle management could not load. Confirm the Phase 5 migration.
+        Circle management is temporarily unavailable. Please try again shortly.
       </StatusMessage>
     );
   }

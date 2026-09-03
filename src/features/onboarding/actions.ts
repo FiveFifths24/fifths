@@ -24,6 +24,7 @@ export async function completeOnboardingAction(
     locationVisibility: formData.get("locationVisibility"),
     friendListVisibility: formData.get("friendListVisibility"),
     discoverable: formData.get("discoverable"),
+    profileVisibility: formData.get("profileVisibility"),
 
     interestIds: formData.getAll("interestIds"),
     skillIds: formData.getAll("skillIds"),
@@ -151,6 +152,17 @@ export async function completeOnboardingAction(
         fieldErrors: usernameTaken
           ? { username: ["Choose a different username."] }
           : undefined,
+      };
+    }
+    const { error: visibilityError } = await supabase.rpc(
+      "set_profile_visibility",
+      { p_visibility: parsed.data.profileVisibility },
+    );
+    if (visibilityError) {
+      return {
+        status: "error",
+        message:
+          "Your profile was created, but its visibility choice could not be saved.",
       };
     }
   } catch (error) {

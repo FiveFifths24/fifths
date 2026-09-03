@@ -1,12 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import {
+  Bell,
+  CircleUserRound,
+  House,
+  LogOut,
+  Menu,
+  Settings,
+  X,
+} from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useState } from "react";
 
 import { ButtonLink } from "@/components/ui/button-link";
 import { Container } from "@/components/ui/container";
+import { signOutAction } from "@/features/auth/actions";
 import { cn } from "@/lib/cn";
 import { createClient } from "@/lib/supabase/client";
 
@@ -97,21 +106,11 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        <div className="hidden items-center md:flex">
-          <ButtonLink
-            className="text-white hover:text-[#f359d2]"
-            href={isLoggedIn ? "/account" : "/login"}
-            variant="quiet"
-          >
-            {isLoggedIn ? "Account" : "Log In"}
-          </ButtonLink>
-        </div>
-
         <button
           aria-controls={menuId}
           aria-expanded={open}
           aria-label={open ? "Close navigation menu" : "Open navigation menu"}
-          className="inline-flex size-12 items-center justify-center rounded-full border border-neutral-700 text-white md:hidden"
+          className="inline-flex min-h-12 min-w-12 items-center justify-center gap-2 rounded-full border border-neutral-700 px-3 text-white transition hover:border-[#f359d2]/60 md:px-5"
           onClick={() => setOpen((current) => !current)}
           type="button"
         >
@@ -120,21 +119,76 @@ export function SiteHeader() {
           ) : (
             <Menu aria-hidden="true" className="size-5" />
           )}
+          <span className="hidden text-sm font-bold md:inline">
+            {isLoggedIn ? "Account" : "Menu"}
+          </span>
         </button>
       </Container>
 
       {open ? (
         <div
-          className="border-t border-neutral-800 bg-black/95 backdrop-blur-xl md:hidden"
+          className="border-t border-neutral-800 bg-black/95 backdrop-blur-xl"
           id={menuId}
         >
-          <Container className="py-5">
-            <ButtonLink
-              className="w-full border-0 bg-[linear-gradient(90deg,#1800ad_0%,#6c14ce_36%,#f359d2_70%,#7cff00_100%)] text-white shadow-[0_0_20px_rgba(108,20,206,0.2)] hover:brightness-110"
-              href={isLoggedIn ? "/account" : "/login"}
-            >
-              {isLoggedIn ? "Account" : "Log In"}
-            </ButtonLink>
+          <Container className="flex flex-col gap-3 py-5 md:flex-row md:justify-end">
+            {isLoggedIn ? (
+              <>
+                <ButtonLink
+                  className="w-full md:w-auto"
+                  href="/home"
+                  onClick={() => setOpen(false)}
+                  variant="secondary"
+                >
+                  <House aria-hidden="true" className="size-4" />
+                  Home
+                </ButtonLink>
+                <ButtonLink
+                  className="w-full md:w-auto"
+                  href="/profile"
+                  onClick={() => setOpen(false)}
+                  variant="secondary"
+                >
+                  <CircleUserRound aria-hidden="true" className="size-4" />
+                  My Profile
+                </ButtonLink>
+
+                <ButtonLink
+                  className="w-full md:w-auto"
+                  href="/home/notifications"
+                  onClick={() => setOpen(false)}
+                  variant="secondary"
+                >
+                  <Bell aria-hidden="true" className="size-4" />
+                  Notifications
+                </ButtonLink>
+
+                <ButtonLink
+                  className="w-full md:w-auto"
+                  href="/account"
+                  onClick={() => setOpen(false)}
+                >
+                  <Settings aria-hidden="true" className="size-4" />
+                  Account
+                </ButtonLink>
+                <form action={signOutAction} className="w-full md:w-auto">
+                  <button
+                    className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full border border-neutral-700 px-6 py-3 text-sm font-bold text-white transition hover:border-[#f359d2]/60 hover:bg-white/5 md:w-auto"
+                    type="submit"
+                  >
+                    <LogOut aria-hidden="true" className="size-4" />
+                    Log Out
+                  </button>
+                </form>
+              </>
+            ) : (
+              <ButtonLink
+                className="w-full border-0 bg-[linear-gradient(90deg,#1800ad_0%,#6c14ce_36%,#f359d2_70%,#7cff00_100%)] text-white shadow-[0_0_20px_rgba(108,20,206,0.2)] hover:brightness-110 md:w-auto"
+                href="/login"
+                onClick={() => setOpen(false)}
+              >
+                Log In
+              </ButtonLink>
+            )}
           </Container>
         </div>
       ) : null}

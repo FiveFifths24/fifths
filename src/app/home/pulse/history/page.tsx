@@ -32,8 +32,7 @@ export default async function PulseHistoryPage() {
   if (historyResult.error || modeResult.error) {
     return (
       <StatusMessage tone="error">
-        Pulse history could not load. Confirm that the Phase 3 migration has
-        been applied to the connected Supabase project.
+        Pulse history is temporarily unavailable. Please try again shortly.
       </StatusMessage>
     );
   }

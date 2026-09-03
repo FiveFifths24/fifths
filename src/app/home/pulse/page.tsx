@@ -31,8 +31,7 @@ export default async function PulseCheckInPage() {
   if (modeResult.error || interestResult.error || !modeResult.data?.length) {
     return (
       <StatusMessage tone="error">
-        Pulse options are unavailable. Confirm that the Phase 3 migration has
-        been applied to the connected Supabase project.
+        Pulse options are temporarily unavailable. Please try again shortly.
       </StatusMessage>
     );
   }

@@ -151,7 +151,7 @@ export function PulseCheckInForm({
           choices={[
             { value: "in_person", label: "In person" },
             { value: "online", label: "Online" },
-            { value: "either", label: "Either works" },
+            { value: "either", label: "Either Works" },
           ]}
           columns="grid-cols-1"
           error={firstFieldError(state, "preferredFormat")}

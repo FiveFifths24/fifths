@@ -83,7 +83,7 @@ export function OpportunityResponseForm({
         name="availability"
       />
       <SubmitButton pendingLabel="Submitting response…">
-        Submit private response
+        Submit Private Response
       </SubmitButton>
     </form>
   );

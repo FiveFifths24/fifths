@@ -57,7 +57,7 @@ export default async function OpportunityResponsesPage({
   if (responseResult.error) {
     return (
       <StatusMessage tone="error">
-        Response history needs the Phase 6 migration.
+        Response history is temporarily unavailable. Please try again shortly.
       </StatusMessage>
     );
   }

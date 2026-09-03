@@ -9,34 +9,255 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      direct_conversations: {
+        Row: {
+          id: string;
+          user_id_a: string;
+          user_id_b: string;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id_a: string;
+          user_id_b: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<
+          Database["public"]["Tables"]["direct_conversations"]["Insert"]
+        >;
+        Relationships: [];
+      };
+
+      direct_messages: {
+        Row: {
+          id: string;
+          conversation_id: string;
+          sender_id: string;
+          body: string;
+          created_at: string;
+          edited_at: string | null;
+          deleted_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          conversation_id: string;
+          sender_id: string;
+          body: string;
+          created_at?: string;
+          edited_at?: string | null;
+          deleted_at?: string | null;
+        };
+        Update: Partial<
+          Database["public"]["Tables"]["direct_messages"]["Insert"]
+        >;
+        Relationships: [];
+      };
       profiles: {
         Row: {
           id: string;
           username: string | null;
+          username_changed_at: string | null;
           display_name: string | null;
+          display_name_changed_at: string | null;
           pronouns: string | null;
           timezone: string;
           avatar_url: string | null;
+          bio: string | null;
+          city: string | null;
+          region: string | null;
+          country_code: string | null;
+          cover_image_url: string | null;
+          background_image_url: string | null;
+          landscape_image_fit: "cover" | "contain";
+          landscape_image_position_x: number;
+          landscape_image_position_y: number;
+          landscape_image_zoom: number;
+          background_image_fit: "cover" | "contain";
+          background_image_position_x: number;
+          background_image_position_y: number;
+          background_image_zoom: number;
+          profile_accent_color: string;
+          spotlight_category: string | null;
+          spotlight_title: string | null;
+          spotlight_description: string | null;
+          spotlight_url: string | null;
+
+          current_game: string | null;
+          current_reading: string | null;
+          current_food: string | null;
+          current_game_description: string | null;
+          current_game_url: string | null;
+
+          current_reading_description: string | null;
+          current_reading_url: string | null;
+
+          current_food_description: string | null;
+          current_food_url: string | null;
+
+          mood: string | null;
+          last_seen_at: string | null;
+          view_my_label: string | null;
+          view_my_url: string | null;
+          profile_song_url: string | null;
+          profile_song_title: string | null;
+          profile_song_artist: string | null;
+          location_visibility: Database["public"]["Enums"]["location_visibility"];
+          friend_list_visibility: Database["public"]["Enums"]["friend_list_visibility"];
+          discoverable: boolean;
           visibility: Database["public"]["Enums"]["profile_visibility"];
           age_confirmed_at: string | null;
           onboarding_completed_at: string | null;
           created_at: string;
           updated_at: string;
+          featured_profile_image_url: string | null;
+          featured_profile_image_2_url: string | null;
+          latest_pick_category: string | null;
+          latest_pick_note: string | null;
+          latest_pick_title: string | null;
+          latest_pick_url: string | null;
         };
         Insert: {
           id: string;
           username?: string | null;
+          username_changed_at?: string | null;
           display_name?: string | null;
+          display_name_changed_at?: string | null;
           pronouns?: string | null;
           timezone?: string;
           avatar_url?: string | null;
+          bio?: string | null;
+          city?: string | null;
+          region?: string | null;
+          country_code?: string | null;
+          cover_image_url?: string | null;
+          background_image_url?: string | null;
+          landscape_image_fit?: "cover" | "contain";
+          landscape_image_position_x?: number;
+          landscape_image_position_y?: number;
+          landscape_image_zoom?: number;
+          background_image_fit?: "cover" | "contain";
+          background_image_position_x?: number;
+          background_image_position_y?: number;
+          background_image_zoom?: number;
+          profile_accent_color?: string;
+          spotlight_category?: string | null;
+          spotlight_title?: string | null;
+          spotlight_description?: string | null;
+          spotlight_url?: string | null;
+
+          current_game?: string | null;
+          current_reading?: string | null;
+          current_food?: string | null;
+
+          mood?: string | null;
+          last_seen_at?: string | null;
+          view_my_label?: string | null;
+          view_my_url?: string | null;
+          profile_song_url?: string | null;
+          profile_song_title?: string | null;
+          profile_song_artist?: string | null;
+          location_visibility?: Database["public"]["Enums"]["location_visibility"];
+          friend_list_visibility?: Database["public"]["Enums"]["friend_list_visibility"];
+          discoverable?: boolean;
           visibility?: Database["public"]["Enums"]["profile_visibility"];
           age_confirmed_at?: string | null;
           onboarding_completed_at?: string | null;
           created_at?: string;
           updated_at?: string;
+          featured_profile_image_url?: string | null;
+          featured_profile_image_2_url?: string | null;
+          latest_pick_category?: string | null;
+          latest_pick_note?: string | null;
+          latest_pick_title?: string | null;
+          latest_pick_url?: string | null;
         };
         Update: Partial<Database["public"]["Tables"]["profiles"]["Insert"]>;
+        Relationships: [];
+      };
+      profile_rooms: {
+        Row: {
+          user_id: string;
+          enabled: boolean;
+          wall_color: string;
+          floor_color: string;
+          couch_color: string;
+          bookshelf_color: string;
+          tv_color: string;
+          door_color: string;
+          accessory_color: string;
+          lighting_theme: "cosmic" | "warm" | "daylight" | "midnight";
+          current_vibe: "chill" | "focused" | "gaming" | "creative" | "social";
+          character_color: string;
+          character_shape: "ghost" | "blob" | "orbit";
+          character_expression: "smile" | "calm" | "wink";
+          character_accessory: "none" | "headphones" | "glasses" | "beanie";
+          head_accessory:
+            | "none"
+            | "headphones"
+            | "beanie"
+            | "bow"
+            | "hat"
+            | "crown"
+            | "flower"
+            | "headband";
+          face_accessory: "none" | "glasses" | "sunglasses";
+          neck_accessory: "none" | "scarf" | "bandana";
+          motion_enabled: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          user_id: string;
+          enabled?: boolean;
+          wall_color?: string;
+          floor_color?: string;
+          couch_color?: string;
+          bookshelf_color?: string;
+          tv_color?: string;
+          door_color?: string;
+          accessory_color?: string;
+          lighting_theme?: "cosmic" | "warm" | "daylight" | "midnight";
+          current_vibe?: "chill" | "focused" | "gaming" | "creative" | "social";
+          character_color?: string;
+          character_shape?: "ghost" | "blob" | "orbit";
+          character_expression?: "smile" | "calm" | "wink";
+          character_accessory?: "none" | "headphones" | "glasses" | "beanie";
+          head_accessory?:
+            | "none"
+            | "headphones"
+            | "beanie"
+            | "bow"
+            | "hat"
+            | "crown"
+            | "flower"
+            | "headband";
+          face_accessory?: "none" | "glasses" | "sunglasses";
+          neck_accessory?: "none" | "scarf" | "bandana";
+          motion_enabled?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<
+          Database["public"]["Tables"]["profile_rooms"]["Insert"]
+        >;
+        Relationships: [];
+      };
+      profile_view_buckets: {
+        Row: {
+          profile_id: string;
+          viewer_id: string;
+          viewed_on: string;
+          created_at: string;
+        };
+        Insert: {
+          profile_id: string;
+          viewer_id: string;
+          viewed_on?: string;
+          created_at?: string;
+        };
+        Update: never;
         Relationships: [];
       };
       user_roles: {
@@ -775,9 +996,97 @@ export type Database = {
         Update: never;
         Relationships: [];
       };
+      profile_follows: {
+        Row: { follower_id: string; followed_id: string; created_at: string };
+        Insert: {
+          follower_id: string;
+          followed_id: string;
+          created_at?: string;
+        };
+        Update: never;
+        Relationships: [];
+      };
+      profile_friendships: {
+        Row: {
+          user_id_a: string;
+          user_id_b: string;
+          requested_by: string;
+          status: Database["public"]["Enums"]["friendship_status"];
+          created_at: string;
+          responded_at: string | null;
+        };
+        Insert: {
+          user_id_a: string;
+          user_id_b: string;
+          requested_by: string;
+          status?: Database["public"]["Enums"]["friendship_status"];
+          created_at?: string;
+          responded_at?: string | null;
+        };
+        Update: never;
+        Relationships: [];
+      };
+      profile_blocks: {
+        Row: {
+          blocker_id: string;
+          blocked_id: string;
+          blocked_username: string | null;
+          blocked_display_name: string | null;
+          created_at: string;
+        };
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
+      profile_mutes: {
+        Row: {
+          muter_id: string;
+          muted_id: string;
+          muted_username: string | null;
+          muted_display_name: string | null;
+          created_at: string;
+        };
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
+      profile_blocked_words: {
+        Row: { id: string; user_id: string; word: string; created_at: string };
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
+      profile_statuses: {
+        Row: {
+          user_id: string;
+          status_text: string;
+          expires_at: string;
+          updated_at: string;
+        };
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
+      profile_featured_connections: {
+        Row: {
+          owner_id: string;
+          featured_id: string;
+          display_order: number;
+          created_at: string;
+        };
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: {
+      set_spotlight_category: {
+        Args: {
+          p_spotlight_category: string;
+        };
+        Returns: undefined;
+      };
       complete_onboarding: {
         Args: {
           p_username: string;
@@ -788,6 +1097,20 @@ export type Database = {
           p_skill_ids: string[];
         };
         Returns: undefined;
+      };
+      get_or_create_direct_conversation: {
+        Args: {
+          p_target_user_id: string;
+        };
+        Returns: string;
+      };
+
+      send_direct_message: {
+        Args: {
+          p_conversation_id: string;
+          p_body: string;
+        };
+        Returns: string;
       };
       has_role: {
         Args: { requested_role: Database["public"]["Enums"]["app_role"] };
@@ -1055,6 +1378,17 @@ export type Database = {
         Args: { p_campaign_id: string };
         Returns: boolean;
       };
+      update_profile_room_layer_colors: {
+        Args: {
+          p_accessory_color: string;
+          p_bookshelf_color: string;
+          p_couch_color: string;
+          p_door_color: string;
+          p_floor_color: string;
+          p_tv_color: string;
+        };
+        Returns: undefined;
+      };
       create_realm_campaign: {
         Args: {
           p_circle_id: string | null;
@@ -1187,6 +1521,276 @@ export type Database = {
         Args: Record<string, never>;
         Returns: undefined;
       };
+      update_profile_settings: {
+        Args: {
+          p_username: string;
+          p_display_name: string;
+          p_bio: string | null;
+          p_visibility: Database["public"]["Enums"]["profile_visibility"];
+          p_discoverable: boolean;
+          p_avatar_url: string | null;
+          p_cover_image_url: string | null;
+        };
+        Returns: undefined;
+      };
+      update_profile_experience: {
+        Args: {
+          p_username: string;
+          p_display_name: string;
+          p_bio: string | null;
+          p_visibility: Database["public"]["Enums"]["profile_visibility"];
+          p_discoverable: boolean;
+          p_avatar_url: string | null;
+          p_cover_image_url: string | null;
+          p_background_image_url: string | null;
+          p_profile_accent_color: string;
+          p_landscape_image_fit: "cover" | "contain";
+          p_landscape_image_position_x: number;
+          p_landscape_image_position_y: number;
+          p_landscape_image_zoom: number;
+          p_background_image_fit: "cover" | "contain";
+          p_background_image_position_x: number;
+          p_background_image_position_y: number;
+          p_background_image_zoom: number;
+          p_spotlight_title: string | null;
+          p_spotlight_description: string | null;
+          p_spotlight_url: string | null;
+          p_profile_song_title: string | null;
+          p_profile_song_artist: string | null;
+          p_profile_song_url: string | null;
+          p_latest_pick_category: string | null;
+          p_latest_pick_title: string | null;
+          p_latest_pick_note: string | null;
+          p_latest_pick_url: string | null;
+          p_mood: string | null;
+          p_view_my_label: string | null;
+          p_view_my_url: string | null;
+        };
+        Returns: undefined;
+      };
+      update_profile_room: {
+        Args: {
+          p_enabled: boolean;
+          p_wall_color: string;
+          p_lighting_theme: "cosmic" | "warm" | "daylight" | "midnight";
+          p_current_vibe:
+            "chill" | "focused" | "gaming" | "creative" | "social";
+          p_character_color: string;
+          p_head_accessory:
+            | "none"
+            | "headphones"
+            | "beanie"
+            | "bow"
+            | "hat"
+            | "crown"
+            | "flower"
+            | "headband";
+          p_face_accessory: "none" | "glasses" | "sunglasses";
+          p_neck_accessory: "none" | "scarf" | "bandana";
+          p_motion_enabled: boolean;
+        };
+        Returns: undefined;
+      };
+      get_profile_room: {
+        Args: { p_user_id: string };
+        Returns: {
+          accessory_color: string;
+          bookshelf_color: string;
+          character_accessory: string;
+          character_color: string;
+          character_expression: string;
+          character_shape: string;
+          couch_color: string;
+          current_vibe: "chill" | "focused" | "gaming" | "creative" | "social";
+          door_color: string;
+          enabled: boolean;
+          face_accessory: "none" | "glasses" | "sunglasses";
+          floor_color: string;
+          head_accessory:
+            | "none"
+            | "headphones"
+            | "beanie"
+            | "bow"
+            | "hat"
+            | "crown"
+            | "flower"
+            | "headband";
+          lighting_theme: "cosmic" | "warm" | "daylight" | "midnight";
+          motion_enabled: boolean;
+          neck_accessory: "none" | "scarf" | "bandana";
+          profile_song_artist: string;
+          profile_song_title: string;
+          profile_song_url: string;
+          tv_color: string;
+          wall_color: string;
+        }[];
+      };
+      set_profile_status: {
+        Args: { p_status_text: string };
+        Returns: undefined;
+      };
+      set_featured_connections: {
+        Args: { p_featured_ids: string[] };
+        Returns: undefined;
+      };
+      get_profile_experience: {
+        Args: { p_user_id: string };
+        Returns: Array<{
+          background_image_url: string | null;
+          profile_accent_color: string;
+          status_text: string | null;
+          status_expires_at: string | null;
+          spotlight_title: string | null;
+          spotlight_description: string | null;
+          spotlight_url: string | null;
+          friend_count: number;
+          follower_count: number;
+          following_count: number;
+          landscape_image_fit: "cover" | "contain";
+          landscape_image_position_x: number;
+          landscape_image_position_y: number;
+          landscape_image_zoom: number;
+          background_image_fit: "cover" | "contain";
+          background_image_position_x: number;
+          background_image_position_y: number;
+          background_image_zoom: number;
+          mood: string | null;
+          last_seen_at: string | null;
+          profile_view_count: number;
+          view_my_label: string | null;
+          view_my_url: string | null;
+          profile_song_title: string | null;
+          profile_song_artist: string | null;
+          profile_song_url: string | null;
+          latest_pick_category: string | null;
+          latest_pick_title: string | null;
+          latest_pick_note: string | null;
+          latest_pick_url: string | null;
+          featured_profile_image_url: string | null;
+        }>;
+      };
+      touch_profile_presence: {
+        Args: Record<PropertyKey, never>;
+        Returns: string | null;
+      };
+      record_profile_view: {
+        Args: { p_profile_id: string };
+        Returns: boolean;
+      };
+      get_featured_connections: {
+        Args: { p_owner_id: string };
+        Returns: Array<{
+          id: string;
+          username: string;
+          display_name: string;
+          avatar_url: string | null;
+          display_order: number;
+        }>;
+      };
+      set_profile_visibility: {
+        Args: {
+          p_visibility: Database["public"]["Enums"]["profile_visibility"];
+        };
+        Returns: undefined;
+      };
+      set_featured_profile_image: {
+        Args: { p_featured_profile_image_url: string };
+        Returns: undefined;
+      };
+      set_profile_current_fields: {
+        Args: {
+          p_current_game: string | null;
+          p_current_game_description: string | null;
+          p_current_game_url: string | null;
+
+          p_current_reading: string | null;
+          p_current_reading_description: string | null;
+          p_current_reading_url: string | null;
+
+          p_current_food: string | null;
+          p_current_food_description: string | null;
+          p_current_food_url: string | null;
+        };
+        Returns: undefined;
+      };
+
+      set_second_featured_profile_image: {
+        Args: {
+          p_featured_profile_image_2_url: string;
+        };
+        Returns: undefined;
+      };
+      get_public_profile: {
+        Args: { p_username: string };
+        Returns: Array<{
+          id: string;
+          username: string;
+          display_name: string;
+          pronouns: string | null;
+          bio: string | null;
+          avatar_url: string | null;
+          cover_image_url: string | null;
+          city: string | null;
+          region: string | null;
+          location_visibility: Database["public"]["Enums"]["location_visibility"];
+          created_at: string;
+        }>;
+      };
+      get_member_profiles: {
+        Args: { p_username?: string | null; p_discoverable_only?: boolean };
+        Returns: Array<{
+          id: string;
+          username: string;
+          display_name: string;
+          pronouns: string | null;
+          bio: string | null;
+          avatar_url: string | null;
+          cover_image_url: string | null;
+          city: string | null;
+          region: string | null;
+          location_visibility: Database["public"]["Enums"]["location_visibility"];
+          friend_list_visibility: Database["public"]["Enums"]["friend_list_visibility"];
+          discoverable: boolean;
+          visibility: Database["public"]["Enums"]["profile_visibility"];
+          created_at: string;
+        }>;
+      };
+      follow_profile: {
+        Args: { p_target_user_id: string };
+        Returns: undefined;
+      };
+      unfollow_profile: {
+        Args: { p_target_user_id: string };
+        Returns: undefined;
+      };
+      remove_follower: {
+        Args: { p_follower_user_id: string };
+        Returns: undefined;
+      };
+      send_friend_request: {
+        Args: { p_target_user_id: string };
+        Returns: undefined;
+      };
+      accept_friend_request: {
+        Args: { p_requester_user_id: string };
+        Returns: undefined;
+      };
+      remove_friendship: {
+        Args: { p_target_user_id: string };
+        Returns: undefined;
+      };
+      block_profile: { Args: { p_target_user_id: string }; Returns: undefined };
+      unblock_profile: {
+        Args: { p_target_user_id: string };
+        Returns: undefined;
+      };
+      mute_profile: { Args: { p_target_user_id: string }; Returns: undefined };
+      unmute_profile: {
+        Args: { p_target_user_id: string };
+        Returns: undefined;
+      };
+      add_blocked_word: { Args: { p_word: string }; Returns: string };
+      remove_blocked_word: { Args: { p_word_id: string }; Returns: undefined };
     };
     Enums: {
       app_role:
@@ -1198,6 +1802,9 @@ export type Database = {
         | "organization_admin"
         | "platform_admin";
       profile_visibility: "private" | "members" | "public";
+      location_visibility: "hidden" | "city_region" | "region_only";
+      friend_list_visibility: "private" | "friends" | "members";
+      friendship_status: "pending" | "accepted";
       pulse_stimulation_level: "low" | "moderate" | "high";
       pulse_social_intensity: "solo" | "light" | "social";
       participation_format: "in_person" | "online" | "either";
@@ -1271,7 +1878,10 @@ export type Database = {
         | "commons_response"
         | "realm_application"
         | "passport_activity"
-        | "system";
+        | "system"
+        | "friend_request"
+        | "friend_accepted"
+        | "new_follower";
     };
     CompositeTypes: Record<string, never>;
   };

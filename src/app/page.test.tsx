@@ -9,7 +9,7 @@ describe("landing page", () => {
     expect(
       screen.getByRole("heading", {
         level: 1,
-        name: /real-time capacity\s*meets real-world\s*connections/i,
+        name: /find your space\.\s*match your energy/i,
       }),
     ).toBeInTheDocument();
 

@@ -57,8 +57,7 @@ export default async function CircleDetailPage({
   if (circleResult.error) {
     return (
       <StatusMessage tone="error">
-        This Circle could not load. Confirm the Phase 5 migration and your
-        access.
+        This Circle is temporarily unavailable. Please try again shortly.
       </StatusMessage>
     );
   }

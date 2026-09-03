@@ -59,8 +59,8 @@ export default async function ModerationPage({
   if (reportResult.error || feedbackResult.error)
     return (
       <StatusMessage tone="error">
-        The moderation workspace requires the Phase 10 Supabase migration and an
-        authorized role.
+        The moderation workspace is temporarily unavailable or you may not have
+        access.
       </StatusMessage>
     );
   const reports = reportResult.data ?? [];
@@ -69,26 +69,26 @@ export default async function ModerationPage({
   return (
     <div>
       <ButtonLink href="/home/safety" variant="quiet">
-        ← Back to trust and safety
+        ← Back to Trust and Safety
       </ButtonLink>
       <div className="mt-7 flex items-center gap-3">
         <ShieldAlert aria-hidden="true" className="size-6 text-red-300" />
         <p className="text-xs font-bold tracking-[0.2em] text-red-300 uppercase">
-          Restricted workspace
+          Restricted Workspace
         </p>
       </div>
       <h1 className="display-type mt-4 text-5xl text-white sm:text-7xl">
-        Human review, with limits.
+        Human Review, With Limits.
       </h1>
       <p className="mt-5 max-w-3xl text-lg leading-8 text-neutral-300">
-        Moderators can triage and escalate reports. Only platform administrators
-        can resolve, dismiss, or review private product feedback. Every status
-        transition is privately audited.
+        Keep report details private and use only approved internal channels.
+        Some moderation tools are still limited while this workspace continues
+        to develop.
       </p>
       <StatusMessage className="mt-7">
-        Do not copy report details into public channels. Phase 10 provides no
-        account suspension, content deletion, evidence upload, automated
-        decision, or emergency-response workflow.
+        Do not share report details in public channels. Some moderation tools,
+        including account actions, content removal, evidence uploads, automated
+        decisions, and emergency-response features, are not currently available.
       </StatusMessage>
       {parameters?.review === "updated" ? (
         <StatusMessage className="mt-5" tone="success">

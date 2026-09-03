@@ -10,6 +10,10 @@ import {
   rankSessions,
 } from "@/features/sessions/session-data";
 import { SessionCard } from "@/features/sessions/session-card";
+import {
+  filterMemberContent,
+  loadContentPreferences,
+} from "@/features/profiles/content-filters";
 import type { PulseRecommendationInput } from "@/lib/recommendations/types";
 import { createClient } from "@/lib/supabase/server";
 
@@ -28,7 +32,8 @@ export default async function SessionsPage() {
     return <AccountUnavailable />;
   }
 
-  const now = new Date().toISOString();
+  const publicCutoff = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+  const { data: userData } = await supabase.auth.getUser();
 
   const [sessionResult, modeResult, interestResult, pulseResult] =
     await Promise.all([
@@ -36,7 +41,7 @@ export default async function SessionsPage() {
         .from("sessions")
         .select("*")
         .eq("status", "published")
-        .gt("starts_at", now)
+        .gt("ends_at", publicCutoff)
         .order("starts_at")
         .limit(60),
 
@@ -62,13 +67,21 @@ export default async function SessionsPage() {
   if (sessionResult.error) {
     return (
       <StatusMessage tone="error">
-        Sessions are unavailable. Confirm that the Phase 4 migration has been
-        applied to the connected Supabase project.
+        Sessions are temporarily unavailable. Please try again shortly.
       </StatusMessage>
     );
   }
 
-  const sessions = sessionResult.data ?? [];
+  const contentPreferences = userData.user
+    ? await loadContentPreferences(supabase, userData.user.id)
+    : { hiddenUserIds: new Set<string>(), blockedWords: [] };
+  const sessions = filterMemberContent(
+    sessionResult.data ?? [],
+    contentPreferences,
+    (session) => session.host_user_id,
+    (session) =>
+      `${session.title} ${session.summary} ${session.description} ${session.host_display_name}`,
+  );
 
   const sessionIds = sessions.map((session) => session.id);
 

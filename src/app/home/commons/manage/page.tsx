@@ -253,8 +253,7 @@ export default async function ManageCreatorCommonsPage({
         </StatusMessage>
       ) : modeResult.error || skillResult.error || interestResult.error ? (
         <StatusMessage className="mt-10" tone="error">
-          Creator options could not load. Confirm that the required migrations
-          have been applied.
+          Creator options are temporarily unavailable. Please try again shortly.
         </StatusMessage>
       ) : showCreateForm ? (
         <section
