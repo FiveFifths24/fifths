@@ -55,7 +55,7 @@ export default async function SafetyPage() {
         <div>
           <p className="flex items-center gap-2 text-xs font-bold tracking-[0.2em] text-red-300 uppercase">
             <ShieldCheck aria-hidden="true" className="size-4" /> Trust and
-            safety
+            Safety
           </p>
           <h1 className="display-type mt-4 max-w-4xl text-5xl leading-[0.95] text-white sm:text-7xl">
             Speak up without making it public.
@@ -68,7 +68,7 @@ export default async function SafetyPage() {
         </div>
         {canModerate ? (
           <ButtonLink href="/home/admin/moderation" variant="secondary">
-            Open moderation workspace
+            Open Moderation Workspace
           </ButtonLink>
         ) : null}
       </div>
@@ -76,16 +76,14 @@ export default async function SafetyPage() {
       <StatusMessage className="mt-8">
         <span>
           <strong>Immediate danger:</strong> contact local emergency services.
-          FIFTHS reporting is not emergency response, medical care, or a
+          SIGNAL reporting is not emergency response, medical care, or a
           substitute for law enforcement.
         </span>
       </StatusMessage>
 
       {unavailable ? (
         <StatusMessage className="mt-6" tone="error">
-          Trust-and-safety history requires the Phase 10 Supabase migration. The
-          interface remains visible for review, but submissions cannot operate
-          yet.
+          Trust and safety history is temporarily unavailable. Please try again shortly.
         </StatusMessage>
       ) : null}
 
@@ -102,7 +100,7 @@ export default async function SafetyPage() {
             className="mt-4 text-3xl font-bold text-white"
             id="feedback-heading"
           >
-            Private product feedback
+            Private Product Feedback
           </h2>
           <p className="mt-3 text-sm leading-6 text-neutral-400">
             Share accessibility needs, friction, or ideas. This is not the route
@@ -121,7 +119,7 @@ export default async function SafetyPage() {
             className="mt-4 text-3xl font-bold text-white"
             id="report-heading"
           >
-            Private safety report
+            Private Safety Report
           </h2>
           <p className="mt-3 text-sm leading-6 text-neutral-400">
             Describe conduct or content that may violate community expectations.
@@ -136,7 +134,7 @@ export default async function SafetyPage() {
 
       <section aria-labelledby="report-history" className="mt-12">
         <h2 className="text-3xl font-bold text-white" id="report-history">
-          Your report history
+          Your Report History
         </h2>
         {(reportResult.data ?? []).length ? (
           <ol className="mt-6 grid gap-4 lg:grid-cols-2">
@@ -173,7 +171,7 @@ export default async function SafetyPage() {
 
       <section aria-labelledby="feedback-history" className="mt-12">
         <h2 className="text-3xl font-bold text-white" id="feedback-history">
-          Feedback receipts
+          Feedback Receipts
         </h2>
         {(feedbackResult.data ?? []).length ? (
           <ul className="mt-6 flex flex-wrap gap-3">
@@ -188,7 +186,7 @@ export default async function SafetyPage() {
           </ul>
         ) : (
           <p className="mt-4 text-sm text-neutral-500">
-            No feedback receipts yet.
+            No Feedback Receipts Yet.
           </p>
         )}
       </section>

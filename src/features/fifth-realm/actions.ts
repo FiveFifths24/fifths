@@ -131,7 +131,7 @@ export async function createCampaignAction(
     return {
       status: "error",
       message:
-        "Fifth Realm is unavailable until the Phase 7 migration is connected.",
+          "Fifth Realm is temporarily unavailable. Please try again shortly.",
     };
   }
   redirect(`/home/realm/manage/${campaignId}?created=1`);
@@ -175,7 +175,7 @@ export async function submitCampaignApplicationAction(
     return {
       status: "error",
       message:
-        "Applications are unavailable until the Phase 7 migration is connected.",
+        "Applications are temporarily unavailable. Please try again shortly.",
     };
   }
   revalidatePath(`/home/realm/${parsed.data.campaignId}`);

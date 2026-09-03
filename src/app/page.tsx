@@ -156,7 +156,7 @@ export default function HomePage() {
       <div className="relative z-10">
         <PulseHero />
 
-        <section className="relative py-12 sm:py-14 lg:py-16">
+        <section className="relative py-12 sm:py-14 lg:pt-32 lg:pb-16">
           <Container className="!max-w-[76rem]">
             <div className="mx-auto max-w-3xl text-center">
               <p className="font-mono text-[0.65rem] font-bold tracking-[0.24em] text-[#f359d2] uppercase">

@@ -80,8 +80,7 @@ export default async function CreatorCommonsPage() {
   if (opportunityResult.error) {
     return (
       <StatusMessage tone="error">
-        Creator Commons needs the Phase 6 migration before live opportunities
-        can load.
+         Creator Commons is temporarily unavailable. Please try again shortly.
       </StatusMessage>
     );
   }

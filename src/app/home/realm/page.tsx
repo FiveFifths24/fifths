@@ -72,7 +72,7 @@ export default async function FifthRealmPage() {
   if (campaignResult.error) {
     return (
       <StatusMessage tone="error">
-        Fifth Realm needs the Phase 7 migration before live campaigns can load.
+        Fifth Realm is temporarily unavailable. Please try again shortly.
       </StatusMessage>
     );
   }

@@ -5,10 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button-link";
 import { PreviewState } from "@/components/ui/preview-state";
 import { StatusMessage } from "@/components/ui/status-message";
-import {
-  markAllNotificationsReadAction,
-  markNotificationReadAction,
-} from "@/features/trust-safety/actions";
+import { markNotificationReadAction } from "@/features/trust-safety/actions";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = { title: "Notifications" };
@@ -45,11 +42,40 @@ export default async function NotificationsPage({
   if (result.error)
     return (
       <StatusMessage tone="error">
-        Notifications require the Phase 10 Supabase migration.
+        Notifications are temporarily unavailable. Please try again shortly.
       </StatusMessage>
     );
-  const notifications = result.data ?? [];
-  const unread = notifications.filter((item) => !item.read_at).length;
+const notifications = result.data ?? [];
+
+const autoReadIds = notifications
+  .filter(
+    (item) =>
+      !item.read_at &&
+      !item.action_url?.startsWith("/home/messages"),
+  )
+  .map((item) => item.id);
+
+if (autoReadIds.length) {
+  await Promise.all(
+    autoReadIds.map((notificationId) =>
+      supabase.rpc("mark_notification_read", {
+        p_notification_id: notificationId,
+      }),
+    ),
+  );
+}
+
+const autoReadIdSet = new Set(autoReadIds);
+const visibleNotifications = notifications.map((item) =>
+  autoReadIdSet.has(item.id)
+    ? {
+        ...item,
+        read_at: new Date().toISOString(),
+      }
+    : item,
+);
+
+const unread = visibleNotifications.filter((item) => !item.read_at).length;
   return (
     <div>
       <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
@@ -64,20 +90,6 @@ export default async function NotificationsPage({
             Friend requests, activity, and important updates from across SIGNAL will appear here.
           </p>
         </div>
-        {unread ? (
-          <form action={markAllNotificationsReadAction}>
-<button
-  className="group flex min-h-12 items-center gap-2 rounded-full border border-[#f359d2]/35 bg-[linear-gradient(135deg,rgba(108,20,206,.18),rgba(243,89,210,.10))] px-6 text-sm font-bold text-white shadow-[0_10px_30px_rgba(108,20,206,.15)] transition hover:border-[#f359d2]/70 hover:bg-[linear-gradient(135deg,rgba(108,20,206,.28),rgba(243,89,210,.18))] hover:shadow-[0_12px_35px_rgba(243,89,210,.18)]"
-  type="submit"
->
-  <CheckCheck
-    aria-hidden="true"
-    className="size-4 text-[#f359d2] transition group-hover:text-white"
-  />
-  Mark All Read
-</button>
-          </form>
-        ) : null}
       </div>
       {parameters?.read === "updated" || parameters?.read === "all" ? (
         <StatusMessage className="mt-7" tone="success">
@@ -92,9 +104,13 @@ export default async function NotificationsPage({
 <p className="mt-8 text-sm font-bold text-white/45">
   {unread === 1 ? "1 Unread" : `${unread} Unread`}
 </p>
-      {notifications.length ? (
+      {visibleNotifications.length ? (
         <ol className="mt-6 space-y-4">
-          {notifications.map((item) => (
+          {visibleNotifications.map((item) => {
+  const isMessageNotification =
+    item.action_url?.startsWith("/home/messages") ?? false;
+
+  return (
 <li
   className={`rounded-[1.75rem] border p-5 shadow-[0_18px_50px_rgba(0,0,0,.25)] backdrop-blur-xl transition sm:p-6 ${
     item.read_at
@@ -131,9 +147,9 @@ export default async function NotificationsPage({
     </ButtonLink>
   ) : null}
 
-  {!item.read_at ? (
-    <form action={markNotificationReadAction}>
-      <input
+{!item.read_at && isMessageNotification ? (
+  <form action={markNotificationReadAction}>
+          <input
         name="notificationId"
         type="hidden"
         value={item.id}
@@ -150,7 +166,8 @@ export default async function NotificationsPage({
 </div>
               </div>
             </li>
-          ))}
+            );
+})}
         </ol>
       ) : (
         <div className="mt-7">

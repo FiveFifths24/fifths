@@ -60,7 +60,7 @@ export async function recordPulseCheckInAction(
     return {
       status: "error",
       message:
-        "Pulse is not connected yet. The founder must apply the Phase 3 Supabase migration.",
+         "Pulse is temporarily unavailable. Please try again shortly.",
     };
   }
 

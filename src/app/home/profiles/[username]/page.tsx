@@ -132,17 +132,38 @@ const [
         <ProfileLaunchView
           contactActions={
             !isOwnProfile ? (
-              <RelationshipControls
-              accentColor={accentColor}
-                friendship={friendshipState(
-                  friendshipResult.data ?? undefined,
-                  userData.user.id,
-                )}
-                isFollowing={Boolean(followResult.data)}
-                isMuted={Boolean(muteResult.data)}
-                returnTo={returnTo}
-                targetUserId={profile.id}
-              />
+<RelationshipControls
+  accentColor={accentColor}
+  friendship={friendshipState(
+    friendshipResult.data ?? undefined,
+    userData.user.id,
+  )}
+  isFollowing={Boolean(followResult.data)}
+  isMuted={Boolean(muteResult.data)}
+  returnTo={returnTo}
+  targetUserId={profile.id}
+  reportSection={
+    <details className="w-full text-center">
+      <summary className="flex min-h-11 w-full cursor-pointer list-none items-center justify-center gap-2 rounded-2xl border border-red-500/20 bg-red-500/10 px-5 py-3 text-sm font-bold text-red-200 transition hover:border-red-500/40 hover:bg-red-500/15">
+        <Flag aria-hidden="true" className="size-4" />
+        Report
+      </summary>
+
+      <div className="mt-3 rounded-[1.25rem] border border-red-900/35 bg-red-950/35 p-4 text-left">
+        <ReportForm
+          defaultContextUrl={returnTo}
+          defaultTarget="member"
+          lockTarget
+        />
+
+        <p className="mt-4 flex items-center gap-2 text-xs text-white/35">
+          <ShieldCheck aria-hidden="true" className="size-4" />
+          Reports are private and reviewed by authorized moderators.
+        </p>
+      </div>
+    </details>
+  }
+/>
             ) : undefined
           }
           experience={{
@@ -216,32 +237,6 @@ headerAction={
             avatarUrl,
             landscapeUrl,
           }}
-safetySection={
-  !isOwnProfile ? (
-    <details
-      className="mx-auto mt-8 w-full max-w-2xl text-center"
-      id="report-member"
-    >
-      <summary className="mx-auto inline-flex cursor-pointer list-none items-center justify-center gap-2 rounded-full bg-red-600 px-5 py-2.5 text-sm font-bold text-white shadow-[0_10px_25px_rgba(220,38,38,.25)] transition hover:bg-red-500">
-        <Flag aria-hidden="true" className="size-4" />
-        Report This Member
-      </summary>
-
-      <div className="mt-4 rounded-[1.5rem] border border-red-900/35 bg-red-950/45 p-5 text-left backdrop-blur-md">
-        <ReportForm
-          defaultContextUrl={returnTo}
-          defaultTarget="member"
-          lockTarget
-        />
-
-        <p className="mt-4 flex items-center gap-2 text-xs text-white/35">
-          <ShieldCheck aria-hidden="true" className="size-4" />
-          Reports are private and reviewed by authorized moderators.
-        </p>
-      </div>
-    </details>
-  ) : undefined
-}
           trackView={!isOwnProfile}
         />
       </div>

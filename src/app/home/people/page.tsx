@@ -358,7 +358,7 @@ supabase
   if (peopleResult.error || friendshipsResult.error || followsResult.error) {
     return (
       <StatusMessage tone="error">
-        People and connections require the latest profile social migration.
+        People and connections are temporarily unavailable. Please try again shortly.
       </StatusMessage>
     );
   }

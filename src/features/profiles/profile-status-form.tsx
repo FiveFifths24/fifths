@@ -46,7 +46,7 @@ export function ProfileStatusForm({
       </div>
       <div className="flex flex-wrap items-center gap-3">
         <SubmitButton pendingLabel="Broadcasting…">
-          Broadcast for 24 hours
+          Broadcast For 24 Hours
         </SubmitButton>
         <span className="text-xs text-white/35">
           Submit an empty box to clear it.

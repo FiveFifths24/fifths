@@ -154,8 +154,7 @@ export default async function PersonalHomePage({
   if (pulseResult.error) {
     return (
       <StatusMessage tone="error">
-        Your personal Home could not load Pulse data. Confirm that the Phase 3
-        migration has been applied to the connected Supabase project.
+        Your Home is temporarily unavailable. Please try again shortly.
       </StatusMessage>
     );
   }

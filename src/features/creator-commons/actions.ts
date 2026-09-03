@@ -92,7 +92,7 @@ export async function createOpportunityAction(
     return {
       status: "error",
       message:
-        "Creator Commons is unavailable until the required database migration is connected.",
+        "Creator Commons is temporarily unavailable. Please try again shortly.",
     };
   }
 
@@ -138,7 +138,7 @@ export async function submitOpportunityResponseAction(
     return {
       status: "error",
       message:
-        "Responses are unavailable until the Phase 6 migration is connected.",
+         "Responses are temporarily unavailable. Please try again shortly.",
     };
   }
 

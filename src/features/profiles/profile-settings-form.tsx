@@ -113,7 +113,7 @@ profileSongTitle: string;
   const [accentColor, setAccentColor] = useState(profile.accentColor);
 
   return (
-    <form action={action} className="space-y-6" encType="multipart/form-data">
+    <form action={action} className="space-y-6">
       <ActionStatus state={state} />
       <div
         className="grid scroll-mt-28 gap-5 sm:grid-cols-2"
@@ -147,7 +147,7 @@ profileSongTitle: string;
             className="mb-2 block text-sm font-bold text-white"
             htmlFor="profile-display-name"
           >
-            Display name
+            Display Name
           </label>
           <input
             className={`${inputClass} read-only:cursor-not-allowed read-only:opacity-55`}

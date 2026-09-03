@@ -67,7 +67,7 @@ export default async function RealmApplicationsPage({
   if (applicationResult.error || membershipResult.error) {
     return (
       <StatusMessage tone="error">
-        Campaign history needs the Phase 7 migration.
+        Campaign history is temporarily unavailable. Please try again later.
       </StatusMessage>
     );
   }

@@ -224,8 +224,7 @@ export default async function ManageRealmPage({
 
       {modeResult.error || interestResult.error ? (
         <StatusMessage className="mt-10" tone="error">
-          Realm options could not load. Confirm that the required migrations
-          have been applied.
+          Realm options are temporarily unavailable. Please try again shortly.
         </StatusMessage>
       ) : showCreateForm ? (
         <section

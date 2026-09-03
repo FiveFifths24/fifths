@@ -151,7 +151,7 @@ export async function joinCircleAction(
     return {
       status: "error",
       message:
-        "Membership is unavailable until the Phase 5 migration is connected.",
+        "We couldn't process your membership request. Please try again later.",
     };
   }
 }
@@ -176,14 +176,14 @@ export async function leaveCircleAction(
       return {
         status: "error",
         message:
-          "This membership could not be ended. Circle owners cannot leave in Phase 5.",
+          "This membership could not be ended. Circle owners must transfer or close the Circle before leaving.",
       };
     }
   } catch {
     return {
       status: "error",
       message:
-        "Membership is unavailable until the Phase 5 migration is connected.",
+         "Membership is temporarily unavailable. Please try again shortly.",
     };
   }
 

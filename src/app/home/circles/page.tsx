@@ -77,8 +77,7 @@ export default async function CirclesDiscoveryPage() {
   if (circleResult.error) {
     return (
       <StatusMessage tone="error">
-        Circle discovery is unavailable. Confirm that the Phase 5 migration has
-        been applied.
+         Circle discovery is temporarily unavailable. Please try again shortly.
       </StatusMessage>
     );
   }

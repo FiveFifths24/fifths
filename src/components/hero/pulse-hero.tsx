@@ -395,18 +395,18 @@ export function PulseHero() {
       />
 
       <div className="relative mx-auto w-full max-w-[86rem]">
-        <div className="grid items-center gap-10 lg:grid-cols-[0.92fr_1.08fr] xl:gap-16">
+        <div className="grid items-center gap-10 lg:grid-cols-[1.15fr_0.85fr] xl:gap-14">
           <div className="text-center lg:text-left">
             <p className="mx-auto mb-5 w-fit bg-[linear-gradient(90deg,#1800ad_0%,#6c14ce_32%,#f359d2_68%,#7cff00_100%)] bg-clip-text font-mono text-[0.62rem] font-black tracking-[0.24em] text-transparent uppercase drop-shadow-[0_0_12px_rgba(243,89,210,0.25)] [-webkit-text-fill-color:transparent] sm:text-[0.68rem] lg:mx-0">
               No Ads. No Algorithmic Feed.
             </p>
 
-            <h1 className="display-type mx-auto max-w-[36rem] text-[clamp(2rem,11vw,5rem)] leading-[0.96] tracking-[-0.045em] text-[#f4f2ef] lg:mx-0 lg:text-[clamp(3.8rem,4.2vw,4.85rem)]">
+            <h1 className="display-type mx-auto max-w-[36rem] text-[clamp(2rem,11vw,5rem)] leading-[0.96] tracking-[-0.045em] text-[#f4f2ef] lg:mx-0 lg:text-[clamp(3rem,3.4vw,4rem)]">
               <span className="block text-white">
                 Find Your Space.
               </span>
 
-              <span className="mt-1 block bg-[linear-gradient(90deg,#1800ad,#6c14ce,#f359d2)] bg-clip-text text-[4.5rem] leading-[0.9] text-transparent [-webkit-text-fill-color:transparent] sm:text-[5.25rem] lg:text-[7rem] xl:text-[7.5rem]">
+              <span className="mt-1 block bg-[linear-gradient(30deg,#1800ad,#6c14ce,#f359d2)] bg-clip-text text-[4.5rem] leading-[0.9] text-transparent [-webkit-text-fill-color:transparent] sm:text-[5.25rem] lg:text-[7rem] xl:text-[7.5rem]">
                 Match Your Energy
               </span>
             </h1>

@@ -308,7 +308,7 @@ const replacedPaths = [
           ? "Use a JPG, PNG, or WebP image—or a GIF for the landscape—no larger than 5 MB."
           : error instanceof Error && error.message === "IMAGE_UPLOAD_FAILED"
             ? "Your image could not be uploaded. Please try again."
-            : "Profile updates require the latest Supabase migration and media bucket.",
+            : "Your profile could not be updated right now. Please try again shortly.",
     };
   }
 }

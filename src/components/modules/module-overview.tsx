@@ -58,17 +58,17 @@ export function ModuleOverview({ module }: { module: PlatformModule }) {
               module.memberHref ? "Implementation status" : "Product preview"
             }
           >
-            {module.memberHref
-              ? "The protected member foundation is implemented in this repository. Live use still requires the founder-owned Supabase project, ordered migrations, Auth configuration, and launch review."
-              : "This page describes planned MVP behavior. Realm campaigns and verified Passport activity begin in later phases."}
-          </PreviewState>
+{module.memberHref
+  ? "This feature is available to members, though some functionality may still be limited during setup."
+  : "This feature is still in development and will become available in a future update."}
+            </PreviewState>
         </Container>
       </section>
 
       <section className="py-20 sm:py-28">
         <Container className="grid gap-14 lg:grid-cols-[0.8fr_1.2fr]">
           <SectionHeading
-            eyebrow="Who it serves"
+            eyebrow="Who It Serves"
             title="Built for participation with context."
           />
           <div className="grid gap-4 sm:grid-cols-3">
@@ -89,7 +89,7 @@ export function ModuleOverview({ module }: { module: PlatformModule }) {
       <section className="border-y border-neutral-800 bg-neutral-950 py-20 sm:py-28">
         <Container>
           <SectionHeading
-            eyebrow="What members will be able to do"
+            eyebrow="What Members Will Be Able to Do"
             title="Clear actions. Deliberate boundaries."
           />
           <div className="mt-12 grid gap-4 md:grid-cols-3">
@@ -133,7 +133,7 @@ export function ModuleOverview({ module }: { module: PlatformModule }) {
           </article>
           <article className="rounded-3xl border border-neutral-800 bg-neutral-950 p-7 sm:p-9">
             <h2 className="text-xs font-bold tracking-[0.18em] text-neutral-400 uppercase">
-              Intentionally not included
+              Intentionally Not Included
             </h2>
             <ul className="mt-7 space-y-4">
               {module.notIncluded.map((item) => (
@@ -158,7 +158,7 @@ export function ModuleOverview({ module }: { module: PlatformModule }) {
           <article className="rounded-3xl border border-red-900/50 bg-red-950/20 p-7 sm:p-9">
             <Radio aria-hidden="true" className="size-6 text-red-300" />
             <h2 className="mt-8 text-2xl font-black text-white">
-              How Pulse leads here
+              How Pulse Leads Here
             </h2>
             <p className="mt-4 leading-7 text-neutral-300">
               {module.pulseConnection}
