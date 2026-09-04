@@ -7,7 +7,6 @@ import {
   MapPin,
   Search,
   Sparkles,
-  UserRound,
   Clock3,
   MessagesSquare,
   BriefcaseBusiness,
