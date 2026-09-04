@@ -69,8 +69,8 @@ export function OpportunityCard({ item }: { item: OpportunityCardItem }) {
   const openings = Math.max(0, item.positions - item.accepted_count);
 
   return (
-    <article className="flex h-full flex-col rounded-[1.75rem] border border-[#f359d2]/55 bg-[#10080e] p-6">
-      <div className="flex flex-wrap items-center gap-2">
+    <article className="flex h-full max-w-full min-w-0 flex-col overflow-hidden rounded-[1.75rem] border border-[#f359d2]/55 bg-[#10080e] p-6 text-center sm:text-left">
+      <div className="flex flex-wrap items-center justify-center gap-2 sm:justify-start">
         <Badge className="border-white bg-white text-black">
           Creator Commons
         </Badge>
@@ -109,7 +109,7 @@ export function OpportunityCard({ item }: { item: OpportunityCardItem }) {
         {item.status !== "published" ? <Badge>{item.status}</Badge> : null}
       </div>
 
-      <h2 className="mt-5 text-2xl font-bold text-white">
+      <h2 className="mt-5 min-w-0 text-2xl font-bold [overflow-wrap:anywhere] break-words text-white">
         <Link
           className="rounded-sm underline decoration-neutral-700 underline-offset-4 hover:decoration-[#f359d2]"
           href={`/home/commons/${item.id}`}
@@ -118,7 +118,7 @@ export function OpportunityCard({ item }: { item: OpportunityCardItem }) {
         </Link>
       </h2>
 
-      <p className="mt-3 flex-1 text-sm leading-6 text-neutral-400">
+      <p className="mt-3 min-w-0 flex-1 text-sm leading-6 break-words text-neutral-400">
         {item.summary}
       </p>
 
@@ -127,7 +127,7 @@ export function OpportunityCard({ item }: { item: OpportunityCardItem }) {
       </p>
 
       <dl className="mt-6 grid gap-3 text-sm font-medium text-[#f359d2] sm:grid-cols-2">
-        <div className="flex gap-2">
+        <div className="flex justify-center gap-2 sm:justify-start">
           <Clock3
             aria-hidden="true"
             className="mt-0.5 size-4 shrink-0 text-[#f359d2]"
@@ -142,7 +142,7 @@ export function OpportunityCard({ item }: { item: OpportunityCardItem }) {
           </div>
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex justify-center gap-2 sm:justify-start">
           <MapPin
             aria-hidden="true"
             className="mt-0.5 size-4 shrink-0 text-[#f359d2]"
@@ -157,7 +157,7 @@ export function OpportunityCard({ item }: { item: OpportunityCardItem }) {
           </div>
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex justify-center gap-2 sm:justify-start">
           <BriefcaseBusiness
             aria-hidden="true"
             className="mt-0.5 size-4 shrink-0 text-[#f359d2]"
@@ -171,7 +171,7 @@ export function OpportunityCard({ item }: { item: OpportunityCardItem }) {
           </div>
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex justify-center gap-2 sm:justify-start">
           <Users
             aria-hidden="true"
             className="mt-0.5 size-4 shrink-0 text-[#f359d2]"
@@ -189,14 +189,14 @@ export function OpportunityCard({ item }: { item: OpportunityCardItem }) {
 
       {item.reasons?.length ? (
         <div className="mt-5 border-t border-neutral-800 pt-5">
-          <p className="flex items-center gap-2 text-xs font-bold tracking-wide text-amber-200 uppercase">
+          <p className="flex items-center justify-center gap-2 text-xs font-bold tracking-wide text-amber-200 uppercase sm:justify-start">
             <Zap aria-hidden="true" className="size-4" />
             {item.fit ? `${item.fit} fit · ` : ""}
             Why this may fit
           </p>
 
           <ul
-            className="mt-3 flex flex-wrap gap-2"
+            className="mt-3 flex flex-wrap justify-center gap-2 sm:justify-start"
             aria-label="Why this matches your Pulse"
           >
             {item.reasons.slice(0, 3).map((reason) => (

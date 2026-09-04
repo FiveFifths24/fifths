@@ -35,6 +35,7 @@ describe("CampaignCard", () => {
     expect(
       screen.getByRole("link", { name: "The Lantern Archive" }),
     ).toHaveAttribute("href", `/home/realm/${item.id}`);
+    expect(screen.getByText("Fifth Realm Campaign")).toBeInTheDocument();
     expect(screen.getByText("Game master Avery")).toBeInTheDocument();
     expect(screen.getByText("4 seats")).toBeInTheDocument();
     expect(screen.getByText("Application: submitted")).toBeInTheDocument();

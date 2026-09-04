@@ -46,8 +46,8 @@ export function formatJoinPolicy(policy: Circle["join_policy"]) {
 
 export function CircleCard({ item }: { item: CircleCardItem }) {
   return (
-    <article className="flex h-full flex-col rounded-[1.75rem] border border-rose-950/70 bg-neutral-900 p-6">
-      <div className="flex flex-wrap items-center gap-2">
+    <article className="flex h-full max-w-full min-w-0 flex-col overflow-hidden rounded-[1.75rem] border border-rose-950/70 bg-neutral-900 p-6 text-center sm:text-left">
+      <div className="flex flex-wrap items-center justify-center gap-2 sm:justify-start">
         <Badge>Circle</Badge>
         <Badge className="border-rose-900 bg-rose-950/40 text-rose-100">
           {item.modeName}
@@ -68,7 +68,7 @@ export function CircleCard({ item }: { item: CircleCardItem }) {
         ) : null}
       </div>
 
-      <h2 className="mt-5 text-2xl font-bold text-white">
+      <h2 className="mt-5 min-w-0 text-2xl font-bold [overflow-wrap:anywhere] break-words text-white">
         <Link
           className="rounded-sm underline decoration-neutral-700 underline-offset-4 hover:decoration-rose-400"
           href={`/home/circles/${item.id}`}
@@ -76,12 +76,12 @@ export function CircleCard({ item }: { item: CircleCardItem }) {
           {item.name}
         </Link>
       </h2>
-      <p className="mt-3 flex-1 text-sm leading-6 text-neutral-400">
+      <p className="mt-3 min-w-0 flex-1 text-sm leading-6 break-words text-neutral-400">
         {item.summary}
       </p>
 
       <dl className="mt-6 grid gap-3 text-sm text-neutral-300 sm:grid-cols-2">
-        <div className="flex gap-2">
+        <div className="flex justify-center gap-2 sm:justify-start">
           <MapPin
             aria-hidden="true"
             className="mt-0.5 size-4 shrink-0 text-rose-300"
@@ -94,7 +94,7 @@ export function CircleCard({ item }: { item: CircleCardItem }) {
             </dd>
           </div>
         </div>
-        <div className="flex gap-2">
+        <div className="flex justify-center gap-2 sm:justify-start">
           <UsersRound
             aria-hidden="true"
             className="mt-0.5 size-4 shrink-0 text-rose-300"
@@ -108,7 +108,7 @@ export function CircleCard({ item }: { item: CircleCardItem }) {
             </dd>
           </div>
         </div>
-        <div className="flex gap-2">
+        <div className="flex justify-center gap-2 sm:justify-start">
           <Zap
             aria-hidden="true"
             className="mt-0.5 size-4 shrink-0 text-rose-300"
@@ -121,7 +121,7 @@ export function CircleCard({ item }: { item: CircleCardItem }) {
             </dd>
           </div>
         </div>
-        <div className="flex gap-2">
+        <div className="flex justify-center gap-2 sm:justify-start">
           <HeartHandshake
             aria-hidden="true"
             className="mt-0.5 size-4 shrink-0 text-rose-300"
