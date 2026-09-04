@@ -16,6 +16,10 @@ import {
   sessionRegistrationSchema,
   sessionStatusSchema,
 } from "./schemas";
+import {
+  getSafeCreateSessionErrorMessage,
+  getSessionStatusOutcome,
+} from "./session-errors";
 
 export async function createSessionAction(
   _previousState: ActionState,
@@ -64,6 +68,7 @@ export async function createSessionAction(
       return {
         status: "error",
         message: "Your session expired. Log in again to create a Session.",
+        values,
       };
     }
 
@@ -88,8 +93,8 @@ export async function createSessionAction(
     if (error || !data) {
       return {
         status: "error",
-        message:
-          "The Session could not be created. Review the details and try again.",
+        message: getSafeCreateSessionErrorMessage(error),
+        values,
       };
     }
 
@@ -98,6 +103,7 @@ export async function createSessionAction(
     return {
       status: "error",
       message: "The Session could not be created right now. Try again shortly.",
+      values,
     };
   }
 
@@ -219,7 +225,7 @@ export async function setSessionStatusAction(formData: FormData) {
     });
 
     if (error) {
-      outcome = "error";
+      outcome = getSessionStatusOutcome(error);
     }
   } catch {
     outcome = "error";
