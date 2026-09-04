@@ -62,7 +62,7 @@ export function SessionCard({ item }: { item: SessionCardItem }) {
   const duration = durationMinutes(item.starts_at, item.ends_at);
 
   return (
-    <article className="flex h-full max-w-full min-w-0 flex-col overflow-hidden rounded-[1.75rem] border border-neutral-800 bg-neutral-900 p-5 sm:p-6">
+    <article className="flex h-full max-w-full min-w-0 flex-col overflow-hidden rounded-[1.75rem] border border-neutral-800 bg-neutral-900 p-5 text-center sm:p-6 sm:text-left">
       <div className="flex flex-wrap items-center justify-center gap-2 sm:justify-start">
         <Badge>Session</Badge>
         <Badge className="border-[#992bff]/35 bg-[#992bff]/10 text-[#d8b4fe]">
@@ -74,9 +74,9 @@ export function SessionCard({ item }: { item: SessionCardItem }) {
         <Badge>{remaining === 0 ? "Full" : `${remaining} spots left`}</Badge>
       </div>
 
-      <h2 className="mt-5 max-w-full min-w-0 text-2xl font-bold break-words text-white">
+      <h2 className="mt-5 max-w-full min-w-0 text-2xl font-bold [overflow-wrap:anywhere] break-words text-white">
         <Link
-          className="block max-w-full rounded-sm break-all underline decoration-neutral-700 underline-offset-4 hover:decoration-red-500"
+          className="block max-w-full rounded-sm underline decoration-neutral-700 underline-offset-4 hover:decoration-red-500"
           href={`/home/sessions/${item.id}`}
         >
           {item.title}

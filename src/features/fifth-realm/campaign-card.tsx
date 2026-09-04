@@ -60,9 +60,9 @@ export function CampaignCard({ item }: { item: CampaignCardItem }) {
   const openings = Math.max(0, item.player_capacity - item.active_player_count);
 
   return (
-    <article className="group flex h-full flex-col rounded-[1.75rem] border border-[#22d3ee]/20 bg-[linear-gradient(145deg,rgba(34,211,238,0.04),rgba(12,12,14,0.96)_40%,rgba(0,0,0,0.96))] p-6 shadow-[0_0_40px_rgba(34,211,238,0.025)] transition hover:border-[#22d3ee]/40 hover:shadow-[0_0_45px_rgba(34,211,238,0.055)]">
+    <article className="group flex h-full max-w-full min-w-0 flex-col overflow-hidden rounded-[1.75rem] border border-[#22d3ee]/20 bg-[linear-gradient(145deg,rgba(34,211,238,0.04),rgba(12,12,14,0.96)_40%,rgba(0,0,0,0.96))] p-6 text-center shadow-[0_0_40px_rgba(34,211,238,0.025)] transition hover:border-[#22d3ee]/40 hover:shadow-[0_0_45px_rgba(34,211,238,0.055)] sm:text-left">
       <div className="flex flex-wrap items-center justify-center gap-2 sm:justify-start">
-        <Badge className={realmBadge}>Fifth Realm</Badge>
+        <Badge className={realmBadge}>Fifth Realm Campaign</Badge>
 
         <Badge className={realmBadge}>{item.modeName}</Badge>
 
@@ -87,7 +87,7 @@ export function CampaignCard({ item }: { item: CampaignCardItem }) {
         ) : null}
       </div>
 
-      <h2 className="mt-5 text-center text-2xl font-bold text-white sm:text-left">
+      <h2 className="mt-5 min-w-0 text-center text-2xl font-bold [overflow-wrap:anywhere] break-words text-white sm:text-left">
         <Link
           className="rounded-sm underline decoration-[#22d3ee]/25 underline-offset-4 transition hover:text-[#cffafe] hover:decoration-[#22d3ee]"
           href={`/home/realm/${item.id}`}
@@ -96,7 +96,7 @@ export function CampaignCard({ item }: { item: CampaignCardItem }) {
         </Link>
       </h2>
 
-      <p className="mt-3 flex-1 text-center text-sm leading-6 text-white/45 sm:text-left">
+      <p className="mt-3 min-w-0 flex-1 text-center text-sm leading-6 break-words text-white/45 sm:text-left">
         {item.summary}
       </p>
 
@@ -105,7 +105,7 @@ export function CampaignCard({ item }: { item: CampaignCardItem }) {
       </p>
 
       <dl className="mt-6 grid gap-3 text-sm text-white/60 sm:grid-cols-2">
-        <div className="flex justify-center gap-2 text-left sm:justify-start">
+        <div className="flex justify-center gap-2 text-center sm:justify-start sm:text-left">
           <Clock3
             aria-hidden="true"
             className="mt-0.5 size-4 shrink-0 text-[#22d3ee]/75"
@@ -118,7 +118,7 @@ export function CampaignCard({ item }: { item: CampaignCardItem }) {
           </div>
         </div>
 
-        <div className="flex justify-center gap-2 text-left sm:justify-start">
+        <div className="flex justify-center gap-2 text-center sm:justify-start sm:text-left">
           <MapPin
             aria-hidden="true"
             className="mt-0.5 size-4 shrink-0 text-[#22d3ee]/75"
@@ -134,7 +134,7 @@ export function CampaignCard({ item }: { item: CampaignCardItem }) {
           </div>
         </div>
 
-        <div className="flex justify-center gap-2 text-left sm:justify-start">
+        <div className="flex justify-center gap-2 text-center sm:justify-start sm:text-left">
           <Compass
             aria-hidden="true"
             className="mt-0.5 size-4 shrink-0 text-[#22d3ee]/75"
@@ -147,7 +147,7 @@ export function CampaignCard({ item }: { item: CampaignCardItem }) {
           </div>
         </div>
 
-        <div className="flex justify-center gap-2 text-left sm:justify-start">
+        <div className="flex justify-center gap-2 text-center sm:justify-start sm:text-left">
           <Users
             aria-hidden="true"
             className="mt-0.5 size-4 shrink-0 text-[#22d3ee]/75"
