@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import {
   Bell,
   CalendarRange,
+  Compass,
   HeartHandshake,
   House,
   UsersRound,
@@ -40,6 +41,12 @@ const items = [
     href: "/home/people",
     label: "People",
     icon: UsersRound,
+    nested: true,
+  },
+  {
+    href: "/home/discover",
+    label: "Discover",
+    icon: Compass,
     nested: true,
   },
 ] as const;

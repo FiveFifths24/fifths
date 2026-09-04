@@ -25,6 +25,7 @@ import {
   formatOpportunityKind,
 } from "@/features/creator-commons/opportunity-card";
 import { OpportunityResponseForm } from "@/features/creator-commons/opportunity-response-form";
+import { ReportForm } from "@/features/trust-safety/report-form";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
@@ -538,6 +539,19 @@ export default async function OpportunityDetailPage({
           </ul>
         </aside>
       </div>
+      <details className="mt-10 rounded-[1.5rem] border border-red-300/15 bg-red-300/[0.03] p-5">
+        <summary className="cursor-pointer font-bold text-red-100/70">
+          Report this opportunity
+        </summary>
+        <div className="mt-6">
+          <ReportForm
+            defaultContextUrl={`/home/commons/${opportunity.id}`}
+            defaultTarget="opportunity"
+            defaultTargetId={opportunity.id}
+            lockTarget
+          />
+        </div>
+      </details>
     </article>
   );
 }

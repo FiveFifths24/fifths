@@ -1,5 +1,10 @@
 # Architecture
 
+The finite friend-activity and opt-in discovery architecture is documented in
+`docs/INTENTIONAL_ACTIVITY_DISCOVERY.md`. Personal Home performs no global
+module discovery queries; canonical activity is retrieved through one
+privacy-checking RPC, and global exploration is a separate route.
+
 ## Decision summary
 
 FIFTHS will be one Next.js application and one Supabase project. This **modular monolith** keeps the MVP affordable and understandable while enforcing product boundaries in code. It avoids five separate apps, duplicated accounts, and fragile data synchronization.

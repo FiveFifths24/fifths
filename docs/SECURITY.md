@@ -1,5 +1,11 @@
 # Security
 
+Friend activity uses default-deny RLS with no direct authenticated read grant.
+The retrieval RPC independently checks friendship, blocks, mutes, sharing
+preferences, profile visibility, canonical source existence, and source access.
+Temporary write-rate counters remain in the private schema. See
+`docs/INTENTIONAL_ACTIVITY_DISCOVERY.md` for the complete threat boundary.
+
 Security uses overlapping controls: server authorization prevents inappropriate actions before a query, while Supabase Row Level Security protects records even if application code makes a mistake.
 
 ## Required controls

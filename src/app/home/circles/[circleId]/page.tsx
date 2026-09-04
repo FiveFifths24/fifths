@@ -13,6 +13,7 @@ import {
 } from "@/features/circles/circle-card";
 import { assembleSessionCards } from "@/features/sessions/session-data";
 import { SessionCard } from "@/features/sessions/session-card";
+import { ReportForm } from "@/features/trust-safety/report-form";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
@@ -302,6 +303,19 @@ export default async function CircleDetailPage({
           </div>
         )}
       </section>
+      <details className="mt-10 rounded-[1.5rem] border border-red-300/15 bg-red-300/[0.03] p-5">
+        <summary className="cursor-pointer font-bold text-red-100/70">
+          Report this Circle
+        </summary>
+        <div className="mt-6">
+          <ReportForm
+            defaultContextUrl={`/home/circles/${circle.id}`}
+            defaultTarget="circle"
+            defaultTargetId={circle.id}
+            lockTarget
+          />
+        </div>
+      </details>
     </div>
   );
 }

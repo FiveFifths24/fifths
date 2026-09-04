@@ -150,6 +150,7 @@ export default async function MemberProfilePage({
                       <ReportForm
                         defaultContextUrl={returnTo}
                         defaultTarget="member"
+                        defaultTargetId={profile.id}
                         lockTarget
                       />
 

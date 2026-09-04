@@ -9,6 +9,46 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      activity_sharing_preferences: {
+        Row: {
+          user_id: string;
+          share_with_friends: boolean;
+          share_session_activity: boolean;
+          share_circle_activity: boolean;
+          share_profile_activity: boolean;
+          share_commons_activity: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          user_id: string;
+          share_with_friends?: boolean;
+          share_session_activity?: boolean;
+          share_circle_activity?: boolean;
+          share_profile_activity?: boolean;
+          share_commons_activity?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<
+          Database["public"]["Tables"]["activity_sharing_preferences"]["Insert"]
+        >;
+        Relationships: [];
+      };
+      signal_activity_events: {
+        Row: {
+          id: string;
+          actor_user_id: string;
+          activity_type: Database["public"]["Enums"]["signal_activity_type"];
+          entity_type: Database["public"]["Enums"]["signal_activity_entity_type"];
+          entity_id: string;
+          dedupe_key: string;
+          created_at: string;
+        };
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
       direct_conversations: {
         Row: {
           id: string;
@@ -943,6 +983,7 @@ export type Database = {
           id: string;
           reporter_user_id: string;
           target_type: Database["public"]["Enums"]["report_target_type"];
+          target_entity_id: string | null;
           category: Database["public"]["Enums"]["report_category"];
           summary: string;
           details: string;
@@ -957,6 +998,7 @@ export type Database = {
           id?: string;
           reporter_user_id: string;
           target_type: Database["public"]["Enums"]["report_target_type"];
+          target_entity_id?: string | null;
           category: Database["public"]["Enums"]["report_category"];
           summary: string;
           details: string;
@@ -1131,6 +1173,37 @@ export type Database = {
     };
     Views: Record<string, never>;
     Functions: {
+      get_friend_activity: {
+        Args: {
+          p_before?: string | null;
+          p_before_id?: string | null;
+          p_limit?: number;
+        };
+        Returns: Array<{
+          id: string;
+          actor_user_id: string;
+          actor_username: string;
+          actor_display_name: string;
+          activity_type: Database["public"]["Enums"]["signal_activity_type"];
+          entity_type: Database["public"]["Enums"]["signal_activity_entity_type"];
+          entity_id: string;
+          entity_title: string | null;
+          action_url: string;
+          created_at: string;
+          has_more: boolean;
+        }>;
+      };
+      update_activity_sharing_preferences: {
+        Args: {
+          p_share_with_friends: boolean;
+          p_share_session_activity: boolean;
+          p_share_circle_activity: boolean;
+          p_share_profile_activity: boolean;
+          p_share_commons_activity: boolean;
+        };
+        Returns: undefined;
+      };
+      cleanup_signal_rate_limits: { Args: never; Returns: number };
       claim_media_upload_slots: {
         Args: { p_count: number };
         Returns: undefined;
@@ -1565,6 +1638,17 @@ export type Database = {
         };
         Returns: string;
       };
+      submit_entity_report: {
+        Args: {
+          p_target_type: Database["public"]["Enums"]["report_target_type"];
+          p_target_entity_id: string | null;
+          p_category: Database["public"]["Enums"]["report_category"];
+          p_summary: string;
+          p_details: string;
+          p_context_url: string | null;
+        };
+        Returns: string;
+      };
       review_report: {
         Args: {
           p_report_id: string;
@@ -1860,6 +1944,18 @@ export type Database = {
       remove_blocked_word: { Args: { p_word_id: string }; Returns: undefined };
     };
     Enums: {
+      signal_activity_type:
+        | "session_created"
+        | "session_joined"
+        | "circle_created"
+        | "circle_joined"
+        | "profile_status_updated"
+        | "profile_music_updated"
+        | "profile_featured_media_updated"
+        | "profile_recommendation_updated"
+        | "commons_created";
+      signal_activity_entity_type:
+        "profile" | "session" | "circle" | "opportunity";
       media_upload_surface:
         | "profile_avatar"
         | "profile_featured"
@@ -1963,6 +2059,10 @@ export type Database = {
 };
 
 export type Profile = Database["public"]["Tables"]["profiles"]["Row"];
+export type ActivitySharingPreferences =
+  Database["public"]["Tables"]["activity_sharing_preferences"]["Row"];
+export type SignalActivityEvent =
+  Database["public"]["Tables"]["signal_activity_events"]["Row"];
 export type Interest = Database["public"]["Tables"]["interests"]["Row"];
 export type Skill = Database["public"]["Tables"]["skills"]["Row"];
 export type Mode = Database["public"]["Tables"]["modes"]["Row"];
