@@ -16,6 +16,7 @@ import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button-link";
 import { PreviewState } from "@/components/ui/preview-state";
 import { StatusMessage } from "@/components/ui/status-message";
+import { FlashStatusMessage } from "@/components/ui/flash-status-message";
 import {
   removeCampaignMemberAction,
   reviewCampaignApplicationAction,
@@ -54,8 +55,8 @@ function SectionHeading({
   icon: React.ReactNode;
 }) {
   return (
-    <div className="flex items-start gap-4">
-      <div className="mt-1 flex size-10 shrink-0 items-center justify-center rounded-full border border-[#22d3ee]/25 bg-[#22d3ee]/[0.08] text-[#22d3ee] shadow-[0_0_24px_rgba(34,211,238,0.06)]">
+    <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:items-start sm:text-left">
+      <div className="sm:mt-1 flex size-10 shrink-0 items-center justify-center rounded-full border border-[#22d3ee]/25 bg-[#22d3ee]/[0.08] text-[#22d3ee] shadow-[0_0_24px_rgba(34,211,238,0.06)]">
         {icon}
       </div>
 
@@ -169,7 +170,7 @@ export default async function ManageCampaignPage({
   const linkedSessions = linkedSessionsResult.data ?? [];
 
   return (
-    <div className="mx-auto max-w-7xl">
+    <div className="mx-auto max-w-7xl text-center sm:text-left">
       {/* =====================================================
           BACK
       ====================================================== */}
@@ -202,13 +203,12 @@ export default async function ManageCampaignPage({
           <StatusMessage tone="success">Campaign status updated.</StatusMessage>
         ) : null}
 
-        {parameters?.status === "error" ? (
-          <StatusMessage tone="error">
-            That campaign status change could not be completed. Check the
-            campaign lifecycle, deadline, and player capacity.
-          </StatusMessage>
-        ) : null}
-
+{parameters?.status === "error" ? (
+  <FlashStatusMessage param="status" tone="error" value="error">
+    That campaign status change could not be completed. Check the
+    campaign lifecycle, deadline, and player capacity.
+  </FlashStatusMessage>
+) : null}
         {parameters?.application === "accepted" ? (
           <StatusMessage tone="success">
             Application accepted. The player has been added to the active
@@ -271,7 +271,7 @@ export default async function ManageCampaignPage({
         <div className="relative">
           <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
             <div className="max-w-4xl">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center justify-center gap-3 sm:justify-start">
                 <Compass aria-hidden="true" className="size-5 text-[#22d3ee]" />
 
                 <p className="font-mono text-[0.65rem] font-bold tracking-[0.22em] text-[#22d3ee]/80 uppercase">
@@ -279,7 +279,7 @@ export default async function ManageCampaignPage({
                 </p>
               </div>
 
-              <div className="mt-5 flex flex-wrap gap-2">
+              <div className="mt-5 flex flex-wrap justify-center gap-2 sm:justify-start">
                 <Badge className={realmBadgeClass}>
                   {campaign.genre.replaceAll("_", " ")}
                 </Badge>
@@ -294,16 +294,16 @@ export default async function ManageCampaignPage({
                 </Badge>
               </div>
 
-              <h1 className="display-type mt-5 max-w-5xl text-5xl leading-[0.92] text-white sm:text-7xl">
+              <h1 className="display-type mx-auto mt-5 max-w-5xl text-5xl leading-[0.92] text-white sm:mx-0 sm:text-7xl">
                 {campaign.title}
               </h1>
 
-              <p className="mt-5 max-w-3xl text-lg leading-8 text-white/60">
+              <p className="mx-auto mt-5 max-w-3xl text-lg leading-8 text-white/60 sm:mx-0">
                 {campaign.summary}
               </p>
             </div>
 
-            <div className="shrink-0">
+            <div className="flex shrink-0 justify-center sm:justify-start">
               <ButtonLink
                 href={`/home/realm/${campaign.id}`}
                 variant="secondary"
@@ -352,7 +352,7 @@ export default async function ManageCampaignPage({
 
           {/* LIFECYCLE ACTIONS */}
 
-          <div className="mt-7 flex flex-wrap gap-3">
+          <div className="mt-7 flex flex-wrap justify-center gap-3 sm:justify-start">
             {campaign.status === "draft" ? (
               <form action={setCampaignStatusAction}>
                 <input name="campaignId" type="hidden" value={campaign.id} />
@@ -541,10 +541,11 @@ export default async function ManageCampaignPage({
                 ))}
               </div>
             ) : (
-              <PreviewState title="No Applications Yet">
-                Once recruitment opens, applications will appear here for
-                review.
-              </PreviewState>
+<div className="text-center">
+  <PreviewState title="No Applications Yet">
+    Once recruitment opens, applications will appear here for review.
+  </PreviewState>
+</div>
             )}
           </div>
         </section>
@@ -574,8 +575,8 @@ export default async function ManageCampaignPage({
                     className="rounded-2xl border border-[#22d3ee]/12 bg-black/30 p-5 transition hover:border-[#22d3ee]/25"
                     key={member.user_id}
                   >
-                    <div className="flex items-start justify-between gap-4">
-                      <div>
+                    <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:items-start sm:justify-between sm:text-left">
+                      <div className="flex flex-col items-center sm:items-start">
                         <Badge className={`${realmBadgeClass} capitalize`}>
                           {member.member_role.replaceAll("_", " ")}
                         </Badge>
@@ -647,7 +648,7 @@ export default async function ManageCampaignPage({
             <div className="grid gap-4 lg:grid-cols-2">
               {linkedSessions.map((session) => (
                 <article
-                  className="flex flex-col gap-5 rounded-[1.5rem] border border-[#22d3ee]/15 bg-black/35 p-5 transition hover:border-[#22d3ee]/30 sm:flex-row sm:items-center sm:justify-between"
+                  className="flex flex-col items-center gap-5 rounded-[1.5rem] border border-[#22d3ee]/15 bg-black/35 p-5 text-center transition hover:border-[#22d3ee]/30 sm:flex-row sm:items-center sm:justify-between sm:text-left"
                   key={session.id}
                 >
                   <div>
@@ -692,9 +693,11 @@ export default async function ManageCampaignPage({
               ))}
             </div>
           ) : (
-            <PreviewState title="No Linked Sessions">
-              Campaign meetings you connect will appear here.
-            </PreviewState>
+<div className="text-center">
+  <PreviewState title="No Linked Sessions">
+    Campaign meetings you connect will appear here.
+  </PreviewState>
+</div>
           )}
         </div>
 
@@ -745,11 +748,10 @@ export default async function ManageCampaignPage({
 
       <section className="mt-10 grid gap-4 md:grid-cols-3">
         <div className="rounded-2xl border border-[#22d3ee]/12 bg-[#22d3ee]/[0.025] p-5">
-          <LockKeyhole
-            aria-hidden="true"
-            className="size-5 text-[#22d3ee]/80"
-          />
-
+<LockKeyhole
+  aria-hidden="true"
+  className="mx-auto size-5 text-[#22d3ee]/80 sm:mx-0"
+/>
           <h2 className="mt-4 font-bold text-white">Private Applications</h2>
 
           <p className="mt-2 text-sm leading-6 text-white/40">
@@ -760,9 +762,9 @@ export default async function ManageCampaignPage({
 
         <div className="rounded-2xl border border-[#22d3ee]/12 bg-[#22d3ee]/[0.025] p-5">
           <ShieldCheck
-            aria-hidden="true"
-            className="size-5 text-[#22d3ee]/80"
-          />
+  aria-hidden="true"
+  className="mx-auto size-5 text-[#22d3ee]/80 sm:mx-0"
+/>
 
           <h2 className="mt-4 font-bold text-white">Capacity Protected</h2>
 
@@ -774,9 +776,9 @@ export default async function ManageCampaignPage({
 
         <div className="rounded-2xl border border-[#22d3ee]/12 bg-[#22d3ee]/[0.025] p-5">
           <CalendarRange
-            aria-hidden="true"
-            className="size-5 text-[#22d3ee]/80"
-          />
+  aria-hidden="true"
+  className="mx-auto size-5 text-[#22d3ee]/80 sm:mx-0"
+/>
 
           <h2 className="mt-4 font-bold text-white">Session Connected</h2>
 

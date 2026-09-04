@@ -251,7 +251,7 @@ export default async function ManageCirclesPage() {
       {/* =====================================================
           MANAGEMENT NOTE
       ====================================================== */}
-      <aside className="mt-10 flex gap-4 rounded-[1.5rem] border border-[#ee54a7]/15 bg-[#ee54a7]/[0.035] p-5 text-sm leading-7 text-white/55 sm:p-6">
+      <aside className="mt-20 flex gap-4 rounded-[1.5rem] border border-[#ee54a7]/15 bg-[#ee54a7]/[0.035] p-5 text-sm leading-7 text-white/55 sm:p-6">
         <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-[#ee54a7]/25 bg-black/30">
           <MessagesSquare
             aria-hidden="true"

@@ -228,8 +228,7 @@ export function CreateCircleForm({
             hint="Members review these expectations before joining."
             label="Community Rules"
             name="rules"
-            placeholder="Set expectations for participation, respect, privacy, safety,
-             and staying on topic."
+            placeholder="Set expectations for participation, respect, privacy, safety, and staying on topic."
             defaultValue={previousValue("rules")}
           />
         </div>
@@ -414,6 +413,7 @@ export function CreateCircleForm({
           </SelectField>
         </div>
 
+<div className="mt-5"></div>
         <SelectField
           defaultValue={previousValue("socialIntensity") ?? ""}
           error={firstFieldError(state, "socialIntensity")}

@@ -85,24 +85,102 @@ export async function createCircleAction(
       p_interest_ids: parsed.data.interestIds,
     });
 
-    if (error || !data) {
-      if (error?.code === "23505") {
-        return {
-          status: "error",
-          message: "That URL name is already taken.",
-          fieldErrors: {
-            slug: ["That URL name is already in use. Choose a different one."],
-          },
-          values,
-        };
-      }
+if (error || !data) {
+  console.error("create_circle failed:", error);
 
-      return {
-        status: "error",
-        message: "The Circle could not be created. Check the details below.",
-        values,
-      };
-    }
+  if (error?.code === "23505") {
+    return {
+      status: "error",
+      message: "That URL name is already taken.",
+      fieldErrors: {
+        slug: ["That URL name is already in use. Choose a different one."],
+      },
+      values,
+    };
+  }
+
+  const fieldErrors: Record<string, string[]> = {};
+
+  if (error?.message.includes("Invalid Circle content")) {
+    return {
+      status: "error",
+      message:
+        "Some Circle details do not meet the required length or format. Review the highlighted fields below.",
+      fieldErrors: {
+        name: ["Use between 3 and 80 characters."],
+        slug: [
+          "Use 3–60 lowercase letters, numbers, or hyphens with no spaces.",
+        ],
+        summary: ["Use between 10 and 240 characters."],
+        description: ["Use between 20 and 4,000 characters."],
+        rules: ["Use between 20 and 4,000 characters."],
+      },
+      values,
+    };
+  }
+
+  if (error?.message.includes("Private Circles are invite only")) {
+    fieldErrors.visibility = [
+      "Private Circles must use Invite Only membership.",
+    ];
+    fieldErrors.joinPolicy = [
+      "Choose Invite Only when creating a private Circle.",
+    ];
+  }
+
+  if (error?.message.includes("Invalid location label")) {
+    fieldErrors.locationLabel = [
+      "Use between 2 and 120 characters, or leave this field blank.",
+    ];
+  }
+
+  if (error?.message.includes("Invalid mode")) {
+    fieldErrors.modeId = ["Choose an available Primary Mode."];
+  }
+
+  if (error?.message.includes("Invalid Circle energy range")) {
+    fieldErrors.minimumEnergy = [
+      "Minimum Energy cannot be higher than Maximum Energy.",
+    ];
+    fieldErrors.maximumEnergy = [
+      "Maximum Energy must be equal to or higher than Minimum Energy.",
+    ];
+  }
+
+  if (error?.message.includes("Invalid interest selection")) {
+    fieldErrors.interestIds = ["Choose a valid Circle topic."];
+  }
+
+  if (error?.message.includes("Host role required")) {
+    return {
+      status: "error",
+      message:
+        "Your account does not currently have permission to create Circles.",
+      values,
+    };
+  }
+
+  if (error?.message.includes("Onboarding required")) {
+    return {
+      status: "error",
+      message:
+        "Complete your SIGNAL profile setup before creating a Circle.",
+      values,
+    };
+  }
+
+  return {
+    status: "error",
+    message:
+      Object.keys(fieldErrors).length > 0
+        ? "Check the highlighted Circle details and try again."
+        : error?.message
+          ? `Circle creation failed: ${error.message}`
+          : "The Circle could not be created. Please try again.",
+    fieldErrors,
+    values,
+  };
+}
 
     circleId = data;
   } catch {
