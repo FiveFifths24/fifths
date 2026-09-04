@@ -42,6 +42,13 @@ export const reportSchema = z.object({
     "campaign",
     "platform",
   ]),
+  targetEntityId: z.preprocess(
+    (value) =>
+      value == null || (typeof value === "string" && value.trim() === "")
+        ? null
+        : value,
+    z.uuid().nullable(),
+  ),
   category: z.enum([
     "harassment",
     "hate_or_discrimination",

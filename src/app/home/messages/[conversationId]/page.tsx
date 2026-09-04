@@ -4,6 +4,7 @@ import { ArrowLeft, Send } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { sendDirectMessageAction } from "@/features/messages/actions";
 import { signProfileMedia } from "@/features/profiles/profile-media";
+import { ReportForm } from "@/features/trust-safety/report-form";
 
 export default async function DirectConversationPage({
   params,
@@ -210,6 +211,22 @@ export default async function DirectConversationPage({
           </form>
         </div>
       </section>
+      <details className="mt-6 rounded-[1.5rem] border border-red-300/15 bg-red-300/[0.03] p-5">
+        <summary className="cursor-pointer font-bold text-red-100/70">
+          Report this conversation
+        </summary>
+        <p className="mt-3 text-sm leading-6 text-white/45">
+          Include the relevant message text and time in your private report.
+        </p>
+        <div className="mt-6">
+          <ReportForm
+            defaultContextUrl={`/home/messages/${conversationId}`}
+            defaultTarget="member"
+            defaultTargetId={otherUserId}
+            lockTarget
+          />
+        </div>
+      </details>
     </main>
   );
 }

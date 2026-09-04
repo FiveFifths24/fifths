@@ -502,7 +502,7 @@ async function runRelationshipAction(
   });
   if (!parsed.success) redirect(returnTo);
   const supabase = await createClient();
-  const { error } = await supabase.rpc(rpcName, {
+  await supabase.rpc(rpcName, {
     [argumentName]: parsed.data.targetUserId,
   } as never);
   revalidatePath("/home/people");

@@ -32,7 +32,9 @@ export default async function SessionsPage() {
     return <AccountUnavailable />;
   }
 
-  const publicCutoff = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+  const publicCutoffDate = new Date();
+  publicCutoffDate.setHours(publicCutoffDate.getHours() - 24);
+  const publicCutoff = publicCutoffDate.toISOString();
   const { data: userData } = await supabase.auth.getUser();
 
   const [sessionResult, modeResult, interestResult, pulseResult] =

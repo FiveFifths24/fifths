@@ -61,6 +61,7 @@ export async function submitReportAction(
 ): Promise<ActionState> {
   const parsed = reportSchema.safeParse({
     targetType: formData.get("targetType"),
+    targetEntityId: formData.get("targetEntityId"),
     category: formData.get("category"),
     summary: formData.get("summary"),
     details: formData.get("details"),
@@ -75,8 +76,9 @@ export async function submitReportAction(
   }
   try {
     const supabase = await createClient();
-    const { error } = await supabase.rpc("submit_report", {
+    const { error } = await supabase.rpc("submit_entity_report", {
       p_target_type: parsed.data.targetType,
+      p_target_entity_id: parsed.data.targetEntityId,
       p_category: parsed.data.category,
       p_summary: parsed.data.summary,
       p_details: parsed.data.details,

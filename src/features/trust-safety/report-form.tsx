@@ -92,10 +92,12 @@ function TextField({
 
 export function ReportForm({
   defaultTarget = "platform",
+  defaultTargetId = "",
   defaultContextUrl = "",
   lockTarget = false,
 }: {
   defaultTarget?: (typeof targets)[number][0];
+  defaultTargetId?: string;
   defaultContextUrl?: string;
   lockTarget?: boolean;
 } = {}) {
@@ -112,13 +114,14 @@ export function ReportForm({
       className="space-y-5"
     >
       <ActionStatus state={state} />
+      <input name="targetEntityId" type="hidden" value={defaultTargetId} />
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
           <label
             className="mb-2 block text-sm font-bold text-white"
             htmlFor="report-target"
           >
-            Concern About
+            Concern about
           </label>
           <select
             className={selectClass}

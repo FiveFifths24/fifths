@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { normalizeSafeExternalUrl } from "@/lib/url-safety";
 
 const optionalUrl = (max: number) =>
   z
@@ -6,10 +7,10 @@ const optionalUrl = (max: number) =>
     .trim()
     .max(max, `Use no more than ${max.toLocaleString()} characters.`)
     .refine(
-      (value) => !value || /^https?:\/\//i.test(value),
-      "Use a complete http:// or https:// link.",
+      (value) => !value || normalizeSafeExternalUrl(value) !== null,
+      "Use a safe, public http:// or https:// link.",
     )
-    .transform((value) => value || null);
+    .transform((value) => (value ? normalizeSafeExternalUrl(value) : null));
 
 export const profileSettingsSchema = z
   .object({

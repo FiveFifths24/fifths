@@ -346,6 +346,7 @@ export default async function SessionDetailsPage({
           <ReportForm
             defaultContextUrl={`/home/sessions/${session.id}`}
             defaultTarget="session"
+            defaultTargetId={session.id}
             lockTarget
           />
         </div>

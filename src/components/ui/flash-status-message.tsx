@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 
 import { StatusMessage } from "@/components/ui/status-message";
 
@@ -14,7 +14,6 @@ export function FlashStatusMessage({
   value: string;
   children: React.ReactNode;
 }) {
-  const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 

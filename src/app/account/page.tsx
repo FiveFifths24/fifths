@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { Eye, Radio, Sparkles, UsersRound } from "lucide-react";
+import { Eye, Radio, RadioTower, Sparkles, UsersRound } from "lucide-react";
 import { AccountTabs } from "@/components/account/account-tabs";
 import { AccountUnavailable } from "@/components/account/account-unavailable";
 import { Container } from "@/components/ui/container";
 import { ButtonLink } from "@/components/ui/button-link";
 import { StatusMessage } from "@/components/ui/status-message";
 import { signOutAction } from "@/features/auth/actions";
+import { ActivityPrivacyForm } from "@/features/activity/activity-privacy-form";
 import { signProfileMedia } from "@/features/profiles/profile-media";
 import { ProfileSettingsForm } from "@/features/profiles/profile-settings-form";
 import { ProfileStatusForm } from "@/features/profiles/profile-status-form";
@@ -41,6 +42,7 @@ export default async function AccountPage({
     friendshipsResult,
     peopleResult,
     featuredResult,
+    activityPrivacyResult,
     parameters,
   ] = await Promise.all([
     supabase
@@ -66,6 +68,11 @@ export default async function AccountPage({
       .from("profile_featured_connections")
       .select("featured_id")
       .eq("owner_id", userData.user.id),
+    supabase
+      .from("activity_sharing_preferences")
+      .select("*")
+      .eq("user_id", userData.user.id)
+      .maybeSingle(),
     searchParams,
   ]);
 
@@ -219,6 +226,29 @@ export default async function AccountPage({
               }}
             />
           </div>
+        </section>
+
+        <section className="mt-8 rounded-[2rem] border border-[#f359d2]/20 bg-[linear-gradient(145deg,rgba(243,89,210,0.07),rgba(3,3,7,0.92))] p-6 sm:p-8">
+          <div className="flex items-center gap-3">
+            <RadioTower aria-hidden="true" className="size-5 text-[#f359d2]" />
+            <h2 className="text-2xl font-bold text-white">Activity Privacy</h2>
+          </div>
+          <p className="mt-3 max-w-2xl text-sm leading-6 text-white/45">
+            Choose which meaningful updates may appear in accepted friends&apos;
+            finite Home activity. SIGNAL never shares profile views, searches,
+            private messages, saved items, or passive browsing.
+          </p>
+          <ActivityPrivacyForm
+            defaults={
+              activityPrivacyResult.data ?? {
+                share_with_friends: true,
+                share_session_activity: true,
+                share_circle_activity: true,
+                share_profile_activity: true,
+                share_commons_activity: false,
+              }
+            }
+          />
         </section>
 
         <section className="mt-8 rounded-[2rem] border border-[#a855f7]/20 bg-[linear-gradient(145deg,rgba(108,20,206,0.08),rgba(3,3,7,0.92))] p-6 sm:p-8">

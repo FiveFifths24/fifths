@@ -44,26 +44,17 @@ function renderRoom() {
 describe("ProfileRoom", () => {
   beforeEach(() => window.localStorage.clear());
 
-  it("provides room and quick views with an owner edit path", () => {
+  it("provides the profile room with an owner edit path", () => {
     renderRoom();
 
     expect(
       screen.getByRole("heading", { name: "My Room" }),
     ).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Room View" })).toHaveAttribute(
-      "aria-pressed",
-      "true",
-    );
     expect(screen.getByRole("link", { name: "Edit My Room" })).toHaveAttribute(
       "href",
       "/account#edit-my-room",
     );
-
-    fireEvent.click(screen.getByRole("button", { name: "Quick View" }));
-    expect(screen.getByRole("button", { name: "Quick View" })).toHaveAttribute(
-      "aria-pressed",
-      "true",
-    );
+    expect(screen.getByText("Profile Space")).toBeInTheDocument();
   });
 
   it("keeps legacy room content available while the launch profile is active", () => {
