@@ -14,6 +14,7 @@ describe("Fifth Realm forms", () => {
     render(
       <CreateCampaignForm
         circles={[{ id: "circle-1", name: "Story Circle" }]}
+        draftOwnerId="user-1"
         interests={[{ id: "interest-1", name: "Storytelling" }]}
         modes={[{ id: "mode-1", name: "Immerse" }]}
       />,

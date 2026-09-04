@@ -68,7 +68,11 @@ export const createCampaignSchema = z
     premise: z.string().trim().min(20).max(5000),
     genre: z.enum(campaignGenres),
     tone: z.string().trim().min(2).max(160),
-    safetyExpectations: z.string().trim().min(20).max(2000),
+    safetyExpectations: z
+      .string()
+      .trim()
+      .min(20, "Describe the safety expectations in at least 20 characters.")
+      .max(2000, "Keep the safety expectations to 2,000 characters or fewer."),
     format: z.enum(["in_person", "online", "either"]),
     locationLabel: optionalLabel,
     scheduleSummary: z.string().trim().min(10).max(500),

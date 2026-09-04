@@ -167,6 +167,7 @@ export default async function ManageCirclesPage() {
 
           <div className="mt-8">
             <CreateCircleForm
+              draftOwnerId={userData.user.id}
               interests={interestResult.data ?? []}
               modes={modeResult.data ?? []}
             />

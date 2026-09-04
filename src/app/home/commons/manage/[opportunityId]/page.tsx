@@ -13,6 +13,8 @@ import {
 } from "lucide-react";
 
 import { AccountUnavailable } from "@/components/account/account-unavailable";
+import { ClearFormDraft } from "@/components/forms/form-draft";
+import { formDraftStorageKey } from "@/components/forms/form-draft-config";
 import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button-link";
 import { PreviewState } from "@/components/ui/preview-state";
@@ -152,10 +154,18 @@ export default async function ManageOpportunityPage({
       </div>
 
       {parameters?.created === "1" ? (
-        <StatusMessage className="mt-6" tone="success">
-          Your private draft is ready. Review the details below before
-          publishing it to Creator Commons.
-        </StatusMessage>
+        <>
+          <ClearFormDraft
+            storageKey={formDraftStorageKey(
+              "commons-opportunity-create",
+              opportunity.created_by,
+            )}
+          />
+          <StatusMessage className="mt-6" tone="success">
+            Your private draft is ready. Review the details below before
+            publishing it to Creator Commons.
+          </StatusMessage>
+        </>
       ) : null}
 
       {parameters?.status === "updated" ? (

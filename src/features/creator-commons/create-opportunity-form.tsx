@@ -3,6 +3,14 @@
 import { useActionState } from "react";
 
 import { ActionStatus } from "@/components/forms/action-status";
+import {
+  DraftRestoredNotice,
+  useFormDraft,
+} from "@/components/forms/form-draft";
+import {
+  formDraftStorageKey,
+  opportunityDraftFields,
+} from "@/components/forms/form-draft-config";
 import { SubmitButton } from "@/components/forms/submit-button";
 import { TextField } from "@/components/forms/text-field";
 import { firstFieldError, initialActionState } from "@/features/auth/state";
@@ -178,24 +186,33 @@ export function CreateOpportunityForm({
   skills,
   interests,
   circles,
+  draftOwnerId,
 }: {
   modes: Array<Pick<Mode, "id" | "name">>;
   skills: Array<Pick<Skill, "id" | "name">>;
   interests: Array<Pick<Interest, "id" | "name">>;
   circles: Array<Pick<Circle, "id" | "name">>;
+  draftOwnerId: string;
 }) {
   const [state, action] = useActionState(
     createOpportunityAction,
     initialActionState,
   );
+  const { formRef, restored } = useFormDraft({
+    storageKey: formDraftStorageKey("commons-opportunity-create", draftOwnerId),
+    fields: opportunityDraftFields,
+    actionState: state,
+  });
 
   return (
     <form
       action={action}
       aria-label="Create a Creator Commons opportunity"
       className="space-y-10 text-left"
+      ref={formRef}
     >
       <ActionStatus state={state} />
+      <DraftRestoredNotice restored={restored} />
 
       <fieldset>
         <legend className="w-full text-center text-xl font-bold text-white lg:text-left">

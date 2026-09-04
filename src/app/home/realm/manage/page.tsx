@@ -256,6 +256,7 @@ export default async function ManageRealmPage({
             <div className="mt-8 text-left">
               <CreateCampaignForm
                 circles={circleResult.data ?? []}
+                draftOwnerId={userData.user.id}
                 interests={interestResult.data ?? []}
                 modes={modeResult.data ?? []}
               />

@@ -8,6 +8,8 @@ import {
   UsersRound,
 } from "lucide-react";
 import { AccountUnavailable } from "@/components/account/account-unavailable";
+import { ClearFormDraft } from "@/components/forms/form-draft";
+import { formDraftStorageKey } from "@/components/forms/form-draft-config";
 import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button-link";
 import { PreviewState } from "@/components/ui/preview-state";
@@ -170,9 +172,14 @@ export default async function ManageCirclePage({
       </div>
 
       {messages?.created === "1" ? (
-        <StatusMessage className="mt-8" tone="success">
-          Circle draft created. Review every boundary before publishing.
-        </StatusMessage>
+        <>
+          <ClearFormDraft
+            storageKey={formDraftStorageKey("circle-create", circle.created_by)}
+          />
+          <StatusMessage className="mt-8" tone="success">
+            Circle draft created. Review every boundary before publishing.
+          </StatusMessage>
+        </>
       ) : null}
       {messages?.status === "updated" ? (
         <StatusMessage className="mt-8" tone="success">

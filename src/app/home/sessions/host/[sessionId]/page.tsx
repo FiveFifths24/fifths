@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { ClipboardCheck, Settings2, ShieldCheck, Users } from "lucide-react";
 
 import { AccountUnavailable } from "@/components/account/account-unavailable";
+import { ClearFormDraft } from "@/components/forms/form-draft";
+import { formDraftStorageKey } from "@/components/forms/form-draft-config";
 import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button-link";
 import { StatusMessage } from "@/components/ui/status-message";
@@ -111,9 +113,20 @@ export default async function ManageSessionPage({
           STATUS MESSAGES
       ====================================================== */}
       {messages?.created === "1" ? (
-        <StatusMessage className="mt-8 text-center sm:text-left" tone="success">
-          Draft created. Review the details before publishing.
-        </StatusMessage>
+        <>
+          <ClearFormDraft
+            storageKey={formDraftStorageKey(
+              "session-create",
+              session.host_user_id,
+            )}
+          />
+          <StatusMessage
+            className="mt-8 text-center sm:text-left"
+            tone="success"
+          >
+            Draft created. Review the details before publishing.
+          </StatusMessage>
+        </>
       ) : null}
 
       {messages?.status === "updated" ? (

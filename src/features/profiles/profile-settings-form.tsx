@@ -2,6 +2,14 @@
 
 import { useActionState, useEffect, useState } from "react";
 import { ActionStatus } from "@/components/forms/action-status";
+import {
+  DraftRestoredNotice,
+  useFormDraft,
+} from "@/components/forms/form-draft";
+import {
+  formDraftStorageKey,
+  profileSettingsDraftFields,
+} from "@/components/forms/form-draft-config";
 import { SubmitButton } from "@/components/forms/submit-button";
 import { firstFieldError, initialActionState } from "@/features/auth/state";
 import { updateProfileSettingsAction } from "./actions";
@@ -55,7 +63,9 @@ function useNameChangeWindow(changedAt: string | null) {
 
 export function ProfileSettingsForm({
   profile,
+  draftOwnerId,
 }: {
+  draftOwnerId: string;
   profile: {
     username: string;
     usernameChangedAt: string | null;
@@ -111,10 +121,16 @@ export function ProfileSettingsForm({
   const usernameWindow = useNameChangeWindow(profile.usernameChangedAt);
   const displayNameWindow = useNameChangeWindow(profile.displayNameChangedAt);
   const [accentColor, setAccentColor] = useState(profile.accentColor);
+  const { formRef, restored } = useFormDraft({
+    storageKey: formDraftStorageKey("profile-settings", draftOwnerId),
+    fields: profileSettingsDraftFields,
+    actionState: state,
+  });
 
   return (
-    <form action={action} className="space-y-6">
+    <form action={action} className="space-y-6" ref={formRef}>
       <ActionStatus state={state} />
+      <DraftRestoredNotice restored={restored} />
       <div
         className="grid scroll-mt-28 gap-5 sm:grid-cols-2"
         id="profile-media"

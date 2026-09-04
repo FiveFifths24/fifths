@@ -53,6 +53,30 @@ describe("Fifth Realm schemas", () => {
     }
   });
 
+  it("explains the safety expectations length requirements", () => {
+    const tooShort = createCampaignSchema.safeParse({
+      ...validCampaign,
+      safetyExpectations: "Too short",
+    });
+    const tooLong = createCampaignSchema.safeParse({
+      ...validCampaign,
+      safetyExpectations: "x".repeat(2001),
+    });
+
+    expect(tooShort.success).toBe(false);
+    expect(tooLong.success).toBe(false);
+    if (!tooShort.success) {
+      expect(tooShort.error.flatten().fieldErrors.safetyExpectations).toContain(
+        "Describe the safety expectations in at least 20 characters.",
+      );
+    }
+    if (!tooLong.success) {
+      expect(tooLong.error.flatten().fieldErrors.safetyExpectations).toContain(
+        "Keep the safety expectations to 2,000 characters or fewer.",
+      );
+    }
+  });
+
   it("requires explicit safety acknowledgement on applications", () => {
     const result = campaignApplicationSchema.safeParse({
       campaignId: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
