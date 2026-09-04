@@ -22,7 +22,7 @@ describe("Phase 10 trust-and-safety forms", () => {
       screen.getByRole("form", { name: "Submit a private safety report" }),
     ).toBeInTheDocument();
     for (const label of [
-      "Concern about",
+      /Concern about/i,
       "Category",
       "Short summary",
       "What happened?",

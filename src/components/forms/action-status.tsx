@@ -6,7 +6,13 @@ export function ActionStatus({ state }: { state: ActionState }) {
   return (
     <StatusMessage
       className="mb-5"
-      tone={state.status === "success" ? "success" : "error"}
+      tone={
+        state.status === "success"
+          ? "success"
+          : state.status === "pending"
+            ? "info"
+            : "error"
+      }
     >
       {state.message}
     </StatusMessage>

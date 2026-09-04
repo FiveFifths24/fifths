@@ -24,6 +24,7 @@ describe("profile settings schema", () => {
         backgroundImagePositionX: 50,
         backgroundImagePositionY: 60,
         backgroundImageZoom: 125,
+        spotlightCategory: "Building",
         spotlightTitle: "Building SIGNAL",
         spotlightDescription: "A profile spotlight.",
         spotlightUrl: "https://example.com",
@@ -36,6 +37,15 @@ describe("profile settings schema", () => {
         latestPickTitle: "A new album",
         latestPickNote: "On repeat this week.",
         latestPickUrl: "https://example.com/album",
+        currentGame: "",
+        currentGameDescription: "",
+        currentGameUrl: "",
+        currentReading: "",
+        currentReadingDescription: "",
+        currentReadingUrl: "",
+        currentFood: "",
+        currentFoodDescription: "",
+        currentFoodUrl: "",
       }).success,
     ).toBe(true);
   });
@@ -57,6 +67,7 @@ describe("profile settings schema", () => {
       backgroundImagePositionX: 50,
       backgroundImagePositionY: 50,
       backgroundImageZoom: 100,
+      spotlightCategory: "",
       spotlightTitle: "",
       spotlightDescription: "",
       spotlightUrl: "",
@@ -69,6 +80,15 @@ describe("profile settings schema", () => {
       latestPickTitle: "",
       latestPickNote: "",
       latestPickUrl: "",
+      currentGame: "",
+      currentGameDescription: "",
+      currentGameUrl: "",
+      currentReading: "",
+      currentReadingDescription: "",
+      currentReadingUrl: "",
+      currentFood: "",
+      currentFoodDescription: "",
+      currentFoodUrl: "",
     };
 
     expect(profileSettingsSchema.safeParse(base).success).toBe(true);

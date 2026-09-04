@@ -859,7 +859,11 @@ export function ProfileSettingsForm({
           </span>
         </span>
       </label>
-      <SubmitButton pendingLabel="Saving To Profile…">
+      <p className="text-xs leading-5 text-white/45">
+        New images are privately scanned before they replace anything already on
+        your profile. Images requiring review stay private.
+      </p>
+      <SubmitButton pendingLabel="Uploading & Scanning…">
         Save Profile & Background
       </SubmitButton>
     </form>
