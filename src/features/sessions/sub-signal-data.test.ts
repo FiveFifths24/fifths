@@ -6,6 +6,7 @@ import {
   isEligibleCircle,
   isEligibleOpportunity,
   isEligibleSession,
+  selectEcosystemPreview,
 } from "./sub-signal-data";
 
 const now = "2027-03-10T12:00:00.000Z";
@@ -89,6 +90,36 @@ describe("Sessions Sub-Signal eligibility", () => {
         now,
       ),
     ).toBe(false);
+  });
+});
+
+describe("ecosystem preview selection", () => {
+  const items = [{ id: "deadline-first" }, { id: "pulse-match" }];
+
+  it("uses the best transparent Pulse match when one is available", () => {
+    expect(
+      selectEcosystemPreview(items, [
+        {
+          candidate: {
+            id: "pulse-match",
+            title: "Pulse match",
+            module: "circles",
+            modeSlugs: [],
+            energyRange: { minimum: 1, maximum: 5 },
+            stimulationLevels: [],
+            socialIntensities: [],
+            format: "either",
+            interestIds: [],
+          },
+          fit: "strong",
+          reasons: [],
+        },
+      ]),
+    ).toEqual({ id: "pulse-match" });
+  });
+
+  it("falls back deterministically to the source query order", () => {
+    expect(selectEcosystemPreview(items)).toEqual({ id: "deadline-first" });
   });
 });
 

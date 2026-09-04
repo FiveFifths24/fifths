@@ -4,6 +4,7 @@ import type {
   RealmCampaign,
   Session,
 } from "@/types/database";
+import type { RankedRecommendation } from "@/lib/recommendations/types";
 
 export type SubSignalSource = "sessions" | "campaigns" | "circles" | "commons";
 
@@ -36,6 +37,17 @@ export function isEligibleOpportunity(
 ) {
   return (
     opportunity.status === "published" && opportunity.response_deadline > now
+  );
+}
+
+export function selectEcosystemPreview<T extends { id: string }>(
+  items: T[],
+  recommendations: RankedRecommendation[] = [],
+): T | undefined {
+  const rankedId = recommendations[0]?.candidate.id;
+  return (
+    (rankedId ? items.find((item) => item.id === rankedId) : undefined) ??
+    items[0]
   );
 }
 

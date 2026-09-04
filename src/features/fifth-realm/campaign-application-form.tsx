@@ -20,7 +20,7 @@ export function CampaignApplicationForm({
   return (
     <form
       action={formAction}
-      aria-label="Apply to this Fifth Realm campaign"
+      aria-label="Apply to this Fifth Realm Campaign"
       className="space-y-5"
     >
       <ActionStatus state={state} />

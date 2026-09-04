@@ -1,36 +1,25 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import {
-  BriefcaseBusiness,
-  CalendarRange,
-  Gamepad2,
-  MessagesSquare,
-  Plus,
-  Sparkles,
-  TicketCheck,
-} from "lucide-react";
+import { CalendarRange, Plus, Sparkles, TicketCheck } from "lucide-react";
 
 import { AccountUnavailable } from "@/components/account/account-unavailable";
 import { ButtonLink } from "@/components/ui/button-link";
 import { StatusMessage } from "@/components/ui/status-message";
-import { CircleCard } from "@/features/circles/circle-card";
-import { assembleCircleCards } from "@/features/circles/circle-data";
-import { OpportunityCard } from "@/features/creator-commons/opportunity-card";
-import { assembleOpportunityCards } from "@/features/creator-commons/opportunity-data";
-import { CampaignCard } from "@/features/fifth-realm/campaign-card";
-import { assembleCampaignCards } from "@/features/fifth-realm/campaign-data";
+import { rankCircles } from "@/features/circles/circle-data";
+import { rankOpportunities } from "@/features/creator-commons/opportunity-data";
+import { rankCampaigns } from "@/features/fifth-realm/campaign-data";
+import { AroundEcosystem } from "@/features/sessions/around-ecosystem";
 import {
   assembleSessionCards,
   rankSessions,
 } from "@/features/sessions/session-data";
 import { SessionCard } from "@/features/sessions/session-card";
 import {
-  formatUnavailableSources,
-  getSubSignalPageState,
   isEligibleCampaign,
   isEligibleCircle,
   isEligibleOpportunity,
   isEligibleSession,
+  selectEcosystemPreview,
   type SubSignalSource,
 } from "@/features/sessions/sub-signal-data";
 import {
@@ -74,7 +63,6 @@ export default async function SessionsPage() {
     opportunityResult,
     modeResult,
     interestResult,
-    skillResult,
     pulseResult,
   ] = await Promise.all([
     supabase
@@ -110,7 +98,6 @@ export default async function SessionsPage() {
       .select("id, name")
       .eq("active", true)
       .order("name"),
-    supabase.from("skills").select("id, name").eq("active", true).order("name"),
     supabase
       .from("pulse_check_ins")
       .select("*")
@@ -182,20 +169,13 @@ export default async function SessionsPage() {
   const campaignIds = campaigns.map((campaign) => campaign.id);
   const circleIds = circles.map((circle) => circle.id);
   const opportunityIds = opportunities.map((opportunity) => opportunity.id);
-  const userId = userData.user?.id;
   const pulse = pulseResult.error ? null : pulseResult.data;
 
   const [
     sessionInterestResult,
     campaignInterestResult,
-    campaignApplicationResult,
-    campaignMemberResult,
     circleInterestResult,
-    circleMemberResult,
-    opportunitySkillResult,
     opportunityInterestResult,
-    savedOpportunityResult,
-    opportunityResponseResult,
     pulseInterestResult,
   ] = await Promise.all([
     sessionIds.length
@@ -210,58 +190,16 @@ export default async function SessionsPage() {
           .select("campaign_id, interest_id")
           .in("campaign_id", campaignIds)
       : Promise.resolve({ data: [], error: null }),
-    userId && campaignIds.length
-      ? supabase
-          .from("campaign_applications")
-          .select("campaign_id, status")
-          .eq("user_id", userId)
-          .in("campaign_id", campaignIds)
-      : Promise.resolve({ data: [], error: null }),
-    userId && campaignIds.length
-      ? supabase
-          .from("campaign_members")
-          .select("campaign_id")
-          .eq("user_id", userId)
-          .eq("status", "active")
-          .in("campaign_id", campaignIds)
-      : Promise.resolve({ data: [], error: null }),
     circleIds.length
       ? supabase
           .from("circle_interests")
           .select("circle_id, interest_id")
           .in("circle_id", circleIds)
       : Promise.resolve({ data: [], error: null }),
-    userId && circleIds.length
-      ? supabase
-          .from("circle_members")
-          .select("circle_id, role, status")
-          .eq("user_id", userId)
-          .in("circle_id", circleIds)
-      : Promise.resolve({ data: [], error: null }),
-    opportunityIds.length
-      ? supabase
-          .from("opportunity_skills")
-          .select("opportunity_id, skill_id")
-          .in("opportunity_id", opportunityIds)
-      : Promise.resolve({ data: [], error: null }),
     opportunityIds.length
       ? supabase
           .from("opportunity_interests")
           .select("opportunity_id, interest_id")
-          .in("opportunity_id", opportunityIds)
-      : Promise.resolve({ data: [], error: null }),
-    userId && opportunityIds.length
-      ? supabase
-          .from("saved_opportunities")
-          .select("opportunity_id")
-          .eq("user_id", userId)
-          .in("opportunity_id", opportunityIds)
-      : Promise.resolve({ data: [], error: null }),
-    userId && opportunityIds.length
-      ? supabase
-          .from("opportunity_responses")
-          .select("opportunity_id, status")
-          .eq("user_id", userId)
           .in("opportunity_id", opportunityIds)
       : Promise.resolve({ data: [], error: null }),
     pulse
@@ -327,40 +265,37 @@ export default async function SessionsPage() {
     sessionLinks,
     recommendations,
   );
-  const campaignCards = assembleCampaignCards(
+  const campaignPreview = selectEcosystemPreview(
     campaigns,
-    modes,
-    interests,
-    campaignInterestResult.data ?? [],
-    [],
-    campaignApplicationResult.data ?? [],
-    (campaignMemberResult.data ?? []).map((item) => item.campaign_id),
+    pulseInput
+      ? rankCampaigns(
+          pulseInput,
+          campaigns,
+          modes,
+          campaignInterestResult.data ?? [],
+        )
+      : [],
   );
-  const circleCards = assembleCircleCards(
+  const circlePreview = selectEcosystemPreview(
     circles,
-    modes,
-    interests,
-    circleInterestResult.data ?? [],
-    [],
-    circleMemberResult.data ?? [],
+    pulseInput
+      ? rankCircles(pulseInput, circles, modes, circleInterestResult.data ?? [])
+      : [],
   );
-  const opportunityCards = assembleOpportunityCards(
+  const commonsPreview = selectEcosystemPreview(
     opportunities,
-    modes,
-    skillResult.data ?? [],
-    interests,
-    opportunitySkillResult.data ?? [],
-    opportunityInterestResult.data ?? [],
-    [],
-    (savedOpportunityResult.data ?? []).map((item) => item.opportunity_id),
-    opportunityResponseResult.data ?? [],
+    pulseInput
+      ? rankOpportunities(
+          pulseInput,
+          opportunities,
+          modes,
+          opportunityInterestResult.data ?? [],
+        )
+      : [],
   );
-  const totalItems =
-    sessionCards.length +
-    campaignCards.length +
-    circleCards.length +
-    opportunityCards.length;
-  const pageState = getSubSignalPageState(totalItems, unavailableSources);
+  const ecosystemUnavailable = unavailableSources.filter(
+    (source) => source !== "sessions",
+  );
 
   return (
     <div className="min-w-0 text-center sm:text-left">
@@ -372,13 +307,13 @@ export default async function SessionsPage() {
           </p>
 
           <h1 className="display-type mx-auto mt-8 max-w-4xl text-5xl leading-[0.95] break-words text-white sm:mx-0 sm:text-7xl">
-            What Can I Participate In Right Now?
+            Find Something Worth Showing Up For.
           </h1>
 
           <p className="mx-auto mt-5 max-w-3xl text-lg leading-8 break-words text-neutral-300 sm:mx-0">
-            Find standalone Sessions, live Fifth Realm campaigns, in-person and
-            hybrid Circles, and current Creator Commons opportunities—all in one
-            intentional place to discover something worth showing up for.
+            Sessions are specific things SIGNAL members are doing together—from
+            game nights, shopping trips, and dinners to coworking, workshops,
+            museum visits, and local meetups.
           </p>
         </div>
 
@@ -408,16 +343,16 @@ export default async function SessionsPage() {
           tone="success"
         >
           <span>
-            <strong>Matched to your current Pulse.</strong> Standard Sessions
-            keep their transparent Pulse order; other opportunities are ordered
-            by their current schedule or deadline.
+            <strong>Matched to your current Pulse.</strong> Sessions keep their
+            transparent Pulse order, and each ecosystem preview uses the same
+            fit signals when available.
           </span>
         </StatusMessage>
       ) : (
         <StatusMessage className="mt-8 justify-center text-center sm:justify-start sm:text-left">
           <span>
             <strong>Browsing by current schedule and deadline.</strong> Check
-            your Pulse for transparent ordering of standard Sessions.{" "}
+            your Pulse for transparent Session ordering.{" "}
             <Link className="font-bold underline" href="/home/pulse">
               Check Pulse
             </Link>
@@ -425,110 +360,86 @@ export default async function SessionsPage() {
         </StatusMessage>
       )}
 
-      {pageState === "results" && unavailableSources.length > 0 ? (
-        <StatusMessage className="mt-4 justify-center text-center sm:justify-start sm:text-left">
-          Some Session sources are temporarily unavailable:{" "}
-          {formatUnavailableSources(unavailableSources)}. Available
-          participation options are still shown below.
-        </StatusMessage>
-      ) : null}
-
-      {pageState === "results" ? (
-        <div className="mt-12 space-y-14">
-          {sessionCards.length ? (
-            <SubSignalSection
-              description="Standalone plans and activities created by SIGNAL members."
-              heading={pulseInput ? "Sessions In Sync" : "Upcoming Sessions"}
-              icon={
-                <Sparkles
-                  aria-hidden="true"
-                  className="size-5 text-[#992bff]"
-                />
-              }
-              id="standard-session-results"
-            >
-              {sessionCards.map((card) => (
-                <SessionCard item={card} key={card.id} />
-              ))}
-            </SubSignalSection>
-          ) : null}
-
-          {campaignCards.length ? (
-            <SubSignalSection
-              description="Recruiting and active shared worlds from Fifth Realm."
-              heading="Fifth Realm Campaigns"
-              icon={
-                <Gamepad2
-                  aria-hidden="true"
-                  className="size-5 text-[#22d3ee]"
-                />
-              }
-              id="campaign-session-results"
-            >
-              {campaignCards.map((card) => (
-                <CampaignCard item={card} key={card.id} />
-              ))}
-            </SubSignalSection>
-          ) : null}
-
-          {circleCards.length ? (
-            <SubSignalSection
-              description="Published communities with an in-person or hybrid way to participate."
-              heading="Circles You Can Show Up To"
-              icon={
-                <MessagesSquare
-                  aria-hidden="true"
-                  className="size-5 text-[#ee54a7]"
-                />
-              }
-              id="circle-session-results"
-            >
-              {circleCards.map((card) => (
-                <CircleCard item={card} key={card.id} />
-              ))}
-            </SubSignalSection>
-          ) : null}
-
-          {opportunityCards.length ? (
-            <SubSignalSection
-              description="Current creative and professional opportunities accepting responses."
-              heading="Creator Commons Opportunities"
-              icon={
-                <BriefcaseBusiness
-                  aria-hidden="true"
-                  className="size-5 text-white"
-                />
-              }
-              id="commons-session-results"
-            >
-              {opportunityCards.map((card) => (
-                <OpportunityCard item={card} key={card.id} />
-              ))}
-            </SubSignalSection>
-          ) : null}
-        </div>
-      ) : pageState === "empty" ? (
-        <div className="mt-10 rounded-[1.75rem] border border-[#992bff]/20 bg-[#992bff]/[0.035] px-6 py-10 text-center">
-          <div className="mx-auto flex max-w-xl flex-col items-center">
-            <Sparkles aria-hidden="true" className="size-6 text-[#992bff]" />
-            <h2 className="mt-4 text-xl font-bold text-white">
-              No Published Sessions Yet
-            </h2>
-            <p className="mt-3 max-w-md text-sm leading-6 text-white/50">
-              New Sessions, campaigns, in-person Circles, and Creator Commons
-              opportunities will appear here as they become available.
-            </p>
+      <SubSignalSection
+        description="Standalone plans and activities created by SIGNAL members."
+        heading={pulseInput ? "Sessions In Sync" : "Upcoming Sessions"}
+        icon={<Sparkles aria-hidden="true" className="size-5 text-[#992bff]" />}
+        id="standard-session-results"
+      >
+        {sessionResult.error ? (
+          <StatusMessage
+            className="col-span-full justify-center text-center"
+            tone="error"
+          >
+            Sessions are temporarily unavailable. Please try again shortly.
+          </StatusMessage>
+        ) : sessionCards.length ? (
+          sessionCards.map((card) => <SessionCard item={card} key={card.id} />)
+        ) : (
+          <div className="col-span-full rounded-[1.75rem] border border-[#992bff]/20 bg-[#992bff]/[0.035] px-6 py-10 text-center">
+            <div className="mx-auto flex max-w-xl flex-col items-center">
+              <Sparkles aria-hidden="true" className="size-6 text-[#992bff]" />
+              <h3 className="mt-4 text-xl font-bold text-white">
+                No Published Sessions Yet
+              </h3>
+              <p className="mt-3 max-w-md text-sm leading-6 text-white/50">
+                Member-created plans and activities will appear here as soon as
+                someone publishes a Session.
+              </p>
+            </div>
           </div>
-        </div>
-      ) : (
-        <StatusMessage
-          className="mt-10 justify-center text-center"
-          tone="error"
-        >
-          Participation options are temporarily unavailable. Please try again
-          shortly.
-        </StatusMessage>
-      )}
+        )}
+      </SubSignalSection>
+
+      <AroundEcosystem
+        campaign={
+          campaignPreview
+            ? {
+                activePlayers: campaignPreview.active_player_count,
+                capacity: campaignPreview.player_capacity,
+                deadline: campaignPreview.application_deadline,
+                experienceLevel: campaignPreview.experience_level,
+                format: campaignPreview.format,
+                genre: campaignPreview.genre,
+                href: `/home/realm/${campaignPreview.id}`,
+                location: campaignPreview.location_label,
+                schedule: campaignPreview.schedule_summary,
+                summary: campaignPreview.summary,
+                title: campaignPreview.title,
+              }
+            : undefined
+        }
+        circle={
+          circlePreview
+            ? {
+                format: circlePreview.format,
+                href: `/home/circles/${circlePreview.id}`,
+                joinPolicy: circlePreview.join_policy,
+                location: circlePreview.location_label,
+                name: circlePreview.name,
+                summary: circlePreview.summary,
+              }
+            : undefined
+        }
+        commons={
+          commonsPreview
+            ? {
+                acceptedCount: commonsPreview.accepted_count,
+                creatorName: commonsPreview.creator_display_name,
+                deadline: commonsPreview.response_deadline,
+                format: commonsPreview.format,
+                href: `/home/commons/${commonsPreview.id}`,
+                isPaid: commonsPreview.is_paid,
+                kind: commonsPreview.kind,
+                location: commonsPreview.location_label,
+                positions: commonsPreview.positions,
+                summary: commonsPreview.summary,
+                title: commonsPreview.title,
+              }
+            : undefined
+        }
+        unavailableSources={ecosystemUnavailable}
+      />
     </div>
   );
 }
@@ -547,7 +458,7 @@ function SubSignalSection({
   children: React.ReactNode;
 }) {
   return (
-    <section aria-labelledby={id} className="min-w-0">
+    <section aria-labelledby={id} className="mt-12 min-w-0">
       <div className="flex min-w-0 flex-col items-center sm:items-start">
         <div className="flex max-w-full flex-col items-center justify-center gap-2 sm:flex-row sm:justify-start sm:gap-3">
           {icon}

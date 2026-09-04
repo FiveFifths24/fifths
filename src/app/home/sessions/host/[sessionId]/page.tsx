@@ -16,6 +16,7 @@ import {
   formatSessionDate,
   formatSessionFormat,
 } from "@/features/sessions/session-card";
+import { SessionStatusFeedback } from "@/features/sessions/session-status-feedback";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = { title: "Manage Session" };
@@ -129,17 +130,7 @@ export default async function ManageSessionPage({
         </>
       ) : null}
 
-      {messages?.status === "updated" ? (
-        <StatusMessage className="mt-8 text-center sm:text-left" tone="success">
-          Session status updated.
-        </StatusMessage>
-      ) : null}
-
-      {messages?.status === "error" ? (
-        <StatusMessage className="mt-8 text-center sm:text-left" tone="error">
-          The status change could not be completed.
-        </StatusMessage>
-      ) : null}
+      <SessionStatusFeedback status={messages?.status} />
 
       {messages?.attendance === "updated" ? (
         <StatusMessage className="mt-8 text-center sm:text-left" tone="success">
