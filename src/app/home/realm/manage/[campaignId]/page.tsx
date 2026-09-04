@@ -56,7 +56,7 @@ function SectionHeading({
 }) {
   return (
     <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:items-start sm:text-left">
-      <div className="sm:mt-1 flex size-10 shrink-0 items-center justify-center rounded-full border border-[#22d3ee]/25 bg-[#22d3ee]/[0.08] text-[#22d3ee] shadow-[0_0_24px_rgba(34,211,238,0.06)]">
+      <div className="flex size-10 shrink-0 items-center justify-center rounded-full border border-[#22d3ee]/25 bg-[#22d3ee]/[0.08] text-[#22d3ee] shadow-[0_0_24px_rgba(34,211,238,0.06)] sm:mt-1">
         {icon}
       </div>
 
@@ -203,12 +203,12 @@ export default async function ManageCampaignPage({
           <StatusMessage tone="success">Campaign status updated.</StatusMessage>
         ) : null}
 
-{parameters?.status === "error" ? (
-  <FlashStatusMessage param="status" tone="error" value="error">
-    That campaign status change could not be completed. Check the
-    campaign lifecycle, deadline, and player capacity.
-  </FlashStatusMessage>
-) : null}
+        {parameters?.status === "error" ? (
+          <FlashStatusMessage param="status" tone="error" value="error">
+            That campaign status change could not be completed. Check the
+            campaign lifecycle, deadline, and player capacity.
+          </FlashStatusMessage>
+        ) : null}
         {parameters?.application === "accepted" ? (
           <StatusMessage tone="success">
             Application accepted. The player has been added to the active
@@ -541,11 +541,12 @@ export default async function ManageCampaignPage({
                 ))}
               </div>
             ) : (
-<div className="text-center">
-  <PreviewState title="No Applications Yet">
-    Once recruitment opens, applications will appear here for review.
-  </PreviewState>
-</div>
+              <div className="text-center">
+                <PreviewState title="No Applications Yet">
+                  Once recruitment opens, applications will appear here for
+                  review.
+                </PreviewState>
+              </div>
             )}
           </div>
         </section>
@@ -693,11 +694,11 @@ export default async function ManageCampaignPage({
               ))}
             </div>
           ) : (
-<div className="text-center">
-  <PreviewState title="No Linked Sessions">
-    Campaign meetings you connect will appear here.
-  </PreviewState>
-</div>
+            <div className="text-center">
+              <PreviewState title="No Linked Sessions">
+                Campaign meetings you connect will appear here.
+              </PreviewState>
+            </div>
           )}
         </div>
 
@@ -748,10 +749,10 @@ export default async function ManageCampaignPage({
 
       <section className="mt-10 grid gap-4 md:grid-cols-3">
         <div className="rounded-2xl border border-[#22d3ee]/12 bg-[#22d3ee]/[0.025] p-5">
-<LockKeyhole
-  aria-hidden="true"
-  className="mx-auto size-5 text-[#22d3ee]/80 sm:mx-0"
-/>
+          <LockKeyhole
+            aria-hidden="true"
+            className="mx-auto size-5 text-[#22d3ee]/80 sm:mx-0"
+          />
           <h2 className="mt-4 font-bold text-white">Private Applications</h2>
 
           <p className="mt-2 text-sm leading-6 text-white/40">
@@ -762,9 +763,9 @@ export default async function ManageCampaignPage({
 
         <div className="rounded-2xl border border-[#22d3ee]/12 bg-[#22d3ee]/[0.025] p-5">
           <ShieldCheck
-  aria-hidden="true"
-  className="mx-auto size-5 text-[#22d3ee]/80 sm:mx-0"
-/>
+            aria-hidden="true"
+            className="mx-auto size-5 text-[#22d3ee]/80 sm:mx-0"
+          />
 
           <h2 className="mt-4 font-bold text-white">Capacity Protected</h2>
 
@@ -776,9 +777,9 @@ export default async function ManageCampaignPage({
 
         <div className="rounded-2xl border border-[#22d3ee]/12 bg-[#22d3ee]/[0.025] p-5">
           <CalendarRange
-  aria-hidden="true"
-  className="mx-auto size-5 text-[#22d3ee]/80 sm:mx-0"
-/>
+            aria-hidden="true"
+            className="mx-auto size-5 text-[#22d3ee]/80 sm:mx-0"
+          />
 
           <h2 className="mt-4 font-bold text-white">Session Connected</h2>
 

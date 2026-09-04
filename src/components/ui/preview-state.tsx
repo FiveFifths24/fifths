@@ -15,9 +15,7 @@ export function PreviewState({
         {title}
       </div>
 
-      <div className="mt-2 text-sm leading-6 text-[#b6b1c2]">
-        {children}
-      </div>
+      <div className="mt-2 text-sm leading-6 text-[#b6b1c2]">{children}</div>
     </div>
   );
 }

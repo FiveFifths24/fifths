@@ -163,14 +163,14 @@ export function SiteHeader() {
                   Notifications
                 </ButtonLink>
                 <ButtonLink
-  className="w-full md:w-auto"
-  href="/home/discover"
-  onClick={() => setOpen(false)}
-  variant="secondary"
->
-  <Compass aria-hidden="true" className="size-4" />
-  Explore Ecosystem
-</ButtonLink>
+                  className="w-full md:w-auto"
+                  href="/home/discover"
+                  onClick={() => setOpen(false)}
+                  variant="secondary"
+                >
+                  <Compass aria-hidden="true" className="size-4" />
+                  Explore Ecosystem
+                </ButtonLink>
 
                 <ButtonLink
                   className="w-full md:w-auto"
