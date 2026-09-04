@@ -10,6 +10,7 @@ describe("CreateOpportunityForm", () => {
     render(
       <CreateOpportunityForm
         circles={[{ id: "circle-1", name: "Creator Circle" }]}
+        draftOwnerId="user-1"
         interests={[{ id: "interest-1", name: "Media" }]}
         modes={[{ id: "mode-1", name: "Create" }]}
         skills={[{ id: "skill-1", name: "Production" }]}

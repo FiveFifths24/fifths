@@ -131,6 +131,7 @@ export default async function HostSessionsPage() {
         <div className="mt-8 text-left">
           <CreateSessionForm
             defaultTimezone={profileResult.data?.timezone ?? "UTC"}
+            draftOwnerId={userData.user.id}
             interests={interestResult.data ?? []}
             modes={modeResult.data ?? []}
           />

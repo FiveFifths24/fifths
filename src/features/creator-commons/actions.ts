@@ -3,7 +3,11 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-import type { ActionState } from "@/features/auth/state";
+import {
+  actionValuesFromFormData,
+  type ActionState,
+} from "@/features/auth/state";
+import { opportunityDraftFields } from "@/components/forms/form-draft-config";
 import { createClient } from "@/lib/supabase/server";
 
 import {
@@ -20,6 +24,7 @@ export async function createOpportunityAction(
   _previousState: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
+  const values = actionValuesFromFormData(formData, opportunityDraftFields);
   const parsed = createOpportunitySchema.safeParse({
     circleId: formData.get("circleId"),
     title: formData.get("title"),
@@ -48,6 +53,7 @@ export async function createOpportunityAction(
       status: "error",
       message: "Check the highlighted opportunity details and try again.",
       fieldErrors: parsed.error.flatten().fieldErrors,
+      values,
     };
   }
 

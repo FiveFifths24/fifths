@@ -6,6 +6,7 @@ describe("CreateCircleForm", () => {
   it("provides labeled identity, access, rules, and Pulse-fit controls", () => {
     render(
       <CreateCircleForm
+        draftOwnerId="user-1"
         interests={[
           {
             id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",

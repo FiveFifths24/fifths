@@ -7,6 +7,7 @@ describe("CreateSessionForm", () => {
     render(
       <CreateSessionForm
         defaultTimezone="America/New_York"
+        draftOwnerId="user-1"
         interests={[
           {
             id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",

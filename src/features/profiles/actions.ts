@@ -2,7 +2,11 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import type { ActionState } from "@/features/auth/state";
+import { profileSettingsDraftFields } from "@/components/forms/form-draft-config";
+import {
+  actionValuesFromFormData,
+  type ActionState,
+} from "@/features/auth/state";
 import {
   ImageValidationError,
   prepareImageForModeration,
@@ -84,6 +88,7 @@ export async function updateProfileSettingsAction(
   _previousState: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
+  const values = actionValuesFromFormData(formData, profileSettingsDraftFields);
   const parsed = profileSettingsSchema.safeParse({
     username: formData.get("username"),
     displayName: formData.get("displayName"),
@@ -136,6 +141,7 @@ export async function updateProfileSettingsAction(
       status: "error",
       message: "Check the highlighted profile details and try again.",
       fieldErrors: parsed.error.flatten().fieldErrors,
+      values,
     };
   }
 

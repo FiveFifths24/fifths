@@ -281,6 +281,7 @@ export default async function ManageCreatorCommonsPage({
           <div className="mt-8 text-left">
             <CreateOpportunityForm
               circles={circles}
+              draftOwnerId={userData.user.id}
               interests={interestResult.data ?? []}
               modes={modeResult.data ?? []}
               skills={skillResult.data ?? []}

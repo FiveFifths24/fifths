@@ -3,6 +3,14 @@
 import { useActionState } from "react";
 
 import { ActionStatus } from "@/components/forms/action-status";
+import {
+  DraftRestoredNotice,
+  useFormDraft,
+} from "@/components/forms/form-draft";
+import {
+  circleDraftFields,
+  formDraftStorageKey,
+} from "@/components/forms/form-draft-config";
 import { SubmitButton } from "@/components/forms/submit-button";
 import { TextField } from "@/components/forms/text-field";
 import { firstFieldError, initialActionState } from "@/features/auth/state";
@@ -125,14 +133,21 @@ function TextAreaField({
 export function CreateCircleForm({
   modes,
   interests,
+  draftOwnerId,
 }: {
   modes: Array<Pick<Mode, "id" | "name">>;
   interests: Array<Pick<Interest, "id" | "name">>;
+  draftOwnerId: string;
 }) {
   const [state, action] = useActionState(
     createCircleAction,
     initialActionState,
   );
+  const { formRef, restored } = useFormDraft({
+    storageKey: formDraftStorageKey("circle-create", draftOwnerId),
+    fields: circleDraftFields,
+    actionState: state,
+  });
 
   function previousValue(name: string) {
     const value = state.values?.[name];
@@ -142,8 +157,14 @@ export function CreateCircleForm({
 
   const topicError = firstFieldError(state, "interestIds");
   return (
-    <form action={action} aria-label="Create a Circle" className="space-y-10">
+    <form
+      action={action}
+      aria-label="Create a Circle"
+      className="space-y-10"
+      ref={formRef}
+    >
       <ActionStatus state={state} />
+      <DraftRestoredNotice restored={restored} />
 
       {/* =====================================================
           COMMUNITY IDENTITY

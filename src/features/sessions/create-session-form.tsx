@@ -2,6 +2,14 @@
 
 import { useActionState } from "react";
 import { ActionStatus } from "@/components/forms/action-status";
+import {
+  DraftRestoredNotice,
+  useFormDraft,
+} from "@/components/forms/form-draft";
+import {
+  formDraftStorageKey,
+  sessionDraftFields,
+} from "@/components/forms/form-draft-config";
 import { SubmitButton } from "@/components/forms/submit-button";
 import { TextField } from "@/components/forms/text-field";
 import { firstFieldError, initialActionState } from "@/features/auth/state";
@@ -78,19 +86,32 @@ export function CreateSessionForm({
   modes,
   interests,
   defaultTimezone,
+  draftOwnerId,
 }: {
   modes: Array<Pick<Mode, "id" | "name">>;
   interests: Array<Pick<Interest, "id" | "name">>;
   defaultTimezone: string;
+  draftOwnerId: string;
 }) {
   const [state, action] = useActionState(
     createSessionAction,
     initialActionState,
   );
+  const { formRef, restored } = useFormDraft({
+    storageKey: formDraftStorageKey("session-create", draftOwnerId),
+    fields: sessionDraftFields,
+    actionState: state,
+  });
 
   return (
-    <form action={action} aria-label="Create a Session" className="space-y-9">
+    <form
+      action={action}
+      aria-label="Create a Session"
+      className="space-y-9"
+      ref={formRef}
+    >
       <ActionStatus state={state} />
+      <DraftRestoredNotice restored={restored} />
 
       <fieldset>
         <legend className="text-xl font-bold text-white">

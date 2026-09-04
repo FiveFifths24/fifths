@@ -3,6 +3,14 @@
 import { useActionState } from "react";
 
 import { ActionStatus } from "@/components/forms/action-status";
+import {
+  DraftRestoredNotice,
+  useFormDraft,
+} from "@/components/forms/form-draft";
+import {
+  campaignDraftFields,
+  formDraftStorageKey,
+} from "@/components/forms/form-draft-config";
 import { SubmitButton } from "@/components/forms/submit-button";
 import { TextField } from "@/components/forms/text-field";
 import { firstFieldError, initialActionState } from "@/features/auth/state";
@@ -140,15 +148,22 @@ export function CreateCampaignForm({
   circles,
   interests,
   modes,
+  draftOwnerId,
 }: {
   circles: Array<Pick<Circle, "id" | "name">>;
   interests: Array<Pick<Interest, "id" | "name">>;
   modes: Array<Pick<Mode, "id" | "name">>;
+  draftOwnerId: string;
 }) {
   const [state, action] = useActionState(
     createCampaignAction,
     initialActionState,
   );
+  const { formRef, restored } = useFormDraft({
+    storageKey: formDraftStorageKey("realm-campaign-create", draftOwnerId),
+    fields: campaignDraftFields,
+    actionState: state,
+  });
   const value = (name: string, fallback = "") => {
     const stored = state.values?.[name];
 
@@ -164,8 +179,10 @@ export function CreateCampaignForm({
       action={action}
       aria-label="Create a Fifth Realm campaign"
       className="space-y-8"
+      ref={formRef}
     >
       <ActionStatus state={state} />
+      <DraftRestoredNotice restored={restored} />
 
       {/* =====================================================
           STEP 1 — THE CAMPAIGN

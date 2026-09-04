@@ -178,6 +178,7 @@ export default async function AccountPage({
               </div>
             </div>
             <ProfileSettingsForm
+              draftOwnerId={userData.user.id}
               profile={{
                 username: profile.username ?? "",
                 usernameChangedAt: profile.username_changed_at,

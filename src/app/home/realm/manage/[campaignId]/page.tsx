@@ -10,6 +10,8 @@ import {
 } from "lucide-react";
 
 import { AccountUnavailable } from "@/components/account/account-unavailable";
+import { ClearFormDraft } from "@/components/forms/form-draft";
+import { formDraftStorageKey } from "@/components/forms/form-draft-config";
 import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button-link";
 import { PreviewState } from "@/components/ui/preview-state";
@@ -182,10 +184,18 @@ export default async function ManageCampaignPage({
 
       <div className="mt-6 space-y-3">
         {parameters?.created === "1" ? (
-          <StatusMessage tone="success">
-            Campaign draft created. Review the details before opening
-            recruitment.
-          </StatusMessage>
+          <>
+            <ClearFormDraft
+              storageKey={formDraftStorageKey(
+                "realm-campaign-create",
+                campaign.created_by,
+              )}
+            />
+            <StatusMessage tone="success">
+              Campaign draft created. Review the details before opening
+              recruitment.
+            </StatusMessage>
+          </>
         ) : null}
 
         {parameters?.status === "updated" ? (

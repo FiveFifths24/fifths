@@ -3,7 +3,11 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-import type { ActionState } from "@/features/auth/state";
+import {
+  actionValuesFromFormData,
+  type ActionState,
+} from "@/features/auth/state";
+import { sessionDraftFields } from "@/components/forms/form-draft-config";
 import { createClient } from "@/lib/supabase/server";
 
 import {
@@ -17,6 +21,7 @@ export async function createSessionAction(
   _previousState: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
+  const values = actionValuesFromFormData(formData, sessionDraftFields);
   const parsed = createSessionSchema.safeParse({
     title: formData.get("title"),
     description: formData.get("description"),
@@ -39,6 +44,7 @@ export async function createSessionAction(
       status: "error",
       message: "Check the highlighted Session details and try again.",
       fieldErrors: parsed.error.flatten().fieldErrors,
+      values,
     };
   }
 
