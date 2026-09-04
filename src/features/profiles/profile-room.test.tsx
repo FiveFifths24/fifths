@@ -44,17 +44,17 @@ function renderRoom() {
 describe("ProfileRoom", () => {
   beforeEach(() => window.localStorage.clear());
 
-  it("provides the profile room with an owner edit path", () => {
+  it("provides the launch room summary with an owner edit path", () => {
     renderRoom();
 
     expect(
       screen.getByRole("heading", { name: "My Room" }),
     ).toBeInTheDocument();
+    expect(screen.getByRole("combobox", { name: "Room light" })).toBeVisible();
     expect(screen.getByRole("link", { name: "Edit My Room" })).toHaveAttribute(
       "href",
       "/account#edit-my-room",
     );
-    expect(screen.getByText("Profile Space")).toBeInTheDocument();
   });
 
   it("keeps legacy room content available while the launch profile is active", () => {

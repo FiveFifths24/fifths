@@ -3,6 +3,21 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import type { ActionState } from "@/features/auth/state";
+import {
+  ImageValidationError,
+  prepareImageForModeration,
+  type PreparedImage,
+} from "@/features/media-moderation/image-validation";
+import {
+  discardUnreferencedModeratedImage,
+  moderatePreparedProfileImage,
+  removePublishedModeratedImage,
+} from "@/features/media-moderation/pipeline";
+import { ModerationConfigurationError } from "@/features/media-moderation/provider";
+import type {
+  MediaUploadResult,
+  MediaUploadSurface,
+} from "@/features/media-moderation/types";
 import { createClient } from "@/lib/supabase/server";
 import {
   blockedWordIdSchema,
@@ -14,13 +29,6 @@ import {
   targetProfileSchema,
 } from "./schemas";
 
-const allowedImageTypes = new Map([
-  ["image/jpeg", "jpg"],
-  ["image/png", "png"],
-  ["image/webp", "webp"],
-  ["image/gif", "gif"],
-]);
-
 function safeReturnPath(value: FormDataEntryValue | null) {
   return typeof value === "string" &&
     /^\/(?!\/)[A-Za-z0-9/_?=&%#.-]*$/.test(value)
@@ -28,32 +36,48 @@ function safeReturnPath(value: FormDataEntryValue | null) {
     : "/home/people";
 }
 
-async function uploadProfileImage(
-  kind: "avatar" | "landscape" | "background" | "featured" | "featured-2",
+type PreparedProfileUpload = {
+  surface: MediaUploadSurface;
+  currentPath: string | null;
+  prepared: PreparedImage | null;
+};
+
+async function prepareProfileUpload(
+  surface: MediaUploadSurface,
   file: FormDataEntryValue | null,
-  userId: string,
   currentPath: string | null,
-) {
-  if (!(file instanceof File) || file.size === 0) return currentPath;
-  const extension = allowedImageTypes.get(file.type);
-  if (
-    !extension ||
-    (file.type === "image/gif" && kind !== "landscape") ||
-    file.size > 5 * 1024 * 1024
-  ) {
-    throw new Error("IMAGE_INVALID");
+): Promise<PreparedProfileUpload> {
+  return {
+    surface,
+    currentPath,
+    prepared:
+      file instanceof File && file.size > 0
+        ? await prepareImageForModeration(file)
+        : null,
+  };
+}
+
+async function moderateProfileUpload(
+  upload: PreparedProfileUpload,
+): Promise<MediaUploadResult> {
+  if (!upload.prepared) {
+    return { path: upload.currentPath, outcome: "unchanged" };
   }
-  const supabase = await createClient();
-  const path = `${userId}/${kind}-${crypto.randomUUID()}.${extension}`;
-  const { error } = await supabase.storage
-    .from("profile-media")
-    .upload(path, file, {
-      cacheControl: "3600",
-      contentType: file.type,
-      upsert: true,
-    });
-  if (error) throw new Error("IMAGE_UPLOAD_FAILED");
-  return path;
+  return moderatePreparedProfileImage(
+    upload.prepared,
+    upload.surface,
+    upload.currentPath,
+  );
+}
+
+async function discardApprovedUploads(results: MediaUploadResult[]) {
+  await Promise.allSettled(
+    results.flatMap((result) =>
+      result.outcome === "approved" && result.path
+        ? [discardUnreferencedModeratedImage(result.path)]
+        : [],
+    ),
+  );
 }
 
 export async function updateProfileSettingsAction(
@@ -130,36 +154,70 @@ export async function updateProfileSettingsAction(
       )
       .eq("id", userData.user.id)
       .maybeSingle();
-    const avatarPath = await uploadProfileImage(
-      "avatar",
+    const imageEntries = [
       formData.get("avatar"),
-      userData.user.id,
-      current?.avatar_url ?? null,
-    );
-    const landscapePath = await uploadProfileImage(
-      "landscape",
       formData.get("landscape"),
-      userData.user.id,
-      current?.cover_image_url ?? null,
-    );
-    const backgroundPath = await uploadProfileImage(
-      "background",
       formData.get("background"),
-      userData.user.id,
-      current?.background_image_url ?? null,
-    );
-    const featuredPath = await uploadProfileImage(
-      "featured",
       formData.get("featuredProfileImage"),
-      userData.user.id,
-      current?.featured_profile_image_url ?? null,
-    );
-    const featuredPath2 = await uploadProfileImage(
-      "featured-2",
       formData.get("featuredProfileImage2"),
-      userData.user.id,
-      current?.featured_profile_image_2_url ?? null,
-    );
+    ];
+    const uploadCount = imageEntries.filter(
+      (entry) => entry instanceof File && entry.size > 0,
+    ).length;
+    if (uploadCount) {
+      const { error: rateLimitError } = await supabase.rpc(
+        "claim_media_upload_slots",
+        { p_count: uploadCount },
+      );
+      if (rateLimitError) {
+        return {
+          status: "error",
+          message:
+            "Too many image uploads were attempted. Wait up to an hour and try again.",
+        };
+      }
+    }
+    // Decode and validate every selected file before any storage write occurs.
+    const preparedUploads = await Promise.all([
+      prepareProfileUpload(
+        "profile_avatar",
+        formData.get("avatar"),
+        current?.avatar_url ?? null,
+      ),
+      prepareProfileUpload(
+        "profile_landscape",
+        formData.get("landscape"),
+        current?.cover_image_url ?? null,
+      ),
+      prepareProfileUpload(
+        "profile_wallpaper",
+        formData.get("background"),
+        current?.background_image_url ?? null,
+      ),
+      prepareProfileUpload(
+        "profile_featured",
+        formData.get("featuredProfileImage"),
+        current?.featured_profile_image_url ?? null,
+      ),
+      prepareProfileUpload(
+        "profile_featured_2",
+        formData.get("featuredProfileImage2"),
+        current?.featured_profile_image_2_url ?? null,
+      ),
+    ]);
+    const [avatar, landscape, background, featured, featured2] =
+      await Promise.all([
+        moderateProfileUpload(preparedUploads[0]!),
+        moderateProfileUpload(preparedUploads[1]!),
+        moderateProfileUpload(preparedUploads[2]!),
+        moderateProfileUpload(preparedUploads[3]!),
+        moderateProfileUpload(preparedUploads[4]!),
+      ]);
+    const avatarPath = avatar.path;
+    const landscapePath = landscape.path;
+    const backgroundPath = background.path;
+    const featuredPath = featured.path;
+    const featuredPath2 = featured2.path;
     const { error } = await supabase.rpc("update_profile_experience", {
       p_username: parsed.data.username,
       p_display_name: parsed.data.displayName,
@@ -193,6 +251,13 @@ export async function updateProfileSettingsAction(
       p_latest_pick_url: parsed.data.latestPickUrl,
     });
     if (error) {
+      await discardApprovedUploads([
+        avatar,
+        landscape,
+        background,
+        featured,
+        featured2,
+      ]);
       const errorMessage = error.message.toUpperCase();
       return {
         status: "error",
@@ -213,6 +278,7 @@ export async function updateProfileSettingsAction(
     );
 
     if (spotlightCategoryError) {
+      await discardApprovedUploads([featured, featured2]);
       return {
         status: "error",
         message: "Your Current Focus category could not be saved.",
@@ -236,6 +302,7 @@ export async function updateProfileSettingsAction(
     );
 
     if (currentFieldsError) {
+      await discardApprovedUploads([featured, featured2]);
       console.error("set_profile_current_fields failed:", currentFieldsError);
 
       return {
@@ -248,6 +315,7 @@ export async function updateProfileSettingsAction(
       { p_featured_profile_image_url: featuredPath ?? "" },
     );
     if (featuredImageError) {
+      await discardApprovedUploads([featured, featured2]);
       return {
         status: "error",
         message: "Your featured profile image could not be saved.",
@@ -261,6 +329,7 @@ export async function updateProfileSettingsAction(
     );
 
     if (featuredImage2Error) {
+      await discardApprovedUploads([featured2]);
       return {
         status: "error",
         message: "Your second featured profile image could not be saved.",
@@ -285,7 +354,7 @@ export async function updateProfileSettingsAction(
       Boolean(currentPath && !activePaths.has(currentPath)),
     );
     if (replacedPaths.length) {
-      await supabase.storage.from("profile-media").remove(replacedPaths);
+      await Promise.all(replacedPaths.map(removePublishedModeratedImage));
     }
 
     revalidatePath("/account");
@@ -295,6 +364,27 @@ export async function updateProfileSettingsAction(
     }
     revalidatePath(`/home/profiles/${parsed.data.username}`);
     revalidatePath(`/profiles/${parsed.data.username}`);
+    const uploadOutcomes = [
+      avatar.outcome,
+      landscape.outcome,
+      background.outcome,
+      featured.outcome,
+      featured2.outcome,
+    ];
+    if (uploadOutcomes.includes("rejected")) {
+      return {
+        status: "error",
+        message:
+          "Your other profile changes were saved, but an image was not replaced because it violates SIGNAL's content guidelines.",
+      };
+    }
+    if (uploadOutcomes.includes("review")) {
+      return {
+        status: "pending",
+        message:
+          "Your other profile changes were saved. An image is pending review, so your current approved image remains visible.",
+      };
+    }
     return {
       status: "success",
       message: "Your SIGNAL profile has been updated.",
@@ -303,10 +393,10 @@ export async function updateProfileSettingsAction(
     return {
       status: "error",
       message:
-        error instanceof Error && error.message === "IMAGE_INVALID"
-          ? "Use a JPG, PNG, or WebP image—or a GIF for the landscape—no larger than 5 MB."
-          : error instanceof Error && error.message === "IMAGE_UPLOAD_FAILED"
-            ? "Your image could not be uploaded. Please try again."
+        error instanceof ImageValidationError
+          ? "Use a valid JPG, PNG, or WebP image between 50 × 50 pixels and 5 MB."
+          : error instanceof ModerationConfigurationError
+            ? "Image scanning is unavailable, so no image was published. Please try again later."
             : "Your profile could not be updated right now. Please try again shortly.",
     };
   }

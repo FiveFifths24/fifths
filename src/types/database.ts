@@ -1120,6 +1120,56 @@ export type Database = {
         Update: never;
         Relationships: [];
       };
+      media_moderation_records: {
+        Row: {
+          id: string;
+          user_id: string;
+          upload_surface: Database["public"]["Enums"]["media_upload_surface"];
+          status: Database["public"]["Enums"]["media_moderation_status"];
+          quarantine_bucket: string;
+          quarantine_path: string;
+          published_bucket: string | null;
+          published_path: string | null;
+          original_mime_type: string;
+          normalized_mime_type: string;
+          original_byte_size: number;
+          normalized_byte_size: number;
+          image_width: number;
+          image_height: number;
+          file_sha256: string;
+          provider: string | null;
+          provider_request_id: string | null;
+          categories: Json;
+          provider_metadata: Json;
+          decision_reason: string | null;
+          legal_escalation_required: boolean;
+          enforcement_metadata: Json;
+          moderated_at: string | null;
+          reviewed_at: string | null;
+          reviewer_id: string | null;
+          quarantine_deleted_at: string | null;
+          expires_at: string;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: Partial<
+          Database["public"]["Tables"]["media_moderation_records"]["Row"]
+        > & {
+          user_id: string;
+          upload_surface: Database["public"]["Enums"]["media_upload_surface"];
+          quarantine_path: string;
+          original_mime_type: string;
+          original_byte_size: number;
+          normalized_byte_size: number;
+          image_width: number;
+          image_height: number;
+          file_sha256: string;
+        };
+        Update: Partial<
+          Database["public"]["Tables"]["media_moderation_records"]["Row"]
+        >;
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: {
@@ -1154,6 +1204,23 @@ export type Database = {
         Returns: undefined;
       };
       cleanup_signal_rate_limits: { Args: never; Returns: number };
+      claim_media_upload_slots: {
+        Args: { p_count: number };
+        Returns: undefined;
+      };
+      begin_media_moderation_upload: {
+        Args: {
+          p_upload_surface: Database["public"]["Enums"]["media_upload_surface"];
+          p_quarantine_path: string;
+          p_original_mime_type: string;
+          p_normalized_byte_size: number;
+          p_original_byte_size: number;
+          p_image_width: number;
+          p_image_height: number;
+          p_file_sha256: string;
+        };
+        Returns: string;
+      };
       set_spotlight_category: {
         Args: {
           p_spotlight_category: string;
@@ -1889,6 +1956,14 @@ export type Database = {
         | "commons_created";
       signal_activity_entity_type:
         "profile" | "session" | "circle" | "opportunity";
+      media_upload_surface:
+        | "profile_avatar"
+        | "profile_featured"
+        | "profile_featured_2"
+        | "profile_wallpaper"
+        | "profile_landscape";
+      media_moderation_status:
+        "pending" | "approved" | "review" | "rejected" | "error" | "expired";
       app_role:
         | "member"
         | "host"

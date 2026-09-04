@@ -47,7 +47,14 @@ describe("ProfileLaunchView", () => {
     render(
       <ProfileLaunchView
         experience={experience}
-        featuredConnections={[]}
+        featuredConnections={[
+          {
+            id: "00000000-0000-4000-8000-000000000002",
+            username: "friend",
+            displayName: "A Friend",
+            avatarUrl: null,
+          },
+        ]}
         isOwner
         profile={{
           id: "00000000-0000-4000-8000-000000000001",
@@ -64,6 +71,7 @@ describe("ProfileLaunchView", () => {
     expect(screen.getByRole("heading", { name: "Seven" })).toBeInTheDocument();
     expect(screen.getByText("Mood:")).toBeInTheDocument();
     expect(screen.getByText("Founder and gamer.")).toBeInTheDocument();
+    expect(screen.getByText("Friend Spotlight")).toBeInTheDocument();
     expect(screen.getByText("Soundtrack")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /Latest Video/ })).toHaveAttribute(
       "href",

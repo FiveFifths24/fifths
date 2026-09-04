@@ -38,10 +38,51 @@ jobs:
         run: npm run test
       - name: Build production application
         run: npm run build
-      - name: Audit runtime dependencies
-        run: npm audit --omit=dev
-      - name: Audit complete dependency tree
-        run: npm audit
+      - name: Audit dependencies
+        env:
+          NPM_CONFIG_FETCH_RETRIES: 0
+          NPM_CONFIG_FETCH_TIMEOUT: 60000
+        run: |
+          audit_with_retry() {
+            local attempt=1
+            local delay=5
+            local max_attempts=3
+            local output_file
+            local status
+            output_file="$(mktemp)"
+
+            while true; do
+              set +e
+              npm audit "$@" 2>&1 | tee "$output_file"
+              status=${PIPESTATUS[0]}
+              set -e
+
+              if [ "$status" -eq 0 ]; then
+                rm -f "$output_file"
+                return 0
+              fi
+
+              if ! grep -Eqi \
+                '408 Request Timeout|429 Too Many Requests|500 Internal Server Error|502 Bad Gateway|503 Service Unavailable|504 Gateway Timeout|network timeout|EAI_AGAIN|ECONNRESET|ECONNREFUSED|ETIMEDOUT|ENETUNREACH|socket hang up' \
+                "$output_file"; then
+                rm -f "$output_file"
+                return "$status"
+              fi
+
+              if [ "$attempt" -ge "$max_attempts" ]; then
+                rm -f "$output_file"
+                return "$status"
+              fi
+
+              echo "::warning::npm audit service unavailable; retrying in ${delay}s (attempt $((attempt + 1))/${max_attempts})."
+              sleep "$delay"
+              attempt=$((attempt + 1))
+              delay=$((delay * 2))
+            done
+          }
+
+          audit_with_retry --omit=dev
+          audit_with_retry
 
   browser:
     name: Browser, accessibility, and responsive review
