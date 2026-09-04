@@ -253,7 +253,7 @@ export function CreateOpportunityForm({
           >
             <option value="">Choose Paid or Unpaid</option>
             <option value="paid">Paid opportunity</option>
-            <option value="unpaid">Unpaid / community collaboration</option>
+            <option value="unpaid">Unpaid / Community Collaboration</option>
           </SelectField>
         </div>
 
@@ -474,7 +474,7 @@ export function CreateOpportunityForm({
         community.
       </div>
 
-      <SubmitButton pendingLabel="Creating draft…">
+      <SubmitButton pendingLabel="Creating Draft…">
         Create Draft Opportunity
       </SubmitButton>
     </form>

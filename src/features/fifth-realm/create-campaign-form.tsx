@@ -177,7 +177,7 @@ export function CreateCampaignForm({
   return (
     <form
       action={action}
-      aria-label="Create a Fifth Realm campaign"
+      aria-label="Create a Fifth Realm Campaign"
       className="space-y-8"
       ref={formRef}
     >

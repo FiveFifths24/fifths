@@ -200,12 +200,12 @@ export default async function OpportunityDetailPage({
             {opportunity.is_paid ? (
               <Badge className="flex items-center gap-1.5 border-emerald-700 bg-emerald-950/60 text-emerald-200">
                 <CircleDollarSign aria-hidden="true" className="size-3.5" />
-                Paid opportunity
+                Paid Opportunity
               </Badge>
             ) : (
               <Badge className="flex items-center gap-1.5 border-[#f359d2]/60 bg-black/30 text-[#f359d2]">
                 <HeartHandshake aria-hidden="true" className="size-3.5" />
-                Unpaid / community
+                Unpaid / Community
               </Badge>
             )}
 
@@ -278,7 +278,7 @@ export default async function OpportunityDetailPage({
                     : "mt-1 font-bold text-[#f359d2]"
                 }
               >
-                {opportunity.is_paid ? "Paid" : "Unpaid / community"}
+                {opportunity.is_paid ? "Paid" : "Unpaid / Community"}
               </dd>
             </div>
           </dl>

@@ -238,7 +238,7 @@ export default async function ManageCreatorCommonsPage({
                 )}
 
                 {showCreateForm
-                  ? "Return to opportunities"
+                  ? "Return To Opportunities"
                   : "Create Private Draft"}
               </span>
             </ButtonLink>
@@ -416,7 +416,7 @@ export default async function ManageCreatorCommonsPage({
                         className="border-neutral-600 bg-neutral-950 text-white hover:border-white"
                         href={`/home/commons/manage/${card.id}`}
                       >
-                        View management record
+                        View Management Record
                       </ButtonLink>
                     </div>
                   ))}

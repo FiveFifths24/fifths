@@ -9,10 +9,12 @@ export function FlashStatusMessage({
   param,
   value,
   children,
+  tone = "success",
 }: {
   param: string;
   value: string;
   children: React.ReactNode;
+  tone?: "success" | "error";
 }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -21,7 +23,6 @@ export function FlashStatusMessage({
     if (searchParams.get(param) !== value) return;
 
     const nextParams = new URLSearchParams(searchParams.toString());
-
     nextParams.delete(param);
 
     const nextUrl = nextParams.size
@@ -31,5 +32,5 @@ export function FlashStatusMessage({
     window.history.replaceState(null, "", nextUrl);
   }, [param, pathname, searchParams, value]);
 
-  return <StatusMessage tone="success">{children}</StatusMessage>;
+  return <StatusMessage tone={tone}>{children}</StatusMessage>;
 }

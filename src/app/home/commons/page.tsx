@@ -301,7 +301,7 @@ export default async function CreatorCommonsPage() {
             id="opportunity-discovery"
           >
             {pulseInput
-              ? "Opportunities that fit right now"
+              ? "Opportunities That Fit Right Now"
               : "Published Opportunities"}
           </h2>
         </div>

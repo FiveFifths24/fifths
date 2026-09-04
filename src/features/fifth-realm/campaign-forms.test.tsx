@@ -20,7 +20,7 @@ describe("Fifth Realm forms", () => {
       />,
     );
     expect(
-      screen.getByRole("form", { name: "Create a Fifth Realm campaign" }),
+      screen.getByRole("form", { name: "Create a Fifth Realm Campaign" }),
     ).toBeInTheDocument();
     expect(screen.getByLabelText("Campaign Premise")).toBeRequired();
     expect(screen.getByLabelText("Expectations")).toBeRequired();
@@ -38,7 +38,7 @@ describe("Fifth Realm forms", () => {
       <CampaignApplicationForm campaignId="aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa" />,
     );
     expect(
-      screen.getByRole("form", { name: "Apply to this Fifth Realm campaign" }),
+      screen.getByRole("form", { name: "Apply to this Fifth Realm Campaign" }),
     ).toBeInTheDocument();
     expect(
       screen.getByLabelText(/i have read this campaign’s safety expectations/i),
