@@ -79,9 +79,37 @@ uses an explicit allow adapter. The adapter refuses to start when
    content.
 
 The adapter sends a metadata-free, maximum-2048-pixel derivative and requests
-Hate, SelfHarm, Sexual, and Violence analysis. Severity 0 allows, severity 2
-holds for review, and severity 4 or 6 blocks. These thresholds are server-side
-and are not returned to members.
+Hate, SelfHarm, Sexual, and Violence analysis. Decisions and provider scores
+remain server-side and are never returned to members.
+
+Azure's image response contains a broad category and severity, but it does not
+return dependable scene context such as real versus fictional, historical use
+versus propaganda, or educational use versus exploitation. SIGNAL therefore
+uses a context-preserving policy:
+
+- Clearly safe imagery is allowed.
+- Azure's low Sexual signal is allowed because Microsoft's image taxonomy
+  explicitly includes fashion modeling, artistic figure work, and body art.
+- Azure's low Violence signal is allowed because the taxonomy explicitly
+  includes displayed or animated weapons, non-realistic violence, and low-gore
+  fictional imagery.
+- Medium Sexual or Violence signals are held for review instead of blocked.
+- Hate and SelfHarm signals are held for review because their legitimacy often
+  depends on historical, journalistic, educational, medical, or artistic
+  context.
+- Azure's high Sexual signal is blocked because that tier is defined as
+  explicit sexual acts or illegal sexual content.
+- High Violence, Hate, or SelfHarm signals stay private for review because the
+  category/severity response alone does not prove that the image is real-world
+  gore, extremist propaganda, or promotion of harm.
+
+This means swimwear, non-explicit lingerie, cosplay, fantasy/game art,
+fictional violence, contextual weapons, moderate fictional blood, artistic
+figure work, breastfeeding, educational/medical anatomy, tattoos/body art,
+fashion, and suggestive but non-explicit imagery are not rejected merely for
+skin, weapons, blood, or mature themes. If Azure cannot establish the needed
+context, SIGNAL chooses REVIEW rather than BLOCK. Review items remain private
+and never replace an already approved image.
 
 Azure's general image taxonomy is not a specialized CSAM detection system. For
 specialist or multi-provider coverage, configure the normalized webhook adapter:
@@ -120,6 +148,15 @@ It must return:
   "suspectedMinorSexualContent": false
 }
 ```
+
+The webhook provider must apply the same content policy. It should return ALLOW
+for clearly legitimate creative, gaming, lifestyle, fashion, cosplay, or
+educational imagery; REVIEW when sexual, violent, hateful, or graphic context
+is genuinely ambiguous; and BLOCK only for clear prohibited content such as
+explicit pornography or sexual acts, sexual exploitation, suspected sexual
+content involving minors, severe graphic real-world gore, or hateful/extremist
+propaganda. A contextual provider must not infer prohibition from skin,
+weapons, blood, or mature themes alone.
 
 Scores must be between 0 and 1. A positive `sexual_minors` score or
 `suspectedMinorSexualContent: true` is forced to BLOCK, deleted from quarantine

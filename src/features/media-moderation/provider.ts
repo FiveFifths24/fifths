@@ -35,10 +35,41 @@ const azureResponseSchema = z.object({
   ),
 });
 
-function outcomeFromScores(categories: ModerationCategoryScores) {
-  const scores = Object.values(categories);
-  if (scores.some((score) => score >= 4 / 6)) return "rejected" as const;
-  if (scores.some((score) => score >= 2 / 6)) return "review" as const;
+type AzureAnalysis = z.infer<typeof azureResponseSchema>["categoriesAnalysis"];
+
+/**
+ * Azure returns only a broad harm category and a four-level severity. Its low
+ * Sexual tier explicitly includes fashion, figure art, and body art, while its
+ * low Violence tier includes fictional/game violence and displayed weapons.
+ * Those signals are therefore legitimate enough to allow on their own.
+ *
+ * Medium signals and non-sexual high signals lack the context needed to tell,
+ * for example, fiction from real-world harm or education from propaganda. They
+ * stay private for review. Azure's high Sexual tier is reserved for explicit
+ * sexual acts and illegal sexual content, so that tier can be blocked without
+ * publishing it or routing it through the ordinary review gallery.
+ */
+function outcomeFromAzureAnalysis(analysis: AzureAnalysis) {
+  if (
+    analysis.some(
+      ({ category, severity }) => category === "Sexual" && severity === 6,
+    )
+  ) {
+    return "rejected" as const;
+  }
+
+  if (
+    analysis.some(({ category, severity }) => {
+      if (severity === 0) return false;
+      if (category === "Sexual" || category === "Violence") {
+        return severity >= 4;
+      }
+      return true;
+    })
+  ) {
+    return "review" as const;
+  }
+
   return "approved" as const;
 }
 
@@ -81,8 +112,9 @@ function createAzureModerator(
       for (const item of parsed.data.categoriesAnalysis) {
         const score = item.severity / 6;
         if (item.category === "Sexual") {
-          categories[item.severity >= 4 ? "sexual_explicit" : "sexual_nudity"] =
-            score;
+          categories[
+            item.severity === 6 ? "sexual_explicit" : "sexual_nudity"
+          ] = score;
         } else if (item.category === "Violence") {
           categories.graphic_violence = score;
         } else if (item.category === "Hate") {
@@ -93,7 +125,7 @@ function createAzureModerator(
       }
 
       return {
-        outcome: outcomeFromScores(categories),
+        outcome: outcomeFromAzureAnalysis(parsed.data.categoriesAnalysis),
         categories,
         provider: "azure-content-safety",
         requestId: response.headers.get("apim-request-id") ?? undefined,
