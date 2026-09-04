@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Bell, CheckCheck } from "lucide-react";
+import { Bell } from "lucide-react";
 import { AccountUnavailable } from "@/components/account/account-unavailable";
 import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button-link";
@@ -92,7 +92,7 @@ export default async function NotificationsPage({
       </div>
       {parameters?.read === "updated" || parameters?.read === "all" ? (
         <StatusMessage className="mt-7" tone="success">
-          You're All Caught Up.
+          You&apos;re All Caught Up.
         </StatusMessage>
       ) : null}
       {parameters?.read === "error" ? (

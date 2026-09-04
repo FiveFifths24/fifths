@@ -5,7 +5,14 @@ const publicEnvironmentSchema = z.object({
   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: z.string().min(20),
 });
 
+const serverSupabaseEnvironmentSchema = publicEnvironmentSchema.extend({
+  SUPABASE_SERVICE_ROLE_KEY: z.string().min(20),
+});
+
 export type SupabaseEnvironment = z.infer<typeof publicEnvironmentSchema>;
+export type ServerSupabaseEnvironment = z.infer<
+  typeof serverSupabaseEnvironmentSchema
+>;
 
 export function getSupabaseEnvironment(
   environment: NodeJS.ProcessEnv = process.env,
@@ -28,6 +35,18 @@ export function requireSupabaseEnvironment() {
     );
   }
   return environment;
+}
+
+export function requireServerSupabaseEnvironment(
+  environment: NodeJS.ProcessEnv = process.env,
+): ServerSupabaseEnvironment {
+  const result = serverSupabaseEnvironmentSchema.safeParse(environment);
+  if (!result.success) {
+    throw new Error(
+      "Supabase server environment variables are not configured.",
+    );
+  }
+  return result.data;
 }
 
 export function getSiteUrl(environment: NodeJS.ProcessEnv = process.env) {

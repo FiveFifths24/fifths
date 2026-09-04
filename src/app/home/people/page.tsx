@@ -7,7 +7,6 @@ import {
   SlidersHorizontal,
   Sparkles,
   UserRoundPlus,
-  UsersRound,
 } from "lucide-react";
 
 import { StatusMessage } from "@/components/ui/status-message";

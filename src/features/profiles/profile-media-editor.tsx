@@ -209,9 +209,9 @@ export function ProfileMediaEditor({
   return (
     <div className="grid gap-6 xl:grid-cols-2">
       <MediaFrameEditor
-        accept="image/jpeg,image/png,image/webp,image/gif"
+        accept="image/jpeg,image/png,image/webp"
         currentUrl={landscape.currentUrl}
-        description="This appears only inside the wide profile header. GIFs are supported."
+        description="This appears only inside the wide profile header."
         initialFit={landscape.fit}
         initialPositionX={landscape.positionX}
         initialPositionY={landscape.positionY}

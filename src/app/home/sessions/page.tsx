@@ -32,6 +32,8 @@ export default async function SessionsPage() {
     return <AccountUnavailable />;
   }
 
+  // A server request needs a current visibility cutoff; it is not render state.
+  // eslint-disable-next-line react-hooks/purity
   const publicCutoff = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
   const { data: userData } = await supabase.auth.getUser();
 

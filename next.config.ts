@@ -53,8 +53,9 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   experimental: {
     serverActions: {
-      // The profile form can contain three independently validated 5 MB images.
-      bodySizeLimit: "18mb",
+      // The profile form can contain five independently validated 5 MB images.
+      // Each file is still byte-decoded and capped at 5 MB on the server.
+      bodySizeLimit: "28mb",
     },
   },
   async headers() {

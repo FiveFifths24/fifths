@@ -1,6 +1,10 @@
 import { createServerClient } from "@supabase/ssr";
+import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
-import { requireSupabaseEnvironment } from "@/lib/env";
+import {
+  requireServerSupabaseEnvironment,
+  requireSupabaseEnvironment,
+} from "@/lib/env";
 import type { Database } from "@/types/database";
 
 export async function createClient() {
@@ -25,6 +29,17 @@ export async function createClient() {
           }
         },
       },
+    },
+  );
+}
+
+export function createServiceClient() {
+  const environment = requireServerSupabaseEnvironment();
+  return createSupabaseClient<Database>(
+    environment.NEXT_PUBLIC_SUPABASE_URL,
+    environment.SUPABASE_SERVICE_ROLE_KEY,
+    {
+      auth: { autoRefreshToken: false, persistSession: false },
     },
   );
 }
