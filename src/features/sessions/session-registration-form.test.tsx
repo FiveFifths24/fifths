@@ -18,7 +18,7 @@ describe("SessionRegistrationForm", () => {
       screen.getByRole("form", { name: "Register for this Session" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "Register for Session" }),
+      screen.getByRole("button", { name: "Register For Session" }),
     ).toBeEnabled();
   });
 
