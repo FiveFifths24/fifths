@@ -89,7 +89,7 @@ export function OpportunityCard({ item }: { item: OpportunityCardItem }) {
         ) : (
           <Badge className="flex items-center gap-1.5 border-fuchsia-900 bg-fuchsia-950/40 text-fuchsia-200">
             <HeartHandshake aria-hidden="true" className="size-3.5" />
-            Unpaid / community
+            Unpaid / Community
           </Badge>
         )}
 
