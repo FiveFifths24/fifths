@@ -13,7 +13,7 @@ const footerGroups = [
       ["Sessions", "/home/sessions"],
       ["Creator Commons", "/home/commons"],
       ["Passport", "/home/passport"],
-      ["eHub", "https://fivefifthsnp.com/ehub"],
+      ["eHub", "/home/ehub"],
     ],
   },
   {
