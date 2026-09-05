@@ -6,13 +6,13 @@ const footerGroups = [
   {
     title: "Explore",
     links: [
-      ["Ecosystem", "/ecosystem"],
+      ["Ecosystem", "/home/discover"],
       ["Pulse", "/home/pulse"],
-      ["Circles", "/circles"],
-      ["Fifth Realm", "/realm"],
+      ["Circles", "/home/circles"],
+      ["Fifth Realm", "/home/realm"],
       ["Sessions", "/home/sessions"],
-      ["Creator Commons", "/commons"],
-      ["Passport", "/passport"],
+      ["Creator Commons", "/home/commons"],
+      ["Passport", "/home/passport"],
       ["eHub", "https://fivefifthsnp.com/ehub"],
     ],
   },

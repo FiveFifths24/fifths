@@ -19,6 +19,7 @@ import {
 import { PulseLivingBackground } from "@/components/effects/pulse-living-background";
 import { PulseHero } from "@/components/hero/pulse-hero";
 import { Container } from "@/components/ui/container";
+import { EHubLandingCta } from "@/features/ehub/ehub-landing-cta";
 
 const signalJourney = [
   {
@@ -141,6 +142,7 @@ export default function HomePage() {
   return (
     <main className="relative isolate min-h-screen overflow-hidden bg-[#020205] text-white">
       <PulseLivingBackground />
+      <EHubLandingCta />
 
       <div
         aria-hidden="true"
