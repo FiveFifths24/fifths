@@ -55,9 +55,7 @@ export function EHubLandingCta() {
   return (
     <div
       className={`fixed right-4 bottom-4 z-[90] w-[360px] max-w-[calc(100vw-2rem)] transition-all duration-500 ease-out sm:right-6 sm:bottom-6 ${
-        hasEntered
-          ? "translate-y-0 opacity-100"
-          : "translate-y-12 opacity-0"
+        hasEntered ? "translate-y-0 opacity-100" : "translate-y-12 opacity-0"
       }`}
     >
       <div className="rounded-[1.5rem] bg-[linear-gradient(90deg,#3b82f6_0%,#8b5cf6_25%,#f472b6_50%,#fb923c_75%,#a3e635_100%)] p-px shadow-[0_0_45px_rgba(139,92,246,0.2)]">
@@ -81,8 +79,7 @@ export function EHubLandingCta() {
 
           <p className="mt-3 text-sm leading-6 text-white/48">
             See how Five Fifths is bringing gaming, technology, creativity,
-            workforce development, and community together in one physical
-            space.
+            workforce development, and community together in one physical space.
           </p>
 
           <div className="mt-5 flex flex-col gap-2">

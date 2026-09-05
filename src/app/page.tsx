@@ -143,7 +143,7 @@ export default function HomePage() {
     <main className="relative isolate min-h-screen overflow-hidden bg-[#020205] text-white">
       <PulseLivingBackground />
       <EHubLandingCta />
-      
+
       <div
         aria-hidden="true"
         className="pointer-events-none fixed inset-0 z-[1] overflow-hidden"

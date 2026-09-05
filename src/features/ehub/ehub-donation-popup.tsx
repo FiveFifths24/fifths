@@ -53,11 +53,11 @@ export function EHubDonationPopup() {
   }
 
   return (
-<div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/65 px-4 backdrop-blur-md">
-<div className="relative w-[520px] max-w-[calc(100vw-2rem)] rounded-[1.75rem] bg-[linear-gradient(135deg,#3b82f6_0%,#8b5cf6_25%,#f472b6_50%,#fb923c_75%,#a3e635_100%)] p-px shadow-[0_0_65px_rgba(139,92,246,0.24)]">
-            <div
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/65 px-4 backdrop-blur-md">
+      <div className="relative w-[520px] max-w-[calc(100vw-2rem)] rounded-[1.75rem] bg-[linear-gradient(135deg,#3b82f6_0%,#8b5cf6_25%,#f472b6_50%,#fb923c_75%,#a3e635_100%)] p-px shadow-[0_0_65px_rgba(139,92,246,0.24)]">
+        <div
           aria-labelledby="ehub-donation-title"
-className="relative rounded-[calc(1.75rem-1px)] bg-[#020205]/95 px-8 py-9 text-center backdrop-blur-xl sm:px-10 sm:py-10"
+          className="relative rounded-[calc(1.75rem-1px)] bg-[#020205]/95 px-8 py-9 text-center backdrop-blur-xl sm:px-10 sm:py-10"
           role="dialog"
         >
           <button

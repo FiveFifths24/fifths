@@ -5,15 +5,15 @@ import { Container } from "@/components/ui/container";
 const footerGroups = [
   {
     title: "Explore",
-links: [
-  ["Ecosystem", "/home/discover"],
-  ["Pulse", "/home/pulse"],
-  ["Circles", "/home/circles"],
-  ["Fifth Realm", "/home/realm"],
-  ["Sessions", "/home/sessions"],
-  ["Creator Commons", "/home/commons"],
-  ["Passport", "/home/passport"],
-  ["eHub", "https://fivefifthsnp.com/ehub"],
+    links: [
+      ["Ecosystem", "/home/discover"],
+      ["Pulse", "/home/pulse"],
+      ["Circles", "/home/circles"],
+      ["Fifth Realm", "/home/realm"],
+      ["Sessions", "/home/sessions"],
+      ["Creator Commons", "/home/commons"],
+      ["Passport", "/home/passport"],
+      ["eHub", "https://fivefifthsnp.com/ehub"],
     ],
   },
   {
