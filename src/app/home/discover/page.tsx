@@ -4,13 +4,16 @@ import { redirect } from "next/navigation";
 import {
   ArrowUpRight,
   BriefcaseBusiness,
+  CalendarDays,
   Compass,
   MapPin,
+  MessageCircle,
   MessagesSquare,
   Search,
   Sparkles,
 } from "lucide-react";
 import { StatusMessage } from "@/components/ui/status-message";
+import { openDirectConversationAction } from "@/features/messages/actions";
 import {
   CampaignResultCard,
   CircleResultCard,
@@ -55,39 +58,97 @@ function nearLocation(
   );
 }
 
-function ResultCard({
-  href,
-  eyebrow,
+function SessionResultCard({
+  id,
   title,
   summary,
-  meta,
+  format,
+  location,
+  startsAt,
+  hostUserId,
+  viewerUserId,
 }: {
-  href: string;
-  eyebrow: string;
+  id: string;
   title: string;
   summary?: string | null;
-  meta?: string | null;
+  format: string;
+  location?: string | null;
+  startsAt: string;
+  hostUserId: string;
+  viewerUserId: string;
 }) {
+  const isHost = hostUserId === viewerUserId;
+
   return (
-    <Link
-      className="group rounded-[1.5rem] border border-white/10 bg-black/40 p-5 transition hover:-translate-y-0.5 hover:border-[#ca9aff]/40 hover:bg-[#6c14ce]/[0.08] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f359d2] motion-reduce:transform-none"
-      href={href}
-    >
-      <p className="text-[0.65rem] font-black tracking-[0.18em] text-[#ca9aff] uppercase">
-        {eyebrow}
-      </p>
-      <h3 className="mt-2 text-lg font-bold text-white group-hover:text-[#f6aee7]">
-        {title}
-      </h3>
-      {summary ? (
-        <p className="mt-2 line-clamp-2 text-sm leading-6 text-white/45">
-          {summary}
+    <article className="group relative flex min-h-[16rem] min-w-0 flex-col overflow-hidden rounded-[1.5rem] border border-[#992bff]/20 bg-[radial-gradient(circle_at_top_right,rgba(153,43,255,0.12),transparent_38%),linear-gradient(145deg,rgba(108,20,206,0.07),rgba(0,0,0,0.92))] p-5 text-center transition duration-300 hover:-translate-y-1 hover:border-[#992bff]/45 hover:shadow-[0_20px_55px_rgba(153,43,255,0.08)] focus-within:border-[#992bff]/45 motion-reduce:transform-none">
+      {!isHost ? (
+        <form
+          action={openDirectConversationAction}
+          className="absolute top-4 right-4 z-20"
+        >
+          <input name="targetUserId" type="hidden" value={hostUserId} />
+
+          <button
+            className="inline-flex min-h-9 items-center gap-1.5 rounded-full border border-[#992bff]/25 bg-black/55 px-3 py-1.5 text-xs font-bold text-white/55 backdrop-blur-sm transition hover:border-[#992bff]/55 hover:bg-[#992bff]/15 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#992bff]"
+            type="submit"
+          >
+            <MessageCircle
+              aria-hidden="true"
+              className="size-3.5 text-[#c084fc]"
+            />
+            Message Host
+          </button>
+        </form>
+      ) : null}
+
+      <Link
+        className="flex h-full min-w-0 flex-1 flex-col items-center focus-visible:outline-none"
+        href={`/home/sessions/${id}`}
+      >
+        <div className="flex size-10 items-center justify-center rounded-xl border border-[#992bff]/25 bg-[#992bff]/10">
+          <Sparkles aria-hidden="true" className="size-5 text-[#c084fc]" />
+        </div>
+
+        <p className="mt-3 text-[0.62rem] font-black tracking-[0.18em] text-[#c084fc] uppercase">
+          Session
         </p>
-      ) : null}
-      {meta ? (
-        <p className="mt-4 text-xs font-bold text-white/30">{meta}</p>
-      ) : null}
-    </Link>
+
+        <h3 className="mt-5 max-w-full px-6 text-xl font-bold [overflow-wrap:anywhere] break-words text-white transition group-hover:text-[#ead7ff]">
+          {title}
+        </h3>
+
+        {summary ? (
+          <p className="mt-3 line-clamp-2 max-w-full text-sm leading-6 [overflow-wrap:anywhere] break-words text-white/50">
+            {summary}
+          </p>
+        ) : null}
+
+        <div className="mt-5 flex flex-wrap justify-center gap-2">
+          <span className="rounded-full border border-[#992bff]/15 bg-[#992bff]/[0.06] px-3 py-1.5 text-xs font-bold text-white/55 capitalize">
+            {format.replaceAll("_", " ")}
+          </span>
+
+          {location ? (
+            <span className="flex max-w-full items-center gap-1.5 rounded-full border border-[#992bff]/15 bg-[#992bff]/[0.06] px-3 py-1.5 text-xs font-bold [overflow-wrap:anywhere] break-words text-white/55">
+              <MapPin
+                aria-hidden="true"
+                className="size-3.5 shrink-0 text-[#c084fc]"
+              />
+              {location}
+            </span>
+          ) : null}
+        </div>
+
+        <div className="mt-auto w-full pt-5">
+          <div className="border-t border-[#992bff]/10 pt-4">
+            <p className="flex items-center justify-center gap-2 text-[0.68rem] font-black tracking-[0.14em] text-[#c084fc]/75 uppercase">
+              <CalendarDays aria-hidden="true" className="size-3.5" />
+              {new Date(startsAt).toLocaleDateString()}
+            </p>
+          </div>
+        </div>
+      </Link>
+    </article>
   );
 }
 function PeopleResultCard({
@@ -586,20 +647,38 @@ export default async function DiscoverPage({
         ) : null}
         {sessions.length ? (
           <section aria-labelledby="session-results">
-            <h2 className="text-2xl font-bold text-white" id="session-results">
-              Sessions
-            </h2>
+<div className="flex items-center gap-3">
+  <div className="flex size-9 items-center justify-center rounded-xl border border-[#992bff]/25 bg-[#992bff]/[0.06]">
+    <Sparkles aria-hidden="true" className="size-4 text-[#992bff]" />
+  </div>
+
+  <div>
+    <p className="text-[0.65rem] font-black tracking-[0.18em] text-[#992bff]/65 uppercase">
+      Community Activity
+    </p>
+
+    <h2
+      className="text-2xl font-bold text-white"
+      id="session-results"
+    >
+      Sessions
+    </h2>
+  </div>
+</div>
             <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {sessions.map((item) => (
-                <ResultCard
-                  eyebrow="Session"
-                  href={`/home/sessions/${item.id}`}
-                  key={item.id}
-                  meta={`${item.format.replaceAll("_", " ")} · ${new Date(item.starts_at).toLocaleDateString()}`}
-                  summary={item.summary}
-                  title={item.title}
-                />
-              ))}
+{sessions.map((item) => (
+  <SessionResultCard
+    format={item.format}
+    hostUserId={item.host_user_id}
+    id={item.id}
+    key={item.id}
+    location={item.location_label}
+    startsAt={item.starts_at}
+    summary={item.summary}
+    title={item.title}
+    viewerUserId={userData.user.id}
+  />
+))}
             </div>
           </section>
         ) : null}

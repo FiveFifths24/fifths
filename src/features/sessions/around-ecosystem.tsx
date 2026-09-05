@@ -25,14 +25,22 @@ export function AroundEcosystem({
   unavailableSources = [],
 }: Props) {
   if (!campaign && !circle && !commons) return null;
+  const previewCount = [campaign, circle, commons].filter(Boolean).length;
+
+const previewGridClass =
+  previewCount === 3
+    ? "lg:grid-cols-3"
+    : previewCount === 2
+      ? "lg:grid-cols-2"
+      : "lg:grid-cols-1";
 
   return (
     <section
       aria-labelledby="around-ecosystem-heading"
       className="mt-16 min-w-0 border-t border-white/10 pt-12 text-center sm:text-left"
     >
-      <div className="flex min-w-0 flex-col items-center sm:items-start">
-        <p className="flex items-center justify-center gap-2 text-xs font-black tracking-[0.18em] text-[#ca9aff] uppercase sm:justify-start">
+      <div className="flex min-w-0 flex-col items-center text-center">
+        <p className="flex items-center justify-center gap-2 text-xs font-black tracking-[0.18em] text-[#ca9aff] uppercase">
           <Compass aria-hidden="true" className="size-4" />
           Discovery Bridge
         </p>
@@ -55,7 +63,9 @@ export function AroundEcosystem({
         </p>
       ) : null}
 
-      <div className="mt-7 grid min-w-0 grid-cols-1 gap-6 lg:grid-cols-3">
+      <div
+  className={`mt-7 grid min-w-0 grid-cols-1 items-stretch gap-6 ${previewGridClass}`}
+>
         {campaign ? (
           <FeaturePreview cta="Explore Fifth Realm" featureHref="/home/realm">
             <CampaignResultCard {...campaign} />
@@ -76,14 +86,17 @@ export function AroundEcosystem({
         ) : null}
       </div>
 
-      <div className="mt-8 flex justify-center sm:justify-start">
-        <Link
-          className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/15 px-5 py-2.5 text-sm font-bold text-white/70 transition hover:border-[#992bff]/50 hover:text-white"
-          href="/home/discover"
-        >
-          <Sparkles aria-hidden="true" className="size-4 text-[#992bff]" />
-          Explore all SIGNAL
-        </Link>
+      <div className="mt-10 flex justify-center">
+<Link
+  className="group inline-flex min-h-12 items-center gap-2.5 rounded-full border border-[#992bff]/35 bg-[linear-gradient(135deg,rgba(108,20,206,0.18),rgba(153,43,255,0.08))] px-6 py-3 text-sm font-black tracking-wide text-[#ead7ff] shadow-[0_0_28px_rgba(153,43,255,0.08)] transition hover:-translate-y-0.5 hover:border-[#992bff]/65 hover:bg-[#992bff]/15 hover:text-white hover:shadow-[0_0_34px_rgba(153,43,255,0.16)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#992bff] motion-reduce:transform-none"
+  href="/home/discover"
+>
+  <Sparkles
+    aria-hidden="true"
+    className="size-4 text-[#c084fc] transition group-hover:scale-110"
+  />
+  Explore All SIGNALs
+</Link>
       </div>
     </section>
   );
@@ -99,10 +112,10 @@ function FeaturePreview({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-w-0 flex-col">
+    <div className="flex h-full min-w-0 flex-col">
       {children}
       <Link
-        className="mx-auto mt-3 inline-flex min-h-11 items-center justify-center rounded-full px-4 py-2 text-sm font-bold text-white/65 underline decoration-white/20 underline-offset-4 transition hover:text-white sm:mx-0 sm:self-start"
+        className="mx-auto mt-3 inline-flex min-h-11 items-center justify-center rounded-full px-4 py-2 text-sm font-bold text-white/65 underline decoration-white/20 underline-offset-4 transition hover:text-white"
         href={featureHref}
       >
         {cta}

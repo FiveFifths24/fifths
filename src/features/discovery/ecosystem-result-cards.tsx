@@ -42,7 +42,7 @@ export function CampaignResultCard({
 
   return (
     <Link
-      className="group relative flex min-h-[16rem] max-w-full min-w-0 flex-col items-center overflow-hidden rounded-[1.5rem] border border-[#22d3ee]/20 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.10),transparent_36%),linear-gradient(145deg,rgba(8,145,178,0.06),rgba(0,0,0,0.92))] p-5 text-center transition duration-300 hover:-translate-y-1 hover:border-[#22d3ee]/45 hover:shadow-[0_20px_55px_rgba(34,211,238,0.08)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#22d3ee] motion-reduce:transform-none"
+      className="group relative flex h-full min-h-[16rem] max-w-full min-w-0 flex-col items-center overflow-hidden rounded-[1.5rem] border border-[#22d3ee]/20 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.10),transparent_36%),linear-gradient(145deg,rgba(8,145,178,0.06),rgba(0,0,0,0.92))] p-5 text-center transition duration-300 hover:-translate-y-1 hover:border-[#22d3ee]/45 hover:shadow-[0_20px_55px_rgba(34,211,238,0.08)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#22d3ee] motion-reduce:transform-none"
       href={href}
     >
       <ArrowUpRight
@@ -145,7 +145,7 @@ export function CircleResultCard({
 
   return (
     <Link
-      className="group relative flex min-h-[15rem] max-w-full min-w-0 flex-col items-center overflow-hidden rounded-[1.5rem] border border-[#ee54a7]/20 bg-[radial-gradient(circle_at_top_right,rgba(238,84,167,0.11),transparent_38%),linear-gradient(145deg,rgba(108,20,206,0.07),rgba(0,0,0,0.92))] p-5 text-center transition duration-300 hover:-translate-y-1 hover:border-[#ee54a7]/45 hover:shadow-[0_20px_55px_rgba(238,84,167,0.08)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ee54a7] motion-reduce:transform-none"
+      className="group relative flex h-full min-h-[16rem] max-w-full min-w-0 flex-col items-center overflow-hidden rounded-[1.5rem] border border-[#ee54a7]/20 bg-[radial-gradient(circle_at_top_right,rgba(238,84,167,0.11),transparent_38%),linear-gradient(145deg,rgba(108,20,206,0.07),rgba(0,0,0,0.92))] p-5 text-center transition duration-300 hover:-translate-y-1 hover:border-[#ee54a7]/45 hover:shadow-[0_20px_55px_rgba(238,84,167,0.08)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ee54a7] motion-reduce:transform-none"
       href={href}
     >
       <ArrowUpRight
@@ -228,7 +228,7 @@ export function CommonsResultCard({
 
   return (
     <Link
-      className="group relative flex min-h-[16rem] max-w-full min-w-0 flex-col items-center overflow-hidden rounded-[1.5rem] border border-[#ca9aff]/20 bg-[radial-gradient(circle_at_top_right,rgba(202,154,255,0.12),transparent_38%),linear-gradient(145deg,rgba(108,20,206,0.08),rgba(0,0,0,0.92))] p-5 text-center transition duration-300 hover:-translate-y-1 hover:border-[#ca9aff]/45 hover:shadow-[0_20px_55px_rgba(202,154,255,0.08)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ca9aff] motion-reduce:transform-none"
+      className="group relative flex h-full min-h-[16rem] max-w-full min-w-0 flex-col items-center overflow-hidden rounded-[1.5rem] border border-[#ca9aff]/20 bg-[radial-gradient(circle_at_top_right,rgba(202,154,255,0.12),transparent_38%),linear-gradient(145deg,rgba(108,20,206,0.08),rgba(0,0,0,0.92))] p-5 text-center transition duration-300 hover:-translate-y-1 hover:border-[#ca9aff]/45 hover:shadow-[0_20px_55px_rgba(202,154,255,0.08)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ca9aff] motion-reduce:transform-none"
       href={href}
     >
       <ArrowUpRight
