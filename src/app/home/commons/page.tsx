@@ -10,6 +10,7 @@ import {
 
 import { AccountUnavailable } from "@/components/account/account-unavailable";
 import { ButtonLink } from "@/components/ui/button-link";
+import { SwipeCardGrid } from "@/components/ui/swipe-card-grid";
 import { PreviewState } from "@/components/ui/preview-state";
 import { StatusMessage } from "@/components/ui/status-message";
 import { OpportunityCard } from "@/features/creator-commons/opportunity-card";
@@ -313,11 +314,11 @@ export default async function CreatorCommonsPage() {
         </p>
 
         {cards.length ? (
-          <div className="mt-6 grid gap-5 lg:grid-cols-2">
+          <SwipeCardGrid className="mt-6 gap-5 lg:grid-cols-2">
             {cards.map((card) => (
               <OpportunityCard item={card} key={card.id} />
             ))}
-          </div>
+          </SwipeCardGrid>
         ) : (
           <div className="mt-6">
             <PreviewState title="No Published Opportunities Yet">

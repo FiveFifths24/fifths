@@ -9,6 +9,7 @@ import {
 
 import { AccountUnavailable } from "@/components/account/account-unavailable";
 import { ButtonLink } from "@/components/ui/button-link";
+import { SwipeCardGrid } from "@/components/ui/swipe-card-grid";
 import { PreviewState } from "@/components/ui/preview-state";
 import { StatusMessage } from "@/components/ui/status-message";
 import { CampaignCard } from "@/features/fifth-realm/campaign-card";
@@ -283,11 +284,13 @@ export default async function FifthRealmPage() {
         </div>
 
         {cards.length ? (
-          <div className="mt-7 grid gap-5 lg:grid-cols-2">
+          <SwipeCardGrid as="ul" className="mt-6 gap-6 lg:grid-cols-2">
             {cards.map((card) => (
-              <CampaignCard item={card} key={card.id} />
+              <li key={card.id}>
+                <CampaignCard item={card} />
+              </li>
             ))}
-          </div>
+          </SwipeCardGrid>
         ) : (
           <div className="mt-7">
             <PreviewState title="No Live Campaigns Yet">

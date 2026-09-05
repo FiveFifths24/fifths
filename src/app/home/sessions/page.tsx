@@ -13,7 +13,7 @@ import {
   assembleSessionCards,
   rankSessions,
 } from "@/features/sessions/session-data";
-import { SessionCard } from "@/features/sessions/session-card";
+import { SessionResults } from "@/features/sessions/session-results";
 import {
   isEligibleCampaign,
   isEligibleCircle,
@@ -360,37 +360,6 @@ export default async function SessionsPage() {
         </StatusMessage>
       )}
 
-      <SubSignalSection
-        description="Standalone plans and activities created by SIGNAL members."
-        heading={pulseInput ? "Sessions In Sync" : "Upcoming Sessions"}
-        icon={<Sparkles aria-hidden="true" className="size-5 text-[#992bff]" />}
-        id="standard-session-results"
-      >
-        {sessionResult.error ? (
-          <StatusMessage
-            className="col-span-full justify-center text-center"
-            tone="error"
-          >
-            Sessions are temporarily unavailable. Please try again shortly.
-          </StatusMessage>
-        ) : sessionCards.length ? (
-          sessionCards.map((card) => <SessionCard item={card} key={card.id} />)
-        ) : (
-          <div className="col-span-full rounded-[1.75rem] border border-[#992bff]/20 bg-[#992bff]/[0.035] px-6 py-10 text-center">
-            <div className="mx-auto flex max-w-xl flex-col items-center">
-              <Sparkles aria-hidden="true" className="size-6 text-[#992bff]" />
-              <h3 className="mt-4 text-xl font-bold text-white">
-                No Published Sessions Yet
-              </h3>
-              <p className="mt-3 max-w-md text-sm leading-6 text-white/50">
-                Member-created plans and activities will appear here as soon as
-                someone publishes a Session.
-              </p>
-            </div>
-          </div>
-        )}
-      </SubSignalSection>
-
       <AroundEcosystem
         campaign={
           campaignPreview
@@ -440,42 +409,16 @@ export default async function SessionsPage() {
         }
         unavailableSources={ecosystemUnavailable}
       />
+      {sessionResult.error ? (
+        <StatusMessage
+          className="mt-12 justify-center text-center"
+          tone="error"
+        >
+          Sessions are temporarily unavailable. Please try again shortly.
+        </StatusMessage>
+      ) : (
+        <SessionResults interests={interests} sessions={sessionCards} />
+      )}
     </div>
-  );
-}
-
-function SubSignalSection({
-  id,
-  heading,
-  description,
-  icon,
-  children,
-}: {
-  id: string;
-  heading: string;
-  description: string;
-  icon: React.ReactNode;
-  children: React.ReactNode;
-}) {
-  return (
-    <section aria-labelledby={id} className="mt-12 min-w-0">
-      <div className="flex min-w-0 flex-col items-center sm:items-start">
-        <div className="flex max-w-full flex-col items-center justify-center gap-2 sm:flex-row sm:justify-start sm:gap-3">
-          {icon}
-          <h2
-            className="min-w-0 text-2xl font-bold break-words text-white"
-            id={id}
-          >
-            {heading}
-          </h2>
-        </div>
-        <p className="mt-2 max-w-2xl text-sm leading-6 break-words text-white/45">
-          {description}
-        </p>
-      </div>
-      <div className="mt-6 grid min-w-0 grid-cols-1 gap-5 lg:grid-cols-2">
-        {children}
-      </div>
-    </section>
   );
 }

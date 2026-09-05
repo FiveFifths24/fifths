@@ -305,7 +305,7 @@ export default async function CircleDetailPage({
       </section>
       <details className="mt-10 rounded-[1.5rem] border border-red-300/15 bg-red-300/[0.03] p-5">
         <summary className="cursor-pointer font-bold text-red-100/70">
-          Report this Circle
+          Report This Circle
         </summary>
         <div className="mt-6">
           <ReportForm

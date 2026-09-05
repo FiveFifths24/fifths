@@ -213,7 +213,7 @@ export default async function DirectConversationPage({
       </section>
       <details className="mt-6 rounded-[1.5rem] border border-red-300/15 bg-red-300/[0.03] p-5">
         <summary className="cursor-pointer font-bold text-red-100/70">
-          Report this conversation
+          Report This Conversation
         </summary>
         <p className="mt-3 text-sm leading-6 text-white/45">
           Include the relevant message text and time in your private report.

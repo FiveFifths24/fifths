@@ -42,12 +42,12 @@ export function CampaignResultCard({
 
   return (
     <Link
-      className="group relative flex min-h-[16rem] max-w-full min-w-0 flex-col items-center overflow-hidden rounded-[1.5rem] border border-[#22d3ee]/20 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.10),transparent_36%),linear-gradient(145deg,rgba(8,145,178,0.06),rgba(0,0,0,0.92))] p-5 text-center transition duration-300 hover:-translate-y-1 hover:border-[#22d3ee]/45 hover:shadow-[0_20px_55px_rgba(34,211,238,0.08)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#22d3ee] motion-reduce:transform-none"
+      className="group relative flex min-h-[13rem] max-w-full min-w-0 flex-col items-center overflow-hidden rounded-[1.5rem] border border-[#22d3ee]/20 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.10),transparent_36%),linear-gradient(145deg,rgba(8,145,178,0.06),rgba(0,0,0,0.92))] p-4 text-center transition duration-300 hover:-translate-y-1 hover:border-[#22d3ee]/45 hover:shadow-[0_20px_55px_rgba(34,211,238,0.08)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#22d3ee] motion-reduce:transform-none"
       href={href}
     >
       <ArrowUpRight
         aria-hidden="true"
-        className="absolute top-5 right-5 size-4 text-white/25 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#22d3ee]"
+        className="absolute top-4 right-5 size-4 text-white/25 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#22d3ee]"
       />
 
       <div className="flex items-center justify-center gap-2">
@@ -65,17 +65,17 @@ export function CampaignResultCard({
         </div>
       </div>
 
-      <h3 className="mt-5 max-w-full px-6 text-xl font-bold [overflow-wrap:anywhere] break-words text-white transition group-hover:text-[#cffafe]">
+      <h3 className="mt-4 max-w-full px-2 text-base font-bold [overflow-wrap:anywhere] break-words text-white transition group-hover:text-[#cffafe]">
         {title}
       </h3>
 
       {summary ? (
-        <p className="mt-2 line-clamp-2 max-w-full text-sm leading-6 [overflow-wrap:anywhere] break-words text-white/50">
+        <p className="mt-2 line-clamp-2 max-w-full text-xs leading-5 [overflow-wrap:anywhere] break-words text-white/50">
           {summary}
         </p>
       ) : null}
 
-      <div className="mt-5 grid justify-items-center gap-2 text-xs text-white/50">
+      <div className="mt-4 grid justify-items-center gap-1.5 text-[0.68rem] text-white/50">
         <p className="flex items-center justify-center gap-2 text-center">
           <Clock3
             aria-hidden="true"
@@ -145,12 +145,12 @@ export function CircleResultCard({
 
   return (
     <Link
-      className="group relative flex min-h-[15rem] max-w-full min-w-0 flex-col items-center overflow-hidden rounded-[1.5rem] border border-[#ee54a7]/20 bg-[radial-gradient(circle_at_top_right,rgba(238,84,167,0.11),transparent_38%),linear-gradient(145deg,rgba(108,20,206,0.07),rgba(0,0,0,0.92))] p-5 text-center transition duration-300 hover:-translate-y-1 hover:border-[#ee54a7]/45 hover:shadow-[0_20px_55px_rgba(238,84,167,0.08)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ee54a7] motion-reduce:transform-none"
+      className="group relative flex min-h-[13rem] max-w-full min-w-0 flex-col items-center overflow-hidden rounded-[1.5rem] border border-[#ee54a7]/20 bg-[radial-gradient(circle_at_top_right,rgba(238,84,167,0.11),transparent_38%),linear-gradient(145deg,rgba(108,20,206,0.07),rgba(0,0,0,0.92))] p-4 text-center transition duration-300 hover:-translate-y-1 hover:border-[#ee54a7]/45 hover:shadow-[0_20px_55px_rgba(238,84,167,0.08)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ee54a7] motion-reduce:transform-none"
       href={href}
     >
       <ArrowUpRight
         aria-hidden="true"
-        className="absolute top-5 right-5 size-4 text-white/25 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#ee54a7]"
+        className="absolute top-4 right-5 size-4 text-white/25 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#ee54a7]"
       />
 
       <div className="flex size-10 items-center justify-center rounded-xl border border-[#ee54a7]/25 bg-[#ee54a7]/10">
@@ -161,27 +161,27 @@ export function CircleResultCard({
         Circle
       </p>
 
-      <h3 className="mt-5 max-w-full px-6 text-xl font-bold [overflow-wrap:anywhere] break-words text-white transition group-hover:text-[#ffd0eb]">
+      <h3 className="mt-4 max-w-full px-2 text-base font-bold [overflow-wrap:anywhere] break-words text-white transition group-hover:text-[#ffd0eb]">
         {name}
       </h3>
 
       {summary ? (
-        <p className="mt-3 line-clamp-2 max-w-full text-sm leading-6 [overflow-wrap:anywhere] break-words text-white/50">
+        <p className="mt-3 line-clamp-2 max-w-full text-xs leading-5 [overflow-wrap:anywhere] break-words text-white/50">
           {summary}
         </p>
       ) : null}
 
       <div className="mt-5 flex flex-wrap justify-center gap-2">
-        <span className="rounded-full border border-[#ee54a7]/15 bg-[#ee54a7]/[0.06] px-3 py-1.5 text-xs font-bold text-white/55 capitalize">
+        <span className="rounded-full border border-[#ee54a7]/15 bg-[#ee54a7]/[0.06] px-2.5 py-1 text-[0.65rem] font-bold text-white/55 capitalize">
           {format.replaceAll("_", " ")}
         </span>
 
-        <span className="rounded-full border border-[#ee54a7]/15 bg-[#ee54a7]/[0.06] px-3 py-1.5 text-xs font-bold text-white/55">
+        <span className="rounded-full border border-[#ee54a7]/15 bg-[#ee54a7]/[0.06] px-2.5 py-1 text-[0.65rem] font-bold text-white/55">
           {membershipLabel}
         </span>
 
         {location ? (
-          <span className="max-w-full rounded-full border border-[#ee54a7]/15 bg-[#ee54a7]/[0.06] px-3 py-1.5 text-xs font-bold [overflow-wrap:anywhere] break-words text-white/55">
+          <span className="max-w-full rounded-full border border-[#ee54a7]/15 bg-[#ee54a7]/[0.06] px-2.5 py-1 text-[0.65rem] font-bold [overflow-wrap:anywhere] break-words text-white/55">
             {location}
           </span>
         ) : null}
@@ -228,22 +228,19 @@ export function CommonsResultCard({
 
   return (
     <Link
-      className="group relative flex min-h-[16rem] max-w-full min-w-0 flex-col items-center overflow-hidden rounded-[1.5rem] border border-[#ca9aff]/20 bg-[radial-gradient(circle_at_top_right,rgba(202,154,255,0.12),transparent_38%),linear-gradient(145deg,rgba(108,20,206,0.08),rgba(0,0,0,0.92))] p-5 text-center transition duration-300 hover:-translate-y-1 hover:border-[#ca9aff]/45 hover:shadow-[0_20px_55px_rgba(202,154,255,0.08)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ca9aff] motion-reduce:transform-none"
+      className="group relative flex min-h-[13rem] max-w-full min-w-0 flex-col items-center overflow-hidden rounded-[1.5rem] border border-white/25 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.08),transparent_38%),linear-gradient(145deg,rgba(255,255,255,0.035),rgba(0,0,0,0.94))] p-4 text-center transition duration-300 hover:-translate-y-1 hover:border-white/50 hover:shadow-[0_20px_55px_rgba(255,255,255,0.06)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transform-none"
       href={href}
     >
       <ArrowUpRight
         aria-hidden="true"
-        className="absolute top-5 right-5 size-4 text-white/25 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#ca9aff]"
+        className="absolute top-4 right-5 size-4 text-white/25 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[white]"
       />
 
-      <div className="flex size-10 items-center justify-center rounded-xl border border-[#ca9aff]/25 bg-[#ca9aff]/10">
-        <BriefcaseBusiness
-          aria-hidden="true"
-          className="size-5 text-[#ca9aff]"
-        />
+      <div className="flex size-10 items-center justify-center rounded-xl border border-white/25 bg-white/[0.06]">
+        <BriefcaseBusiness aria-hidden="true" className="size-5 text-white" />
       </div>
 
-      <p className="mt-3 text-[0.62rem] font-black tracking-[0.18em] text-[#ca9aff] uppercase">
+      <p className="mt-3 text-[0.62rem] font-black tracking-[0.18em] text-white uppercase">
         Creator Commons
       </p>
 
@@ -251,12 +248,12 @@ export function CommonsResultCard({
         {kind.replaceAll("_", " ")}
       </p>
 
-      <h3 className="mt-4 max-w-full px-6 text-xl font-bold [overflow-wrap:anywhere] break-words text-white transition group-hover:text-[#ead7ff]">
+      <h3 className="mt-3 max-w-full px-2 text-base font-bold [overflow-wrap:anywhere] break-words text-white transition group-hover:text-[#ead7ff]">
         {title}
       </h3>
 
       {summary ? (
-        <p className="mt-3 line-clamp-2 max-w-full text-sm leading-6 [overflow-wrap:anywhere] break-words text-white/50">
+        <p className="mt-3 line-clamp-2 max-w-full text-xs leading-5 [overflow-wrap:anywhere] break-words text-white/50">
           {summary}
         </p>
       ) : null}
@@ -266,34 +263,34 @@ export function CommonsResultCard({
       </p>
 
       <div className="mt-5 flex flex-wrap justify-center gap-2">
-        <span className="rounded-full border border-[#ca9aff]/15 bg-[#ca9aff]/[0.06] px-3 py-1.5 text-xs font-bold text-white/55 capitalize">
+        <span className="rounded-full border border-[white]/15 bg-[white]/[0.06] px-2.5 py-1 text-[0.65rem] font-bold text-white/55 capitalize">
           {format.replaceAll("_", " ")}
           {location ? ` · ${location}` : ""}
         </span>
 
-        <span className="flex items-center gap-1.5 rounded-full border border-[#ca9aff]/15 bg-[#ca9aff]/[0.06] px-3 py-1.5 text-xs font-bold text-white/55">
+        <span className="flex items-center gap-1.5 rounded-full border border-[white]/15 bg-[white]/[0.06] px-2.5 py-1 text-[0.65rem] font-bold text-white/55">
           {isPaid ? (
             <CircleDollarSign
               aria-hidden="true"
-              className="size-3.5 text-[#ca9aff]"
+              className="size-3.5 text-[white]"
             />
           ) : (
             <HeartHandshake
               aria-hidden="true"
-              className="size-3.5 text-[#ca9aff]"
+              className="size-3.5 text-[white]"
             />
           )}
           {isPaid ? "Paid" : "Community"}
         </span>
 
-        <span className="rounded-full border border-[#ca9aff]/15 bg-[#ca9aff]/[0.06] px-3 py-1.5 text-xs font-bold text-white/55">
+        <span className="rounded-full border border-[white]/15 bg-[white]/[0.06] px-2.5 py-1 text-[0.65rem] font-bold text-white/55">
           {openings} {openings === 1 ? "opening" : "openings"}
         </span>
       </div>
 
       <div className="mt-auto w-full pt-5">
-        <div className="border-t border-[#ca9aff]/10 pt-4">
-          <p className="text-[0.68rem] font-black tracking-[0.14em] text-[#ca9aff]/75 uppercase">
+        <div className="border-t border-[white]/10 pt-4">
+          <p className="text-[0.68rem] font-black tracking-[0.14em] text-[white]/75 uppercase">
             Respond by {new Date(deadline).toLocaleDateString()}
           </p>
         </div>

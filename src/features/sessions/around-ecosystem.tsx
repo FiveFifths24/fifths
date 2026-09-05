@@ -36,12 +36,14 @@ export function AroundEcosystem({
           <Compass aria-hidden="true" className="size-4" />
           Discovery Bridge
         </p>
+
         <h2
           className="mt-3 max-w-full text-3xl font-bold break-words text-white"
           id="around-ecosystem-heading"
         >
           Around The Ecosystem
         </h2>
+
         <p className="mt-3 max-w-2xl text-sm leading-6 break-words text-white/50">
           A small window into other places where people are creating, gathering,
           and building across SIGNAL.
@@ -55,22 +57,21 @@ export function AroundEcosystem({
         </p>
       ) : null}
 
-      <div className="mt-7 grid min-w-0 grid-cols-1 gap-6 lg:grid-cols-3">
+      <div className="mt-7 grid min-w-0 auto-rows-fr grid-cols-1 gap-6 lg:grid-cols-3">
         {campaign ? (
-          <FeaturePreview cta="Explore Fifth Realm" featureHref="/home/realm">
+          <FeaturePreview>
             <CampaignResultCard {...campaign} />
           </FeaturePreview>
         ) : null}
+
         {circle ? (
-          <FeaturePreview cta="See More Circles" featureHref="/home/circles">
+          <FeaturePreview>
             <CircleResultCard {...circle} />
           </FeaturePreview>
         ) : null}
+
         {commons ? (
-          <FeaturePreview
-            cta="Explore Creator Commons"
-            featureHref="/home/commons"
-          >
+          <FeaturePreview>
             <CommonsResultCard {...commons} />
           </FeaturePreview>
         ) : null}
@@ -89,24 +90,10 @@ export function AroundEcosystem({
   );
 }
 
-function FeaturePreview({
-  cta,
-  featureHref,
-  children,
-}: {
-  cta: string;
-  featureHref: string;
-  children: React.ReactNode;
-}) {
+function FeaturePreview({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex min-w-0 flex-col">
-      {children}
-      <Link
-        className="mx-auto mt-3 inline-flex min-h-11 items-center justify-center rounded-full px-4 py-2 text-sm font-bold text-white/65 underline decoration-white/20 underline-offset-4 transition hover:text-white sm:mx-0 sm:self-start"
-        href={featureHref}
-      >
-        {cta}
-      </Link>
+    <div className="flex h-full min-w-0 flex-col">
+      <div className="flex-1 [&>*]:h-full">{children}</div>
     </div>
   );
 }

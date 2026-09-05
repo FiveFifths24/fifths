@@ -340,7 +340,7 @@ export default async function SessionDetailsPage({
       <details className="mt-8 rounded-[1.5rem] border border-red-900/50 bg-red-950/20 p-6">
         <summary className="flex cursor-pointer list-none items-center justify-center gap-3 font-bold text-red-200 sm:justify-start">
           <Flag aria-hidden="true" className="size-5" />
-          Report this Session
+          Report This Session
         </summary>
         <div className="mt-6 border-t border-red-900/40 pt-6">
           <ReportForm

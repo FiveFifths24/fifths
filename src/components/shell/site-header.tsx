@@ -111,7 +111,7 @@ export function SiteHeader() {
           aria-controls={menuId}
           aria-expanded={open}
           aria-label={open ? "Close navigation menu" : "Open navigation menu"}
-          className="inline-flex min-h-12 min-w-12 items-center justify-center gap-2 rounded-full border border-neutral-700 px-3 text-white transition hover:border-[#f359d2]/60 md:px-5"
+          className="relative z-[100] inline-flex min-h-12 min-w-12 touch-manipulation items-center justify-center gap-2 rounded-full border border-neutral-700 px-3 text-white transition hover:border-[#f359d2]/60 md:px-5"
           onClick={() => setOpen((current) => !current)}
           type="button"
         >
@@ -128,7 +128,7 @@ export function SiteHeader() {
 
       {open ? (
         <div
-          className="border-t border-neutral-800 bg-black/95 backdrop-blur-xl"
+          className="fixed inset-x-0 top-[4.5rem] z-[60] max-h-[calc(100dvh-4.5rem)] overflow-y-auto border-t border-neutral-800 bg-black/95 backdrop-blur-xl md:static md:z-auto md:max-h-none md:overflow-visible"
           id={menuId}
         >
           <Container className="flex flex-col gap-3 py-5 md:flex-row md:justify-end">

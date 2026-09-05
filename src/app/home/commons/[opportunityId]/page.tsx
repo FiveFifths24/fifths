@@ -541,7 +541,7 @@ export default async function OpportunityDetailPage({
       </div>
       <details className="mt-10 rounded-[1.5rem] border border-red-300/15 bg-red-300/[0.03] p-5">
         <summary className="cursor-pointer font-bold text-red-100/70">
-          Report this opportunity
+          Report This Opportunity
         </summary>
         <div className="mt-6">
           <ReportForm

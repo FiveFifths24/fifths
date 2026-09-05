@@ -4,6 +4,7 @@ import { MessagesSquare, ShieldCheck, UsersRound } from "lucide-react";
 import { AccountUnavailable } from "@/components/account/account-unavailable";
 import { ButtonLink } from "@/components/ui/button-link";
 import { StatusMessage } from "@/components/ui/status-message";
+import { SwipeCardGrid } from "@/components/ui/swipe-card-grid";
 import {
   assembleCircleCards,
   rankCircles,
@@ -237,13 +238,13 @@ export default async function CirclesDiscoveryPage() {
         </div>
 
         {cards.length ? (
-          <ul className="mt-6 grid gap-6 lg:grid-cols-2">
+          <SwipeCardGrid as="ul" className="mt-6 gap-6 lg:grid-cols-2">
             {cards.map((card) => (
               <li key={card.id}>
                 <CircleCard item={card} />
               </li>
             ))}
-          </ul>
+          </SwipeCardGrid>
         ) : (
           <div className="mt-6 rounded-2xl border border-dashed border-[#ee54a7]/30 bg-[#ee54a7]/[0.035] p-6 text-center">
             <div className="flex justify-center">
