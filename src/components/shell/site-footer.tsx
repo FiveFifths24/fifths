@@ -31,7 +31,7 @@ const footerGroups = [
     title: "Five Fifths",
     links: [
       ["About", "/about"],
-      ["Digital Training", "https://fivefifthsnp.com"],
+      ["Digital Training", "https://fivefifthsnp.com/programs"],
       ["Five Fifths Website", "https://fivefifthsnp.com"],
     ],
   },
