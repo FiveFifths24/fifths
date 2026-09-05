@@ -68,7 +68,7 @@ export function SessionRegistrationForm({
         Registration is capacity-safe and tied only to your signed-in account.
       </p>
       <SubmitButton pendingLabel="Registering…">
-        Register for Session
+        Register For Session
       </SubmitButton>
     </form>
   );
