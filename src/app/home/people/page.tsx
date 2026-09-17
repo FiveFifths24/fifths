@@ -56,7 +56,7 @@ function presenceLabel(lastSeenAt: string | null) {
 
   if (days <= 7) return `Active ${days}d ago`;
 
-  return "Active recently";
+  return "Active Recently";
 }
 
 function ProfilePreview({

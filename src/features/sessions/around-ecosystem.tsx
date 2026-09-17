@@ -83,7 +83,7 @@ export function AroundEcosystem({
           href="/home/discover"
         >
           <Sparkles aria-hidden="true" className="size-4 text-[#992bff]" />
-          Explore all SIGNAL
+          Explore All SIGNAL
         </Link>
       </div>
     </section>

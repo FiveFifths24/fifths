@@ -777,7 +777,7 @@ export function ProfileLaunchView({
               </SectionLabel>
 
               <p className="mt-2 text-sm text-white/40">
-                People in {profile.displayName}&apos;s orbit.
+                People In {profile.displayName}&apos;s Orbit.
               </p>
 
               <div className="mx-auto mt-7 flex max-w-4xl flex-wrap items-start justify-center gap-7 sm:gap-10">

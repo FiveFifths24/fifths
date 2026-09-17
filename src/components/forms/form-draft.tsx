@@ -269,7 +269,7 @@ export function DraftRestoredNotice({ restored }: { restored: boolean }) {
       className="text-xs font-medium text-emerald-200/75"
       role="status"
     >
-      Draft restored
+      Draft Restored
     </p>
   );
 }
