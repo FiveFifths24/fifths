@@ -237,33 +237,28 @@ export default async function CirclesDiscoveryPage() {
           </h2>
         </div>
 
-        {cards.length ? (
-          <SwipeCardGrid as="ul" className="mt-6 gap-6 lg:grid-cols-2">
-            {cards.map((card) => (
-              <li key={card.id}>
-                <CircleCard item={card} />
-              </li>
-            ))}
-          </SwipeCardGrid>
-        ) : (
-          <div className="mt-6 rounded-2xl border border-dashed border-[#ee54a7]/30 bg-[#ee54a7]/[0.035] p-6 text-center">
-            <div className="flex justify-center">
-              <MessagesSquare
-                aria-hidden="true"
-                className="size-5 text-[#ee54a7]"
-              />
-            </div>
+<>
+  <div className="sm:hidden">
+    <SwipeCardGrid
+      as="ul"
+      className="mt-6 gap-6 [&>li]:w-full [&>li]:max-w-none"
+    >
+      {cards.map((card) => (
+        <li className="w-full max-w-none" key={card.id}>
+          <CircleCard item={card} />
+        </li>
+      ))}
+    </SwipeCardGrid>
+  </div>
 
-            <h3 className="mt-3 text-sm font-bold text-white">
-              No Published Circles Yet
-            </h3>
-
-            <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-white/60">
-              New Circles will appear here once people create and publish real
-              communities.
-            </p>
-          </div>
-        )}
+  <ul className="mt-6 hidden gap-4 sm:grid sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+    {cards.map((card) => (
+      <li className="min-w-0" key={card.id}>
+        <CircleCard item={card} />
+      </li>
+    ))}
+  </ul>
+</>
       </section>
 
       {/* =====================================================

@@ -4,9 +4,13 @@ import {
   CalendarRange,
   ClipboardCheck,
   Compass,
+  Eye,
   LockKeyhole,
+  Pencil,
   ShieldCheck,
+  Trash2,
   Users,
+  XCircle,
 } from "lucide-react";
 
 import { AccountUnavailable } from "@/components/account/account-unavailable";
@@ -18,6 +22,7 @@ import { PreviewState } from "@/components/ui/preview-state";
 import { StatusMessage } from "@/components/ui/status-message";
 import { FlashStatusMessage } from "@/components/ui/flash-status-message";
 import {
+  deleteCampaignAction,
   removeCampaignMemberAction,
   reviewCampaignApplicationAction,
   setCampaignSessionAction,
@@ -84,13 +89,14 @@ export default async function ManageCampaignPage({
   searchParams,
 }: {
   params: Promise<{ campaignId: string }>;
-  searchParams?: Promise<{
-    created?: string;
-    status?: string;
-    application?: string;
-    member?: string;
-    session?: string;
-  }>;
+searchParams?: Promise<{
+  created?: string;
+  updated?: string;
+  status?: string;
+  application?: string;
+  member?: string;
+  session?: string;
+}>;
 }) {
   const [{ campaignId }, parameters] = await Promise.all([
     params,
@@ -168,6 +174,9 @@ export default async function ManageCampaignPage({
   const applications = applicationResult.data ?? [];
   const roster = rosterResult.data ?? [];
   const linkedSessions = linkedSessionsResult.data ?? [];
+  const canDeleteCampaign =
+  applications.length === 0 &&
+  roster.every((member) => member.member_role !== "player");
 
   return (
     <div className="mx-auto max-w-7xl text-center sm:text-left">
@@ -198,7 +207,11 @@ export default async function ManageCampaignPage({
             </StatusMessage>
           </>
         ) : null}
-
+{parameters?.updated === "1" ? (
+  <StatusMessage tone="success">
+    Campaign details updated successfully.
+  </StatusMessage>
+) : null}
         {parameters?.status === "updated" ? (
           <StatusMessage tone="success">Campaign status updated.</StatusMessage>
         ) : null}
@@ -303,14 +316,113 @@ export default async function ManageCampaignPage({
               </p>
             </div>
 
-            <div className="flex shrink-0 justify-center sm:justify-start">
-              <ButtonLink
-                href={`/home/realm/${campaign.id}`}
-                variant="secondary"
-              >
-                View Public Campaign
-              </ButtonLink>
-            </div>
+<div className="flex shrink-0 justify-center sm:justify-start">
+  <details className="group relative">
+    <summary className="flex min-h-11 min-w-[15rem] cursor-pointer list-none items-center justify-center gap-3 rounded-full border border-[#22d3ee]/40 bg-gradient-to-r from-[#0891b2] via-[#22d3ee] to-[#6c14ce] px-7 py-2.5 text-sm font-bold text-white shadow-lg shadow-[#22d3ee]/10 transition hover:brightness-110 [&::-webkit-details-marker]:hidden">
+      Campaign Actions
+
+      <span
+        aria-hidden="true"
+        className="text-[0.65rem] transition-transform group-open:rotate-180"
+      >
+        ▼
+      </span>
+    </summary>
+
+<div className="absolute right-0 z-30 mt-3 w-[20rem] max-w-[calc(100vw-2rem)] overflow-hidden rounded-[1.35rem] border border-white/10 bg-[#09090b]/98 p-2 shadow-[0_24px_70px_rgba(0,0,0,0.55)] backdrop-blur-xl sm:w-[22rem]">
+  <div className="px-3 pb-2 pt-2">
+    <p className="font-mono text-[0.58rem] font-bold tracking-[0.18em] text-white/30 uppercase">
+      Campaign
+    </p>
+  </div>
+
+  <ButtonLink
+    className="flex min-h-0 w-full justify-start rounded-xl border-0 bg-transparent px-3 py-3 text-left text-sm font-semibold text-white/70 shadow-none transition hover:bg-white/[0.055] hover:text-white"
+    href={`/home/realm/${campaign.id}`}
+  >
+    <span className="flex items-center gap-3 whitespace-nowrap">
+      <Eye
+        aria-hidden="true"
+        className="size-4 shrink-0 text-white/35"
+      />
+      View Public Campaign
+    </span>
+  </ButtonLink>
+
+  {(["draft", "recruiting"] as const).includes(
+    campaign.status as "draft" | "recruiting",
+  ) ? (
+    <ButtonLink
+      className="flex min-h-0 w-full justify-start rounded-xl border-0 bg-transparent px-3 py-3 text-left text-sm font-semibold text-white/70 shadow-none transition hover:bg-[#22d3ee]/[0.08] hover:text-[#cffafe]"
+      href={`/home/realm/manage/${campaign.id}/edit`}
+    >
+      <span className="flex items-center gap-3 whitespace-nowrap">
+        <Pencil
+          aria-hidden="true"
+          className="size-4 shrink-0 text-[#67e8f9]/65"
+        />
+        Edit Campaign
+      </span>
+    </ButtonLink>
+  ) : null}
+
+  {(["draft", "recruiting", "active"] as const).includes(
+    campaign.status as "draft" | "recruiting" | "active",
+  ) || canDeleteCampaign ? (
+    <div className="my-2 border-t border-white/[0.07]" />
+  ) : null}
+
+  {(["draft", "recruiting", "active"] as const).includes(
+    campaign.status as "draft" | "recruiting" | "active",
+  ) ? (
+    <form action={setCampaignStatusAction}>
+      <input
+        name="campaignId"
+        type="hidden"
+        value={campaign.id}
+      />
+      <input
+        name="status"
+        type="hidden"
+        value="cancelled"
+      />
+
+      <button
+        className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm font-semibold text-red-200/75 transition hover:bg-red-950/30 hover:text-red-100"
+        type="submit"
+      >
+        <XCircle
+          aria-hidden="true"
+          className="size-4 shrink-0 text-red-300/55"
+        />
+        Cancel Campaign
+      </button>
+    </form>
+  ) : null}
+
+  {canDeleteCampaign ? (
+    <form action={deleteCampaignAction}>
+      <input
+        name="campaignId"
+        type="hidden"
+        value={campaign.id}
+      />
+
+      <button
+        className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm font-semibold text-red-300/80 transition hover:bg-red-950/35 hover:text-red-200"
+        type="submit"
+      >
+        <Trash2
+          aria-hidden="true"
+          className="size-4 shrink-0 text-red-400/60"
+        />
+        Delete Campaign
+      </button>
+    </form>
+  ) : null}
+</div>
+  </details>
+</div>
           </div>
 
           {/* SNAPSHOT */}
@@ -352,57 +464,66 @@ export default async function ManageCampaignPage({
 
           {/* LIFECYCLE ACTIONS */}
 
-          <div className="mt-7 flex flex-wrap justify-center gap-3 sm:justify-start">
-            {campaign.status === "draft" ? (
-              <form action={setCampaignStatusAction}>
-                <input name="campaignId" type="hidden" value={campaign.id} />
+{/* LIFECYCLE ACTIONS */}
 
-                <input name="status" type="hidden" value="recruiting" />
+<div className="mt-7 flex justify-center sm:justify-start">
+  {campaign.status === "draft" ? (
+    <form action={setCampaignStatusAction}>
+      <input
+        name="campaignId"
+        type="hidden"
+        value={campaign.id}
+      />
+      <input
+        name="status"
+        type="hidden"
+        value="recruiting"
+      />
 
-                <button className={buttonClass()} type="submit">
-                  Open Recruitment
-                </button>
-              </form>
-            ) : null}
+      <button className={buttonClass()} type="submit">
+        Open Recruitment
+      </button>
+    </form>
+  ) : null}
 
-            {campaign.status === "recruiting" ? (
-              <form action={setCampaignStatusAction}>
-                <input name="campaignId" type="hidden" value={campaign.id} />
+  {campaign.status === "recruiting" ? (
+    <form action={setCampaignStatusAction}>
+      <input
+        name="campaignId"
+        type="hidden"
+        value={campaign.id}
+      />
+      <input
+        name="status"
+        type="hidden"
+        value="active"
+      />
 
-                <input name="status" type="hidden" value="active" />
+      <button className={buttonClass()} type="submit">
+        Start Campaign
+      </button>
+    </form>
+  ) : null}
 
-                <button className={buttonClass()} type="submit">
-                  Start Campaign
-                </button>
-              </form>
-            ) : null}
+  {campaign.status === "active" ? (
+    <form action={setCampaignStatusAction}>
+      <input
+        name="campaignId"
+        type="hidden"
+        value={campaign.id}
+      />
+      <input
+        name="status"
+        type="hidden"
+        value="completed"
+      />
 
-            {campaign.status === "active" ? (
-              <form action={setCampaignStatusAction}>
-                <input name="campaignId" type="hidden" value={campaign.id} />
-
-                <input name="status" type="hidden" value="completed" />
-
-                <button className={buttonClass()} type="submit">
-                  Complete Campaign
-                </button>
-              </form>
-            ) : null}
-
-            {(["draft", "recruiting", "active"] as const).includes(
-              campaign.status as "draft" | "recruiting" | "active",
-            ) ? (
-              <form action={setCampaignStatusAction}>
-                <input name="campaignId" type="hidden" value={campaign.id} />
-
-                <input name="status" type="hidden" value="cancelled" />
-
-                <button className={buttonClass("danger")} type="submit">
-                  Cancel Campaign
-                </button>
-              </form>
-            ) : null}
-          </div>
+      <button className={buttonClass()} type="submit">
+        Complete Campaign
+      </button>
+    </form>
+  ) : null}
+</div>
         </div>
       </header>
 
@@ -770,7 +891,7 @@ export default async function ManageCampaignPage({
           <h2 className="mt-4 font-bold text-white">Capacity Protected</h2>
 
           <p className="mt-2 text-sm leading-6 text-white/40">
-            Accepted players count toward the campaign&apos;s authoritative seat
+            Accepted players count toward the campaign&apos;s seat
             capacity.
           </p>
         </div>

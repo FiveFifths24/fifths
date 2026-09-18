@@ -193,6 +193,174 @@ export async function createCircleAction(
 
   redirect(`/home/circles/manage/${circleId}?created=1`);
 }
+export async function updateCircleAction(
+  circleId: string,
+  _previousState: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  const values: Record<string, string | string[]> = {};
+
+  for (const [key, value] of formData.entries()) {
+    if (typeof value !== "string") continue;
+
+    const existing = values[key];
+
+    if (existing === undefined) {
+      values[key] = value;
+    } else if (Array.isArray(existing)) {
+      values[key] = [...existing, value];
+    } else {
+      values[key] = [existing, value];
+    }
+  }
+
+  const parsed = createCircleSchema.safeParse({
+    name: formData.get("name"),
+    slug: formData.get("slug"),
+    summary: formData.get("summary"),
+    description: formData.get("description"),
+    rules: formData.get("rules"),
+    visibility: formData.get("visibility"),
+    joinPolicy: formData.get("joinPolicy"),
+    format: formData.get("format"),
+    locationLabel: formData.get("locationLabel"),
+    modeId: formData.get("modeId"),
+    minimumEnergy: formData.get("minimumEnergy"),
+    maximumEnergy: formData.get("maximumEnergy"),
+    stimulationLevel: formData.get("stimulationLevel"),
+    socialIntensity: formData.get("socialIntensity"),
+    interestIds: formData.getAll("interestIds"),
+  });
+
+  if (!parsed.success) {
+    return {
+      status: "error",
+      message: "Check the highlighted Circle details and try again.",
+      fieldErrors: parsed.error.flatten().fieldErrors,
+      values,
+    };
+  }
+
+  try {
+    const supabase = await createClient();
+
+    const { error } = await supabase.rpc("update_circle", {
+      p_circle_id: circleId,
+      p_name: parsed.data.name,
+      p_slug: parsed.data.slug,
+      p_summary: parsed.data.summary,
+      p_description: parsed.data.description,
+      p_rules: parsed.data.rules,
+      p_visibility: parsed.data.visibility,
+      p_join_policy: parsed.data.joinPolicy,
+      p_format: parsed.data.format,
+      p_location_label: parsed.data.locationLabel,
+      p_mode_id: parsed.data.modeId,
+      p_minimum_energy: parsed.data.minimumEnergy,
+      p_maximum_energy: parsed.data.maximumEnergy,
+      p_stimulation_level: parsed.data.stimulationLevel,
+      p_social_intensity: parsed.data.socialIntensity,
+      p_interest_ids: parsed.data.interestIds,
+    });
+
+    if (error) {
+      console.error("update_circle failed:", error);
+
+      if (error.code === "23505") {
+        return {
+          status: "error",
+          message: "That URL name is already taken.",
+          fieldErrors: {
+            slug: ["That URL name is already in use. Choose a different one."],
+          },
+          values,
+        };
+      }
+
+      const fieldErrors: Record<string, string[]> = {};
+
+      if (error.message.includes("Invalid Circle content")) {
+        fieldErrors.name = ["Use between 3 and 40 characters."];
+        fieldErrors.slug = [
+          "Use 3–60 lowercase letters, numbers, or hyphens with no spaces.",
+        ];
+        fieldErrors.summary = ["Use between 10 and 240 characters."];
+        fieldErrors.description = ["Use between 20 and 4,000 characters."];
+        fieldErrors.rules = ["Use between 20 and 4,000 characters."];
+      }
+
+      if (error.message.includes("Private Circles are invite only")) {
+        fieldErrors.visibility = [
+          "Private Circles must use Invite Only membership.",
+        ];
+        fieldErrors.joinPolicy = [
+          "Choose Invite Only when using a private Circle.",
+        ];
+      }
+
+      if (error.message.includes("Invalid location label")) {
+        fieldErrors.locationLabel = [
+          "Use between 2 and 120 characters, or leave this field blank.",
+        ];
+      }
+
+      if (error.message.includes("Invalid mode")) {
+        fieldErrors.modeId = ["Choose an available Primary Mode."];
+      }
+
+      if (error.message.includes("Invalid Circle energy range")) {
+        fieldErrors.minimumEnergy = [
+          "Minimum Energy cannot be higher than Maximum Energy.",
+        ];
+        fieldErrors.maximumEnergy = [
+          "Maximum Energy must be equal to or higher than Minimum Energy.",
+        ];
+      }
+
+      if (error.message.includes("Invalid interest selection")) {
+        fieldErrors.interestIds = ["Choose one valid Circle topic."];
+      }
+
+      if (error.message.includes("Archived Circles cannot be edited")) {
+        return {
+          status: "error",
+          message: "Archived Circles cannot be edited.",
+          values,
+        };
+      }
+
+      if (error.message.includes("Circle update denied")) {
+        return {
+          status: "error",
+          message: "You do not have permission to edit this Circle.",
+          values,
+        };
+      }
+
+return {
+  status: "error",
+  message:
+    Object.keys(fieldErrors).length > 0
+      ? "Check the highlighted Circle details and try again."
+      : "The Circle could not be updated. Please try again.",
+  fieldErrors,
+  values,
+};
+    }
+  } catch {
+    return {
+      status: "error",
+      message: "The Circle could not be updated. Please try again.",
+      values,
+    };
+  }
+
+  revalidatePath(`/home/circles/manage/${circleId}`);
+  revalidatePath(`/home/circles/${circleId}`);
+  revalidatePath("/home/circles");
+
+  redirect(`/home/circles/manage/${circleId}?updated=1`);
+}
 
 export async function joinCircleAction(
   circleId: string,
@@ -265,9 +433,158 @@ export async function leaveCircleAction(
     };
   }
 
-  revalidatePath(`/home/circles/${parsed.data.circleId}`);
-  revalidatePath("/home/circles/memberships");
-  return { status: "success", message: "You left this Circle." };
+revalidatePath(`/home/circles/${parsed.data.circleId}`);
+revalidatePath(`/home/circles/${parsed.data.circleId}/chat`);
+revalidatePath("/home/circles");
+revalidatePath("/home/circles/memberships");
+
+redirect(
+  `/home/circles/${parsed.data.circleId}?membership=left`,
+);
+}
+export async function sendCircleMessageAction(
+  circleId: string,
+  _previousState: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  const parsedCircleId = circleIdSchema.safeParse({ circleId });
+
+  if (!parsedCircleId.success) {
+    return {
+      status: "error",
+      message: "This Circle link is not valid.",
+    };
+  }
+
+  const bodyValue = formData.get("body");
+  const body = typeof bodyValue === "string" ? bodyValue.trim() : "";
+
+  if (!body) {
+    return {
+      status: "error",
+      message: "Write a message before sending.",
+      fieldErrors: {
+        body: ["Write a message before sending."],
+      },
+    };
+  }
+
+  if (body.length > 2000) {
+    return {
+      status: "error",
+      message: "Circle messages can be up to 2,000 characters.",
+      fieldErrors: {
+        body: ["Keep your message to 2,000 characters or fewer."],
+      },
+    };
+  }
+
+  try {
+    const supabase = await createClient();
+
+    const { error } = await supabase.rpc("send_circle_message", {
+      p_circle_id: parsedCircleId.data.circleId,
+      p_body: body,
+    });
+
+    if (error) {
+      if (error.message.includes("Active Circle membership required")) {
+        return {
+          status: "error",
+          message: "Only active Circle members can use this chat.",
+        };
+      }
+
+if (error.message.includes("Circle chat is unavailable")) {
+  return {
+    status: "error",
+    message: "Chat is unavailable for this Circle.",
+  };
+}
+
+if (error.message.includes("Circle chat rate limit reached")) {
+  return {
+    status: "error",
+    message: "You're sending messages too quickly. Wait a moment and try again.",
+  };
+}
+
+if (error.message.includes("Circle chat cooldown required")) {
+  return {
+    status: "error",
+    message:
+      "You've sent a lot of messages recently. Take a short break before sending more.",
+  };
+}
+
+if (error.message.includes("Repeated Circle message blocked")) {
+  return {
+    status: "error",
+    message: "That same message has already been sent recently.",
+  };
+}
+
+return {
+  status: "error",
+  message: "Your message could not be sent. Please try again.",
+};
+    }
+  } catch {
+    return {
+      status: "error",
+      message: "Circle chat is temporarily unavailable.",
+    };
+  }
+
+  revalidatePath(`/home/circles/${parsedCircleId.data.circleId}/chat`);
+
+  return {
+    status: "success",
+    message: "Message sent.",
+  };
+}
+export async function deleteCircleMessageAction(formData: FormData) {
+  const messageId = String(formData.get("messageId") ?? "");
+  const circleId = String(formData.get("circleId") ?? "");
+
+  if (!messageId || !circleId) {
+    return;
+  }
+
+  const supabase = await createClient();
+
+  const { error } = await supabase.rpc("delete_circle_message", {
+    p_message_id: messageId,
+  });
+
+  if (error) {
+    console.error("deleteCircleMessageAction", error);
+    return;
+  }
+
+  revalidatePath(`/home/circles/${circleId}/chat`);
+}
+
+export async function moderateCircleMessageAction(formData: FormData) {
+  const messageId = String(formData.get("messageId") ?? "");
+  const circleId = String(formData.get("circleId") ?? "");
+
+  if (!messageId || !circleId) {
+    return;
+  }
+
+  const supabase = await createClient();
+
+  const { error } = await supabase.rpc("moderate_circle_message", {
+    p_message_id: messageId,
+  });
+
+  if (error) {
+    console.error("moderateCircleMessageAction", error);
+    return;
+  }
+
+  revalidatePath(`/home/circles/${circleId}/chat`);
 }
 
 export async function respondToCircleInvitationAction(formData: FormData) {
@@ -421,4 +738,37 @@ export async function setSessionCircleAction(formData: FormData) {
     redirect(`/home/circles/manage/${parsed.data.circleId}?session=${outcome}`);
   }
   redirect("/home/circles/manage?session=updated");
+  }
+
+  export async function deleteCircleAction(formData: FormData) {
+  const parsed = circleIdSchema.safeParse({
+    circleId: formData.get("circleId"),
+  });
+
+  if (!parsed.success) {
+    redirect("/home/circles/manage?delete=invalid");
+  }
+
+  let outcome = "deleted";
+
+  try {
+    const supabase = await createClient();
+
+    const { error } = await supabase.rpc("delete_circle", {
+      p_circle_id: parsed.data.circleId,
+    });
+
+    if (error) {
+      console.error("delete_circle failed:", error);
+      outcome = "error";
+    }
+  } catch {
+    outcome = "error";
+  }
+
+  revalidatePath("/home");
+  revalidatePath("/home/circles");
+  revalidatePath("/home/circles/manage");
+
+  redirect(`/home/circles/manage?delete=${outcome}`);
 }

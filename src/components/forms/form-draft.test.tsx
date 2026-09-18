@@ -100,7 +100,7 @@ describe("form draft persistence", () => {
     render(<DraftForm />);
     act(() => vi.advanceTimersByTime(0));
 
-    expect(screen.getByRole("status")).toHaveTextContent("Draft restored");
+    expect(screen.getByRole("status")).toHaveTextContent("Draft Restored");
     expect(screen.getByLabelText("Title")).toHaveValue("Weekend campaign");
     expect(screen.getByLabelText("Details")).toHaveValue(
       "Bring a character idea.",

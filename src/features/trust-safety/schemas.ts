@@ -34,14 +34,15 @@ export const feedbackSchema = z.object({
 });
 
 export const reportSchema = z.object({
-  targetType: z.enum([
-    "member",
-    "session",
-    "circle",
-    "opportunity",
-    "campaign",
-    "platform",
-  ]),
+targetType: z.enum([
+  "member",
+  "session",
+  "circle",
+  "circle_message",
+  "opportunity",
+  "campaign",
+  "platform",
+]),
   targetEntityId: z.preprocess(
     (value) =>
       value == null || (typeof value === "string" && value.trim() === "")
@@ -70,6 +71,17 @@ export const reportSchema = z.object({
     .min(30, "Use at least 30 characters.")
     .max(2000, "Keep report details under 2,000 characters."),
   contextUrl: optionalContextUrl,
+}).superRefine((value, context) => {
+  if (
+    value.targetType === "circle_message" &&
+    !value.targetEntityId
+  ) {
+    context.addIssue({
+      code: "custom",
+      path: ["targetEntityId"],
+      message: "A Circle message is required for this report.",
+    });
+  }
 });
 
 export const notificationIdSchema = z.object({ notificationId: z.uuid() });

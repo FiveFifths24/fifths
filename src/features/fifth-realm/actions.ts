@@ -322,3 +322,170 @@ export async function setCampaignSessionAction(formData: FormData) {
   revalidatePath(`/home/realm/manage/${parsed.data.campaignId}`);
   redirect(`/home/realm/manage/${parsed.data.campaignId}?session=${outcome}`);
 }
+export async function deleteCampaignAction(formData: FormData) {
+  const parsed = campaignIdSchema.safeParse({
+    campaignId: formData.get("campaignId"),
+  });
+
+  if (!parsed.success) {
+    redirect("/home/realm/manage?delete=invalid");
+  }
+
+  let outcome = "deleted";
+
+  try {
+    const supabase = await createClient();
+
+    const { error } = await supabase.rpc("delete_realm_campaign", {
+      p_campaign_id: parsed.data.campaignId,
+    });
+
+    if (error) {
+      console.error("delete_realm_campaign failed:", error);
+      outcome = "error";
+    }
+  } catch {
+    outcome = "error";
+  }
+
+  revalidatePath("/home");
+  revalidatePath("/home/realm");
+  revalidatePath("/home/realm/manage");
+
+  redirect(`/home/realm/manage?delete=${outcome}`);
+}
+export async function updateCampaignAction(
+  campaignId: string,
+  _previousState: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  const submittedValues: Record<string, string | string[]> = {
+    circleId: String(formData.get("circleId") ?? ""),
+    title: String(formData.get("title") ?? ""),
+    summary: String(formData.get("summary") ?? ""),
+    premise: String(formData.get("premise") ?? ""),
+    genre: String(formData.get("genre") ?? ""),
+    tone: String(formData.get("tone") ?? ""),
+    safetyExpectations: String(
+      formData.get("safetyExpectations") ?? "",
+    ),
+    format: String(formData.get("format") ?? ""),
+    locationLabel: String(formData.get("locationLabel") ?? ""),
+    scheduleSummary: String(formData.get("scheduleSummary") ?? ""),
+    timezone: String(formData.get("timezone") ?? ""),
+    estimatedSessionMinutes: String(
+      formData.get("estimatedSessionMinutes") ?? "",
+    ),
+    applicationDeadlineLocal: String(
+      formData.get("applicationDeadlineLocal") ?? "",
+    ),
+    playerCapacity: String(formData.get("playerCapacity") ?? ""),
+    experienceLevel: String(formData.get("experienceLevel") ?? ""),
+    modeId: String(formData.get("modeId") ?? ""),
+    minimumEnergy: String(formData.get("minimumEnergy") ?? ""),
+    maximumEnergy: String(formData.get("maximumEnergy") ?? ""),
+    stimulationLevel: String(formData.get("stimulationLevel") ?? ""),
+    socialIntensity: String(formData.get("socialIntensity") ?? ""),
+    interestIds: formData.getAll("interestIds").map(String),
+  };
+
+  const parsedId = campaignIdSchema.safeParse({
+    campaignId,
+  });
+
+  if (!parsedId.success) {
+    return {
+      status: "error",
+      message: "This campaign could not be identified.",
+      values: submittedValues,
+    };
+  }
+
+  const parsed = createCampaignSchema.safeParse({
+    circleId: formData.get("circleId"),
+    title: formData.get("title"),
+    summary: formData.get("summary"),
+    premise: formData.get("premise"),
+    genre: formData.get("genre"),
+    tone: formData.get("tone"),
+    safetyExpectations: formData.get("safetyExpectations"),
+    format: formData.get("format"),
+    locationLabel: formData.get("locationLabel"),
+    scheduleSummary: formData.get("scheduleSummary"),
+    timezone: formData.get("timezone"),
+    estimatedSessionMinutes: formData.get("estimatedSessionMinutes"),
+    applicationDeadlineLocal: formData.get("applicationDeadlineLocal"),
+    playerCapacity: formData.get("playerCapacity"),
+    experienceLevel: formData.get("experienceLevel"),
+    modeId: formData.get("modeId"),
+    minimumEnergy: formData.get("minimumEnergy"),
+    maximumEnergy: formData.get("maximumEnergy"),
+    stimulationLevel: formData.get("stimulationLevel"),
+    socialIntensity: formData.get("socialIntensity"),
+    interestIds: formData.getAll("interestIds"),
+  });
+
+  if (!parsed.success) {
+    return {
+      status: "error",
+      message: "Check the highlighted campaign details and try again.",
+      fieldErrors: parsed.error.flatten().fieldErrors,
+      values: submittedValues,
+    };
+  }
+
+  try {
+    const supabase = await createClient();
+
+    const { error } = await supabase.rpc("update_realm_campaign", {
+      p_campaign_id: parsedId.data.campaignId,
+      p_circle_id: parsed.data.circleId,
+      p_title: parsed.data.title,
+      p_summary: parsed.data.summary,
+      p_premise: parsed.data.premise,
+      p_genre: parsed.data.genre,
+      p_tone: parsed.data.tone,
+      p_safety_expectations: parsed.data.safetyExpectations,
+      p_format: parsed.data.format,
+      p_location_label: parsed.data.locationLabel,
+      p_schedule_summary: parsed.data.scheduleSummary,
+      p_timezone: parsed.data.timezone,
+      p_estimated_session_minutes: parsed.data.estimatedSessionMinutes,
+      p_application_deadline_local: parsed.data.applicationDeadlineLocal,
+      p_player_capacity: parsed.data.playerCapacity,
+      p_experience_level: parsed.data.experienceLevel,
+      p_mode_id: parsed.data.modeId,
+      p_minimum_energy: parsed.data.minimumEnergy,
+      p_maximum_energy: parsed.data.maximumEnergy,
+      p_stimulation_level: parsed.data.stimulationLevel,
+      p_social_intensity: parsed.data.socialIntensity,
+      p_interest_ids: parsed.data.interestIds,
+    });
+if (error) {
+  console.error("update_realm_campaign failed:", error);
+
+  return {
+    status: "error",
+    message: `Campaign update failed: ${error.message}`,
+    values: submittedValues,
+  };
+}
+  } catch (error) {
+    console.error("updateCampaignAction failed:", error);
+
+    return {
+      status: "error",
+      message:
+        "Fifth Realm is temporarily unavailable. Please try again shortly.",
+      values: submittedValues,
+    };
+  }
+
+  revalidatePath("/home");
+  revalidatePath("/home/realm");
+  revalidatePath(`/home/realm/${parsedId.data.campaignId}`);
+  revalidatePath(`/home/realm/manage/${parsedId.data.campaignId}`);
+  revalidatePath(`/home/realm/manage/${parsedId.data.campaignId}/edit`);
+
+  redirect(`/home/realm/manage/${parsedId.data.campaignId}?updated=1`);
+}

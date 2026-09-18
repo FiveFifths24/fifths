@@ -11,8 +11,8 @@ describe("formatPresence", () => {
 
   it("keeps older activity deliberately approximate", () => {
     expect(formatPresence("2026-08-28T08:00:00Z", now)).toBe(
-      "Active yesterday",
+      "Active Yesterday",
     );
-    expect(formatPresence("2026-08-01T08:00:00Z", now)).toBe("Active recently");
+    expect(formatPresence("2026-08-01T08:00:00Z", now)).toBe("Active Recently");
   });
 });

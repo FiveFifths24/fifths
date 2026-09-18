@@ -10,7 +10,7 @@ import { assembleOpportunityCards } from "@/features/creator-commons/opportunity
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
-  title: "Saved Creator Commons opportunities",
+  title: "Saved Creator Commons Opportunities",
 };
 
 export const dynamic = "force-dynamic";

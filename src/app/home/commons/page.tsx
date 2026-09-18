@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import {
   Bookmark,
   BriefcaseBusiness,
+  ChevronDown,
   ClipboardList,
   FilePenLine,
+  History,
   Settings2,
   Sparkles,
 } from "lucide-react";
@@ -19,6 +21,12 @@ import {
   rankOpportunities,
 } from "@/features/creator-commons/opportunity-data";
 import type { PulseRecommendationInput } from "@/lib/recommendations/types";
+import {
+  getParticipationLifecycle,
+  isMainDiscoveryLifecycle,
+  isRecentlyEndedLifecycle,
+  PARTICIPATION_RECENT_WINDOW_MS,
+} from "@/lib/participation/lifecycle";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
@@ -42,6 +50,13 @@ export default async function CreatorCommonsPage() {
     return <AccountUnavailable />;
   }
 
+  const now = new Date();
+  const nowIso = now.toISOString();
+  const recentHistoryCutoff = new Date(
+    now.getTime() - PARTICIPATION_RECENT_WINDOW_MS,
+  ).toISOString();
+
+
   const [
     opportunityResult,
     modeResult,
@@ -52,10 +67,11 @@ export default async function CreatorCommonsPage() {
     supabase
       .from("creator_opportunities")
       .select("*")
-      .eq("status", "published")
-      .gt("response_deadline", new Date().toISOString())
+      .or(
+        `and(status.eq.published,response_deadline.gt.${nowIso}),and(status.eq.completed,completed_at.gt.${recentHistoryCutoff})`,
+      )
       .order("response_deadline")
-      .limit(50),
+      .limit(75),
 
     supabase.from("modes").select("id, slug, name").order("sort_order"),
 
@@ -86,9 +102,44 @@ export default async function CreatorCommonsPage() {
     );
   }
 
-  const opportunities = opportunityResult.data ?? [];
+  const loadedOpportunities = opportunityResult.data ?? [];
 
-  const ids = opportunities.map((opportunity) => opportunity.id);
+  const opportunities = loadedOpportunities.filter((opportunity) => {
+    if (opportunity.status === "published") {
+      return opportunity.response_deadline > nowIso;
+    }
+
+    if (
+      opportunity.status === "completed" &&
+      opportunity.completed_at
+    ) {
+      return isMainDiscoveryLifecycle(
+        getParticipationLifecycle(opportunity.completed_at, now),
+      );
+    }
+
+    return false;
+  });
+
+  const recentlyCompletedOpportunities = loadedOpportunities
+    .filter(
+      (opportunity) =>
+        opportunity.status === "completed" &&
+        opportunity.completed_at &&
+        isRecentlyEndedLifecycle(
+          getParticipationLifecycle(opportunity.completed_at, now),
+        ),
+    )
+    .sort(
+      (left, right) =>
+        Date.parse(right.completed_at ?? "") -
+        Date.parse(left.completed_at ?? ""),
+    );
+
+  const ids = [
+    ...opportunities,
+    ...recentlyCompletedOpportunities,
+  ].map((opportunity) => opportunity.id);
 
   const [
     skillLinkResult,
@@ -209,6 +260,17 @@ export default async function CreatorCommonsPage() {
     (savedResult.data ?? []).map((item) => item.opportunity_id),
     responseResult.data ?? [],
   );
+    const recentlyCompletedCards = assembleOpportunityCards(
+    recentlyCompletedOpportunities,
+    modes,
+    skillResult.data ?? [],
+    interestResult.data ?? [],
+    skillLinkResult.data ?? [],
+    interestLinkResult.data ?? [],
+    [],
+    (savedResult.data ?? []).map((item) => item.opportunity_id),
+    responseResult.data ?? [],
+  );
 
   return (
     <div>
@@ -254,29 +316,26 @@ export default async function CreatorCommonsPage() {
         className="mt-8 grid gap-3 sm:grid-cols-3"
       >
         <ButtonLink
-          className="min-h-12 border-white/15 bg-white/[0.035] text-white/75 hover:border-white/35 hover:bg-white/[0.07] hover:text-white"
+          className="min-h-12 border border-white/35 bg-white px-7 text-sm font-bold text-black shadow-[0_0_28px_rgba(255,255,255,0.12)] transition hover:bg-white/90 hover:shadow-[0_0_36px_rgba(255,255,255,0.18)]"
           href="/home/commons/saved"
-          variant="secondary"
         >
-          <Bookmark aria-hidden="true" className="size-4 text-white" />
+          <Bookmark aria-hidden="true" className="size-4 text-black" />
           Saved
         </ButtonLink>
 
         <ButtonLink
-          className="min-h-12 border-white/15 bg-white/[0.035] text-white/75 hover:border-white/35 hover:bg-white/[0.07] hover:text-white"
+          className="min-h-12 border border-white/35 bg-white px-7 text-sm font-bold text-black shadow-[0_0_28px_rgba(255,255,255,0.12)] transition hover:bg-white/90 hover:shadow-[0_0_36px_rgba(255,255,255,0.18)]"
           href="/home/commons/responses"
-          variant="secondary"
         >
-          <ClipboardList aria-hidden="true" className="size-4 text-white" />
+          <ClipboardList aria-hidden="true" className="size-4 text-black" />
           My Responses
         </ButtonLink>
 
         <ButtonLink
-          className="min-h-12 border-white/15 bg-white/[0.035] text-white/75 hover:border-white/35 hover:bg-white/[0.07] hover:text-white"
+          className="min-h-12 border border-white/35 bg-white px-7 text-sm font-bold text-black shadow-[0_0_28px_rgba(255,255,255,0.12)] transition hover:bg-white/90 hover:shadow-[0_0_36px_rgba(255,255,255,0.18)]"
           href="/home/commons/manage"
-          variant="secondary"
         >
-          <Settings2 aria-hidden="true" className="size-4 text-white" />
+          <Settings2 aria-hidden="true" className="size-4 text-black" />
           Manage
         </ButtonLink>
       </nav>
@@ -303,7 +362,7 @@ export default async function CreatorCommonsPage() {
           >
             {pulseInput
               ? "Opportunities That Fit Right Now"
-              : "Published Opportunities"}
+              : "Current Opportunities"}
           </h2>
         </div>
 
@@ -329,6 +388,44 @@ export default async function CreatorCommonsPage() {
           </div>
         )}
       </section>
+            {recentlyCompletedCards.length ? (
+        <details className="mt-12 overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/[0.025]">
+          <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5 text-left [&::-webkit-details-marker]:hidden">
+            <div className="min-w-0">
+              <p className="flex items-center gap-2 text-xs font-bold tracking-[0.18em] text-white/45 uppercase">
+                <History aria-hidden="true" className="size-4 text-white/70" />
+                Past Week
+              </p>
+
+              <h2 className="mt-2 text-xl font-bold text-white">
+                Recently Completed
+              </h2>
+
+              <p className="mt-1 text-sm leading-6 text-white/45">
+                Creator Commons opportunities completed within the past seven
+                days.
+              </p>
+            </div>
+
+            <div className="flex shrink-0 items-center gap-3">
+              <span className="rounded-full border border-white/15 bg-white/[0.06] px-3 py-1 text-xs font-bold text-white/70">
+                {recentlyCompletedCards.length}
+              </span>
+
+              <ChevronDown
+                aria-hidden="true"
+                className="size-5 text-white/45"
+              />
+            </div>
+          </summary>
+
+          <div className="grid gap-5 border-t border-white/10 p-5 sm:p-6 lg:grid-cols-2">
+            {recentlyCompletedCards.map((card) => (
+              <OpportunityCard item={card} key={card.id} />
+            ))}
+          </div>
+        </details>
+      ) : null}
     </div>
   );
 }

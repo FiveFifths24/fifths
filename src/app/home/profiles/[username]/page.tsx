@@ -147,12 +147,15 @@ export default async function MemberProfilePage({
                     </summary>
 
                     <div className="mt-3 rounded-[1.25rem] border border-red-900/35 bg-red-950/35 p-4 text-left">
-                      <ReportForm
-                        defaultContextUrl={returnTo}
-                        defaultTarget="member"
-                        defaultTargetId={profile.id}
-                        lockTarget
-                      />
+<ReportForm
+  defaultTarget="member"
+  defaultTargetId={profile.id}
+  defaultContextUrl={`/home/profiles/${profile.username}`}
+  lockTarget
+  offerBlockAfterReport
+  blockTargetUserId={profile.id}
+  returnTo={`/home/profiles/${profile.username}`}
+/>
 
                       <p className="mt-4 flex items-center gap-2 text-xs text-white/35">
                         <ShieldCheck aria-hidden="true" className="size-4" />

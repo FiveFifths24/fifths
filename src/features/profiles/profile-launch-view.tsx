@@ -203,12 +203,13 @@ export function ProfileLaunchView({
   experience,
   featuredConnections,
   isOwner,
+  headerAction,
   contactActions,
   featuredProfileImageUrl,
   featuredProfileImageUrl2,
   trackView = false,
 }: {
-  profile: {
+    profile: {
     id: string;
     username: string;
     displayName: string;
@@ -395,6 +396,11 @@ export function ProfileLaunchView({
                   </a>
                 </div>
               ) : null}
+              {headerAction ? (
+  <div className="mt-6 flex justify-center lg:absolute lg:right-10 lg:bottom-10 lg:mt-0">
+    {headerAction}
+  </div>
+) : null}
             </div>
           </div>
         </div>

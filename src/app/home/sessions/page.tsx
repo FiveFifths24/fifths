@@ -1,6 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { CalendarRange, Plus, Sparkles, TicketCheck } from "lucide-react";
+import {
+  CalendarRange,
+  ChevronDown,
+  History,
+  Plus,
+  Sparkles,
+  TicketCheck,
+} from "lucide-react";
 
 import { AccountUnavailable } from "@/components/account/account-unavailable";
 import { ButtonLink } from "@/components/ui/button-link";
@@ -18,7 +25,6 @@ import {
   isEligibleCampaign,
   isEligibleCircle,
   isEligibleOpportunity,
-  isEligibleSession,
   selectEcosystemPreview,
   type SubSignalSource,
 } from "@/features/sessions/sub-signal-data";
@@ -27,7 +33,14 @@ import {
   loadContentPreferences,
 } from "@/features/profiles/content-filters";
 import type { PulseRecommendationInput } from "@/lib/recommendations/types";
+import {
+  getParticipationLifecycle,
+  isMainDiscoveryLifecycle,
+  isRecentlyEndedLifecycle,
+  PARTICIPATION_RECENT_WINDOW_MS,
+} from "@/lib/participation/lifecycle";
 import { createClient } from "@/lib/supabase/server";
+import { SessionCard } from "@/features/sessions/session-card";
 
 export const metadata: Metadata = {
   title: "Discover Sessions",
@@ -47,14 +60,14 @@ export default async function SessionsPage() {
     return <AccountUnavailable />;
   }
 
-  // These request-time cutoffs preserve the existing Session grace period while
-  // keeping deadline-driven Sub-Signals current.
+  // Sessions remain in primary discovery for 24 hours after ending.
+  // Sessions ended within the past seven days remain available in Recently Ended.
   const now = new Date();
   const nowIso = now.toISOString();
-  const publicCutoff = new Date(
-    now.getTime() - 24 * 60 * 60 * 1000,
+  const recentHistoryCutoff = new Date(
+    now.getTime() - PARTICIPATION_RECENT_WINDOW_MS,
   ).toISOString();
-  const { data: userData } = await supabase.auth.getUser();
+    const { data: userData } = await supabase.auth.getUser();
 
   const [
     sessionResult,
@@ -69,10 +82,10 @@ export default async function SessionsPage() {
       .from("sessions")
       .select("*")
       .eq("status", "published")
-      .gt("ends_at", publicCutoff)
+      .gt("ends_at", recentHistoryCutoff)
       .order("starts_at")
       .limit(SESSION_LIMIT),
-    supabase
+          supabase
       .from("realm_campaigns")
       .select("*")
       .in("status", ["recruiting", "active"])
@@ -116,9 +129,9 @@ export default async function SessionsPage() {
   const contentPreferences = userData.user
     ? await loadContentPreferences(supabase, userData.user.id)
     : { hiddenUserIds: new Set<string>(), blockedWords: [] };
-  const sessions = filterMemberContent(
-    (sessionResult.data ?? []).filter((session) =>
-      isEligibleSession(session, publicCutoff),
+  const visibleSessions = filterMemberContent(
+    (sessionResult.data ?? []).filter(
+      (session) => session.status === "published",
     ),
     contentPreferences,
     (session) => session.host_user_id,
@@ -130,7 +143,24 @@ export default async function SessionsPage() {
         session.host_display_name,
       ].join(" "),
   );
-  const campaigns = filterMemberContent(
+
+  const sessions = visibleSessions.filter((session) =>
+    isMainDiscoveryLifecycle(
+      getParticipationLifecycle(session.ends_at, now),
+    ),
+  );
+
+  const recentlyEndedSessions = visibleSessions
+    .filter((session) =>
+      isRecentlyEndedLifecycle(
+        getParticipationLifecycle(session.ends_at, now),
+      ),
+    )
+    .sort(
+      (left, right) =>
+        Date.parse(right.ends_at) - Date.parse(left.ends_at),
+    );
+      const campaigns = filterMemberContent(
     (campaignResult.data ?? []).filter(isEligibleCampaign),
     contentPreferences,
     (campaign) => campaign.created_by,
@@ -165,7 +195,9 @@ export default async function SessionsPage() {
       ].join(" "),
   );
 
-  const sessionIds = sessions.map((session) => session.id);
+  const sessionIds = [...sessions, ...recentlyEndedSessions].map(
+    (session) => session.id,
+  );
   const campaignIds = campaigns.map((campaign) => campaign.id);
   const circleIds = circles.map((circle) => circle.id);
   const opportunityIds = opportunities.map((opportunity) => opportunity.id);
@@ -265,6 +297,12 @@ export default async function SessionsPage() {
     sessionLinks,
     recommendations,
   );
+    const recentlyEndedCards = assembleSessionCards(
+    recentlyEndedSessions,
+    modes,
+    interests,
+    sessionLinks,
+  );
   const campaignPreview = selectEcosystemPreview(
     campaigns,
     pulseInput
@@ -359,8 +397,56 @@ export default async function SessionsPage() {
           </span>
         </StatusMessage>
       )}
+            {recentlyEndedCards.length ? (
+        <details className="mt-12 overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/[0.025]">
+          <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5 text-left [&::-webkit-details-marker]:hidden">
+            <div className="min-w-0">
+              <p className="flex items-center gap-2 text-xs font-bold tracking-[0.18em] text-white/45 uppercase">
+                <History aria-hidden="true" className="size-4 text-[#992bff]" />
+                Past Week
+              </p>
 
-      <AroundEcosystem
+              <h2 className="mt-2 text-xl font-bold text-white">
+                Recently Ended
+              </h2>
+
+              <p className="mt-1 text-sm leading-6 text-white/45">
+                Sessions that ended within the past seven days.
+              </p>
+            </div>
+
+            <div className="flex shrink-0 items-center gap-3">
+              <span className="rounded-full border border-[#992bff]/25 bg-[#992bff]/10 px-3 py-1 text-xs font-bold text-[#d8b4fe]">
+                {recentlyEndedCards.length}
+              </span>
+
+              <ChevronDown
+                aria-hidden="true"
+                className="size-5 text-white/45"
+              />
+            </div>
+          </summary>
+
+          <div className="grid grid-cols-1 gap-5 border-t border-white/10 p-5 sm:p-6 lg:grid-cols-2">
+            {recentlyEndedCards.map((card) => (
+              <SessionCard item={card} key={card.id} />
+            ))}
+          </div>
+        </details>
+      ) : null}
+
+
+      {sessionResult.error ? (
+        <StatusMessage
+          className="mt-12 justify-center text-center"
+          tone="error"
+        >
+          Sessions are temporarily unavailable. Please try again shortly.
+        </StatusMessage>
+      ) : (
+        <SessionResults interests={interests} sessions={sessionCards} />
+      )}
+            <AroundEcosystem
         campaign={
           campaignPreview
             ? {
@@ -409,16 +495,7 @@ export default async function SessionsPage() {
         }
         unavailableSources={ecosystemUnavailable}
       />
-      {sessionResult.error ? (
-        <StatusMessage
-          className="mt-12 justify-center text-center"
-          tone="error"
-        >
-          Sessions are temporarily unavailable. Please try again shortly.
-        </StatusMessage>
-      ) : (
-        <SessionResults interests={interests} sessions={sessionCards} />
-      )}
+
     </div>
   );
 }

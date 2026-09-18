@@ -107,7 +107,7 @@ export function SessionResults({ sessions, interests }: Props) {
             </p>
 
             <p className="mt-2 text-sm leading-6 text-white/45">
-              Narrow the Session board by what you&apos;re interested in.
+              Narrow The Session Board What You&apos;re Interested In.
             </p>
           </div>
 
@@ -178,24 +178,24 @@ export function SessionResults({ sessions, interests }: Props) {
             onClick={clearFilters}
             type="button"
           >
-            Clear filters
+            Clear Filters
           </button>
         ) : null}
       </div>
 
       <SessionSection
-        description="Sessions happening now or beginning within the next six hours."
-        emptyMessage="Nothing is happening right now. Check the upcoming Sessions below."
+        description="Sessions Happening Now Or Beginning Within The Next Six Hours."
+        emptyMessage="Nothing Is happening Right Now. Check The Upcoming Sessions Below."
         heading="Current Sessions"
         sessions={currentSessions}
       />
 
       <SessionSection
-        description="Plans and activities starting more than six hours from now."
+        description="Plans And Activities Starting More Than Six Hours From Now."
         emptyMessage={
           hasFilters
-            ? "No upcoming Sessions match these filters."
-            : "No upcoming Sessions have been published yet."
+            ? "No Upcoming Sessions Match These Filters."
+            : "No Upcoming Sessions Have Been Published Yet."
         }
         heading="Upcoming Sessions"
         sessions={upcomingSessions}
