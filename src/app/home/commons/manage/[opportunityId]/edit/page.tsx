@@ -53,11 +53,7 @@ export default async function EditOpportunityPage({
     return <AccountUnavailable />;
   }
 
-  const [
-    opportunityResult,
-    managerResult,
-    roleResult,
-  ] = await Promise.all([
+  const [opportunityResult, managerResult, roleResult] = await Promise.all([
     supabase
       .from("creator_opportunities")
       .select("*")
@@ -68,10 +64,7 @@ export default async function EditOpportunityPage({
       p_opportunity_id: opportunityId,
     }),
 
-    supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", userData.user.id),
+    supabase.from("user_roles").select("role").eq("user_id", userData.user.id),
   ]);
 
   if (
@@ -117,11 +110,7 @@ export default async function EditOpportunityPage({
       .eq("active", true)
       .order("sort_order"),
 
-    supabase
-      .from("skills")
-      .select("id, name")
-      .eq("active", true)
-      .order("name"),
+    supabase.from("skills").select("id, name").eq("active", true).order("name"),
 
     supabase
       .from("interests")
@@ -129,13 +118,13 @@ export default async function EditOpportunityPage({
       .eq("active", true)
       .order("name"),
 
-supabase
-  .from("circle_members")
-  .select("circle_id, role, status")
-  .eq("user_id", userData.user.id)
-  .eq("status", "active")
-  .in("role", ["owner", "host"]),
-    
+    supabase
+      .from("circle_members")
+      .select("circle_id, role, status")
+      .eq("user_id", userData.user.id)
+      .eq("status", "active")
+      .in("role", ["owner", "host"]),
+
     supabase
       .from("opportunity_skills")
       .select("skill_id")
@@ -147,69 +136,68 @@ supabase
       .eq("opportunity_id", opportunity.id),
   ]);
 
-if (
-  modeResult.error ||
-  skillResult.error ||
-  interestResult.error ||
-  circleMembershipResult.error ||
-  selectedSkillResult.error ||
-  selectedInterestResult.error
-) {
-  return (
-    <div className="mx-auto max-w-5xl">
-      <ButtonLink
-        href={`/home/commons/manage/${opportunity.id}`}
-        variant="quiet"
-      >
-        ← Back to Opportunity
-      </ButtonLink>
+  if (
+    modeResult.error ||
+    skillResult.error ||
+    interestResult.error ||
+    circleMembershipResult.error ||
+    selectedSkillResult.error ||
+    selectedInterestResult.error
+  ) {
+    return (
+      <div className="mx-auto max-w-5xl">
+        <ButtonLink
+          href={`/home/commons/manage/${opportunity.id}`}
+          variant="quiet"
+        >
+          ← Back to Opportunity
+        </ButtonLink>
 
-      <div className="mt-8">
-        <StatusMessage tone="error">
-          This opportunity could not be prepared for editing.
-        </StatusMessage>
+        <div className="mt-8">
+          <StatusMessage tone="error">
+            This opportunity could not be prepared for editing.
+          </StatusMessage>
+        </div>
       </div>
-    </div>
+    );
+  }
+
+  const circleIds = (circleMembershipResult.data ?? []).map(
+    (membership) => membership.circle_id,
   );
-}
 
-const circleIds = (circleMembershipResult.data ?? []).map(
-  (membership) => membership.circle_id,
-);
+  const hostedCircleResult = circleIds.length
+    ? await supabase
+        .from("circles")
+        .select("id, name, status")
+        .in("id", circleIds)
+        .neq("status", "archived")
+        .order("name")
+    : {
+        data: [],
+        error: null,
+      };
 
-const hostedCircleResult = circleIds.length
-  ? await supabase
-      .from("circles")
-      .select("id, name, status")
-      .in("id", circleIds)
-      .neq("status", "archived")
-      .order("name")
-  : {
-      data: [],
-      error: null,
-    };
+  if (hostedCircleResult.error) {
+    return (
+      <div className="mx-auto max-w-5xl">
+        <ButtonLink
+          href={`/home/commons/manage/${opportunity.id}`}
+          variant="quiet"
+        >
+          ← Back to Opportunity
+        </ButtonLink>
 
-if (hostedCircleResult.error) {
-  return (
-    <div className="mx-auto max-w-5xl">
-      <ButtonLink
-        href={`/home/commons/manage/${opportunity.id}`}
-        variant="quiet"
-      >
-        ← Back to Opportunity
-      </ButtonLink>
-
-      <div className="mt-8">
-        <StatusMessage tone="error">
-          Circle options could not be loaded.
-        </StatusMessage>
+        <div className="mt-8">
+          <StatusMessage tone="error">
+            Circle options could not be loaded.
+          </StatusMessage>
+        </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
 
   let circles: Array<{ id: string; name: string }> = [];
-
 
   const responseDeadlineLocal = toLocalDateTimeInput(
     opportunity.response_deadline,

@@ -164,7 +164,7 @@ export function CreateCircleForm({
       className="space-y-10"
       ref={formRef}
     >
-<DraftRestoredNotice restored={restored} />
+      <DraftRestoredNotice restored={restored} />
 
       {/* =====================================================
           COMMUNITY IDENTITY
@@ -436,22 +436,22 @@ export function CreateCircleForm({
         before publishing it for discovery.
       </div>
 
-<div className="rounded-[1.5rem] border border-[#ee54a7]/15 bg-black/20 p-5">
-  <FormErrorFocus state={state} />
+      <div className="rounded-[1.5rem] border border-[#ee54a7]/15 bg-black/20 p-5">
+        <FormErrorFocus state={state} />
 
-  {state.status === "error" ? (
-    <div className="mb-5">
-      <ActionStatus state={state} />
-    </div>
-  ) : null}
+        {state.status === "error" ? (
+          <div className="mb-5">
+            <ActionStatus state={state} />
+          </div>
+        ) : null}
 
-  <SubmitButton
-    className="shadow-lg shadow-[#6c14ce]/20 hover:brightness-110"
-    pendingLabel="Creating Circle…"
-  >
-    Create Circle
-  </SubmitButton>
-</div>
+        <SubmitButton
+          className="shadow-lg shadow-[#6c14ce]/20 hover:brightness-110"
+          pendingLabel="Creating Circle…"
+        >
+          Create Circle
+        </SubmitButton>
+      </div>
     </form>
   );
 }

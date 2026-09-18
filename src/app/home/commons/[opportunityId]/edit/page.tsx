@@ -108,11 +108,7 @@ export default async function EditOpportunityPage({
       .eq("active", true)
       .order("sort_order"),
 
-    supabase
-      .from("skills")
-      .select("id, name")
-      .eq("active", true)
-      .order("name"),
+    supabase.from("skills").select("id, name").eq("active", true).order("name"),
 
     supabase
       .from("interests")

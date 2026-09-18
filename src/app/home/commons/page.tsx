@@ -56,7 +56,6 @@ export default async function CreatorCommonsPage() {
     now.getTime() - PARTICIPATION_RECENT_WINDOW_MS,
   ).toISOString();
 
-
   const [
     opportunityResult,
     modeResult,
@@ -109,10 +108,7 @@ export default async function CreatorCommonsPage() {
       return opportunity.response_deadline > nowIso;
     }
 
-    if (
-      opportunity.status === "completed" &&
-      opportunity.completed_at
-    ) {
+    if (opportunity.status === "completed" && opportunity.completed_at) {
       return isMainDiscoveryLifecycle(
         getParticipationLifecycle(opportunity.completed_at, now),
       );
@@ -136,10 +132,9 @@ export default async function CreatorCommonsPage() {
         Date.parse(left.completed_at ?? ""),
     );
 
-  const ids = [
-    ...opportunities,
-    ...recentlyCompletedOpportunities,
-  ].map((opportunity) => opportunity.id);
+  const ids = [...opportunities, ...recentlyCompletedOpportunities].map(
+    (opportunity) => opportunity.id,
+  );
 
   const [
     skillLinkResult,
@@ -260,7 +255,7 @@ export default async function CreatorCommonsPage() {
     (savedResult.data ?? []).map((item) => item.opportunity_id),
     responseResult.data ?? [],
   );
-    const recentlyCompletedCards = assembleOpportunityCards(
+  const recentlyCompletedCards = assembleOpportunityCards(
     recentlyCompletedOpportunities,
     modes,
     skillResult.data ?? [],
@@ -388,7 +383,7 @@ export default async function CreatorCommonsPage() {
           </div>
         )}
       </section>
-            {recentlyCompletedCards.length ? (
+      {recentlyCompletedCards.length ? (
         <details className="mt-12 overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/[0.025]">
           <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5 text-left [&::-webkit-details-marker]:hidden">
             <div className="min-w-0">

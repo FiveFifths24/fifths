@@ -209,7 +209,7 @@ export function ProfileLaunchView({
   featuredProfileImageUrl2,
   trackView = false,
 }: {
-    profile: {
+  profile: {
     id: string;
     username: string;
     displayName: string;
@@ -397,10 +397,10 @@ export function ProfileLaunchView({
                 </div>
               ) : null}
               {headerAction ? (
-  <div className="mt-6 flex justify-center lg:absolute lg:right-10 lg:bottom-10 lg:mt-0">
-    {headerAction}
-  </div>
-) : null}
+                <div className="mt-6 flex justify-center lg:absolute lg:right-10 lg:bottom-10 lg:mt-0">
+                  {headerAction}
+                </div>
+              ) : null}
             </div>
           </div>
         </div>

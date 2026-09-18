@@ -8,20 +8,20 @@ const page = readFileSync(
 );
 
 describe("Sessions-first discovery experience", () => {
-it("keeps standard Sessions as the primary result area", () => {
-  expect(page).toContain("<SessionResults");
-  expect(page.indexOf("<SessionResults")).toBeGreaterThan(-1);
-  expect(page.indexOf("<AroundEcosystem")).toBeGreaterThan(
-    page.indexOf("<SessionResults"),
-  );
-});
+  it("keeps standard Sessions as the primary result area", () => {
+    expect(page).toContain("<SessionResults");
+    expect(page.indexOf("<SessionResults")).toBeGreaterThan(-1);
+    expect(page.indexOf("<AroundEcosystem")).toBeGreaterThan(
+      page.indexOf("<SessionResults"),
+    );
+  });
 
-it("keeps Session results independent from ecosystem previews", () => {
-  expect(page).toContain(
-    "<SessionResults interests={interests} sessions={sessionCards} />",
-  );
-  expect(page).toContain("<AroundEcosystem");
-});
+  it("keeps Session results independent from ecosystem previews", () => {
+    expect(page).toContain(
+      "<SessionResults interests={interests} sessions={sessionCards} />",
+    );
+    expect(page).toContain("<AroundEcosystem");
+  });
 
   it("limits each ecosystem source before rendering", () => {
     expect(page).toContain("const campaignPreview = selectEcosystemPreview");

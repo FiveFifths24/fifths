@@ -34,7 +34,7 @@ export default async function CircleDetailPage({
   params: Promise<{ circleId: string }>;
   searchParams?: Promise<{ membership?: string }>;
 }) {
-    let supabase;
+  let supabase;
 
   try {
     supabase = await createClient();
@@ -42,11 +42,11 @@ export default async function CircleDetailPage({
     return <AccountUnavailable />;
   }
 
-const [{ circleId }, parameters, userResult] = await Promise.all([
-  params,
-  searchParams,
-  supabase.auth.getUser(),
-]);
+  const [{ circleId }, parameters, userResult] = await Promise.all([
+    params,
+    searchParams,
+    supabase.auth.getUser(),
+  ]);
 
   if (!userResult.data.user) {
     return <AccountUnavailable />;
@@ -140,26 +140,22 @@ const [{ circleId }, parameters, userResult] = await Promise.all([
   const canManage =
     membership?.status === "active" &&
     ["owner", "host", "moderator"].includes(membership.role);
-    const canUseCircleChat = membership?.status === "active";
+  const canUseCircleChat = membership?.status === "active";
 
-return (
-  <div className="text-center sm:text-left">
-    <div className="flex justify-center sm:justify-start">
-      <ButtonLink
-        className="mb-8"
-        href="/home/circles"
-        variant="quiet"
-      >
-        ← Back To Circles
-      </ButtonLink>
-    </div>
-    {parameters?.membership === "left" ? (
-  <StatusMessage className="mb-6" tone="success">
-    You left this Circle. You can rejoin later if membership is available.
-  </StatusMessage>
-) : null}
+  return (
+    <div className="text-center sm:text-left">
+      <div className="flex justify-center sm:justify-start">
+        <ButtonLink className="mb-8" href="/home/circles" variant="quiet">
+          ← Back To Circles
+        </ButtonLink>
+      </div>
+      {parameters?.membership === "left" ? (
+        <StatusMessage className="mb-6" tone="success">
+          You left this Circle. You can rejoin later if membership is available.
+        </StatusMessage>
+      ) : null}
 
-    {/* =====================================================
+      {/* =====================================================
         CIRCLE HERO
               ====================================================== */}
       <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-12">
@@ -204,30 +200,30 @@ return (
           </div>
         </div>
 
-<div className="flex flex-wrap justify-center gap-3 sm:justify-start lg:justify-end">
-{canUseCircleChat ? (
-  <ButtonLink
-    className="min-h-12 min-w-[11.5rem] rounded-full border border-transparent bg-[linear-gradient(transparent,transparent)_padding-box,linear-gradient(to_right,#6c14ce,#a855f7,#ee54a7)_border-box] px-7 text-sm text-white shadow-lg shadow-[#6c14ce]/15 hover:bg-[linear-gradient(rgba(255,255,255,0.04),rgba(255,255,255,0.04))_padding-box,linear-gradient(to_right,#6c14ce,#a855f7,#ee54a7)_border-box]"
-    href={`/home/circles/${circle.id}/chat`}
-    variant="quiet"
-  >
-    <MessageCircle
-      aria-hidden="true"
-      className="mr-2 size-4 text-[#ff9ed1]"
-    />
-    Open Circle Chat
-  </ButtonLink>
-) : null}
+        <div className="flex flex-wrap justify-center gap-3 sm:justify-start lg:justify-end">
+          {canUseCircleChat ? (
+            <ButtonLink
+              className="min-h-12 min-w-[11.5rem] rounded-full border border-transparent bg-[linear-gradient(transparent,transparent)_padding-box,linear-gradient(to_right,#6c14ce,#a855f7,#ee54a7)_border-box] px-7 text-sm text-white shadow-lg shadow-[#6c14ce]/15 hover:bg-[linear-gradient(rgba(255,255,255,0.04),rgba(255,255,255,0.04))_padding-box,linear-gradient(to_right,#6c14ce,#a855f7,#ee54a7)_border-box]"
+              href={`/home/circles/${circle.id}/chat`}
+              variant="quiet"
+            >
+              <MessageCircle
+                aria-hidden="true"
+                className="mr-2 size-4 text-[#ff9ed1]"
+              />
+              Open Circle Chat
+            </ButtonLink>
+          ) : null}
 
-  {canManage ? (
-    <ButtonLink
-      className="min-h-12 min-w-[11.5rem] border-0 bg-gradient-to-r from-[#6c14ce] via-[#a855f7] to-[#ee54a7] px-7 text-sm text-white shadow-lg shadow-[#6c14ce]/20 hover:brightness-110"
-      href={`/home/circles/manage/${circle.id}`}
-    >
-      Manage Circle
-    </ButtonLink>
-  ) : null}
-</div>
+          {canManage ? (
+            <ButtonLink
+              className="min-h-12 min-w-[11.5rem] border-0 bg-gradient-to-r from-[#6c14ce] via-[#a855f7] to-[#ee54a7] px-7 text-sm text-white shadow-lg shadow-[#6c14ce]/20 hover:brightness-110"
+              href={`/home/circles/manage/${circle.id}`}
+            >
+              Manage Circle
+            </ButtonLink>
+          ) : null}
+        </div>
       </div>
 
       {/* =====================================================
@@ -277,35 +273,35 @@ return (
             MEMBERSHIP
         ==================================================== */}
         <aside className="h-fit rounded-[2rem] border border-[#ee54a7]/20 bg-[#ee54a7]/[0.045] p-6 sm:p-8">
-<h2 className="text-center text-2xl font-bold text-white">
-  Your Membership
-</h2>
+          <h2 className="text-center text-2xl font-bold text-white">
+            Your Membership
+          </h2>
 
-<p className="mx-auto mt-3 max-w-2xl text-center text-sm leading-7 text-white/55">
-  {membership?.status === "active"
-    ? "Manage Your Participation In This Circle."
-    : "Review this Circle's purpose, rules, and participation expectations before joining."}
-</p>
+          <p className="mx-auto mt-3 max-w-2xl text-center text-sm leading-7 text-white/55">
+            {membership?.status === "active"
+              ? "Manage Your Participation In This Circle."
+              : "Review this Circle's purpose, rules, and participation expectations before joining."}
+          </p>
 
-<div className="mt-6">
-  <CircleMembershipForm
-    circleId={circle.id}
-    joinPolicy={circle.join_policy}
-    membership={membership}
-  />
-</div>
+          <div className="mt-6">
+            <CircleMembershipForm
+              circleId={circle.id}
+              joinPolicy={circle.join_policy}
+              membership={membership}
+            />
+          </div>
 
-{canUseCircleChat ? (
-    <div className="mt-5 border-t border-[#ee54a7]/15 pt-5">
-    <ButtonLink
-      className="w-full justify-center border border-[#ee54a7]/20 bg-[#ee54a7]/10 text-[#ffb4dc] hover:bg-[#ee54a7]/15"
-      href={`/home/circles/${circle.id}/chat`}
-    >
-      <MessageCircle aria-hidden="true" className="mr-2 size-4" />
-      Open Circle Chat
-    </ButtonLink>
-  </div>
-) : null}
+          {canUseCircleChat ? (
+            <div className="mt-5 border-t border-[#ee54a7]/15 pt-5">
+              <ButtonLink
+                className="w-full justify-center border border-[#ee54a7]/20 bg-[#ee54a7]/10 text-[#ffb4dc] hover:bg-[#ee54a7]/15"
+                href={`/home/circles/${circle.id}/chat`}
+              >
+                <MessageCircle aria-hidden="true" className="mr-2 size-4" />
+                Open Circle Chat
+              </ButtonLink>
+            </div>
+          ) : null}
 
           <p className="mx-auto mt-6 max-w-2xl border-t border-[#ee54a7]/15 pt-5 text-center text-xs leading-6 text-white/40">
             Your membership and participation remain connected to this community

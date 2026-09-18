@@ -81,10 +81,7 @@ export default async function EditCampaignPage({
   if (!["draft", "recruiting"].includes(campaign.status)) {
     return (
       <div className="mx-auto w-full max-w-5xl">
-        <ButtonLink
-          href={`/home/realm/manage/${campaign.id}`}
-          variant="quiet"
-        >
+        <ButtonLink href={`/home/realm/manage/${campaign.id}`} variant="quiet">
           ← Back To Campaign
         </ButtonLink>
 
@@ -99,37 +96,33 @@ export default async function EditCampaignPage({
   const roles = (roleResult.data ?? []).map((item) => item.role);
   const isAdmin = roles.includes("platform_admin");
 
-  const [
-    modeResult,
-    interestResult,
-    membershipResult,
-    selectedInterestResult,
-  ] = await Promise.all([
-    supabase
-      .from("modes")
-      .select("id, name")
-      .eq("active", true)
-      .order("sort_order"),
+  const [modeResult, interestResult, membershipResult, selectedInterestResult] =
+    await Promise.all([
+      supabase
+        .from("modes")
+        .select("id, name")
+        .eq("active", true)
+        .order("sort_order"),
 
-    supabase
-      .from("interests")
-      .select("id, name")
-      .eq("active", true)
-      .eq("realm_enabled", true)
-      .order("name"),
+      supabase
+        .from("interests")
+        .select("id, name")
+        .eq("active", true)
+        .eq("realm_enabled", true)
+        .order("name"),
 
-    supabase
-      .from("circle_members")
-      .select("circle_id, role, status")
-      .eq("user_id", userData.user.id)
-      .eq("status", "active")
-      .in("role", ["owner", "host"]),
+      supabase
+        .from("circle_members")
+        .select("circle_id, role, status")
+        .eq("user_id", userData.user.id)
+        .eq("status", "active")
+        .in("role", ["owner", "host"]),
 
-    supabase
-      .from("campaign_interests")
-      .select("interest_id")
-      .eq("campaign_id", campaign.id),
-  ]);
+      supabase
+        .from("campaign_interests")
+        .select("interest_id")
+        .eq("campaign_id", campaign.id),
+    ]);
 
   if (
     modeResult.error ||
@@ -139,10 +132,7 @@ export default async function EditCampaignPage({
   ) {
     return (
       <div className="mx-auto w-full max-w-5xl">
-        <ButtonLink
-          href={`/home/realm/manage/${campaign.id}`}
-          variant="quiet"
-        >
+        <ButtonLink href={`/home/realm/manage/${campaign.id}`} variant="quiet">
           ← Back To Campaign
         </ButtonLink>
 
@@ -178,10 +168,7 @@ export default async function EditCampaignPage({
   if (circleResult.error) {
     return (
       <div className="mx-auto w-full max-w-5xl">
-        <ButtonLink
-          href={`/home/realm/manage/${campaign.id}`}
-          variant="quiet"
-        >
+        <ButtonLink href={`/home/realm/manage/${campaign.id}`} variant="quiet">
           ← Back To Campaign
         </ButtonLink>
 

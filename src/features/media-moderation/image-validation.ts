@@ -90,13 +90,13 @@ export async function prepareImageForModeration(
     }).metadata();
     const mimeType =
       actualMimeTypes[metadata.format as keyof typeof actualMimeTypes];
-const width = metadata.width ?? 0;
+    const width = metadata.width ?? 0;
 
-const height =
-  mimeType === "image/gif"
-    ? (metadata.pageHeight ?? metadata.height ?? 0)
-    : (metadata.height ?? 0);
-        if (
+    const height =
+      mimeType === "image/gif"
+        ? (metadata.pageHeight ?? metadata.height ?? 0)
+        : (metadata.height ?? 0);
+    if (
       !mimeType ||
       (mimeType !== "image/gif" && (metadata.pages ?? 1) !== 1) ||
       width < MIN_IMAGE_DIMENSION ||
@@ -109,13 +109,13 @@ const height =
     }
 
     const publicationBytes = await encodePublication(source, mimeType);
-const publicationMetadata =
-  mimeType === "image/gif"
-    ? metadata
-    : await sharp(publicationBytes).metadata();
-        let moderationBytes = await sharp(publicationBytes, {
-  animated: false,
-})
+    const publicationMetadata =
+      mimeType === "image/gif"
+        ? metadata
+        : await sharp(publicationBytes).metadata();
+    let moderationBytes = await sharp(publicationBytes, {
+      animated: false,
+    })
       .resize({
         width: 2048,
         height: 2048,
@@ -139,19 +139,19 @@ const publicationMetadata =
       throw new ImageValidationError();
     }
 
-return {
-  publicationBytes,
-  moderationBytes,
-  originalMimeType: mimeType,
-  originalByteSize: source.length,
-  normalizedByteSize: publicationBytes.length,
-  width: publicationMetadata.width ?? width,
-  height:
-    mimeType === "image/gif"
-      ? height
-      : (publicationMetadata.height ?? height),
-  sha256: createHash("sha256").update(publicationBytes).digest("hex"),
-};
+    return {
+      publicationBytes,
+      moderationBytes,
+      originalMimeType: mimeType,
+      originalByteSize: source.length,
+      normalizedByteSize: publicationBytes.length,
+      width: publicationMetadata.width ?? width,
+      height:
+        mimeType === "image/gif"
+          ? height
+          : (publicationMetadata.height ?? height),
+      sha256: createHash("sha256").update(publicationBytes).digest("hex"),
+    };
   } catch (error) {
     if (error instanceof ImageValidationError) throw error;
     throw new ImageValidationError();

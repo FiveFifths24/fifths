@@ -88,19 +88,15 @@ export default async function CircleMembershipsPage({
 
   const circleById = new Map(circles.map((circle) => [circle.id, circle]));
 
-return (
-  <div className="text-center sm:text-left">
-    <div className="flex justify-center sm:justify-start">
-      <ButtonLink
-        className="mb-8"
-        href="/home/circles"
-        variant="quiet"
-      >
-        ← Back To Circles
-      </ButtonLink>
-    </div>
+  return (
+    <div className="text-center sm:text-left">
+      <div className="flex justify-center sm:justify-start">
+        <ButtonLink className="mb-8" href="/home/circles" variant="quiet">
+          ← Back To Circles
+        </ButtonLink>
+      </div>
 
-    {/* =====================================================
+      {/* =====================================================
         PAGE INTRO
               ====================================================== */}
       <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-12">

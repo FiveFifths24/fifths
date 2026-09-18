@@ -366,9 +366,7 @@ export async function updateCampaignAction(
     premise: String(formData.get("premise") ?? ""),
     genre: String(formData.get("genre") ?? ""),
     tone: String(formData.get("tone") ?? ""),
-    safetyExpectations: String(
-      formData.get("safetyExpectations") ?? "",
-    ),
+    safetyExpectations: String(formData.get("safetyExpectations") ?? ""),
     format: String(formData.get("format") ?? ""),
     locationLabel: String(formData.get("locationLabel") ?? ""),
     scheduleSummary: String(formData.get("scheduleSummary") ?? ""),
@@ -461,15 +459,15 @@ export async function updateCampaignAction(
       p_social_intensity: parsed.data.socialIntensity,
       p_interest_ids: parsed.data.interestIds,
     });
-if (error) {
-  console.error("update_realm_campaign failed:", error);
+    if (error) {
+      console.error("update_realm_campaign failed:", error);
 
-  return {
-    status: "error",
-    message: `Campaign update failed: ${error.message}`,
-    values: submittedValues,
-  };
-}
+      return {
+        status: "error",
+        message: `Campaign update failed: ${error.message}`,
+        values: submittedValues,
+      };
+    }
   } catch (error) {
     console.error("updateCampaignAction failed:", error);
 

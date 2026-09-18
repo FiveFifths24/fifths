@@ -54,10 +54,10 @@ export function CircleCard({ item }: { item: CircleCardItem }) {
         : "Social";
 
   return (
-<article className="group relative mx-auto flex h-full w-full max-w-none min-w-0 flex-col overflow-hidden rounded-[1.75rem] border border-[#ee54a7]/15 bg-white/[0.025] text-center transition duration-300 hover:border-[#ee54a7]/30 hover:bg-[#ee54a7]/[0.035] sm:text-left">
+    <article className="group relative mx-auto flex h-full w-full max-w-none min-w-0 flex-col overflow-hidden rounded-[1.75rem] border border-[#ee54a7]/15 bg-white/[0.025] text-center transition duration-300 hover:border-[#ee54a7]/30 hover:bg-[#ee54a7]/[0.035] sm:text-left">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -right-20 -top-20 size-48 rounded-full bg-[#ee54a7]/[0.045] blur-[90px] transition group-hover:bg-[#ee54a7]/[0.07]"
+        className="pointer-events-none absolute -top-20 -right-20 size-48 rounded-full bg-[#ee54a7]/[0.045] blur-[90px] transition group-hover:bg-[#ee54a7]/[0.07]"
       />
 
       <div className="relative flex h-full flex-col p-5 sm:p-6">
@@ -117,80 +117,73 @@ export function CircleCard({ item }: { item: CircleCardItem }) {
             PARTICIPATION SIGNALS
         ====================================================== */}
         <dl className="mx-auto mt-5 grid w-full max-w-none gap-3 sm:grid-cols-2">
-<div className="flex w-full min-w-0 justify-center rounded-xl border border-white/[0.06] bg-black/20 px-4 py-3">
-  <div className="flex flex-col items-center text-center">
-    <MapPin
-      aria-hidden="true"
-      className="size-4 text-[#ff8bc9]"
-    />
+          <div className="flex w-full min-w-0 justify-center rounded-xl border border-white/[0.06] bg-black/20 px-4 py-3">
+            <div className="flex flex-col items-center text-center">
+              <MapPin aria-hidden="true" className="size-4 text-[#ff8bc9]" />
 
-    <dt className="mt-1.5 text-[0.65rem] font-bold tracking-[0.12em] text-white/30 uppercase">
-      Format
-    </dt>
+              <dt className="mt-1.5 text-[0.65rem] font-bold tracking-[0.12em] text-white/30 uppercase">
+                Format
+              </dt>
 
-    <dd className="mt-1 break-words text-sm leading-5 text-white/75">
-      {formatCircleFormat(item.format)}
-      {item.location_label ? ` · ${item.location_label}` : ""}
-    </dd>
-  </div>
-</div>
+              <dd className="mt-1 text-sm leading-5 break-words text-white/75">
+                {formatCircleFormat(item.format)}
+                {item.location_label ? ` · ${item.location_label}` : ""}
+              </dd>
+            </div>
+          </div>
 
-<div className="flex w-full min-w-0 justify-center rounded-xl border border-white/[0.06] bg-black/20 px-4 py-3">
-  <div className="flex flex-col items-center text-center">
-    <UsersRound
-      aria-hidden="true"
-      className="size-4 text-[#ff8bc9]"
-    />
+          <div className="flex w-full min-w-0 justify-center rounded-xl border border-white/[0.06] bg-black/20 px-4 py-3">
+            <div className="flex flex-col items-center text-center">
+              <UsersRound
+                aria-hidden="true"
+                className="size-4 text-[#ff8bc9]"
+              />
 
-    <dt className="mt-1.5 text-[0.65rem] font-bold tracking-[0.12em] text-white/30 uppercase">
-      Social Pace
-    </dt>
+              <dt className="mt-1.5 text-[0.65rem] font-bold tracking-[0.12em] text-white/30 uppercase">
+                Social Pace
+              </dt>
 
-    <dd className="mt-1 text-sm leading-5 text-white/75">
-      {socialLabel}
-    </dd>
-  </div>
-</div>
+              <dd className="mt-1 text-sm leading-5 text-white/75">
+                {socialLabel}
+              </dd>
+            </div>
+          </div>
 
-<div className="flex w-full min-w-0 justify-center rounded-xl border border-white/[0.06] bg-black/20 px-4 py-3">
-  <div className="flex flex-col items-center text-center">
-    <Zap
-      aria-hidden="true"
-      className="size-4 text-[#ff8bc9]"
-    />
+          <div className="flex w-full min-w-0 justify-center rounded-xl border border-white/[0.06] bg-black/20 px-4 py-3">
+            <div className="flex flex-col items-center text-center">
+              <Zap aria-hidden="true" className="size-4 text-[#ff8bc9]" />
 
-    <dt className="mt-1.5 text-[0.65rem] font-bold tracking-[0.12em] text-white/30 uppercase">
-      Energy
-    </dt>
+              <dt className="mt-1.5 text-[0.65rem] font-bold tracking-[0.12em] text-white/30 uppercase">
+                Energy
+              </dt>
 
-    <dd className="mt-1 text-sm leading-5 text-white/75">
-      {item.minimum_energy}–{item.maximum_energy}
-      <span className="text-white/30"> · </span>
-      <span className="capitalize">
-        {item.stimulation_level} Stimulation
-      </span>
-    </dd>
-  </div>
-</div>
+              <dd className="mt-1 text-sm leading-5 text-white/75">
+                {item.minimum_energy}–{item.maximum_energy}
+                <span className="text-white/30"> · </span>
+                <span className="capitalize">
+                  {item.stimulation_level} Stimulation
+                </span>
+              </dd>
+            </div>
+          </div>
 
-<div className="flex w-full min-w-0 justify-center rounded-xl border border-white/[0.06] bg-black/20 px-4 py-3">
-  <div className="flex flex-col items-center text-center">
-    <HeartHandshake
-      aria-hidden="true"
-      className="size-4 text-[#ff8bc9]"
-    />
+          <div className="flex w-full min-w-0 justify-center rounded-xl border border-white/[0.06] bg-black/20 px-4 py-3">
+            <div className="flex flex-col items-center text-center">
+              <HeartHandshake
+                aria-hidden="true"
+                className="size-4 text-[#ff8bc9]"
+              />
 
-    <dt className="mt-1.5 text-[0.65rem] font-bold tracking-[0.12em] text-white/30 uppercase">
-      Topic
-    </dt>
+              <dt className="mt-1.5 text-[0.65rem] font-bold tracking-[0.12em] text-white/30 uppercase">
+                Topic
+              </dt>
 
-    <dd className="mt-1 break-words text-sm leading-5 text-white/75">
-      {item.interestNames.slice(0, 2).join(" · ") || "Shared Purpose"}
-    </dd>
-  </div>
-</div>
-
-  </dl>
+              <dd className="mt-1 text-sm leading-5 break-words text-white/75">
+                {item.interestNames.slice(0, 2).join(" · ") || "Shared Purpose"}
+              </dd>
+            </div>
+          </div>
+        </dl>
 
         {/* =====================================================
             SIGNAL SYNC

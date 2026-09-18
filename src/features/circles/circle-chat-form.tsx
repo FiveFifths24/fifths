@@ -31,18 +31,11 @@ export function CircleChatForm({
   const bodyError = state.fieldErrors?.body?.[0];
 
   return (
-    <form
-      action={action}
-      className="space-y-3"
-      ref={formRef}
-    >
+    <form action={action} className="space-y-3" ref={formRef}>
       <ActionStatus state={state} />
 
       <div>
-        <label
-          className="sr-only"
-          htmlFor="circle-chat-body"
-        >
+        <label className="sr-only" htmlFor="circle-chat-body">
           Message
         </label>
 
@@ -55,7 +48,7 @@ export function CircleChatForm({
             "min-h-24 w-full resize-none rounded-2xl border bg-black/35 px-4 py-3 text-sm leading-6 text-white placeholder:text-white/30",
             "border-[#ee54a7]/20 transition",
             "hover:border-[#ee54a7]/35",
-            "focus:border-[#ee54a7]/60 focus:outline-none focus:ring-2 focus:ring-[#ee54a7]/15",
+            "focus:border-[#ee54a7]/60 focus:ring-2 focus:ring-[#ee54a7]/15 focus:outline-none",
             bodyError ? "border-red-500/70" : "",
           ].join(" ")}
           disabled={disabled}
@@ -71,17 +64,11 @@ export function CircleChatForm({
         />
 
         {bodyError ? (
-          <p
-            className="mt-2 text-xs text-red-300"
-            id="circle-chat-body-error"
-          >
+          <p className="mt-2 text-xs text-red-300" id="circle-chat-body-error">
             {bodyError}
           </p>
         ) : (
-          <p
-            className="mt-2 text-xs text-white/35"
-            id="circle-chat-body-hint"
-          >
+          <p className="mt-2 text-xs text-white/35" id="circle-chat-body-hint">
             Up to 2,000 characters.
           </p>
         )}
@@ -89,9 +76,7 @@ export function CircleChatForm({
 
       <fieldset disabled={disabled}>
         <div className="flex justify-center sm:justify-end">
-          <SubmitButton pendingLabel="Sending...">
-            Send Message
-          </SubmitButton>
+          <SubmitButton pendingLabel="Sending...">Send Message</SubmitButton>
         </div>
       </fieldset>
     </form>

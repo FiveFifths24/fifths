@@ -4,11 +4,7 @@ const DAY_MS = 24 * HOUR_MS;
 export const PARTICIPATION_MAIN_GRACE_MS = DAY_MS;
 export const PARTICIPATION_RECENT_WINDOW_MS = 7 * DAY_MS;
 
-export type ParticipationLifecycle =
-  | "active"
-  | "grace"
-  | "recent"
-  | "archive";
+export type ParticipationLifecycle = "active" | "grace" | "recent" | "archive";
 
 export function getParticipationLifecycle(
   endsAt: string,
@@ -37,14 +33,10 @@ export function getParticipationLifecycle(
   return "archive";
 }
 
-export function isMainDiscoveryLifecycle(
-  lifecycle: ParticipationLifecycle,
-) {
+export function isMainDiscoveryLifecycle(lifecycle: ParticipationLifecycle) {
   return lifecycle === "active" || lifecycle === "grace";
 }
 
-export function isRecentlyEndedLifecycle(
-  lifecycle: ParticipationLifecycle,
-) {
+export function isRecentlyEndedLifecycle(lifecycle: ParticipationLifecycle) {
   return lifecycle === "recent";
 }

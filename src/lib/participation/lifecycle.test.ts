@@ -10,9 +10,9 @@ const now = new Date("2026-09-17T20:00:00.000Z");
 
 describe("participation lifecycle", () => {
   it("keeps upcoming and live participation in main discovery", () => {
-    expect(
-      getParticipationLifecycle("2026-09-17T21:00:00.000Z", now),
-    ).toBe("active");
+    expect(getParticipationLifecycle("2026-09-17T21:00:00.000Z", now)).toBe(
+      "active",
+    );
   });
 
   it("keeps ended participation in main discovery for 24 hours", () => {
@@ -36,8 +36,8 @@ describe("participation lifecycle", () => {
   });
 
   it("archives participation after seven days", () => {
-    expect(
-      getParticipationLifecycle("2026-09-09T20:00:00.000Z", now),
-    ).toBe("archive");
+    expect(getParticipationLifecycle("2026-09-09T20:00:00.000Z", now)).toBe(
+      "archive",
+    );
   });
 });

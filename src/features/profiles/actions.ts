@@ -408,7 +408,7 @@ export async function updateProfileSettingsAction(
             : "Your profile could not be updated right now. Please try again shortly.",
     };
   }
-  }
+}
 
 export async function touchProfilePresenceAction() {
   try {

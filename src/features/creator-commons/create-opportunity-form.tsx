@@ -212,7 +212,7 @@ export function CreateOpportunityForm({
       className="space-y-10 text-left"
       ref={formRef}
     >
-<DraftRestoredNotice restored={restored} />
+      <DraftRestoredNotice restored={restored} />
 
       <fieldset>
         <legend className="w-full text-center text-xl font-bold text-white lg:text-left">
@@ -468,25 +468,25 @@ export function CreateOpportunityForm({
         name="interestIds"
       />
 
-<div className="rounded-2xl border border-white/15 bg-white/[0.035] p-5 text-center text-sm leading-6 text-white/55 lg:text-left">
-  Creating a draft does not publish the opportunity automatically. You
-  will be able to review everything before making it visible to the
-  community.
-</div>
+      <div className="rounded-2xl border border-white/15 bg-white/[0.035] p-5 text-center text-sm leading-6 text-white/55 lg:text-left">
+        Creating a draft does not publish the opportunity automatically. You
+        will be able to review everything before making it visible to the
+        community.
+      </div>
 
-<div className="rounded-2xl border border-white/15 bg-white/[0.025] p-5">
-  <FormErrorFocus state={state} />
+      <div className="rounded-2xl border border-white/15 bg-white/[0.025] p-5">
+        <FormErrorFocus state={state} />
 
-  {state.status === "error" ? (
-    <div className="mb-5">
-      <ActionStatus state={state} />
-    </div>
-  ) : null}
+        {state.status === "error" ? (
+          <div className="mb-5">
+            <ActionStatus state={state} />
+          </div>
+        ) : null}
 
-  <SubmitButton pendingLabel="Creating Draft…">
-    Create Draft Opportunity
-  </SubmitButton>
-</div>
+        <SubmitButton pendingLabel="Creating Draft…">
+          Create Draft Opportunity
+        </SubmitButton>
+      </div>
     </form>
   );
 }

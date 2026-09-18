@@ -35,7 +35,7 @@ describe("OpportunityCard", () => {
       screen.getByRole("link", { name: "Launch interview series" }),
     ).toHaveAttribute("href", `/home/commons/${item.id}`);
     expect(screen.getByText("Created by Avery")).toBeInTheDocument();
-    expect(screen.getByText("1 opening")).toBeInTheDocument();
+    expect(screen.getByText("1 Opening")).toBeInTheDocument();
     expect(screen.getByText("Production")).toBeInTheDocument();
     expect(screen.getByText("Fits Your Current Mode")).toBeInTheDocument();
   });

@@ -123,44 +123,38 @@ export function ReportForm({
     >
       <ActionStatus state={state} />
       {state.status === "success" &&
-offerBlockAfterReport &&
-blockTargetUserId ? (
-  <div className="rounded-2xl border border-red-500/20 bg-red-500/[0.06] p-4">
-    <p className="text-sm font-semibold text-white">
-      Report submitted.
-    </p>
+      offerBlockAfterReport &&
+      blockTargetUserId ? (
+        <div className="rounded-2xl border border-red-500/20 bg-red-500/[0.06] p-4">
+          <p className="text-sm font-semibold text-white">Report submitted.</p>
 
-    <p className="mt-1 text-sm leading-6 text-white/55">
-      Would you also like to block this member?
-    </p>
+          <p className="mt-1 text-sm leading-6 text-white/55">
+            Would you also like to block this member?
+          </p>
 
-    <div className="mt-4 flex flex-wrap gap-3">
-      <form action={blockProfileAction}>
-        <input
-          name="targetUserId"
-          type="hidden"
-          value={blockTargetUserId}
-        />
-        <input
-          name="returnTo"
-          type="hidden"
-          value={returnTo}
-        />
+          <div className="mt-4 flex flex-wrap gap-3">
+            <form action={blockProfileAction}>
+              <input
+                name="targetUserId"
+                type="hidden"
+                value={blockTargetUserId}
+              />
+              <input name="returnTo" type="hidden" value={returnTo} />
 
-        <button
-          className="rounded-full border border-red-400/30 bg-red-500/10 px-4 py-2 text-sm font-semibold text-red-100 transition hover:bg-red-500/20"
-          type="submit"
-        >
-          Block Member
-        </button>
-      </form>
+              <button
+                className="rounded-full border border-red-400/30 bg-red-500/10 px-4 py-2 text-sm font-semibold text-red-100 transition hover:bg-red-500/20"
+                type="submit"
+              >
+                Block Member
+              </button>
+            </form>
 
-      <span className="inline-flex items-center px-2 text-sm text-white/40">
-        Not now
-      </span>
-    </div>
-  </div>
-) : null}
+            <span className="inline-flex items-center px-2 text-sm text-white/40">
+              Not now
+            </span>
+          </div>
+        </div>
+      ) : null}
       <input name="targetEntityId" type="hidden" value={defaultTargetId} />
       <div className="grid gap-5 sm:grid-cols-2">
         <div>

@@ -161,11 +161,7 @@ export function EditCircleForm({
   const topicError = firstFieldError(state, "interestIds");
 
   return (
-    <form
-      action={action}
-      aria-label="Edit Circle"
-      className="space-y-10"
-    >
+    <form action={action} aria-label="Edit Circle" className="space-y-10">
       {/* =====================================================
           COMMUNITY IDENTITY
       ====================================================== */}
@@ -253,8 +249,7 @@ export function EditCircleForm({
           )}
           id="interestIds-description"
         >
-          {topicError ??
-            "Choose the one topic this Circle is centered around."}
+          {topicError ?? "Choose the one topic this Circle is centered around."}
         </p>
 
         <div className="mt-6 max-w-xl">
@@ -356,9 +351,7 @@ export function EditCircleForm({
       ====================================================== */}
 
       <fieldset className="rounded-[1.5rem] border border-[#ee54a7]/15 bg-black/20 p-5 sm:p-6">
-        <legend className="px-2 text-xl font-bold text-white">
-          Pulse Fit
-        </legend>
+        <legend className="px-2 text-xl font-bold text-white">Pulse Fit</legend>
 
         <p className="mt-1 max-w-3xl text-sm leading-7 text-white/55">
           Update the participation signals that describe the typical rhythm of

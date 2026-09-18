@@ -525,37 +525,37 @@ export type Database = {
         Relationships: [];
       };
       circle_messages: {
-Row: {
-  id: string;
-  circle_id: string;
-  user_id: string;
-  body: string;
-  created_at: string;
-  edited_at: string | null;
-  deleted_at: string | null;
-  deleted_by: string | null;
-  deletion_type: string | null;
-};
-Insert: {
-  id?: string;
-  circle_id: string;
-  user_id: string;
-  body: string;
-  created_at?: string;
-  edited_at?: string | null;
-  deleted_at?: string | null;
-  deleted_by?: string | null;
-  deletion_type?: string | null;
-};
-Update: {
-  body?: string;
-  edited_at?: string | null;
-  deleted_at?: string | null;
-  deleted_by?: string | null;
-  deletion_type?: string | null;
-};
-  Relationships: [];
-};
+        Row: {
+          id: string;
+          circle_id: string;
+          user_id: string;
+          body: string;
+          created_at: string;
+          edited_at: string | null;
+          deleted_at: string | null;
+          deleted_by: string | null;
+          deletion_type: string | null;
+        };
+        Insert: {
+          id?: string;
+          circle_id: string;
+          user_id: string;
+          body: string;
+          created_at?: string;
+          edited_at?: string | null;
+          deleted_at?: string | null;
+          deleted_by?: string | null;
+          deletion_type?: string | null;
+        };
+        Update: {
+          body?: string;
+          edited_at?: string | null;
+          deleted_at?: string | null;
+          deleted_by?: string | null;
+          deletion_type?: string | null;
+        };
+        Relationships: [];
+      };
       sessions: {
         Row: {
           id: string;
@@ -1206,23 +1206,23 @@ Update: {
     Views: Record<string, never>;
     Functions: {
       delete_circle: {
-  Args: {
-    p_circle_id: string;
-  };
-  Returns: undefined;
-};
+        Args: {
+          p_circle_id: string;
+        };
+        Returns: undefined;
+      };
       delete_creator_opportunity: {
-  Args: {
-    p_opportunity_id: string;
-  };
-  Returns: undefined;
-};
+        Args: {
+          p_opportunity_id: string;
+        };
+        Returns: undefined;
+      };
       delete_realm_campaign: {
-  Args: {
-    p_campaign_id: string;
-  };
-  Returns: undefined;
-};
+        Args: {
+          p_campaign_id: string;
+        };
+        Returns: undefined;
+      };
       get_friend_activity: {
         Args: {
           p_before?: string | null;
@@ -1272,26 +1272,26 @@ Update: {
         Returns: string;
       };
       update_circle: {
-  Args: {
-    p_circle_id: string;
-    p_name: string;
-    p_slug: string;
-    p_summary: string;
-    p_description: string;
-    p_rules: string;
-    p_visibility: Database["public"]["Enums"]["circle_visibility"];
-    p_join_policy: Database["public"]["Enums"]["circle_join_policy"];
-    p_format: Database["public"]["Enums"]["participation_format"];
-    p_location_label: string | null;
-    p_mode_id: string;
-    p_minimum_energy: number;
-    p_maximum_energy: number;
-    p_stimulation_level: Database["public"]["Enums"]["pulse_stimulation_level"];
-    p_social_intensity: Database["public"]["Enums"]["pulse_social_intensity"];
-    p_interest_ids: string[];
-  };
-  Returns: undefined;
-};
+        Args: {
+          p_circle_id: string;
+          p_name: string;
+          p_slug: string;
+          p_summary: string;
+          p_description: string;
+          p_rules: string;
+          p_visibility: Database["public"]["Enums"]["circle_visibility"];
+          p_join_policy: Database["public"]["Enums"]["circle_join_policy"];
+          p_format: Database["public"]["Enums"]["participation_format"];
+          p_location_label: string | null;
+          p_mode_id: string;
+          p_minimum_energy: number;
+          p_maximum_energy: number;
+          p_stimulation_level: Database["public"]["Enums"]["pulse_stimulation_level"];
+          p_social_intensity: Database["public"]["Enums"]["pulse_social_intensity"];
+          p_interest_ids: string[];
+        };
+        Returns: undefined;
+      };
       set_spotlight_category: {
         Args: {
           p_spotlight_category: string;
@@ -1461,45 +1461,45 @@ Update: {
         Args: { p_circle_id: string };
         Returns: undefined;
       };
-send_circle_message: {
-  Args: {
-    p_circle_id: string;
-    p_body: string;
-  };
-  Returns: string;
-};
+      send_circle_message: {
+        Args: {
+          p_circle_id: string;
+          p_body: string;
+        };
+        Returns: string;
+      };
 
-delete_circle_message: {
-  Args: {
-    p_message_id: string;
-  };
-  Returns: undefined;
-};
+      delete_circle_message: {
+        Args: {
+          p_message_id: string;
+        };
+        Returns: undefined;
+      };
 
-moderate_circle_message: {
-  Args: {
-    p_message_id: string;
-  };
-  Returns: undefined;
-};
+      moderate_circle_message: {
+        Args: {
+          p_message_id: string;
+        };
+        Returns: undefined;
+      };
 
-get_circle_chat_messages: {
-  Args: {
-    p_circle_id: string;
-    p_limit?: number;
-  };
-  Returns: Array<{
-    id: string;
-    circle_id: string;
-    user_id: string;
-    body: string | null;
-    created_at: string;
-    edited_at: string | null;
-    deleted_at: string | null;
-    deletion_type: string | null;
-    can_view_deleted_body: boolean;
-  }>;
-};
+      get_circle_chat_messages: {
+        Args: {
+          p_circle_id: string;
+          p_limit?: number;
+        };
+        Returns: Array<{
+          id: string;
+          circle_id: string;
+          user_id: string;
+          body: string | null;
+          created_at: string;
+          edited_at: string | null;
+          deleted_at: string | null;
+          deletion_type: string | null;
+          can_view_deleted_body: boolean;
+        }>;
+      };
       invite_circle_member: {
         Args: { p_circle_id: string; p_username: string };
         Returns: undefined;
@@ -1566,31 +1566,31 @@ get_circle_chat_messages: {
         Returns: string;
       };
       update_creator_opportunity: {
-  Args: {
-    p_opportunity_id: string;
-    p_circle_id: string | null;
-    p_title: string;
-    p_summary: string;
-    p_description: string;
-    p_deliverables: string;
-    p_kind: Database["public"]["Enums"]["creator_opportunity_kind"];
-    p_is_paid: boolean;
-    p_format: Database["public"]["Enums"]["participation_format"];
-    p_location_label: string | null;
-    p_response_deadline_local: string;
-    p_timezone: string;
-    p_estimated_minutes: number;
-    p_positions: number;
-    p_mode_id: string;
-    p_minimum_energy: number;
-    p_maximum_energy: number;
-    p_stimulation_level: Database["public"]["Enums"]["pulse_stimulation_level"];
-    p_social_intensity: Database["public"]["Enums"]["pulse_social_intensity"];
-    p_skill_ids: string[];
-    p_interest_ids: string[];
-  };
-  Returns: undefined;
-};
+        Args: {
+          p_opportunity_id: string;
+          p_circle_id: string | null;
+          p_title: string;
+          p_summary: string;
+          p_description: string;
+          p_deliverables: string;
+          p_kind: Database["public"]["Enums"]["creator_opportunity_kind"];
+          p_is_paid: boolean;
+          p_format: Database["public"]["Enums"]["participation_format"];
+          p_location_label: string | null;
+          p_response_deadline_local: string;
+          p_timezone: string;
+          p_estimated_minutes: number;
+          p_positions: number;
+          p_mode_id: string;
+          p_minimum_energy: number;
+          p_maximum_energy: number;
+          p_stimulation_level: Database["public"]["Enums"]["pulse_stimulation_level"];
+          p_social_intensity: Database["public"]["Enums"]["pulse_social_intensity"];
+          p_skill_ids: string[];
+          p_interest_ids: string[];
+        };
+        Returns: undefined;
+      };
       set_creator_opportunity_status: {
         Args: {
           p_opportunity_id: string;
@@ -1692,32 +1692,32 @@ get_circle_chat_messages: {
         Returns: string;
       };
       update_realm_campaign: {
-  Args: {
-    p_campaign_id: string;
-    p_circle_id: string | null;
-    p_title: string;
-    p_summary: string;
-    p_premise: string;
-    p_genre: string;
-    p_tone: string;
-    p_safety_expectations: string;
-    p_format: Database["public"]["Enums"]["participation_format"];
-    p_location_label: string | null;
-    p_schedule_summary: string;
-    p_timezone: string;
-    p_estimated_session_minutes: number;
-    p_application_deadline_local: string;
-    p_player_capacity: number;
-    p_experience_level: Database["public"]["Enums"]["campaign_experience_level"];
-    p_mode_id: string;
-    p_minimum_energy: number;
-    p_maximum_energy: number;
-    p_stimulation_level: Database["public"]["Enums"]["pulse_stimulation_level"];
-    p_social_intensity: Database["public"]["Enums"]["pulse_social_intensity"];
-    p_interest_ids: string[];
-  };
-  Returns: undefined;
-};
+        Args: {
+          p_campaign_id: string;
+          p_circle_id: string | null;
+          p_title: string;
+          p_summary: string;
+          p_premise: string;
+          p_genre: string;
+          p_tone: string;
+          p_safety_expectations: string;
+          p_format: Database["public"]["Enums"]["participation_format"];
+          p_location_label: string | null;
+          p_schedule_summary: string;
+          p_timezone: string;
+          p_estimated_session_minutes: number;
+          p_application_deadline_local: string;
+          p_player_capacity: number;
+          p_experience_level: Database["public"]["Enums"]["campaign_experience_level"];
+          p_mode_id: string;
+          p_minimum_energy: number;
+          p_maximum_energy: number;
+          p_stimulation_level: Database["public"]["Enums"]["pulse_stimulation_level"];
+          p_social_intensity: Database["public"]["Enums"]["pulse_social_intensity"];
+          p_interest_ids: string[];
+        };
+        Returns: undefined;
+      };
       set_realm_campaign_status: {
         Args: {
           p_campaign_id: string;
@@ -1725,11 +1725,11 @@ get_circle_chat_messages: {
         };
 
         delete_realm_campaign: {
-  Args: {
-    p_campaign_id: string;
-  };
-  Returns: undefined;
-};
+          Args: {
+            p_campaign_id: string;
+          };
+          Returns: undefined;
+        };
 
         Returns: undefined;
       };
@@ -2195,15 +2195,15 @@ get_circle_chat_messages: {
         | "accessibility"
         | "safety";
       feedback_status: "submitted" | "reviewed" | "closed";
-report_target_type:
-  | "member"
-  | "session"
-  | "circle"
-  | "circle_message"
-  | "opportunity"
-  | "campaign"
-  | "platform";
-        report_category:
+      report_target_type:
+        | "member"
+        | "session"
+        | "circle"
+        | "circle_message"
+        | "opportunity"
+        | "campaign"
+        | "platform";
+      report_category:
         | "harassment"
         | "hate_or_discrimination"
         | "threat_or_violence"
@@ -2247,7 +2247,7 @@ export type CircleMember =
   Database["public"]["Tables"]["circle_members"]["Row"];
 export type CircleMessage =
   Database["public"]["Tables"]["circle_messages"]["Row"];
-  export type CreatorOpportunity =
+export type CreatorOpportunity =
   Database["public"]["Tables"]["creator_opportunities"]["Row"];
 export type OpportunityResponse =
   Database["public"]["Tables"]["opportunity_responses"]["Row"];

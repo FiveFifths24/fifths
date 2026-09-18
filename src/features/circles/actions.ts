@@ -337,15 +337,15 @@ export async function updateCircleAction(
         };
       }
 
-return {
-  status: "error",
-  message:
-    Object.keys(fieldErrors).length > 0
-      ? "Check the highlighted Circle details and try again."
-      : "The Circle could not be updated. Please try again.",
-  fieldErrors,
-  values,
-};
+      return {
+        status: "error",
+        message:
+          Object.keys(fieldErrors).length > 0
+            ? "Check the highlighted Circle details and try again."
+            : "The Circle could not be updated. Please try again.",
+        fieldErrors,
+        values,
+      };
     }
   } catch {
     return {
@@ -433,14 +433,12 @@ export async function leaveCircleAction(
     };
   }
 
-revalidatePath(`/home/circles/${parsed.data.circleId}`);
-revalidatePath(`/home/circles/${parsed.data.circleId}/chat`);
-revalidatePath("/home/circles");
-revalidatePath("/home/circles/memberships");
+  revalidatePath(`/home/circles/${parsed.data.circleId}`);
+  revalidatePath(`/home/circles/${parsed.data.circleId}/chat`);
+  revalidatePath("/home/circles");
+  revalidatePath("/home/circles/memberships");
 
-redirect(
-  `/home/circles/${parsed.data.circleId}?membership=left`,
-);
+  redirect(`/home/circles/${parsed.data.circleId}?membership=left`);
 }
 export async function sendCircleMessageAction(
   circleId: string,
@@ -495,39 +493,40 @@ export async function sendCircleMessageAction(
         };
       }
 
-if (error.message.includes("Circle chat is unavailable")) {
-  return {
-    status: "error",
-    message: "Chat is unavailable for this Circle.",
-  };
-}
+      if (error.message.includes("Circle chat is unavailable")) {
+        return {
+          status: "error",
+          message: "Chat is unavailable for this Circle.",
+        };
+      }
 
-if (error.message.includes("Circle chat rate limit reached")) {
-  return {
-    status: "error",
-    message: "You're sending messages too quickly. Wait a moment and try again.",
-  };
-}
+      if (error.message.includes("Circle chat rate limit reached")) {
+        return {
+          status: "error",
+          message:
+            "You're sending messages too quickly. Wait a moment and try again.",
+        };
+      }
 
-if (error.message.includes("Circle chat cooldown required")) {
-  return {
-    status: "error",
-    message:
-      "You've sent a lot of messages recently. Take a short break before sending more.",
-  };
-}
+      if (error.message.includes("Circle chat cooldown required")) {
+        return {
+          status: "error",
+          message:
+            "You've sent a lot of messages recently. Take a short break before sending more.",
+        };
+      }
 
-if (error.message.includes("Repeated Circle message blocked")) {
-  return {
-    status: "error",
-    message: "That same message has already been sent recently.",
-  };
-}
+      if (error.message.includes("Repeated Circle message blocked")) {
+        return {
+          status: "error",
+          message: "That same message has already been sent recently.",
+        };
+      }
 
-return {
-  status: "error",
-  message: "Your message could not be sent. Please try again.",
-};
+      return {
+        status: "error",
+        message: "Your message could not be sent. Please try again.",
+      };
     }
   } catch {
     return {
@@ -738,9 +737,9 @@ export async function setSessionCircleAction(formData: FormData) {
     redirect(`/home/circles/manage/${parsed.data.circleId}?session=${outcome}`);
   }
   redirect("/home/circles/manage?session=updated");
-  }
+}
 
-  export async function deleteCircleAction(formData: FormData) {
+export async function deleteCircleAction(formData: FormData) {
   const parsed = circleIdSchema.safeParse({
     circleId: formData.get("circleId"),
   });

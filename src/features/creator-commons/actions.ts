@@ -85,28 +85,28 @@ export async function createOpportunityAction(
       p_interest_ids: parsed.data.interestIds,
     });
 
-if (error || !data) {
-  console.error("create_creator_opportunity failed:", error);
+    if (error || !data) {
+      console.error("create_creator_opportunity failed:", error);
 
-  return {
-    status: "error",
-    message:
-      "The opportunity could not be created. Review the details and try again.",
-    values,
-  };
-}
+      return {
+        status: "error",
+        message:
+          "The opportunity could not be created. Review the details and try again.",
+        values,
+      };
+    }
 
     opportunityId = data;
-} catch (error) {
-  console.error("createOpportunityAction failed:", error);
+  } catch (error) {
+    console.error("createOpportunityAction failed:", error);
 
-  return {
-    status: "error",
-    message:
-      "Creator Commons is temporarily unavailable. Please try again shortly.",
-    values,
-  };
-}
+    return {
+      status: "error",
+      message:
+        "Creator Commons is temporarily unavailable. Please try again shortly.",
+      values,
+    };
+  }
 
   redirect(`/home/commons/manage/${opportunityId}?created=1`);
 }
@@ -484,16 +484,16 @@ export async function updateOpportunityAction(
       p_interest_ids: parsed.data.interestIds,
     });
 
-if (error) {
-  console.error("update_creator_opportunity failed:", error);
+    if (error) {
+      console.error("update_creator_opportunity failed:", error);
 
-  return {
-    status: "error",
-message:
-  "The opportunity could not be updated. Review the details and try again.",
-      values,
-  };
-}
+      return {
+        status: "error",
+        message:
+          "The opportunity could not be updated. Review the details and try again.",
+        values,
+      };
+    }
   } catch {
     return {
       status: "error",
@@ -507,11 +507,7 @@ message:
   revalidatePath("/home/commons");
   revalidatePath(`/home/commons/${parsedId.data.opportunityId}`);
   revalidatePath(`/home/commons/manage/${parsedId.data.opportunityId}`);
-  revalidatePath(
-    `/home/commons/manage/${parsedId.data.opportunityId}/edit`,
-  );
+  revalidatePath(`/home/commons/manage/${parsedId.data.opportunityId}/edit`);
 
-  redirect(
-    `/home/commons/manage/${parsedId.data.opportunityId}?updated=1`,
-  );
+  redirect(`/home/commons/manage/${parsedId.data.opportunityId}?updated=1`);
 }

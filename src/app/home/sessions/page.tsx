@@ -67,7 +67,7 @@ export default async function SessionsPage() {
   const recentHistoryCutoff = new Date(
     now.getTime() - PARTICIPATION_RECENT_WINDOW_MS,
   ).toISOString();
-    const { data: userData } = await supabase.auth.getUser();
+  const { data: userData } = await supabase.auth.getUser();
 
   const [
     sessionResult,
@@ -85,7 +85,7 @@ export default async function SessionsPage() {
       .gt("ends_at", recentHistoryCutoff)
       .order("starts_at")
       .limit(SESSION_LIMIT),
-          supabase
+    supabase
       .from("realm_campaigns")
       .select("*")
       .in("status", ["recruiting", "active"])
@@ -145,22 +145,17 @@ export default async function SessionsPage() {
   );
 
   const sessions = visibleSessions.filter((session) =>
-    isMainDiscoveryLifecycle(
-      getParticipationLifecycle(session.ends_at, now),
-    ),
+    isMainDiscoveryLifecycle(getParticipationLifecycle(session.ends_at, now)),
   );
 
   const recentlyEndedSessions = visibleSessions
     .filter((session) =>
-      isRecentlyEndedLifecycle(
-        getParticipationLifecycle(session.ends_at, now),
-      ),
+      isRecentlyEndedLifecycle(getParticipationLifecycle(session.ends_at, now)),
     )
     .sort(
-      (left, right) =>
-        Date.parse(right.ends_at) - Date.parse(left.ends_at),
+      (left, right) => Date.parse(right.ends_at) - Date.parse(left.ends_at),
     );
-      const campaigns = filterMemberContent(
+  const campaigns = filterMemberContent(
     (campaignResult.data ?? []).filter(isEligibleCampaign),
     contentPreferences,
     (campaign) => campaign.created_by,
@@ -297,7 +292,7 @@ export default async function SessionsPage() {
     sessionLinks,
     recommendations,
   );
-    const recentlyEndedCards = assembleSessionCards(
+  const recentlyEndedCards = assembleSessionCards(
     recentlyEndedSessions,
     modes,
     interests,
@@ -397,7 +392,7 @@ export default async function SessionsPage() {
           </span>
         </StatusMessage>
       )}
-            {recentlyEndedCards.length ? (
+      {recentlyEndedCards.length ? (
         <details className="mt-12 overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/[0.025]">
           <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5 text-left [&::-webkit-details-marker]:hidden">
             <div className="min-w-0">
@@ -435,7 +430,6 @@ export default async function SessionsPage() {
         </details>
       ) : null}
 
-
       {sessionResult.error ? (
         <StatusMessage
           className="mt-12 justify-center text-center"
@@ -446,7 +440,7 @@ export default async function SessionsPage() {
       ) : (
         <SessionResults interests={interests} sessions={sessionCards} />
       )}
-            <AroundEcosystem
+      <AroundEcosystem
         campaign={
           campaignPreview
             ? {
@@ -495,7 +489,6 @@ export default async function SessionsPage() {
         }
         unavailableSources={ecosystemUnavailable}
       />
-
     </div>
   );
 }

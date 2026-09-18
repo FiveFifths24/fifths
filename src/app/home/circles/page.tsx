@@ -237,28 +237,28 @@ export default async function CirclesDiscoveryPage() {
           </h2>
         </div>
 
-<>
-  <div className="sm:hidden">
-    <SwipeCardGrid
-      as="ul"
-      className="mt-6 gap-6 [&>li]:w-full [&>li]:max-w-none"
-    >
-      {cards.map((card) => (
-        <li className="w-full max-w-none" key={card.id}>
-          <CircleCard item={card} />
-        </li>
-      ))}
-    </SwipeCardGrid>
-  </div>
+        <>
+          <div className="sm:hidden">
+            <SwipeCardGrid
+              as="ul"
+              className="mt-6 gap-6 [&>li]:w-full [&>li]:max-w-none"
+            >
+              {cards.map((card) => (
+                <li className="w-full max-w-none" key={card.id}>
+                  <CircleCard item={card} />
+                </li>
+              ))}
+            </SwipeCardGrid>
+          </div>
 
-  <ul className="mt-6 hidden gap-4 sm:grid sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-    {cards.map((card) => (
-      <li className="min-w-0" key={card.id}>
-        <CircleCard item={card} />
-      </li>
-    ))}
-  </ul>
-</>
+          <ul className="mt-6 hidden gap-4 sm:grid sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+            {cards.map((card) => (
+              <li className="min-w-0" key={card.id}>
+                <CircleCard item={card} />
+              </li>
+            ))}
+          </ul>
+        </>
       </section>
 
       {/* =====================================================

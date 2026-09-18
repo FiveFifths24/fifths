@@ -149,16 +149,16 @@ export default async function OpportunityDetailPage({
   const response = responseResult.data;
   const isManager = managerResult.data === true;
   const deletionCheckResult = isManager
-  ? await supabase
-      .from("opportunity_responses")
-      .select("user_id", { count: "exact", head: true })
-      .eq("opportunity_id", opportunity.id)
-  : { count: 0, error: null };
+    ? await supabase
+        .from("opportunity_responses")
+        .select("user_id", { count: "exact", head: true })
+        .eq("opportunity_id", opportunity.id)
+    : { count: 0, error: null };
 
-const canDeleteOpportunity =
-  isManager &&
-  !deletionCheckResult.error &&
-  (deletionCheckResult.count ?? 0) === 0;
+  const canDeleteOpportunity =
+    isManager &&
+    !deletionCheckResult.error &&
+    (deletionCheckResult.count ?? 0) === 0;
   const acceptingResponses =
     Boolean(acceptingResult.data) &&
     opportunity.accepted_count < opportunity.positions;
@@ -168,38 +168,40 @@ const canDeleteOpportunity =
     opportunity.positions - opportunity.accepted_count,
   );
   const commonsShell =
-  "overflow-hidden rounded-[32px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01))] shadow-[0_0_0_1px_rgba(255,255,255,0.03),0_24px_80px_rgba(0,0,0,0.45)]";
+    "overflow-hidden rounded-[32px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01))] shadow-[0_0_0_1px_rgba(255,255,255,0.03),0_24px_80px_rgba(0,0,0,0.45)]";
 
-const commonsSectionLabel =
-  "text-[11px] font-semibold uppercase tracking-[0.34em] text-white/45";
+  const commonsSectionLabel =
+    "text-[11px] font-semibold uppercase tracking-[0.34em] text-white/45";
 
-const commonsPill =
-  "inline-flex items-center rounded-full border border-white/12 bg-white/[0.04] px-4 py-1.5 text-sm font-semibold text-white/80";
+  const commonsPill =
+    "inline-flex items-center rounded-full border border-white/12 bg-white/[0.04] px-4 py-1.5 text-sm font-semibold text-white/80";
 
-const commonsPillStrong =
-  "inline-flex items-center rounded-full border border-white/18 bg-white/[0.08] px-4 py-1.5 text-sm font-semibold text-white";
+  const commonsPillStrong =
+    "inline-flex items-center rounded-full border border-white/18 bg-white/[0.08] px-4 py-1.5 text-sm font-semibold text-white";
 
-const commonsPillSoft =
-  "inline-flex items-center rounded-full border border-white/10 bg-white/[0.03] px-4 py-1.5 text-sm font-semibold text-white/65";
+  const commonsPillSoft =
+    "inline-flex items-center rounded-full border border-white/10 bg-white/[0.03] px-4 py-1.5 text-sm font-semibold text-white/65";
 
-const commonsMetaLabel = "text-sm text-white/40";
-const commonsMetaValue = "mt-2 text-xl font-semibold text-white";
+  const commonsMetaLabel = "text-sm text-white/40";
+  const commonsMetaValue = "mt-2 text-xl font-semibold text-white";
 
-const commonsPanel =
-  "rounded-[24px] border border-white/10 bg-white/[0.02] p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]";
+  const commonsPanel =
+    "rounded-[24px] border border-white/10 bg-white/[0.02] p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]";
 
-const commonsPanelTitle = "text-[15px] font-semibold uppercase tracking-[0.22em] text-white/45";
-const commonsPanelHeading = "text-[2rem] font-semibold leading-tight text-white";
-const commonsBody = "text-base leading-7 text-white/72";
+  const commonsPanelTitle =
+    "text-[15px] font-semibold uppercase tracking-[0.22em] text-white/45";
+  const commonsPanelHeading =
+    "text-[2rem] font-semibold leading-tight text-white";
+  const commonsBody = "text-base leading-7 text-white/72";
 
-const commonsNeutralTag =
-  "inline-flex items-center rounded-full border border-white/12 bg-white/[0.04] px-3 py-1 text-sm font-medium text-white/80";
+  const commonsNeutralTag =
+    "inline-flex items-center rounded-full border border-white/12 bg-white/[0.04] px-3 py-1 text-sm font-medium text-white/80";
 
-const commonsPrimaryButton =
-  "inline-flex min-h-11 items-center justify-center rounded-full bg-gradient-to-r from-white via-zinc-100 to-zinc-300 px-6 py-3 text-sm font-bold text-black transition hover:from-zinc-100 hover:via-white hover:to-zinc-200";
+  const commonsPrimaryButton =
+    "inline-flex min-h-11 items-center justify-center rounded-full bg-gradient-to-r from-white via-zinc-100 to-zinc-300 px-6 py-3 text-sm font-bold text-black transition hover:from-zinc-100 hover:via-white hover:to-zinc-200";
 
-const commonsSecondaryButton =
-  "inline-flex min-h-11 items-center justify-center rounded-full border border-white/15 bg-white/[0.03] px-6 py-3 text-sm font-bold text-white/80 transition hover:bg-white/[0.06] hover:text-white";
+  const commonsSecondaryButton =
+    "inline-flex min-h-11 items-center justify-center rounded-full border border-white/15 bg-white/[0.03] px-6 py-3 text-sm font-bold text-white/80 transition hover:bg-white/[0.06] hover:text-white";
 
   return (
     <article className="mx-auto w-full max-w-6xl">
@@ -228,123 +230,128 @@ const commonsSecondaryButton =
       ) : null}
 
       <section className="mt-8 overflow-hidden rounded-[2rem] border border-white/15 bg-[linear-gradient(145deg,rgba(255,255,255,0.045),rgba(12,12,14,0.98)_38%,rgba(255,255,255,0.02))]">
-<div className="border-b border-white/10 p-6 text-center sm:p-9 lg:text-left">
-  <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-    <div className="min-w-0">
-      <div className="flex flex-wrap justify-center gap-2 lg:justify-start">
-        <Badge className="border-white/20 bg-white/10 text-white">
-  Creator Commons
-</Badge>
+        <div className="border-b border-white/10 p-6 text-center sm:p-9 lg:text-left">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+            <div className="min-w-0">
+              <div className="flex flex-wrap justify-center gap-2 lg:justify-start">
+                <Badge className="border-white/20 bg-white/10 text-white">
+                  Creator Commons
+                </Badge>
 
-<Badge className="border-white/15 bg-white/[0.06] text-white/80">
-  {modeResult.data?.name ?? "Create"}
-</Badge>
+                <Badge className="border-white/15 bg-white/[0.06] text-white/80">
+                  {modeResult.data?.name ?? "Create"}
+                </Badge>
 
-<Badge className="border-white/15 bg-white/[0.04] text-white/75">
-  {formatOpportunityKind(opportunity.kind)}
-</Badge>
+                <Badge className="border-white/15 bg-white/[0.04] text-white/75">
+                  {formatOpportunityKind(opportunity.kind)}
+                </Badge>
 
-{opportunity.is_paid ? (
-  <Badge className="flex items-center gap-1.5 border-white/20 bg-white/[0.07] text-white">
-    <CircleDollarSign aria-hidden="true" className="size-3.5 text-white/65" />
-    Paid Opportunity
-  </Badge>
-) : (
-  <Badge className="flex items-center gap-1.5 border-white/15 bg-white/[0.04] text-white/75">
-    <HeartHandshake aria-hidden="true" className="size-3.5 text-white/60" />
-    Unpaid / Community
-  </Badge>
-)}
-<Badge className="border-white/10 bg-black/30 text-white/60 capitalize">
-  {opportunity.status}
-</Badge>
+                {opportunity.is_paid ? (
+                  <Badge className="flex items-center gap-1.5 border-white/20 bg-white/[0.07] text-white">
+                    <CircleDollarSign
+                      aria-hidden="true"
+                      className="size-3.5 text-white/65"
+                    />
+                    Paid Opportunity
+                  </Badge>
+                ) : (
+                  <Badge className="flex items-center gap-1.5 border-white/15 bg-white/[0.04] text-white/75">
+                    <HeartHandshake
+                      aria-hidden="true"
+                      className="size-3.5 text-white/60"
+                    />
+                    Unpaid / Community
+                  </Badge>
+                )}
+                <Badge className="border-white/10 bg-black/30 text-white/60 capitalize">
+                  {opportunity.status}
+                </Badge>
 
-            {response ? (
-<Badge className="border-white/15 bg-white/[0.04] text-white/70 capitalize">
-  Response: {response.status}
-</Badge>
+                {response ? (
+                  <Badge className="border-white/15 bg-white/[0.04] text-white/70 capitalize">
+                    Response: {response.status}
+                  </Badge>
+                ) : null}
+              </div>
+
+              <h1 className="display-type mx-auto mt-6 max-w-4xl text-5xl leading-[0.95] text-white sm:text-7xl lg:mx-0">
+                {opportunity.title}
+              </h1>
+
+              <p className="mx-auto mt-5 max-w-3xl text-lg leading-8 text-neutral-300 lg:mx-0">
+                {opportunity.summary}
+              </p>
+
+              <p className="mt-4 text-xs font-black tracking-[0.16em] text-white/45 uppercase">
+                Created by {opportunity.creator_display_name}
+              </p>
+            </div>
+
+            {isManager ? (
+              <div className="flex w-full shrink-0 justify-center lg:w-auto lg:justify-end">
+                <details className="group relative">
+                  <summary className="flex min-h-11 min-w-[15rem] cursor-pointer list-none items-center justify-center gap-3 rounded-full border border-white/25 bg-gradient-to-r from-white via-neutral-300 to-neutral-600 px-7 py-2.5 text-sm font-bold text-black shadow-[0_8px_28px_rgba(255,255,255,0.08)] transition hover:brightness-110 [&::-webkit-details-marker]:hidden">
+                    Opportunity Actions
+                    <span
+                      aria-hidden="true"
+                      className="text-[0.65rem] transition-transform group-open:rotate-180"
+                    >
+                      ▼
+                    </span>
+                  </summary>
+
+                  <div className="absolute right-0 z-30 mt-3 w-[20rem] max-w-[calc(100vw-2rem)] overflow-hidden rounded-[1.35rem] border border-white/10 bg-[#09090b]/98 p-2 shadow-[0_24px_70px_rgba(0,0,0,0.55)] backdrop-blur-xl sm:w-[22rem]">
+                    <div className="px-3 pt-2 pb-2">
+                      <p className="font-mono text-[0.58rem] font-bold tracking-[0.18em] text-white/30 uppercase">
+                        Opportunity
+                      </p>
+                    </div>
+
+                    <ButtonLink
+                      className="flex min-h-0 w-full justify-start rounded-xl border-0 bg-transparent px-3 py-3 text-left text-sm font-semibold text-white/70 shadow-none transition hover:bg-white/[0.055] hover:text-white"
+                      href={`/home/commons/${opportunity.id}`}
+                    >
+                      View Public Opportunity
+                    </ButtonLink>
+
+                    {(["draft", "published"] as const).includes(
+                      opportunity.status as "draft" | "published",
+                    ) ? (
+                      <ButtonLink
+                        className="flex min-h-0 w-full justify-start rounded-xl border-0 bg-transparent px-3 py-3 text-left text-sm font-semibold text-white/70 shadow-none transition hover:bg-white/[0.055] hover:text-white"
+                        href={`/home/commons/manage/${opportunity.id}/edit`}
+                      >
+                        Edit Opportunity
+                      </ButtonLink>
+                    ) : null}
+
+                    {canDeleteOpportunity ? (
+                      <>
+                        <div className="my-2 border-t border-white/[0.07]" />
+
+                        <form action={deleteOpportunityAction}>
+                          <input
+                            name="opportunityId"
+                            type="hidden"
+                            value={opportunity.id}
+                          />
+
+                          <button
+                            className="flex w-full items-center rounded-xl px-3 py-3 text-left text-sm font-semibold text-red-300/80 transition hover:bg-red-950/35 hover:text-red-200"
+                            type="submit"
+                          >
+                            Delete Opportunity
+                          </button>
+                        </form>
+                      </>
+                    ) : null}
+                  </div>
+                </details>
+              </div>
             ) : null}
-      </div>
+          </div>
+        </div>
 
-      <h1 className="display-type mx-auto mt-6 max-w-4xl text-5xl leading-[0.95] text-white sm:text-7xl lg:mx-0">
-        {opportunity.title}
-      </h1>
-
-      <p className="mx-auto mt-5 max-w-3xl text-lg leading-8 text-neutral-300 lg:mx-0">
-        {opportunity.summary}
-      </p>
-
-      <p className="mt-4 text-xs font-black tracking-[0.16em] text-white/45 uppercase">
-        Created by {opportunity.creator_display_name}
-      </p>
-    </div>
-
-{isManager ? (
-<div className="flex w-full shrink-0 justify-center lg:w-auto lg:justify-end">
-  <details className="group relative">
-<summary className="flex min-h-11 min-w-[15rem] cursor-pointer list-none items-center justify-center gap-3 rounded-full border border-white/25 bg-gradient-to-r from-white via-neutral-300 to-neutral-600 px-7 py-2.5 text-sm font-bold text-black shadow-[0_8px_28px_rgba(255,255,255,0.08)] transition hover:brightness-110 [&::-webkit-details-marker]:hidden">
-      Opportunity Actions
-
-      <span
-        aria-hidden="true"
-        className="text-[0.65rem] transition-transform group-open:rotate-180"
-      >
-        ▼
-      </span>
-    </summary>
-
-    <div className="absolute right-0 z-30 mt-3 w-[20rem] max-w-[calc(100vw-2rem)] overflow-hidden rounded-[1.35rem] border border-white/10 bg-[#09090b]/98 p-2 shadow-[0_24px_70px_rgba(0,0,0,0.55)] backdrop-blur-xl sm:w-[22rem]">
-      <div className="px-3 pb-2 pt-2">
-        <p className="font-mono text-[0.58rem] font-bold tracking-[0.18em] text-white/30 uppercase">
-          Opportunity
-        </p>
-      </div>
-
-      <ButtonLink
-        className="flex min-h-0 w-full justify-start rounded-xl border-0 bg-transparent px-3 py-3 text-left text-sm font-semibold text-white/70 shadow-none transition hover:bg-white/[0.055] hover:text-white"
-        href={`/home/commons/${opportunity.id}`}
-      >
-        View Public Opportunity
-      </ButtonLink>
-
-      {(["draft", "published"] as const).includes(
-        opportunity.status as "draft" | "published",
-      ) ? (
-        <ButtonLink
-          className="flex min-h-0 w-full justify-start rounded-xl border-0 bg-transparent px-3 py-3 text-left text-sm font-semibold text-white/70 shadow-none transition hover:bg-white/[0.055] hover:text-white"
-          href={`/home/commons/manage/${opportunity.id}/edit`}
-        >
-          Edit Opportunity
-        </ButtonLink>
-      ) : null}
-
-      {canDeleteOpportunity ? (
-        <>
-          <div className="my-2 border-t border-white/[0.07]" />
-
-          <form action={deleteOpportunityAction}>
-            <input
-              name="opportunityId"
-              type="hidden"
-              value={opportunity.id}
-            />
-
-            <button
-              className="flex w-full items-center rounded-xl px-3 py-3 text-left text-sm font-semibold text-red-300/80 transition hover:bg-red-950/35 hover:text-red-200"
-              type="submit"
-            >
-              Delete Opportunity
-            </button>
-          </form>
-        </>
-      ) : null}
-    </div>
-  </details>
-</div>
-) : null}
-  </div>
-  </div>
-  
         <div className="p-6 sm:p-9">
           <dl className="grid gap-5 border-b border-white/10 pb-7 text-center text-sm sm:grid-cols-2 lg:grid-cols-5 lg:text-left">
             <div>
@@ -431,32 +438,32 @@ const commonsSecondaryButton =
 
           <div className="mt-6 grid gap-5 sm:grid-cols-2">
             <section className="rounded-2xl border border-white/10 bg-white/[0.025] p-5 text-center lg:text-left">
-<h2 className="text-sm font-black tracking-[0.15em] text-white/45 uppercase">
-  Relevant skills
-</h2>
+              <h2 className="text-sm font-black tracking-[0.15em] text-white/45 uppercase">
+                Relevant skills
+              </h2>
 
               <ul className="mt-4 flex flex-wrap justify-center gap-2 lg:justify-start">
                 {(skillsResult.data ?? []).map((skill) => (
                   <li key={skill.id}>
-<Badge className="border-white/15 bg-white/[0.04] text-white/75">
-  {skill.name}
-</Badge>
+                    <Badge className="border-white/15 bg-white/[0.04] text-white/75">
+                      {skill.name}
+                    </Badge>
                   </li>
                 ))}
               </ul>
             </section>
 
             <section className="rounded-2xl border border-white/10 bg-white/[0.025] p-5 text-center lg:text-left">
-<h2 className="text-sm font-black tracking-[0.15em] text-white/45 uppercase">
-  Interests
-</h2>
+              <h2 className="text-sm font-black tracking-[0.15em] text-white/45 uppercase">
+                Interests
+              </h2>
 
               <ul className="mt-4 flex flex-wrap justify-center gap-2 lg:justify-start">
                 {(interestsResult.data ?? []).map((interest) => (
                   <li key={interest.id}>
-<Badge className="border-white/15 bg-white/[0.04] text-white/75">
-  {interest.name}
-</Badge>
+                    <Badge className="border-white/15 bg-white/[0.04] text-white/75">
+                      {interest.name}
+                    </Badge>
                   </li>
                 ))}
               </ul>
@@ -464,33 +471,36 @@ const commonsSecondaryButton =
           </div>
 
           <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-{!isManager ? (
-  <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-    <form action={saveOpportunityAction} className="w-full sm:w-auto">
-      <input
-        name="opportunityId"
-        type="hidden"
-        value={opportunity.id}
-      />
+            {!isManager ? (
+              <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                <form
+                  action={saveOpportunityAction}
+                  className="w-full sm:w-auto"
+                >
+                  <input
+                    name="opportunityId"
+                    type="hidden"
+                    value={opportunity.id}
+                  />
 
-      <input
-        name="save"
-        type="hidden"
-        value={savedResult.data ? "false" : "true"}
-      />
+                  <input
+                    name="save"
+                    type="hidden"
+                    value={savedResult.data ? "false" : "true"}
+                  />
 
-      <button className={actionButtonClass()} type="submit">
-        <span className="flex items-center justify-center gap-2">
-          <Bookmark aria-hidden="true" className="size-4" />
+                  <button className={actionButtonClass()} type="submit">
+                    <span className="flex items-center justify-center gap-2">
+                      <Bookmark aria-hidden="true" className="size-4" />
 
-          {savedResult.data
-            ? "Remove Saved Opportunity"
-            : "Save Opportunity"}
-        </span>
-      </button>
-    </form>
-  </div>
-) : null}
+                      {savedResult.data
+                        ? "Remove Saved Opportunity"
+                        : "Save Opportunity"}
+                    </span>
+                  </button>
+                </form>
+              </div>
+            ) : null}
           </div>
         </div>
       </section>

@@ -28,9 +28,9 @@ export default async function ManageRealmPage({
   searchParams,
 }: {
   searchParams?: Promise<{
-  create?: string;
-  delete?: string;
-}>;
+    create?: string;
+    delete?: string;
+  }>;
 }) {
   const parameters = await searchParams;
   const showCreateForm = parameters?.create === "1";
@@ -184,17 +184,17 @@ export default async function ManageRealmPage({
         Back to Fifth Realm
       </ButtonLink>
       {parameters?.delete === "deleted" ? (
-  <StatusMessage className="mt-6" tone="success">
-    Campaign deleted.
-  </StatusMessage>
-) : null}
+        <StatusMessage className="mt-6" tone="success">
+          Campaign deleted.
+        </StatusMessage>
+      ) : null}
 
-{parameters?.delete === "error" ? (
-  <StatusMessage className="mt-6" tone="error">
-    This campaign could not be deleted because another member has already
-    interacted with it.
-  </StatusMessage>
-) : null}
+      {parameters?.delete === "error" ? (
+        <StatusMessage className="mt-6" tone="error">
+          This campaign could not be deleted because another member has already
+          interacted with it.
+        </StatusMessage>
+      ) : null}
 
       <header className="mt-8 grid gap-8 text-center lg:grid-cols-[1fr_auto] lg:items-end lg:text-left">
         <div>

@@ -38,15 +38,15 @@ export default async function ManageCirclePage({
   searchParams,
 }: {
   params: Promise<{ circleId: string }>;
-searchParams?: Promise<{
-  created?: string;
-  updated?: string;
-  status?: string;
-  invite?: string;
-  membership?: string;
-  role?: string;
-  session?: string;
-}>;
+  searchParams?: Promise<{
+    created?: string;
+    updated?: string;
+    status?: string;
+    invite?: string;
+    membership?: string;
+    role?: string;
+    session?: string;
+  }>;
 }) {
   let supabase;
   try {
@@ -101,39 +101,39 @@ searchParams?: Promise<{
       ["owner", "host"].includes(membership.role));
   if (!canManage && !canModerate && !canHost) notFound();
 
-const [
-  rosterResult,
-  draftSessionResult,
-  associatedSessionResult,
-  interactionResult,
-] = await Promise.all([
-  canModerate
-    ? supabase.rpc("get_circle_roster", { p_circle_id: circle.id })
-    : Promise.resolve({ data: [], error: null }),
+  const [
+    rosterResult,
+    draftSessionResult,
+    associatedSessionResult,
+    interactionResult,
+  ] = await Promise.all([
+    canModerate
+      ? supabase.rpc("get_circle_roster", { p_circle_id: circle.id })
+      : Promise.resolve({ data: [], error: null }),
 
-  canHost
-    ? supabase
-        .from("sessions")
-        .select("id, title, status, circle_id")
-        .eq("host_user_id", userData.user.id)
-        .eq("status", "draft")
-        .is("circle_id", null)
-        .order("created_at", { ascending: false })
-    : Promise.resolve({ data: [], error: null }),
+    canHost
+      ? supabase
+          .from("sessions")
+          .select("id, title, status, circle_id")
+          .eq("host_user_id", userData.user.id)
+          .eq("status", "draft")
+          .is("circle_id", null)
+          .order("created_at", { ascending: false })
+      : Promise.resolve({ data: [], error: null }),
 
-  supabase
-    .from("sessions")
-    .select("id, title, status, circle_id")
-    .eq("circle_id", circle.id)
-    .order("created_at", { ascending: false })
-    .limit(30),
+    supabase
+      .from("sessions")
+      .select("id, title, status, circle_id")
+      .eq("circle_id", circle.id)
+      .order("created_at", { ascending: false })
+      .limit(30),
 
-  supabase
-    .from("circle_members")
-    .select("user_id", { count: "exact", head: true })
-    .eq("circle_id", circle.id)
-    .neq("user_id", circle.created_by),
-]);
+    supabase
+      .from("circle_members")
+      .select("user_id", { count: "exact", head: true })
+      .eq("circle_id", circle.id)
+      .neq("user_id", circle.created_by),
+  ]);
   if (rosterResult.error) {
     return (
       <StatusMessage tone="error">
@@ -151,23 +151,20 @@ const [
   const availableDrafts = draftSessionResult.data ?? [];
   const associatedSessions = associatedSessionResult.data ?? [];
   const canDeleteCircle =
-  canManage &&
-  !interactionResult.error &&
-  (interactionResult.count ?? 0) === 0;
+    canManage &&
+    !interactionResult.error &&
+    (interactionResult.count ?? 0) === 0;
 
-return (
-  <div className="mx-auto max-w-6xl text-center sm:text-left">
-    <div className="mb-8 flex justify-center sm:justify-start">
-      <ButtonLink
-        href="/home/circles"
-        variant="quiet"
-      >
-        ← Back To Circles
-      </ButtonLink>
-    </div>
+  return (
+    <div className="mx-auto max-w-6xl text-center sm:text-left">
+      <div className="mb-8 flex justify-center sm:justify-start">
+        <ButtonLink href="/home/circles" variant="quiet">
+          ← Back To Circles
+        </ButtonLink>
+      </div>
 
-    <div className="grid gap-7 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-12">
-              <div className="mx-auto max-w-4xl sm:mx-0">
+      <div className="grid gap-7 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-12">
+        <div className="mx-auto max-w-4xl sm:mx-0">
           <p className="flex items-center justify-center gap-2 text-xs font-bold tracking-[0.2em] text-[#ee54a7] uppercase sm:justify-start">
             <MessagesSquare aria-hidden="true" className="size-4" />
             Circle Management
@@ -189,67 +186,66 @@ return (
           </p>
         </div>
 
-<div className="flex justify-center lg:justify-end">
-  <details className="group relative">
-    <summary className="flex min-h-12 min-w-[14rem] cursor-pointer list-none items-center justify-center gap-3 rounded-full border-0 bg-gradient-to-r from-[#6c14ce] via-[#a855f7] to-[#ee54a7] px-7 text-sm font-bold text-white shadow-lg shadow-[#6c14ce]/20 transition hover:brightness-110 [&::-webkit-details-marker]:hidden">
-      Circle Actions
+        <div className="flex justify-center lg:justify-end">
+          <details className="group relative">
+            <summary className="flex min-h-12 min-w-[14rem] cursor-pointer list-none items-center justify-center gap-3 rounded-full border-0 bg-gradient-to-r from-[#6c14ce] via-[#a855f7] to-[#ee54a7] px-7 text-sm font-bold text-white shadow-lg shadow-[#6c14ce]/20 transition hover:brightness-110 [&::-webkit-details-marker]:hidden">
+              Circle Actions
+              <span
+                aria-hidden="true"
+                className="text-[0.65rem] transition-transform group-open:rotate-180"
+              >
+                ▼
+              </span>
+            </summary>
 
-      <span
-        aria-hidden="true"
-        className="text-[0.65rem] transition-transform group-open:rotate-180"
-      >
-        ▼
-      </span>
-    </summary>
+            <div className="absolute right-0 z-30 mt-3 w-[20rem] max-w-[calc(100vw-2rem)] overflow-hidden rounded-[1.35rem] border border-[#ee54a7]/15 bg-[#09090b]/98 p-2 shadow-[0_24px_70px_rgba(0,0,0,0.55)] backdrop-blur-xl">
+              <div className="px-3 pt-2 pb-2">
+                <p className="font-mono text-[0.58rem] font-bold tracking-[0.18em] text-[#ee54a7]/50 uppercase">
+                  Circle
+                </p>
+              </div>
 
-    <div className="absolute right-0 z-30 mt-3 w-[20rem] max-w-[calc(100vw-2rem)] overflow-hidden rounded-[1.35rem] border border-[#ee54a7]/15 bg-[#09090b]/98 p-2 shadow-[0_24px_70px_rgba(0,0,0,0.55)] backdrop-blur-xl">
-      <div className="px-3 pb-2 pt-2">
-        <p className="font-mono text-[0.58rem] font-bold tracking-[0.18em] text-[#ee54a7]/50 uppercase">
-          Circle
-        </p>
-      </div>
+              <ButtonLink
+                className="flex min-h-0 w-full justify-start rounded-xl border-0 bg-transparent px-3 py-3 text-left text-sm font-semibold text-white/70 shadow-none transition hover:bg-white/[0.055] hover:text-white"
+                href={`/home/circles/${circle.id}`}
+              >
+                View Circle Details
+              </ButtonLink>
 
-      <ButtonLink
-        className="flex min-h-0 w-full justify-start rounded-xl border-0 bg-transparent px-3 py-3 text-left text-sm font-semibold text-white/70 shadow-none transition hover:bg-white/[0.055] hover:text-white"
-        href={`/home/circles/${circle.id}`}
-      >
-        View Circle Details
-      </ButtonLink>
+              {circle.status !== "archived" && canManage ? (
+                <ButtonLink
+                  className="flex min-h-0 w-full justify-start rounded-xl border-0 bg-transparent px-3 py-3 text-left text-sm font-semibold text-white/70 shadow-none transition hover:bg-white/[0.055] hover:text-white"
+                  href={`/home/circles/manage/${circle.id}/edit`}
+                >
+                  Edit Circle
+                </ButtonLink>
+              ) : null}
 
-      {circle.status !== "archived" && canManage ? (
-        <ButtonLink
-          className="flex min-h-0 w-full justify-start rounded-xl border-0 bg-transparent px-3 py-3 text-left text-sm font-semibold text-white/70 shadow-none transition hover:bg-white/[0.055] hover:text-white"
-          href={`/home/circles/manage/${circle.id}/edit`}
-        >
-          Edit Circle
-        </ButtonLink>
-      ) : null}
+              {canDeleteCircle ? (
+                <>
+                  <div className="my-2 border-t border-white/[0.07]" />
 
-      {canDeleteCircle ? (
-        <>
-          <div className="my-2 border-t border-white/[0.07]" />
+                  <form action={deleteCircleAction}>
+                    <input name="circleId" type="hidden" value={circle.id} />
 
-          <form action={deleteCircleAction}>
-            <input name="circleId" type="hidden" value={circle.id} />
-
-            <button
-              className="flex w-full items-center rounded-xl px-3 py-3 text-left text-sm font-semibold text-red-300/80 transition hover:bg-red-950/35 hover:text-red-200"
-              type="submit"
-            >
-              Delete Circle
-            </button>
-          </form>
-        </>
-      ) : null}
-    </div>
-  </details>
-</div>
+                    <button
+                      className="flex w-full items-center rounded-xl px-3 py-3 text-left text-sm font-semibold text-red-300/80 transition hover:bg-red-950/35 hover:text-red-200"
+                      type="submit"
+                    >
+                      Delete Circle
+                    </button>
+                  </form>
+                </>
+              ) : null}
+            </div>
+          </details>
+        </div>
       </div>
       {messages?.updated === "1" ? (
-  <StatusMessage className="mt-8" tone="success">
-    Circle details updated successfully.
-  </StatusMessage>
-) : null}
+        <StatusMessage className="mt-8" tone="success">
+          Circle details updated successfully.
+        </StatusMessage>
+      ) : null}
 
       {messages?.created === "1" ? (
         <>

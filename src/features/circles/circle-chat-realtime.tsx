@@ -4,11 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
-export function CircleChatRealtime({
-  circleId,
-}: {
-  circleId: string;
-}) {
+export function CircleChatRealtime({ circleId }: { circleId: string }) {
   const router = useRouter();
 
   useEffect(() => {

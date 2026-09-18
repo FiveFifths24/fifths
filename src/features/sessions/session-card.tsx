@@ -177,15 +177,15 @@ export function SessionCard({ item }: { item: SessionCardItem }) {
             Your Signal Sync
           </p>
           {item.fit ? (
-  <p className="mt-1 text-xs font-bold capitalize text-white/35">
-    {item.fit} Match
-  </p>
-) : null}
+            <p className="mt-1 text-xs font-bold text-white/35 capitalize">
+              {item.fit} Match
+            </p>
+          ) : null}
 
           <ul
-  aria-label="Why This Syncs With Your Pulse"
-  className="mt-2 flex flex-wrap justify-center gap-2 sm:justify-start"
->
+            aria-label="Why This Syncs With Your Pulse"
+            className="mt-2 flex flex-wrap justify-center gap-2 sm:justify-start"
+          >
             {item.reasons.slice(0, 2).map((reason) => (
               <li key={reason}>
                 <Badge className="border-[#f359d2]/20 bg-[#f359d2]/[0.06] text-[#ffc2ef]">

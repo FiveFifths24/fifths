@@ -27,9 +27,9 @@ export default async function ManageCreatorCommonsPage({
   searchParams,
 }: {
   searchParams?: Promise<{
-  create?: string;
-  delete?: string;
-}>;
+    create?: string;
+    delete?: string;
+  }>;
 }) {
   const parameters = await searchParams;
   const showCreateForm = parameters?.create === "1";
@@ -208,17 +208,17 @@ export default async function ManageCreatorCommonsPage({
         Back to Creator Commons
       </ButtonLink>
       {parameters?.delete === "deleted" ? (
-  <StatusMessage className="mt-6" tone="success">
-    Opportunity Deleted.
-  </StatusMessage>
-) : null}
+        <StatusMessage className="mt-6" tone="success">
+          Opportunity Deleted.
+        </StatusMessage>
+      ) : null}
 
-{parameters?.delete === "error" ? (
-  <StatusMessage className="mt-6" tone="error">
-    This opportunity cannot be deleted because another member has already
-    responded to it.
-  </StatusMessage>
-) : null}
+      {parameters?.delete === "error" ? (
+        <StatusMessage className="mt-6" tone="error">
+          This opportunity cannot be deleted because another member has already
+          responded to it.
+        </StatusMessage>
+      ) : null}
 
       <header className="mt-8 text-center lg:text-left">
         <p className="flex items-center justify-center gap-2 text-xs font-black tracking-[0.2em] text-white/70 uppercase lg:justify-start">

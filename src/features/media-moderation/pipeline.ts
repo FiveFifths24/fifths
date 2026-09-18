@@ -51,17 +51,13 @@ export interface MediaModerationStore {
     quarantinePath: string;
     prepared: PreparedImage;
   }): Promise<string>;
-uploadQuarantine(
-  path: string,
-  bytes: Buffer,
-  contentType: string,
-): Promise<void>;
+  uploadQuarantine(
+    path: string,
+    bytes: Buffer,
+    contentType: string,
+  ): Promise<void>;
 
-publish(
-  path: string,
-  bytes: Buffer,
-  contentType: string,
-): Promise<void>;
+  publish(path: string, bytes: Buffer, contentType: string): Promise<void>;
   updateAudit(id: string, update: AuditUpdate): Promise<void>;
   deleteQuarantine(path: string): Promise<void>;
 }
@@ -101,19 +97,18 @@ export async function executeModeratedImageUpload(
   if (!userId) throw new MediaUploadAuthenticationError();
 
   const randomUUID = dependencies.randomUUID ?? (() => crypto.randomUUID());
-const publicationExtension =
-  input.prepared.originalMimeType === "image/gif" ? "gif" : "webp";
+  const publicationExtension =
+    input.prepared.originalMimeType === "image/gif" ? "gif" : "webp";
 
-const publicationContentType =
-  input.prepared.originalMimeType === "image/gif"
-    ? "image/gif"
-    : "image/webp";
+  const publicationContentType =
+    input.prepared.originalMimeType === "image/gif"
+      ? "image/gif"
+      : "image/webp";
 
-const quarantinePath = `${userId}/${randomUUID()}.webp`;
+  const quarantinePath = `${userId}/${randomUUID()}.webp`;
 
-const publishedPath =
-  `${userId}/${publicKind(input.surface)}-${randomUUID()}.${publicationExtension}`;
-    const auditId = await dependencies.store.begin({
+  const publishedPath = `${userId}/${publicKind(input.surface)}-${randomUUID()}.${publicationExtension}`;
+  const auditId = await dependencies.store.begin({
     userId,
     surface: input.surface,
     quarantinePath,
@@ -121,11 +116,11 @@ const publishedPath =
   });
 
   try {
-await dependencies.store.uploadQuarantine(
-  quarantinePath,
-  input.prepared.moderationBytes,
-  "image/webp",
-);
+    await dependencies.store.uploadQuarantine(
+      quarantinePath,
+      input.prepared.moderationBytes,
+      "image/webp",
+    );
   } catch {
     await dependencies.store.updateAudit(auditId, {
       status: "error",
@@ -169,11 +164,11 @@ await dependencies.store.uploadQuarantine(
   }
 
   try {
-await dependencies.store.publish(
-  publishedPath,
-  input.prepared.publicationBytes,
-  publicationContentType,
-);
+    await dependencies.store.publish(
+      publishedPath,
+      input.prepared.publicationBytes,
+      publicationContentType,
+    );
   } catch {
     await dependencies.store.updateAudit(auditId, {
       status: "error",
@@ -227,24 +222,24 @@ function createSupabaseStore(
           p_file_sha256: prepared.sha256,
         },
       );
-if (error || !data) {
-  console.error("begin_media_moderation_upload failed:", {
-    error,
-    data,
-    surface,
-    quarantinePath,
-    originalMimeType: prepared.originalMimeType,
-    normalizedByteSize: prepared.normalizedByteSize,
-    originalByteSize: prepared.originalByteSize,
-    width: prepared.width,
-    height: prepared.height,
-    sha256: prepared.sha256,
-  });
+      if (error || !data) {
+        console.error("begin_media_moderation_upload failed:", {
+          error,
+          data,
+          surface,
+          quarantinePath,
+          originalMimeType: prepared.originalMimeType,
+          normalizedByteSize: prepared.normalizedByteSize,
+          originalByteSize: prepared.originalByteSize,
+          width: prepared.width,
+          height: prepared.height,
+          sha256: prepared.sha256,
+        });
 
-  throw new MediaUploadStorageError();
-}
+        throw new MediaUploadStorageError();
+      }
 
-return data;
+      return data;
     },
     async uploadQuarantine(path, bytes, contentType) {
       const { error } = await serviceClient.storage

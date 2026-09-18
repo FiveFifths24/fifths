@@ -13,7 +13,7 @@ describe("OpportunityResponseForm", () => {
     expect(
       screen.getByRole("form", { name: "Respond to this opportunity" }),
     ).toBeInTheDocument();
-    expect(screen.getByLabelText("Your response")).toBeRequired();
+    expect(screen.getByLabelText("Your Response")).toBeRequired();
     expect(screen.getByLabelText("Availability")).toBeRequired();
     expect(
       screen.getByText(/do not include private contact details/i),

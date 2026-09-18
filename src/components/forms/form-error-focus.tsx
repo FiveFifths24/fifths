@@ -26,9 +26,7 @@ export function FormErrorFocus({ state }: { state: ActionState }) {
     if (firstInvalidField) {
       const escapedName = firstInvalidField.replaceAll('"', '\\"');
 
-      const field = form.querySelector<HTMLElement>(
-        `[name="${escapedName}"]`,
-      );
+      const field = form.querySelector<HTMLElement>(`[name="${escapedName}"]`);
 
       if (field) {
         field.scrollIntoView({
@@ -52,11 +50,5 @@ export function FormErrorFocus({ state }: { state: ActionState }) {
     });
   }, [state]);
 
-  return (
-    <span
-      ref={markerRef}
-      aria-hidden="true"
-      className="sr-only"
-    />
-  );
+  return <span ref={markerRef} aria-hidden="true" className="sr-only" />;
 }

@@ -36,11 +36,7 @@ export default async function EditCirclePage({
 
   const [circleResult, membershipResult, platformRoleResult] =
     await Promise.all([
-      supabase
-        .from("circles")
-        .select("*")
-        .eq("id", circleId)
-        .maybeSingle(),
+      supabase.from("circles").select("*").eq("id", circleId).maybeSingle(),
 
       supabase
         .from("circle_members")
@@ -77,10 +73,7 @@ export default async function EditCirclePage({
   if (circle.status === "archived") {
     return (
       <div className="mx-auto max-w-5xl">
-        <ButtonLink
-          href={`/home/circles/manage/${circle.id}`}
-          variant="quiet"
-        >
+        <ButtonLink href={`/home/circles/manage/${circle.id}`} variant="quiet">
           ← Back to Circle
         </ButtonLink>
 
@@ -122,10 +115,7 @@ export default async function EditCirclePage({
   ) {
     return (
       <div className="mx-auto max-w-5xl">
-        <ButtonLink
-          href={`/home/circles/manage/${circle.id}`}
-          variant="quiet"
-        >
+        <ButtonLink href={`/home/circles/manage/${circle.id}`} variant="quiet">
           ← Back to Circle
         </ButtonLink>
 
@@ -138,16 +128,12 @@ export default async function EditCirclePage({
     );
   }
 
-  const selectedInterestId =
-    selectedInterestResult.data?.interest_id ?? "";
+  const selectedInterestId = selectedInterestResult.data?.interest_id ?? "";
 
   return (
     <div className="mx-auto w-full max-w-6xl">
       <div className="text-center sm:text-left">
-        <ButtonLink
-          href={`/home/circles/manage/${circle.id}`}
-          variant="quiet"
-        >
+        <ButtonLink href={`/home/circles/manage/${circle.id}`} variant="quiet">
           ← Back to Circle
         </ButtonLink>
       </div>

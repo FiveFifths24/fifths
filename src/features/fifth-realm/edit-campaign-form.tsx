@@ -8,12 +8,7 @@ import { TextField } from "@/components/forms/text-field";
 import { firstFieldError, initialActionState } from "@/features/auth/state";
 import { FormErrorFocus } from "@/components/forms/form-error-focus";
 import { cn } from "@/lib/cn";
-import type {
-  Circle,
-  Interest,
-  Mode,
-  RealmCampaign,
-} from "@/types/database";
+import type { Circle, Interest, Mode, RealmCampaign } from "@/types/database";
 
 import { updateCampaignAction } from "./actions";
 import { campaignTimezones } from "./schemas";
@@ -162,10 +157,7 @@ export function EditCampaignForm({
 }) {
   const updateAction = updateCampaignAction.bind(null, campaign.id);
 
-  const [state, action] = useActionState(
-    updateAction,
-    initialActionState,
-  );
+  const [state, action] = useActionState(updateAction, initialActionState);
 
   function value(name: string, fallback = "") {
     const stored = state.values?.[name];
@@ -190,13 +182,13 @@ export function EditCampaignForm({
   const selectedInterests = new Set(interestValues());
 
   return (
-<form
-  action={action}
-  aria-label="Edit a Fifth Realm Campaign"
-  className="space-y-8"
->
-  <fieldset className="rounded-[1.75rem] border border-white/10 bg-black/20 p-5 sm:p-7">
-          <legend className="sr-only">The Campaign</legend>
+    <form
+      action={action}
+      aria-label="Edit a Fifth Realm Campaign"
+      className="space-y-8"
+    >
+      <fieldset className="rounded-[1.75rem] border border-white/10 bg-black/20 p-5 sm:p-7">
+        <legend className="sr-only">The Campaign</legend>
 
         <SectionIntro
           description="Update the world, premise, and overall campaign presentation."
@@ -336,10 +328,7 @@ export function EditCampaignForm({
           />
 
           <SelectField
-            defaultValue={value(
-              "experienceLevel",
-              campaign.experience_level,
-            )}
+            defaultValue={value("experienceLevel", campaign.experience_level)}
             error={firstFieldError(state, "experienceLevel")}
             label="Player Experience"
             name="experienceLevel"
@@ -377,10 +366,7 @@ export function EditCampaignForm({
 
         <div className="mt-5">
           <TextAreaField
-            defaultValue={value(
-              "scheduleSummary",
-              campaign.schedule_summary,
-            )}
+            defaultValue={value("scheduleSummary", campaign.schedule_summary)}
             error={firstFieldError(state, "scheduleSummary")}
             hint="Let participants know if this is recurring, and for how long."
             label="Schedule"
@@ -417,10 +403,7 @@ export function EditCampaignForm({
 
         <div className="mt-5 grid gap-5 sm:grid-cols-2">
           <SelectField
-            defaultValue={value(
-              "circleId",
-              campaign.circle_id ?? "",
-            )}
+            defaultValue={value("circleId", campaign.circle_id ?? "")}
             error={firstFieldError(state, "circleId")}
             label="Circle Association"
             name="circleId"
@@ -436,10 +419,7 @@ export function EditCampaignForm({
           </SelectField>
 
           <TextField
-            defaultValue={value(
-              "locationLabel",
-              campaign.location_label ?? "",
-            )}
+            defaultValue={value("locationLabel", campaign.location_label ?? "")}
             error={firstFieldError(state, "locationLabel")}
             hint="Example: Meet at insert-name-here cafe downtown."
             label="Area or Access Label"
@@ -503,10 +483,7 @@ export function EditCampaignForm({
           />
 
           <SelectField
-            defaultValue={value(
-              "stimulationLevel",
-              campaign.stimulation_level,
-            )}
+            defaultValue={value("stimulationLevel", campaign.stimulation_level)}
             error={firstFieldError(state, "stimulationLevel")}
             label="Stimulation"
             name="stimulationLevel"
@@ -517,10 +494,7 @@ export function EditCampaignForm({
           </SelectField>
 
           <SelectField
-            defaultValue={value(
-              "socialIntensity",
-              campaign.social_intensity,
-            )}
+            defaultValue={value("socialIntensity", campaign.social_intensity)}
             error={firstFieldError(state, "socialIntensity")}
             label="Social Pace"
             name="socialIntensity"
@@ -568,27 +542,27 @@ export function EditCampaignForm({
         </fieldset>
       </fieldset>
 
-<div className="rounded-[1.75rem] border border-[#22d3ee]/15 bg-[#22d3ee]/[0.03] p-5 sm:p-6">
-  <FormErrorFocus state={state} />
+      <div className="rounded-[1.75rem] border border-[#22d3ee]/15 bg-[#22d3ee]/[0.03] p-5 sm:p-6">
+        <FormErrorFocus state={state} />
 
-  {state.status === "error" ? (
-    <div className="mb-5">
-      <ActionStatus state={state} />
-    </div>
-  ) : null}
+        {state.status === "error" ? (
+          <div className="mb-5">
+            <ActionStatus state={state} />
+          </div>
+        ) : null}
 
-  <SubmitButton
-    className="border border-white/10 bg-gradient-to-r from-[#0891b2] via-[#22d3ee] to-[#7c3aed] text-white shadow-lg shadow-[#0891b2]/20 hover:shadow-[#22d3ee]/25 hover:brightness-110"
-    pendingLabel="Saving Campaign Changes…"
-  >
-    Save Campaign Changes
-  </SubmitButton>
+        <SubmitButton
+          className="border border-white/10 bg-gradient-to-r from-[#0891b2] via-[#22d3ee] to-[#7c3aed] text-white shadow-lg shadow-[#0891b2]/20 hover:shadow-[#22d3ee]/25 hover:brightness-110"
+          pendingLabel="Saving Campaign Changes…"
+        >
+          Save Campaign Changes
+        </SubmitButton>
 
-  <p className="mt-3 max-w-2xl text-xs leading-5 text-white/35">
-    Saving changes updates this existing campaign. It does not create a
-    new campaign or change its current lifecycle status.
-  </p>
-</div>
+        <p className="mt-3 max-w-2xl text-xs leading-5 text-white/35">
+          Saving changes updates this existing campaign. It does not create a
+          new campaign or change its current lifecycle status.
+        </p>
+      </div>
     </form>
   );
 }

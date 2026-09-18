@@ -53,8 +53,7 @@ function SelectField({
         aria-invalid={error ? true : undefined}
         className={cn(
           controlClassName,
-          error &&
-            "border-red-500 focus:border-red-400 focus:ring-red-500/20",
+          error && "border-red-500 focus:border-red-400 focus:ring-red-500/20",
         )}
         defaultValue={defaultValue}
         id={name}
@@ -107,8 +106,7 @@ function TextAreaField({
         className={cn(
           controlClassName,
           "min-h-32 resize-y sm:min-h-36",
-          error &&
-            "border-red-500 focus:border-red-400 focus:ring-red-500/20",
+          error && "border-red-500 focus:border-red-400 focus:ring-red-500/20",
         )}
         defaultValue={defaultValue}
         id={name}
@@ -238,7 +236,6 @@ export function EditOpportunityForm({
       aria-label="Edit Creator Commons Opportunity"
       className="space-y-10 text-left"
     >
-
       <fieldset>
         <legend className="w-full text-center text-xl font-bold text-white lg:text-left">
           Opportunity Brief
@@ -298,10 +295,7 @@ export function EditOpportunityForm({
 
         <div className="mt-5 grid gap-5 lg:grid-cols-2">
           <TextAreaField
-            defaultValue={previousValue(
-              "description",
-              opportunity.description,
-            )}
+            defaultValue={previousValue("description", opportunity.description)}
             error={firstFieldError(state, "description")}
             label="Full Description"
             maxLength={5000}
@@ -540,24 +534,24 @@ export function EditOpportunityForm({
         selectedIds={currentInterestIds}
       />
 
-<div className="rounded-2xl border border-white/15 bg-white/[0.035] p-5 text-center text-sm leading-6 text-white/55 lg:text-left">
-  Saving updates the existing opportunity. It does not create a new
-  listing or change its current lifecycle status.
-</div>
+      <div className="rounded-2xl border border-white/15 bg-white/[0.035] p-5 text-center text-sm leading-6 text-white/55 lg:text-left">
+        Saving updates the existing opportunity. It does not create a new
+        listing or change its current lifecycle status.
+      </div>
 
-<div className="rounded-2xl border border-white/15 bg-white/[0.025] p-5">
-  <FormErrorFocus state={state} />
+      <div className="rounded-2xl border border-white/15 bg-white/[0.025] p-5">
+        <FormErrorFocus state={state} />
 
-  {state.status === "error" ? (
-    <div className="mb-5">
-      <ActionStatus state={state} />
-    </div>
-  ) : null}
+        {state.status === "error" ? (
+          <div className="mb-5">
+            <ActionStatus state={state} />
+          </div>
+        ) : null}
 
-  <SubmitButton pendingLabel="Saving Changes…">
-    Save Opportunity Changes
-  </SubmitButton>
-</div>
+        <SubmitButton pendingLabel="Saving Changes…">
+          Save Opportunity Changes
+        </SubmitButton>
+      </div>
     </form>
   );
 }
