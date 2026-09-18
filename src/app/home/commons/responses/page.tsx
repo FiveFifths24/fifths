@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 function actionClass() {
-  return "min-h-11 rounded-full border border-white/15 bg-black/40 px-5 py-2.5 text-sm font-bold text-white/75 transition hover:border-white/35 hover:bg-white/[0.06] hover:text-white";
+  return "min-h-11 rounded-full border border-white/35 bg-white px-5 py-2.5 text-sm font-bold text-black shadow-[0_0_24px_rgba(255,255,255,0.1)] transition hover:bg-white/90 hover:shadow-[0_0_32px_rgba(255,255,255,0.16)]";
 }
 
 export default async function OpportunityResponsesPage({

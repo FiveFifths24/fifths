@@ -203,6 +203,7 @@ export function ProfileLaunchView({
   experience,
   featuredConnections,
   isOwner,
+  headerAction,
   contactActions,
   featuredProfileImageUrl,
   featuredProfileImageUrl2,
@@ -393,6 +394,11 @@ export function ProfileLaunchView({
                     {experience.viewMyLabel}
                     <ArrowUpRight aria-hidden="true" className="size-4" />
                   </a>
+                </div>
+              ) : null}
+              {headerAction ? (
+                <div className="mt-6 flex justify-center lg:absolute lg:right-10 lg:bottom-10 lg:mt-0">
+                  {headerAction}
                 </div>
               ) : null}
             </div>
@@ -777,7 +783,7 @@ export function ProfileLaunchView({
               </SectionLabel>
 
               <p className="mt-2 text-sm text-white/40">
-                People in {profile.displayName}&apos;s orbit.
+                People In {profile.displayName}&apos;s Orbit.
               </p>
 
               <div className="mx-auto mt-7 flex max-w-4xl flex-wrap items-start justify-center gap-7 sm:gap-10">

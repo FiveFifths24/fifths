@@ -86,19 +86,25 @@ export async function createOpportunityAction(
     });
 
     if (error || !data) {
+      console.error("create_creator_opportunity failed:", error);
+
       return {
         status: "error",
         message:
           "The opportunity could not be created. Review the details and try again.",
+        values,
       };
     }
 
     opportunityId = data;
-  } catch {
+  } catch (error) {
+    console.error("createOpportunityAction failed:", error);
+
     return {
       status: "error",
       message:
         "Creator Commons is temporarily unavailable. Please try again shortly.",
+      values,
     };
   }
 
@@ -366,4 +372,142 @@ export async function confirmManagedOpportunityCompletionAction(
   redirect(
     `/home/commons/manage/${parsed.data.opportunityId}?completion=${outcome}`,
   );
+}
+
+export async function deleteOpportunityAction(formData: FormData) {
+  const parsed = opportunityIdSchema.safeParse({
+    opportunityId: formData.get("opportunityId"),
+  });
+
+  if (!parsed.success) {
+    redirect("/home/commons/manage?delete=invalid");
+  }
+
+  let outcome = "deleted";
+
+  try {
+    const supabase = await createClient();
+
+    const { error } = await supabase.rpc("delete_creator_opportunity", {
+      p_opportunity_id: parsed.data.opportunityId,
+    });
+
+    if (error) {
+      console.error("delete_creator_opportunity failed:", error);
+      outcome = "error";
+    }
+  } catch {
+    outcome = "error";
+  }
+
+  revalidatePath("/home");
+  revalidatePath("/home/commons");
+  revalidatePath("/home/commons/manage");
+
+  redirect(`/home/commons/manage?delete=${outcome}`);
+}
+export async function updateOpportunityAction(
+  opportunityId: string,
+  _previousState: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  const values = actionValuesFromFormData(formData, opportunityDraftFields);
+
+  const parsedId = opportunityIdSchema.safeParse({
+    opportunityId,
+  });
+
+  if (!parsedId.success) {
+    return {
+      status: "error",
+      message: "This opportunity could not be identified.",
+      values,
+    };
+  }
+
+  const parsed = createOpportunitySchema.safeParse({
+    circleId: formData.get("circleId"),
+    title: formData.get("title"),
+    summary: formData.get("summary"),
+    description: formData.get("description"),
+    deliverables: formData.get("deliverables"),
+    kind: formData.get("kind"),
+    compensation: formData.get("compensation"),
+    format: formData.get("format"),
+    locationLabel: formData.get("locationLabel"),
+    responseDeadlineLocal: formData.get("responseDeadlineLocal"),
+    timezone: formData.get("timezone"),
+    estimatedMinutes: formData.get("estimatedMinutes"),
+    positions: formData.get("positions"),
+    modeId: formData.get("modeId"),
+    minimumEnergy: formData.get("minimumEnergy"),
+    maximumEnergy: formData.get("maximumEnergy"),
+    stimulationLevel: formData.get("stimulationLevel"),
+    socialIntensity: formData.get("socialIntensity"),
+    skillIds: formData.getAll("skillIds"),
+    interestIds: formData.getAll("interestIds"),
+  });
+
+  if (!parsed.success) {
+    return {
+      status: "error",
+      message: "Check the highlighted opportunity details and try again.",
+      fieldErrors: parsed.error.flatten().fieldErrors,
+      values,
+    };
+  }
+
+  try {
+    const supabase = await createClient();
+
+    const { error } = await supabase.rpc("update_creator_opportunity", {
+      p_opportunity_id: parsedId.data.opportunityId,
+      p_circle_id: parsed.data.circleId,
+      p_title: parsed.data.title,
+      p_summary: parsed.data.summary,
+      p_description: parsed.data.description,
+      p_deliverables: parsed.data.deliverables,
+      p_kind: parsed.data.kind,
+      p_is_paid: parsed.data.compensation === "paid",
+      p_format: parsed.data.format,
+      p_location_label: parsed.data.locationLabel,
+      p_response_deadline_local: parsed.data.responseDeadlineLocal,
+      p_timezone: parsed.data.timezone,
+      p_estimated_minutes: parsed.data.estimatedMinutes,
+      p_positions: parsed.data.positions,
+      p_mode_id: parsed.data.modeId,
+      p_minimum_energy: parsed.data.minimumEnergy,
+      p_maximum_energy: parsed.data.maximumEnergy,
+      p_stimulation_level: parsed.data.stimulationLevel,
+      p_social_intensity: parsed.data.socialIntensity,
+      p_skill_ids: parsed.data.skillIds,
+      p_interest_ids: parsed.data.interestIds,
+    });
+
+    if (error) {
+      console.error("update_creator_opportunity failed:", error);
+
+      return {
+        status: "error",
+        message:
+          "The opportunity could not be updated. Review the details and try again.",
+        values,
+      };
+    }
+  } catch {
+    return {
+      status: "error",
+      message:
+        "Creator Commons is temporarily unavailable. Please try again shortly.",
+      values,
+    };
+  }
+
+  revalidatePath("/home");
+  revalidatePath("/home/commons");
+  revalidatePath(`/home/commons/${parsedId.data.opportunityId}`);
+  revalidatePath(`/home/commons/manage/${parsedId.data.opportunityId}`);
+  revalidatePath(`/home/commons/manage/${parsedId.data.opportunityId}/edit`);
+
+  redirect(`/home/commons/manage/${parsedId.data.opportunityId}?updated=1`);
 }

@@ -95,7 +95,7 @@ export function FriendsActivity({
             className="mx-auto size-7 text-emerald-300"
           />
           <h3 className="mt-3 text-xl font-bold text-white">
-            You&apos;re caught up.
+            You&apos;re Caught Up.
           </h3>
           <p className="mx-auto mt-2 max-w-lg text-sm leading-6 text-white/50">
             You&apos;ve seen what&apos;s new in your world. You can leave it

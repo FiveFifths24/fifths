@@ -18,7 +18,7 @@ describe("CreateOpportunityForm", () => {
     );
     expect(
       screen.getByRole("form", {
-        name: "Create a Creator Commons opportunity",
+        name: "Create A Creator Commons Opportunity",
       }),
     ).toBeInTheDocument();
     expect(screen.getByLabelText(/response deadline/i)).toHaveAttribute(

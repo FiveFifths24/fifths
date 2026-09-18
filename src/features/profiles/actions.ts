@@ -396,6 +396,8 @@ export async function updateProfileSettingsAction(
       message: "Your SIGNAL profile has been updated.",
     };
   } catch (error) {
+    console.error("updateProfileAction failed:", error);
+
     return {
       status: "error",
       message:

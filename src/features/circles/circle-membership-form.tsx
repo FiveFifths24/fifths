@@ -41,7 +41,7 @@ export function CircleMembershipForm({
         className="space-y-4"
       >
         <ActionStatus state={leaveState} />
-        <p className="text-sm leading-6 text-emerald-100">
+        <p className="text-center text-sm leading-6 text-emerald-100">
           You are an active {membership.role} in this Circle.
         </p>
         <SubmitButton pendingLabel="Leaving…" variant="secondary">

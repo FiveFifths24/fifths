@@ -4,26 +4,28 @@ import { useActionState } from "react";
 import { ActionStatus } from "@/components/forms/action-status";
 import { SubmitButton } from "@/components/forms/submit-button";
 import { firstFieldError, initialActionState } from "@/features/auth/state";
+import { blockProfileAction } from "@/features/profiles/actions";
 import { cn } from "@/lib/cn";
 import { submitReportAction } from "./actions";
 
 const targets = [
-  ["member", "Member behavior"],
+  ["member", "Member Behavior"],
   ["session", "Session"],
   ["circle", "Circle"],
-  ["opportunity", "Creator Commons opportunity"],
-  ["campaign", "Fifth Realm campaign"],
-  ["platform", "Platform or safety concern"],
+  ["circle_message", "Circle Chat Message"],
+  ["opportunity", "Creator Commons Opportunity"],
+  ["campaign", "Fifth Realm Campaign"],
+  ["platform", "Platform or Safety Concern"],
 ] as const;
 const categories = [
   ["harassment", "Harassment"],
-  ["hate_or_discrimination", "Hate or discrimination"],
-  ["threat_or_violence", "Threat or violence"],
-  ["sexual_content", "Sexual content or conduct"],
-  ["spam_or_fraud", "Spam or fraud"],
-  ["privacy", "Privacy concern"],
-  ["copyright_or_proprietary_content", "Copyright or proprietary content"],
-  ["other", "Other safety concern"],
+  ["hate_or_discrimination", "Hate or Discrimination"],
+  ["threat_or_violence", "Threat or Violence"],
+  ["sexual_content", "Sexual Content or Conduct"],
+  ["spam_or_fraud", "Spam or Fraud"],
+  ["privacy", "Privacy Concern"],
+  ["copyright_or_proprietary_content", "Copyright or Proprietary Content"],
+  ["other", "Other Safety Concern"],
 ] as const;
 
 function TextField({
@@ -95,11 +97,17 @@ export function ReportForm({
   defaultTargetId = "",
   defaultContextUrl = "",
   lockTarget = false,
+  offerBlockAfterReport = false,
+  blockTargetUserId = "",
+  returnTo = "/home",
 }: {
   defaultTarget?: (typeof targets)[number][0];
   defaultTargetId?: string;
   defaultContextUrl?: string;
   lockTarget?: boolean;
+  offerBlockAfterReport?: boolean;
+  blockTargetUserId?: string;
+  returnTo?: string;
 } = {}) {
   const [state, action] = useActionState(
     submitReportAction,
@@ -114,6 +122,39 @@ export function ReportForm({
       className="space-y-5"
     >
       <ActionStatus state={state} />
+      {state.status === "success" &&
+      offerBlockAfterReport &&
+      blockTargetUserId ? (
+        <div className="rounded-2xl border border-red-500/20 bg-red-500/[0.06] p-4">
+          <p className="text-sm font-semibold text-white">Report submitted.</p>
+
+          <p className="mt-1 text-sm leading-6 text-white/55">
+            Would you also like to block this member?
+          </p>
+
+          <div className="mt-4 flex flex-wrap gap-3">
+            <form action={blockProfileAction}>
+              <input
+                name="targetUserId"
+                type="hidden"
+                value={blockTargetUserId}
+              />
+              <input name="returnTo" type="hidden" value={returnTo} />
+
+              <button
+                className="rounded-full border border-red-400/30 bg-red-500/10 px-4 py-2 text-sm font-semibold text-red-100 transition hover:bg-red-500/20"
+                type="submit"
+              >
+                Block Member
+              </button>
+            </form>
+
+            <span className="inline-flex items-center px-2 text-sm text-white/40">
+              Not now
+            </span>
+          </div>
+        </div>
+      ) : null}
       <input name="targetEntityId" type="hidden" value={defaultTargetId} />
       <div className="grid gap-5 sm:grid-cols-2">
         <div>

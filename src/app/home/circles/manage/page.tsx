@@ -15,7 +15,14 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-export default async function ManageCirclesPage() {
+export default async function ManageCirclesPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{
+    delete?: string;
+  }>;
+}) {
+  const parameters = await searchParams;
   let supabase;
 
   try {
@@ -97,6 +104,23 @@ export default async function ManageCirclesPage() {
 
   return (
     <div className="text-center sm:text-left">
+      <div className="flex justify-center sm:justify-start">
+        <ButtonLink className="mb-8" href="/home/circles" variant="quiet">
+          ← Back To Circles
+        </ButtonLink>
+      </div>
+      {parameters?.delete === "deleted" ? (
+        <StatusMessage className="mb-8" tone="success">
+          Circle Deleted.
+        </StatusMessage>
+      ) : null}
+
+      {parameters?.delete === "error" ? (
+        <StatusMessage className="mb-8" tone="error">
+          This Circle cannot be deleted because another member has already
+          interacted with it.
+        </StatusMessage>
+      ) : null}
       {/* =====================================================
           PAGE INTRO
       ====================================================== */}
@@ -176,56 +200,84 @@ export default async function ManageCirclesPage() {
       </section>
 
       {/* =====================================================
-          MANAGED CIRCLES
-      ====================================================== */}
-      <section className="mt-12" aria-labelledby="managed-circles-heading">
-        <div className="flex items-center justify-center gap-3 sm:justify-start">
-          <Settings2 aria-hidden="true" className="size-5 text-[#ee54a7]" />
+    MANAGED CIRCLES
+====================================================== */}
+      <section className="mt-14" aria-labelledby="managed-circles-heading">
+        <div className="flex flex-col gap-2 text-center sm:text-left">
+          <div className="flex items-center justify-center gap-3 sm:justify-start">
+            <div className="flex size-9 items-center justify-center rounded-xl border border-[#ee54a7]/20 bg-[#ee54a7]/[0.07]">
+              <Settings2 aria-hidden="true" className="size-4 text-[#ee54a7]" />
+            </div>
 
-          <h2
-            className="text-2xl font-bold text-white"
-            id="managed-circles-heading"
-          >
-            Circles You Manage
-          </h2>
+            <h2
+              className="text-2xl font-bold text-white"
+              id="managed-circles-heading"
+            >
+              Circles You Manage
+            </h2>
+          </div>
+
+          {cards.length ? (
+            <p className="text-sm leading-6 text-white/45 sm:pl-12">
+              Return to your communities, update their settings, and manage
+              participation.
+            </p>
+          ) : null}
         </div>
 
         {cards.length ? (
-          <ul className="mt-6 grid gap-6 lg:grid-cols-2">
+          <ul className="mt-7 grid gap-6 lg:grid-cols-2">
             {cards.map((card) => (
-              <li className="space-y-4" key={card.id}>
-                <CircleCard item={card} />
+              <li
+                className="group relative overflow-hidden rounded-[2rem] border border-[#ee54a7]/15 bg-white/[0.015] transition duration-300 hover:border-[#ee54a7]/30 hover:bg-[#ee54a7]/[0.025]"
+                key={card.id}
+              >
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -top-16 -right-16 size-40 rounded-full bg-[#ee54a7]/[0.045] blur-[70px] transition group-hover:bg-[#ee54a7]/[0.075]"
+                />
 
-                <ButtonLink
-                  className="w-full border-[#ee54a7]/30 bg-black/40 text-white/85 hover:border-[#ee54a7]/60 hover:bg-[#ee54a7]/10 hover:text-white"
-                  href={`/home/circles/manage/${card.id}`}
-                  variant="secondary"
-                >
-                  Manage {card.name}
-                  <ArrowRight
-                    aria-hidden="true"
-                    className="size-4 text-[#ee54a7]"
-                  />
-                </ButtonLink>
+                <div className="relative">
+                  <CircleCard item={card} />
+
+                  <div className="border-t border-white/[0.06] bg-black/25 px-5 py-4 sm:px-6">
+                    <ButtonLink
+                      className="group/action min-h-11 w-full justify-between rounded-xl border border-[#ee54a7]/20 bg-[#ee54a7]/[0.035] px-5 text-sm font-bold text-white/80 shadow-none transition hover:border-[#ee54a7]/45 hover:bg-[#ee54a7]/[0.08] hover:text-white"
+                      href={`/home/circles/manage/${card.id}`}
+                      variant="secondary"
+                    >
+                      <span>Manage Circle</span>
+
+                      <ArrowRight
+                        aria-hidden="true"
+                        className="size-4 text-[#ee54a7] transition-transform group-hover/action:translate-x-1"
+                      />
+                    </ButtonLink>
+                  </div>
+                </div>
               </li>
             ))}
           </ul>
         ) : (
-          /* =================================================
-              EMPTY STATE
-          ================================================== */
-          <div className="relative mt-6 overflow-hidden rounded-[2rem] border border-[#ee54a7]/20 bg-[#ee54a7]/[0.035] px-6 py-12 text-center sm:px-10 sm:py-14">
+          <div className="relative mt-7 overflow-hidden rounded-[2rem] border border-[#ee54a7]/20 bg-[#ee54a7]/[0.035] px-6 py-12 text-center sm:px-10 sm:py-14">
             <div
               aria-hidden="true"
               className="pointer-events-none absolute top-1/2 left-1/2 size-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#ee54a7]/[0.07] blur-[110px]"
             />
 
             <div className="relative mx-auto max-w-2xl">
-              <h3 className="display-type text-3xl text-white sm:text-4xl">
+              <div className="mx-auto flex size-12 items-center justify-center rounded-2xl border border-[#ee54a7]/20 bg-[#ee54a7]/[0.07]">
+                <MessagesSquare
+                  aria-hidden="true"
+                  className="size-5 text-[#ee54a7]"
+                />
+              </div>
+
+              <h3 className="display-type mt-5 text-3xl text-white sm:text-4xl">
                 Your Managed Circles Will Appear Here.
               </h3>
 
-              <p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-white/60 sm:text-base">
+              <p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-white/55 sm:text-base">
                 When you create a Circle or receive an owner, host, or moderator
                 role, you&apos;ll be able to return here to manage that
                 community.
@@ -251,7 +303,7 @@ export default async function ManageCirclesPage() {
       {/* =====================================================
           MANAGEMENT NOTE
       ====================================================== */}
-      <aside className="mt-20 flex gap-4 rounded-[1.5rem] border border-[#ee54a7]/15 bg-[#ee54a7]/[0.035] p-5 text-sm leading-7 text-white/55 sm:p-6">
+      <aside className="mt-12 flex gap-4 rounded-[1.5rem] border border-[#ee54a7]/15 bg-[#ee54a7]/[0.035] p-5 text-sm leading-7 text-white/55 sm:p-6">
         <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-[#ee54a7]/25 bg-black/30">
           <MessagesSquare
             aria-hidden="true"

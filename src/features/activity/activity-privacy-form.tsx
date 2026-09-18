@@ -34,7 +34,7 @@ const options = [
   {
     name: "shareProfileActivity",
     key: "share_profile_activity",
-    label: "Profile updates",
+    label: "Profile Updates",
     description:
       "Current Signal, music, and recommendations. Approved media can be added after moderation integration.",
   },

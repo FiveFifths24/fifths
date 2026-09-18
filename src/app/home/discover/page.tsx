@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { SwipeCardGrid } from "@/components/ui/swipe-card-grid";
 import {
   ArrowUpRight,
   BriefcaseBusiness,
   Compass,
   MapPin,
   MessagesSquare,
+  CalendarDays,
   Search,
   Sparkles,
 } from "lucide-react";
@@ -55,38 +57,76 @@ function nearLocation(
   );
 }
 
-function ResultCard({
+function SessionResultCard({
   href,
-  eyebrow,
   title,
   summary,
-  meta,
+  format,
+  startsAt,
+  location,
 }: {
   href: string;
-  eyebrow: string;
   title: string;
   summary?: string | null;
-  meta?: string | null;
+  format: string;
+  startsAt: string;
+  location?: string | null;
 }) {
   return (
     <Link
-      className="group rounded-[1.5rem] border border-white/10 bg-black/40 p-5 transition hover:-translate-y-0.5 hover:border-[#ca9aff]/40 hover:bg-[#6c14ce]/[0.08] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f359d2] motion-reduce:transform-none"
+      className="group relative flex min-h-[16rem] max-w-full min-w-0 flex-col items-center overflow-hidden rounded-[1.5rem] border border-[#992bff]/20 bg-[radial-gradient(circle_at_top_right,rgba(153,43,255,0.12),transparent_38%),linear-gradient(145deg,rgba(108,20,206,0.07),rgba(0,0,0,0.92))] p-5 text-center transition duration-300 hover:-translate-y-1 hover:border-[#992bff]/45 hover:shadow-[0_20px_55px_rgba(153,43,255,0.08)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#992bff] motion-reduce:transform-none"
       href={href}
     >
-      <p className="text-[0.65rem] font-black tracking-[0.18em] text-[#ca9aff] uppercase">
-        {eyebrow}
+      <ArrowUpRight
+        aria-hidden="true"
+        className="absolute top-5 right-5 size-4 text-white/25 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#ca9aff]"
+      />
+
+      <div className="flex size-10 items-center justify-center rounded-xl border border-[#992bff]/25 bg-[#992bff]/10">
+        <CalendarDays aria-hidden="true" className="size-5 text-[#ca9aff]" />
+      </div>
+
+      <p className="mt-3 text-[0.62rem] font-black tracking-[0.18em] text-[#ca9aff] uppercase">
+        Session
       </p>
-      <h3 className="mt-2 text-lg font-bold text-white group-hover:text-[#f6aee7]">
+
+      <h3 className="mt-5 max-w-full px-5 text-xl font-bold [overflow-wrap:anywhere] break-words text-white transition group-hover:text-[#ead7ff]">
         {title}
       </h3>
+
       {summary ? (
-        <p className="mt-2 line-clamp-2 text-sm leading-6 text-white/45">
+        <p className="mt-3 line-clamp-2 max-w-full text-sm leading-6 [overflow-wrap:anywhere] break-words text-white/50">
           {summary}
         </p>
       ) : null}
-      {meta ? (
-        <p className="mt-4 text-xs font-bold text-white/30">{meta}</p>
-      ) : null}
+
+      <div className="mt-5 flex flex-wrap justify-center gap-2">
+        <span className="rounded-full border border-[#992bff]/15 bg-[#992bff]/[0.06] px-3 py-1.5 text-xs font-bold text-white/55 capitalize">
+          {format.replaceAll("_", " ")}
+        </span>
+
+        <span className="rounded-full border border-[#992bff]/15 bg-[#992bff]/[0.06] px-3 py-1.5 text-xs font-bold text-white/55">
+          {new Date(startsAt).toLocaleDateString()}
+        </span>
+
+        {location ? (
+          <span className="flex max-w-full items-center gap-1.5 rounded-full border border-[#992bff]/15 bg-[#992bff]/[0.06] px-3 py-1.5 text-xs font-bold text-white/55">
+            <MapPin
+              aria-hidden="true"
+              className="size-3.5 shrink-0 text-[#ca9aff]"
+            />
+            <span className="truncate">{location}</span>
+          </span>
+        ) : null}
+      </div>
+
+      <div className="mt-auto w-full pt-5">
+        <div className="border-t border-[#992bff]/10 pt-4">
+          <span className="text-[0.68rem] font-black tracking-[0.15em] text-[#ca9aff]/80 uppercase transition group-hover:text-[#ca9aff]">
+            View Session
+          </span>
+        </div>
+      </div>
     </Link>
   );
 }
@@ -111,63 +151,62 @@ function PeopleResultCard({
 
   return (
     <Link
-      className="group relative flex min-h-[14rem] overflow-hidden rounded-[1.5rem] border border-white/10 bg-black/70 transition duration-300 hover:-translate-y-1 hover:border-[#f359d2]/40 hover:shadow-[0_20px_60px_rgba(108,20,206,0.15)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f359d2] motion-reduce:transform-none"
+      className="group relative flex aspect-[4/5] min-w-0 overflow-hidden rounded-[1.25rem] border border-white/10 bg-black/70 transition duration-300 hover:-translate-y-1 hover:border-[#f359d2]/40 hover:shadow-[0_14px_35px_rgba(108,20,206,0.14)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f359d2] motion-reduce:transform-none"
       href={href}
     >
       {coverImageUrl ? (
         <div
           aria-hidden="true"
-          className="absolute inset-0 bg-cover bg-center transition duration-500 group-hover:scale-[1.03]"
+          className="absolute inset-0 bg-cover bg-center brightness-[0.38] saturate-[0.9] transition duration-500 group-hover:scale-[1.04]"
           style={{ backgroundImage: `url("${coverImageUrl}")` }}
         />
       ) : (
         <div
           aria-hidden="true"
-          className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(243,89,210,0.18),transparent_45%),linear-gradient(145deg,rgba(108,20,206,0.18),rgba(0,0,0,0.96))]"
+          className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(243,89,210,0.15),transparent_48%),linear-gradient(145deg,rgba(108,20,206,0.14),rgba(0,0,0,0.97))]"
         />
       )}
 
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/65 to-black/90"
+        className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/40 to-black/90"
       />
 
-      <div className="relative z-10 flex w-full flex-col items-center justify-center px-5 py-6 text-center">
-        <ArrowUpRight
-          aria-hidden="true"
-          className="absolute top-5 right-5 size-4 text-white/45 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#f359d2]"
-        />
+      <ArrowUpRight
+        aria-hidden="true"
+        className="absolute top-3 right-3 z-10 size-3.5 text-white/35 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#f359d2]"
+      />
 
-        <p className="text-2xl font-bold text-white drop-shadow-sm transition group-hover:text-[#f6aee7]">
+      <div className="relative z-10 mt-auto flex w-full min-w-0 flex-col items-center px-3 py-4 text-center">
+        <p className="max-w-full truncate text-sm font-bold text-white transition group-hover:text-[#f6aee7]">
           {displayName || username || "SIGNAL Member"}
         </p>
 
         {username ? (
-          <p className="mt-1 text-sm font-semibold text-[#e2b8ff]/85">
+          <p className="mt-0.5 max-w-full truncate text-[0.7rem] font-semibold text-[#e2b8ff]/75">
             @{username}
           </p>
         ) : null}
 
         {location ? (
-          <p className="mt-3 flex items-center justify-center gap-1.5 text-xs font-semibold text-white/65">
-            <MapPin aria-hidden="true" className="size-3.5 text-[#f359d2]" />
-            {location}
+          <p className="mt-2 flex max-w-full items-center justify-center gap-1 text-[0.65rem] font-semibold text-white/50">
+            <MapPin
+              aria-hidden="true"
+              className="size-3 shrink-0 text-[#f359d2]"
+            />
+            <span className="truncate">{location}</span>
           </p>
         ) : null}
 
         {bio ? (
-          <p className="mt-5 line-clamp-2 max-w-md text-sm leading-6 text-white/75">
+          <p className="mt-2 line-clamp-2 text-[0.68rem] leading-4 text-white/55">
             {bio}
           </p>
-        ) : (
-          <p className="mt-5 text-sm text-white/55">Explore their Signal.</p>
-        )}
+        ) : null}
 
-        <div className="mt-6 border-t border-white/15 pt-4">
-          <span className="text-[0.68rem] font-black tracking-[0.16em] text-[#f359d2] uppercase">
-            View Signal
-          </span>
-        </div>
+        <span className="mt-3 text-[0.58rem] font-black tracking-[0.14em] text-[#f359d2] uppercase">
+          View Signal
+        </span>
       </div>
     </Link>
   );
@@ -568,7 +607,7 @@ export default async function DiscoverPage({
               <Sparkles aria-hidden="true" className="size-5 text-[#f359d2]" />
               People
             </h2>
-            <div className="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 2xl:grid-cols-10">
               {peopleWithMedia.map((item) => (
                 <PeopleResultCard
                   bio={item.bio}
@@ -586,21 +625,46 @@ export default async function DiscoverPage({
         ) : null}
         {sessions.length ? (
           <section aria-labelledby="session-results">
-            <h2 className="text-2xl font-bold text-white" id="session-results">
-              Sessions
-            </h2>
-            <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="flex items-center gap-3">
+              <div className="flex size-9 items-center justify-center rounded-xl border border-[#992bff]/25 bg-[#992bff]/[0.06]">
+                <CalendarDays
+                  aria-hidden="true"
+                  className="size-4 text-[#ca9aff]"
+                />
+              </div>
+
+              <div>
+                <p className="text-[0.65rem] font-black tracking-[0.18em] text-[#ca9aff]/65 uppercase">
+                  Community
+                </p>
+
+                <h2
+                  className="text-2xl font-bold text-white"
+                  id="session-results"
+                >
+                  <Link
+                    className="transition hover:text-[#ca9aff]"
+                    href="/home/sessions"
+                  >
+                    Sessions
+                  </Link>
+                </h2>
+              </div>
+            </div>
+
+            <SwipeCardGrid className="mt-5 gap-3 min-[1800px]:grid-cols-7 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
               {sessions.map((item) => (
-                <ResultCard
-                  eyebrow="Session"
+                <SessionResultCard
+                  format={item.format}
                   href={`/home/sessions/${item.id}`}
                   key={item.id}
-                  meta={`${item.format.replaceAll("_", " ")} · ${new Date(item.starts_at).toLocaleDateString()}`}
+                  location={item.location_label}
+                  startsAt={item.starts_at}
                   summary={item.summary}
                   title={item.title}
                 />
               ))}
-            </div>
+            </SwipeCardGrid>
           </section>
         ) : null}
         {campaigns.length ? (
@@ -622,12 +686,17 @@ export default async function DiscoverPage({
                   className="text-2xl font-bold text-white"
                   id="campaign-results"
                 >
-                  Campaigns
+                  <Link
+                    className="transition hover:text-[#22d3ee]"
+                    href="/home/realm"
+                  >
+                    Campaigns
+                  </Link>
                 </h2>
               </div>
             </div>
 
-            <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <SwipeCardGrid className="mt-5 gap-3 min-[1800px]:grid-cols-7 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
               {campaigns.map((item) => (
                 <CampaignResultCard
                   activePlayers={item.active_player_count}
@@ -644,7 +713,7 @@ export default async function DiscoverPage({
                   title={item.title}
                 />
               ))}
-            </div>
+            </SwipeCardGrid>
           </section>
         ) : null}
         {circles.length ? (
@@ -666,11 +735,16 @@ export default async function DiscoverPage({
                   className="text-2xl font-bold text-white"
                   id="circle-results"
                 >
-                  Circles
+                  <Link
+                    className="transition hover:text-[#ee54a7]"
+                    href="/home/circles"
+                  >
+                    Circles
+                  </Link>
                 </h2>
               </div>
             </div>
-            <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <SwipeCardGrid className="mt-5 gap-3 min-[1800px]:grid-cols-7 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
               {circles.map((item) => (
                 <CircleResultCard
                   format={item.format}
@@ -682,21 +756,21 @@ export default async function DiscoverPage({
                   summary={item.summary}
                 />
               ))}
-            </div>
+            </SwipeCardGrid>
           </section>
         ) : null}
         {commons.length ? (
           <section aria-labelledby="commons-results">
             <div className="flex items-center gap-3">
-              <div className="flex size-9 items-center justify-center rounded-xl border border-[#ca9aff]/25 bg-[#ca9aff]/[0.06]">
+              <div className="flex size-9 items-center justify-center rounded-xl border border-white/15 bg-white/[0.04]">
                 <BriefcaseBusiness
                   aria-hidden="true"
-                  className="size-4 text-[#ca9aff]"
+                  className="size-4 text-white/55"
                 />
               </div>
 
               <div>
-                <p className="text-[0.65rem] font-black tracking-[0.18em] text-[#ca9aff]/65 uppercase">
+                <p className="text-[0.65rem] font-black tracking-[0.18em] text-white/45 uppercase">
                   Opportunities
                 </p>
 
@@ -704,11 +778,16 @@ export default async function DiscoverPage({
                   className="text-2xl font-bold text-white"
                   id="commons-results"
                 >
-                  Creator Commons
+                  <Link
+                    className="transition hover:text-white/20"
+                    href="/home/commons"
+                  >
+                    Creator Commons
+                  </Link>
                 </h2>
               </div>
             </div>
-            <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <SwipeCardGrid className="mt-5 gap-3 min-[1800px]:grid-cols-7 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
               {commons.map((item) => (
                 <CommonsResultCard
                   acceptedCount={item.accepted_count}
@@ -725,7 +804,7 @@ export default async function DiscoverPage({
                   title={item.title}
                 />
               ))}
-            </div>
+            </SwipeCardGrid>
           </section>
         ) : null}
       </div>

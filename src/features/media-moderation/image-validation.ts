@@ -13,6 +13,7 @@ const actualMimeTypes = {
   jpeg: "image/jpeg",
   png: "image/png",
   webp: "image/webp",
+  gif: "image/gif",
 } as const;
 
 export class ImageValidationError extends Error {
@@ -33,7 +34,17 @@ export type PreparedImage = {
   sha256: string;
 };
 
-async function encodePublication(source: Buffer) {
+async function encodePublication(
+  source: Buffer,
+  mimeType: PreparedImage["originalMimeType"],
+) {
+  if (mimeType === "image/gif") {
+    if (source.length > MAX_IMAGE_BYTES) {
+      throw new ImageValidationError();
+    }
+    return source;
+  }
+
   let output = await sharp(source, { limitInputPixels: MAX_IMAGE_PIXELS })
     .rotate()
     .resize({
@@ -57,7 +68,11 @@ async function encodePublication(source: Buffer) {
       .webp({ quality: 72, effort: 4 })
       .toBuffer();
   }
-  if (output.length > MAX_IMAGE_BYTES) throw new ImageValidationError();
+
+  if (output.length > MAX_IMAGE_BYTES) {
+    throw new ImageValidationError();
+  }
+
   return output;
 }
 
@@ -76,10 +91,14 @@ export async function prepareImageForModeration(
     const mimeType =
       actualMimeTypes[metadata.format as keyof typeof actualMimeTypes];
     const width = metadata.width ?? 0;
-    const height = metadata.height ?? 0;
+
+    const height =
+      mimeType === "image/gif"
+        ? (metadata.pageHeight ?? metadata.height ?? 0)
+        : (metadata.height ?? 0);
     if (
       !mimeType ||
-      (metadata.pages ?? 1) !== 1 ||
+      (mimeType !== "image/gif" && (metadata.pages ?? 1) !== 1) ||
       width < MIN_IMAGE_DIMENSION ||
       height < MIN_IMAGE_DIMENSION ||
       width > MAX_IMAGE_DIMENSION ||
@@ -89,9 +108,14 @@ export async function prepareImageForModeration(
       throw new ImageValidationError();
     }
 
-    const publicationBytes = await encodePublication(source);
-    const publicationMetadata = await sharp(publicationBytes).metadata();
-    let moderationBytes = await sharp(publicationBytes)
+    const publicationBytes = await encodePublication(source, mimeType);
+    const publicationMetadata =
+      mimeType === "image/gif"
+        ? metadata
+        : await sharp(publicationBytes).metadata();
+    let moderationBytes = await sharp(publicationBytes, {
+      animated: false,
+    })
       .resize({
         width: 2048,
         height: 2048,
@@ -122,7 +146,10 @@ export async function prepareImageForModeration(
       originalByteSize: source.length,
       normalizedByteSize: publicationBytes.length,
       width: publicationMetadata.width ?? width,
-      height: publicationMetadata.height ?? height,
+      height:
+        mimeType === "image/gif"
+          ? height
+          : (publicationMetadata.height ?? height),
       sha256: createHash("sha256").update(publicationBytes).digest("hex"),
     };
   } catch (error) {

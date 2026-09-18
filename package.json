@@ -27,12 +27,12 @@
     "@supabase/supabase-js": "latest",
     "clsx": "latest",
     "lucide-react": "latest",
-    "next": "latest",
+    "next": "^16.3.5",
     "react": "latest",
     "react-dom": "latest",
     "react-hook-form": "latest",
     "server-only": "^0.0.1",
-    "sharp": "0.35.3",
+    "sharp": "^0.35.4",
     "tailwind-merge": "latest",
     "zod": "latest"
   },
@@ -53,10 +53,10 @@
     "prettier-plugin-tailwindcss": "latest",
     "tailwindcss": "latest",
     "typescript": "latest",
-    "vitest": "latest"
+    "vitest": "^5.0.1"
   },
   "overrides": {
     "postcss": "8.5.25",
-    "sharp": "0.35.3"
+    "sharp": "$sharp"
   }
 }

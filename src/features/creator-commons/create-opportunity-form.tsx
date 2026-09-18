@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 
 import { ActionStatus } from "@/components/forms/action-status";
+import { FormErrorFocus } from "@/components/forms/form-error-focus";
 import {
   DraftRestoredNotice,
   useFormDraft,
@@ -207,11 +208,10 @@ export function CreateOpportunityForm({
   return (
     <form
       action={action}
-      aria-label="Create a Creator Commons opportunity"
+      aria-label="Create A Creator Commons Opportunity"
       className="space-y-10 text-left"
       ref={formRef}
     >
-      <ActionStatus state={state} />
       <DraftRestoredNotice restored={restored} />
 
       <fieldset>
@@ -468,15 +468,25 @@ export function CreateOpportunityForm({
         name="interestIds"
       />
 
-      <div className="rounded-2xl border border-[#992bff]/25 bg-[#992bff]/[0.06] p-5 text-center text-sm leading-6 text-white/55 lg:text-left">
+      <div className="rounded-2xl border border-white/15 bg-white/[0.035] p-5 text-center text-sm leading-6 text-white/55 lg:text-left">
         Creating a draft does not publish the opportunity automatically. You
         will be able to review everything before making it visible to the
         community.
       </div>
 
-      <SubmitButton pendingLabel="Creating Draft…">
-        Create Draft Opportunity
-      </SubmitButton>
+      <div className="rounded-2xl border border-white/15 bg-white/[0.025] p-5">
+        <FormErrorFocus state={state} />
+
+        {state.status === "error" ? (
+          <div className="mb-5">
+            <ActionStatus state={state} />
+          </div>
+        ) : null}
+
+        <SubmitButton pendingLabel="Creating Draft…">
+          Create Draft Opportunity
+        </SubmitButton>
+      </div>
     </form>
   );
 }

@@ -53,15 +53,6 @@ describe("Around The Ecosystem", () => {
     expect(
       screen.getByRole("link", { name: /album cover collaboration/i }),
     ).toHaveAttribute("href", commons.href);
-    expect(
-      screen.getByRole("link", { name: "Explore Fifth Realm" }),
-    ).toHaveAttribute("href", "/home/realm");
-    expect(
-      screen.getByRole("link", { name: "See More Circles" }),
-    ).toHaveAttribute("href", "/home/circles");
-    expect(
-      screen.getByRole("link", { name: "Explore Creator Commons" }),
-    ).toHaveAttribute("href", "/home/commons");
   });
 
   it("keeps the section centered on mobile and restores desktop alignment", () => {

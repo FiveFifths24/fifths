@@ -71,7 +71,7 @@ export function OpportunityResponseForm({
       <ResponseField
         error={firstFieldError(state, "statement")}
         hint="Explain relevant experience, interest, and how you would contribute. Do not include private contact details."
-        label="Your response"
+        label="Your Response"
         maxLength={2000}
         name="statement"
       />

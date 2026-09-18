@@ -69,7 +69,7 @@ export function OpportunityCard({ item }: { item: OpportunityCardItem }) {
   const openings = Math.max(0, item.positions - item.accepted_count);
 
   return (
-    <article className="flex h-full max-w-full min-w-0 flex-col overflow-hidden rounded-[1.75rem] border border-[#f359d2]/55 bg-[#10080e] p-6 text-center sm:text-left">
+    <article className="flex h-full max-w-full min-w-0 flex-col overflow-hidden rounded-[1.75rem] border border-white/15 bg-[linear-gradient(145deg,rgba(255,255,255,0.07),rgba(255,255,255,0.025)_45%,rgba(113,113,122,0.05))] p-6 text-center shadow-[0_20px_60px_rgba(0,0,0,0.18)] transition hover:border-white/25 sm:text-left">
       <div className="flex flex-wrap items-center justify-center gap-2 sm:justify-start">
         <Badge className="border-white bg-white text-black">
           Creator Commons
@@ -87,13 +87,13 @@ export function OpportunityCard({ item }: { item: OpportunityCardItem }) {
             Paid Opportunity
           </Badge>
         ) : (
-          <Badge className="flex items-center gap-1.5 border-fuchsia-900 bg-fuchsia-950/40 text-fuchsia-200">
+          <Badge className="flex items-center gap-1.5 border-white/15 bg-white/[0.05] text-neutral-300">
             <HeartHandshake aria-hidden="true" className="size-3.5" />
             Unpaid / Community
           </Badge>
         )}
 
-        <Badge>{openings === 1 ? "1 opening" : `${openings} Openings`}</Badge>
+        <Badge>{openings === 1 ? "1 Opening" : `${openings} Openings`}</Badge>
 
         {item.saved ? (
           <Badge className="flex items-center gap-1.5">
@@ -111,7 +111,7 @@ export function OpportunityCard({ item }: { item: OpportunityCardItem }) {
 
       <h2 className="mt-5 min-w-0 text-2xl font-bold [overflow-wrap:anywhere] break-words text-white">
         <Link
-          className="rounded-sm underline decoration-neutral-700 underline-offset-4 hover:decoration-[#f359d2]"
+          className="rounded-sm underline decoration-neutral-700 underline-offset-4 transition hover:decoration-white"
           href={`/home/commons/${item.id}`}
         >
           {item.title}
@@ -126,11 +126,11 @@ export function OpportunityCard({ item }: { item: OpportunityCardItem }) {
         Created by {item.creator_display_name}
       </p>
 
-      <dl className="mt-6 grid gap-3 text-sm font-medium text-[#f359d2] sm:grid-cols-2">
+      <dl className="mt-6 grid gap-3 text-sm font-medium text-neutral-300 sm:grid-cols-2">
         <div className="flex justify-center gap-2 sm:justify-start">
           <Clock3
             aria-hidden="true"
-            className="mt-0.5 size-4 shrink-0 text-[#f359d2]"
+            className="mt-0.5 size-4 shrink-0 text-neutral-400"
           />
 
           <div>
@@ -145,7 +145,7 @@ export function OpportunityCard({ item }: { item: OpportunityCardItem }) {
         <div className="flex justify-center gap-2 sm:justify-start">
           <MapPin
             aria-hidden="true"
-            className="mt-0.5 size-4 shrink-0 text-[#f359d2]"
+            className="mt-0.5 size-4 shrink-0 text-neutral-400"
           />
 
           <div>
@@ -160,7 +160,7 @@ export function OpportunityCard({ item }: { item: OpportunityCardItem }) {
         <div className="flex justify-center gap-2 sm:justify-start">
           <BriefcaseBusiness
             aria-hidden="true"
-            className="mt-0.5 size-4 shrink-0 text-[#f359d2]"
+            className="mt-0.5 size-4 shrink-0 text-neutral-400"
           />
 
           <div>
@@ -174,7 +174,7 @@ export function OpportunityCard({ item }: { item: OpportunityCardItem }) {
         <div className="flex justify-center gap-2 sm:justify-start">
           <Users
             aria-hidden="true"
-            className="mt-0.5 size-4 shrink-0 text-[#f359d2]"
+            className="mt-0.5 size-4 shrink-0 text-neutral-400"
           />
 
           <div>

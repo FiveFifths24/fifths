@@ -493,7 +493,7 @@ export function CreateCampaignForm({
           >
             <option value="">Choose A Pace</option>
             <option value="solo">Independent</option>
-            <option value="light">Light collaboration</option>
+            <option value="light">Light Collaboration</option>
             <option value="social">Social</option>
           </SelectField>
         </div>

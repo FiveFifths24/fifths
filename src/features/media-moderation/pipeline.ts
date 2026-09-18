@@ -51,8 +51,13 @@ export interface MediaModerationStore {
     quarantinePath: string;
     prepared: PreparedImage;
   }): Promise<string>;
-  uploadQuarantine(path: string, bytes: Buffer): Promise<void>;
-  publish(path: string, bytes: Buffer): Promise<void>;
+  uploadQuarantine(
+    path: string,
+    bytes: Buffer,
+    contentType: string,
+  ): Promise<void>;
+
+  publish(path: string, bytes: Buffer, contentType: string): Promise<void>;
   updateAudit(id: string, update: AuditUpdate): Promise<void>;
   deleteQuarantine(path: string): Promise<void>;
 }
@@ -92,8 +97,17 @@ export async function executeModeratedImageUpload(
   if (!userId) throw new MediaUploadAuthenticationError();
 
   const randomUUID = dependencies.randomUUID ?? (() => crypto.randomUUID());
+  const publicationExtension =
+    input.prepared.originalMimeType === "image/gif" ? "gif" : "webp";
+
+  const publicationContentType =
+    input.prepared.originalMimeType === "image/gif"
+      ? "image/gif"
+      : "image/webp";
+
   const quarantinePath = `${userId}/${randomUUID()}.webp`;
-  const publishedPath = `${userId}/${publicKind(input.surface)}-${randomUUID()}.webp`;
+
+  const publishedPath = `${userId}/${publicKind(input.surface)}-${randomUUID()}.${publicationExtension}`;
   const auditId = await dependencies.store.begin({
     userId,
     surface: input.surface,
@@ -104,7 +118,8 @@ export async function executeModeratedImageUpload(
   try {
     await dependencies.store.uploadQuarantine(
       quarantinePath,
-      input.prepared.publicationBytes,
+      input.prepared.moderationBytes,
+      "image/webp",
     );
   } catch {
     await dependencies.store.updateAudit(auditId, {
@@ -152,6 +167,7 @@ export async function executeModeratedImageUpload(
     await dependencies.store.publish(
       publishedPath,
       input.prepared.publicationBytes,
+      publicationContentType,
     );
   } catch {
     await dependencies.store.updateAudit(auditId, {
@@ -206,25 +222,41 @@ function createSupabaseStore(
           p_file_sha256: prepared.sha256,
         },
       );
-      if (error || !data) throw new MediaUploadStorageError();
+      if (error || !data) {
+        console.error("begin_media_moderation_upload failed:", {
+          error,
+          data,
+          surface,
+          quarantinePath,
+          originalMimeType: prepared.originalMimeType,
+          normalizedByteSize: prepared.normalizedByteSize,
+          originalByteSize: prepared.originalByteSize,
+          width: prepared.width,
+          height: prepared.height,
+          sha256: prepared.sha256,
+        });
+
+        throw new MediaUploadStorageError();
+      }
+
       return data;
     },
-    async uploadQuarantine(path, bytes) {
+    async uploadQuarantine(path, bytes, contentType) {
       const { error } = await serviceClient.storage
         .from(QUARANTINE_BUCKET)
         .upload(path, bytes, {
           cacheControl: "0",
-          contentType: "image/webp",
+          contentType,
           upsert: false,
         });
       if (error) throw new MediaUploadStorageError();
     },
-    async publish(path, bytes) {
+    async publish(path, bytes, contentType) {
       const { error } = await serviceClient.storage
         .from(PUBLISHED_BUCKET)
         .upload(path, bytes, {
           cacheControl: "31536000",
-          contentType: "image/webp",
+          contentType,
           upsert: false,
         });
       if (error) throw new MediaUploadStorageError();

@@ -9,8 +9,8 @@ export function formatPresence(lastSeenAt: string | null, now = Date.now()) {
   if (minutes < 60) return `Active ${Math.max(1, minutes)}m ago`;
   const hours = Math.floor(minutes / 60);
   if (hours < 24) return `Active ${hours}h ago`;
-  if (hours < 48) return "Active yesterday";
+  if (hours < 48) return "Active Yesterday";
   const days = Math.floor(hours / 24);
   if (days < 7) return `Active ${days}d ago`;
-  return "Active recently";
+  return "Active Recently";
 }

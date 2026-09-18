@@ -4,12 +4,10 @@ import {
   CheckCircle2,
   CircleDollarSign,
   ClipboardCheck,
-  Eye,
   HeartHandshake,
   LockKeyhole,
   Rocket,
   Users,
-  XCircle,
 } from "lucide-react";
 
 import { AccountUnavailable } from "@/components/account/account-unavailable";
@@ -21,6 +19,7 @@ import { PreviewState } from "@/components/ui/preview-state";
 import { StatusMessage } from "@/components/ui/status-message";
 import {
   confirmManagedOpportunityCompletionAction,
+  deleteOpportunityAction,
   reviewOpportunityResponseAction,
   setOpportunityStatusAction,
 } from "@/features/creator-commons/actions";
@@ -40,19 +39,19 @@ export const dynamic = "force-dynamic";
 const workflowSteps = [
   {
     label: "Draft",
-    description: "Review your opportunity",
+    description: "Review Your Opportunity",
   },
   {
     label: "Published",
-    description: "Accept private responses",
+    description: "Accept Private Responses",
   },
   {
     label: "Closed",
-    description: "Finish the collaboration",
+    description: "Finish The Collaboration",
   },
   {
     label: "Completed",
-    description: "Confirm completion",
+    description: "Confirm Completion",
   },
 ] as const;
 
@@ -69,14 +68,14 @@ function buttonClass(tone: "primary" | "secondary" | "danger" = "secondary") {
     "flex min-h-12 w-full items-center justify-center rounded-full border px-6 py-3 text-sm font-black transition sm:w-auto";
 
   if (tone === "primary") {
-    return `${base} border-white bg-white text-black hover:bg-neutral-200`;
+    return `${base} border-white/20 bg-gradient-to-r from-white via-neutral-200 to-neutral-400 text-black shadow-lg shadow-white/[0.04] hover:brightness-110`;
   }
 
   if (tone === "danger") {
-    return `${base} border-red-900 bg-red-950/60 text-red-100 hover:border-red-600`;
+    return `${base} border-red-800/70 bg-red-950/50 text-red-100 hover:border-red-600 hover:bg-red-950/70`;
   }
 
-  return `${base} border-neutral-600 bg-neutral-950 text-white hover:border-white`;
+  return `${base} border-white/15 bg-white/[0.03] text-white/75 hover:border-white/30 hover:bg-white/[0.07] hover:text-white`;
 }
 
 export default async function ManageOpportunityPage({
@@ -139,6 +138,12 @@ export default async function ManageOpportunityPage({
   );
 
   const responses = responseResult.data ?? [];
+
+  const memberResponses = responses.filter(
+    (response) => response.user_id !== opportunity.created_by,
+  );
+
+  const canDeleteOpportunity = memberResponses.length === 0;
   const currentWorkflowStep = getWorkflowStep(opportunity.status);
   const remainingOpenings = Math.max(
     0,
@@ -213,109 +218,207 @@ export default async function ManageOpportunityPage({
         </StatusMessage>
       ) : null}
 
-      <section className="mt-8 overflow-hidden rounded-[2rem] border border-neutral-800 bg-[#0c0910]">
-        <div className="border-b border-neutral-800 bg-neutral-900 p-6 text-center sm:p-9 lg:text-left">
-          <p className="text-xs font-black tracking-[0.2em] text-neutral-300 uppercase">
-            Creator Workspace
-          </p>
+      <section className="mt-8 overflow-hidden rounded-[2rem] border border-white/15 bg-[linear-gradient(145deg,rgba(255,255,255,0.035),rgba(8,8,10,0.98)_42%,rgba(255,255,255,0.015))]">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -top-32 right-0 size-80 rounded-full bg-white/[0.035] blur-3xl"
+        />
 
-          <div className="mt-4 flex flex-wrap justify-center gap-2 lg:justify-start">
-            <Badge className="border-neutral-700 bg-neutral-950 text-neutral-200">
-              {formatOpportunityKind(opportunity.kind)}
-            </Badge>
+        {/* =====================================================
+      OPPORTUNITY HEADER
+  ====================================================== */}
 
-            <Badge className="border-neutral-700 bg-neutral-950 text-neutral-200 capitalize">
-              {opportunity.status}
-            </Badge>
+        <div className="relative border-b border-white/10 p-6 sm:p-8 lg:p-10">
+          <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
+            <div className="max-w-4xl min-w-0 text-center lg:text-left">
+              <p className="font-mono text-[0.65rem] font-black tracking-[0.2em] text-white/40 uppercase">
+                Creator Commons Control
+              </p>
 
-            {opportunity.is_paid ? (
-              <Badge className="flex items-center gap-1.5 border-white bg-white text-black">
-                <CircleDollarSign aria-hidden="true" className="size-3.5" />
-                Paid Opportunity
-              </Badge>
-            ) : (
-              <Badge className="flex items-center gap-1.5 border-neutral-700 bg-neutral-950 text-neutral-200">
-                <HeartHandshake aria-hidden="true" className="size-3.5" />
-                Unpaid / Community
-              </Badge>
-            )}
+              <div className="mt-4 flex flex-wrap justify-center gap-2 lg:justify-start">
+                <Badge className="border-white/15 bg-white/[0.04] text-white/75">
+                  {formatOpportunityKind(opportunity.kind)}
+                </Badge>
 
-            <Badge className="border-neutral-700 bg-neutral-950 text-neutral-200">
-              {opportunity.accepted_count}/{opportunity.positions} accepted
-            </Badge>
+                <Badge className="border-white/15 bg-white/[0.04] text-white/75 capitalize">
+                  {opportunity.status}
+                </Badge>
+
+                {opportunity.is_paid ? (
+                  <Badge className="flex items-center gap-1.5 border-white/20 bg-white/10 text-white">
+                    <CircleDollarSign
+                      aria-hidden="true"
+                      className="size-3.5 text-white/60"
+                    />
+                    Paid Opportunity
+                  </Badge>
+                ) : (
+                  <Badge className="flex items-center gap-1.5 border-white/15 bg-white/[0.04] text-white/70">
+                    <HeartHandshake
+                      aria-hidden="true"
+                      className="size-3.5 text-white/60"
+                    />
+                    Community
+                  </Badge>
+                )}
+
+                <Badge className="border-white/10 bg-black/30 text-white/65">
+                  {opportunity.accepted_count}/{opportunity.positions} accepted
+                </Badge>
+              </div>
+
+              <h1 className="display-type mx-auto mt-6 max-w-5xl text-5xl leading-[0.92] text-white sm:text-7xl lg:mx-0">
+                {opportunity.title}
+              </h1>
+
+              <p className="mx-auto mt-5 max-w-3xl text-base leading-7 text-white/50 sm:text-lg lg:mx-0">
+                {opportunity.summary}
+              </p>
+            </div>
+
+            <div className="flex w-full shrink-0 justify-center lg:w-auto lg:justify-end">
+              <details className="group relative">
+                <summary className="flex min-h-11 min-w-[15rem] cursor-pointer list-none items-center justify-center gap-3 rounded-full border border-white/35 bg-white px-7 py-2.5 text-sm font-bold text-black shadow-[0_0_28px_rgba(255,255,255,0.12)] transition hover:bg-white/90 hover:shadow-[0_0_36px_rgba(255,255,255,0.18)] [&::-webkit-details-marker]:hidden">
+                  Opportunity Actions
+                  <span
+                    aria-hidden="true"
+                    className="text-[0.65rem] transition-transform group-open:rotate-180"
+                  >
+                    ▼
+                  </span>
+                </summary>
+
+                <div className="absolute right-0 z-30 mt-3 w-[20rem] max-w-[calc(100vw-2rem)] overflow-hidden rounded-[1.35rem] border border-white/10 bg-[#09090b]/98 p-2 shadow-[0_24px_70px_rgba(0,0,0,0.55)] backdrop-blur-xl sm:w-[22rem]">
+                  <div className="px-3 pt-2 pb-2">
+                    <p className="font-mono text-[0.58rem] font-bold tracking-[0.18em] text-white/30 uppercase">
+                      Opportunity
+                    </p>
+                  </div>
+
+                  <ButtonLink
+                    className="flex min-h-0 w-full justify-start rounded-xl border-0 bg-transparent px-3 py-3 text-left text-sm font-semibold text-white/70 shadow-none transition hover:bg-white/[0.055] hover:text-white"
+                    href={`/home/commons/${opportunity.id}`}
+                  >
+                    View Public Opportunity
+                  </ButtonLink>
+
+                  {(["draft", "published"] as const).includes(
+                    opportunity.status as "draft" | "published",
+                  ) ? (
+                    <ButtonLink
+                      className="flex min-h-0 w-full justify-start rounded-xl border-0 bg-transparent px-3 py-3 text-left text-sm font-semibold text-white/70 shadow-none transition hover:bg-white/[0.055] hover:text-white"
+                      href={`/home/commons/manage/${opportunity.id}/edit`}
+                    >
+                      Edit Opportunity
+                    </ButtonLink>
+                  ) : null}
+
+                  {canDeleteOpportunity ? (
+                    <>
+                      <div className="my-2 border-t border-white/[0.07]" />
+
+                      <form action={deleteOpportunityAction}>
+                        <input
+                          name="opportunityId"
+                          type="hidden"
+                          value={opportunity.id}
+                        />
+
+                        <button
+                          className="flex w-full items-center rounded-xl px-3 py-3 text-left text-sm font-semibold text-red-300/80 transition hover:bg-red-950/35 hover:text-red-200"
+                          type="submit"
+                        >
+                          Delete Opportunity
+                        </button>
+                      </form>
+                    </>
+                  ) : null}
+                </div>
+              </details>
+            </div>
           </div>
-
-          <h1 className="display-type mx-auto mt-6 max-w-4xl text-5xl leading-[0.95] text-white sm:text-7xl lg:mx-0">
-            {opportunity.title}
-          </h1>
-
-          <p className="mx-auto mt-5 max-w-3xl text-lg leading-8 text-neutral-300 lg:mx-0">
-            {opportunity.summary}
-          </p>
         </div>
 
-        <div className="p-6 sm:p-9">
-          <div className="text-center lg:text-left">
-            <p className="text-xs font-black tracking-[0.18em] text-neutral-300 uppercase">
-              Opportunity Workflow
-            </p>
+        {/* =====================================================
+      STATUS / WORKFLOW
+  ====================================================== */}
 
-            <h2 className="mt-2 text-2xl font-black text-white">
-              From private draft to completed collaboration
-            </h2>
-          </div>
-
+        <div className="relative p-6 sm:p-8 lg:p-10">
           {opportunity.status === "cancelled" ? (
-            <div className="mt-6 rounded-2xl border border-red-900/70 bg-red-950/30 p-5 text-center text-sm font-bold text-red-200 lg:text-left">
+            <div className="rounded-2xl border border-red-900/60 bg-red-950/25 px-5 py-4 text-center text-sm font-semibold text-red-200 lg:text-left">
               This opportunity has been cancelled and is no longer accepting
               responses.
             </div>
           ) : (
-            <ol className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
-              {workflowSteps.map((step, index) => {
-                const reached = currentWorkflowStep >= index;
-                const current = currentWorkflowStep === index;
+            <div>
+              <div className="text-center lg:text-left">
+                <p className="font-mono text-[0.62rem] font-black tracking-[0.18em] text-white/40 uppercase">
+                  Opportunity Workflow
+                </p>
 
-                return (
-                  <li
-                    className={`rounded-2xl border p-4 text-center lg:text-left ${
-                      current
-                        ? "border-white bg-white/10"
-                        : reached
-                          ? "border-neutral-600 bg-neutral-900"
-                          : "border-neutral-800 bg-black/20"
-                    }`}
-                    key={step.label}
-                  >
-                    <span
-                      className={`text-xs font-black tracking-wider uppercase ${
-                        reached ? "text-neutral-300" : "text-neutral-600"
+                <h2 className="mt-2 text-2xl font-black text-white">
+                  Manage This Opportunity
+                </h2>
+
+                <p className="mt-2 max-w-2xl text-sm leading-6 text-white/40">
+                  Move the opportunity through its lifecycle as responses arrive
+                  and the collaboration progresses.
+                </p>
+              </div>
+
+              <ol className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                {workflowSteps.map((step, index) => {
+                  const reached = currentWorkflowStep >= index;
+                  const current = currentWorkflowStep === index;
+
+                  return (
+                    <li
+                      className={`rounded-2xl border p-4 ${
+                        current
+                          ? "border-white/30 bg-white/[0.08] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
+                          : reached
+                            ? "border-white/15 bg-white/[0.035]"
+                            : "border-white/[0.07] bg-black/20"
                       }`}
+                      key={step.label}
                     >
-                      Step {index + 1}
-                    </span>
+                      <span
+                        className={`font-mono text-[0.6rem] font-black tracking-[0.16em] uppercase ${
+                          reached ? "text-white/55" : "text-white/20"
+                        }`}
+                      >
+                        Step {index + 1}
+                      </span>
 
-                    <p
-                      className={`mt-2 font-black ${
-                        reached ? "text-white" : "text-neutral-500"
-                      }`}
-                    >
-                      {step.label}
-                    </p>
+                      <p
+                        className={`mt-2 font-black ${
+                          reached ? "text-white" : "text-white/30"
+                        }`}
+                      >
+                        {step.label}
+                      </p>
 
-                    <p className="mt-1 text-xs leading-5 text-neutral-500">
-                      {step.description}
-                    </p>
-                  </li>
-                );
-              })}
-            </ol>
+                      <p className="mt-1 text-xs leading-5 text-white/30">
+                        {step.description}
+                      </p>
+                    </li>
+                  );
+                })}
+              </ol>
+            </div>
           )}
 
-          <dl className="mt-8 grid gap-4 border-y border-neutral-800 py-7 text-center text-sm sm:grid-cols-2 lg:grid-cols-5 lg:text-left">
-            <div>
-              <dt className="text-neutral-500">Response Deadline</dt>
-              <dd className="mt-1 font-bold text-white">
+          {/* =====================================================
+        OPPORTUNITY SNAPSHOT
+    ====================================================== */}
+
+          <dl className="mx-auto mt-8 grid w-full overflow-hidden rounded-2xl border border-white/10 bg-white/[0.025] text-center sm:grid-cols-2 lg:grid-cols-5 lg:text-left">
+            <div className="flex min-h-28 flex-col items-center justify-center border-b border-white/10 bg-black/40 p-5 sm:border-r lg:items-start lg:border-b-0">
+              <dt className="text-xs font-bold tracking-wide text-white/30 uppercase">
+                Response Deadline
+              </dt>
+
+              <dd className="mt-2 font-bold text-white/85">
                 {formatOpportunityDeadline(
                   opportunity.response_deadline,
                   opportunity.timezone,
@@ -323,9 +426,12 @@ export default async function ManageOpportunityPage({
               </dd>
             </div>
 
-            <div>
-              <dt className="text-neutral-500">Format</dt>
-              <dd className="mt-1 font-bold text-white">
+            <div className="flex min-h-28 flex-col items-center justify-center border-b border-white/10 bg-black/40 p-5 lg:items-start lg:border-r lg:border-b-0">
+              <dt className="text-xs font-bold tracking-wide text-white/30 uppercase">
+                Format
+              </dt>
+
+              <dd className="mt-2 font-bold text-white/85">
                 {formatOpportunityFormat(opportunity.format)}
                 {opportunity.location_label
                   ? ` · ${opportunity.location_label}`
@@ -333,33 +439,40 @@ export default async function ManageOpportunityPage({
               </dd>
             </div>
 
-            <div>
-              <dt className="text-neutral-500">Compensation</dt>
-              <dd
-                className={
-                  opportunity.is_paid
-                    ? "mt-1 font-bold text-white"
-                    : "mt-1 font-bold text-neutral-300"
-                }
-              >
-                {opportunity.is_paid ? "Paid" : "Unpaid / community"}
+            <div className="flex min-h-28 flex-col items-center justify-center border-b border-white/10 bg-black/40 p-5 sm:border-r lg:items-start lg:border-b-0">
+              <dt className="text-xs font-bold tracking-wide text-white/30 uppercase">
+                Compensation
+              </dt>
+
+              <dd className="mt-2 font-bold text-white/85">
+                {opportunity.is_paid ? "Paid" : "Community"}
               </dd>
             </div>
 
-            <div>
-              <dt className="text-neutral-500">Available ?Openings</dt>
-              <dd className="mt-1 font-bold text-white">
-                {remainingOpenings} of {opportunity.positions}
+            <div className="flex min-h-28 flex-col items-center justify-center border-b border-white/10 bg-black/40 p-5 lg:items-start lg:border-r lg:border-b-0">
+              <dt className="text-xs font-bold tracking-wide text-white/30 uppercase">
+                Openings
+              </dt>
+
+              <dd className="mt-2 font-bold text-white/85">
+                {remainingOpenings} of {opportunity.positions} available
               </dd>
             </div>
 
-            <div>
-              <dt className="text-neutral-500">Current Status</dt>
-              <dd className="mt-1 font-bold text-white capitalize">
+            <div className="flex min-h-28 flex-col items-center justify-center bg-black/40 p-5 lg:items-start">
+              <dt className="text-xs font-bold tracking-wide text-white/30 uppercase">
+                Status
+              </dt>
+
+              <dd className="mt-2 font-bold text-white/85 capitalize">
                 {opportunity.status}
               </dd>
             </div>
           </dl>
+
+          {/* =====================================================
+        LIFECYCLE ACTIONS
+    ====================================================== */}
 
           <div className="mt-7 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center">
             {opportunity.status === "draft" ? (
@@ -372,6 +485,7 @@ export default async function ManageOpportunityPage({
                   type="hidden"
                   value={opportunity.id}
                 />
+
                 <input name="status" type="hidden" value="published" />
 
                 <button className={buttonClass("primary")} type="submit">
@@ -382,64 +496,13 @@ export default async function ManageOpportunityPage({
                 </button>
               </form>
             ) : null}
-
-            {opportunity.status === "published" ? (
-              <form
-                action={setOpportunityStatusAction}
-                className="w-full sm:w-auto"
-              >
-                <input
-                  name="opportunityId"
-                  type="hidden"
-                  value={opportunity.id}
-                />
-                <input name="status" type="hidden" value="closed" />
-
-                <button className={buttonClass("primary")} type="submit">
-                  Close Responses
-                </button>
-              </form>
-            ) : null}
-
-            {(["draft", "published", "closed"] as const).includes(
-              opportunity.status as "draft" | "published" | "closed",
-            ) && opportunity.accepted_count === 0 ? (
-              <form
-                action={setOpportunityStatusAction}
-                className="w-full sm:w-auto"
-              >
-                <input
-                  name="opportunityId"
-                  type="hidden"
-                  value={opportunity.id}
-                />
-                <input name="status" type="hidden" value="cancelled" />
-
-                <button className={buttonClass("danger")} type="submit">
-                  <span className="flex items-center gap-2">
-                    <XCircle aria-hidden="true" className="size-4" />
-                    Cancel Opportunity
-                  </span>
-                </button>
-              </form>
-            ) : null}
-
-            <ButtonLink
-              href={`/home/commons/${opportunity.id}`}
-              variant="secondary"
-            >
-              <span className="flex items-center gap-2">
-                <Eye aria-hidden="true" className="size-4" />
-                View Member Page
-              </span>
-            </ButtonLink>
           </div>
         </div>
       </section>
 
       <StatusMessage className="mt-8">
         <span>
-          <strong>Your response queue is private.</strong> Only you, authorized
+          <strong>Your Response Queue Is Private.</strong> Only you, authorized
           opportunity managers, and each individual response owner can view
           their submitted information.
         </span>
@@ -618,7 +681,7 @@ export default async function ManageOpportunityPage({
           </div>
         ) : (
           <div className="mt-6">
-            <PreviewState title="No responses yet">
+            <PreviewState title="No Responses Yet">
               Once this opportunity is published, private member responses will
               appear here for you to review.
             </PreviewState>
@@ -627,7 +690,7 @@ export default async function ManageOpportunityPage({
       </section>
 
       <section className="mt-10 grid gap-5 sm:grid-cols-3">
-        <div className="rounded-2xl border border-neutral-800 bg-neutral-950 p-5 text-center lg:text-left">
+        <div className="rounded-2xl border border-white/10 bg-white/[0.025] p-5 text-center lg:text-left">
           <LockKeyhole
             aria-hidden="true"
             className="mx-auto size-5 text-neutral-300 lg:mx-0"
@@ -641,7 +704,7 @@ export default async function ManageOpportunityPage({
           </p>
         </div>
 
-        <div className="rounded-2xl border border-neutral-800 bg-violet-950/15 p-5 text-center lg:text-left">
+        <div className="rounded-2xl border border-neutral-800 bg-white/[0.025] p-5 text-center lg:text-left">
           <ClipboardCheck
             aria-hidden="true"
             className="mx-auto size-5 text-neutral-300 lg:mx-0"
@@ -657,7 +720,7 @@ export default async function ManageOpportunityPage({
           </p>
         </div>
 
-        <div className="rounded-2xl border border-neutral-800 bg-violet-950/15 p-5 text-center lg:text-left">
+        <div className="rounded-2xl border border-neutral-800 bg-white/[0.025] p-5 text-center lg:text-left">
           <CheckCircle2
             aria-hidden="true"
             className="mx-auto size-5 text-neutral-300 lg:mx-0"
