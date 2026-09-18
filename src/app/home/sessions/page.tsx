@@ -5,7 +5,6 @@ import {
   ChevronDown,
   History,
   Plus,
-  Sparkles,
   TicketCheck,
 } from "lucide-react";
 
@@ -438,7 +437,11 @@ export default async function SessionsPage() {
           Sessions are temporarily unavailable. Please try again shortly.
         </StatusMessage>
       ) : (
-        <SessionResults interests={interests} sessions={sessionCards} />
+        <SessionResults
+          interests={interests}
+          now={now.getTime()}
+          sessions={sessionCards}
+        />
       )}
       <AroundEcosystem
         campaign={

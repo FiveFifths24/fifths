@@ -17,9 +17,10 @@ describe("Sessions-first discovery experience", () => {
   });
 
   it("keeps Session results independent from ecosystem previews", () => {
-    expect(page).toContain(
-      "<SessionResults interests={interests} sessions={sessionCards} />",
-    );
+    expect(page).toContain("<SessionResults");
+    expect(page).toContain("interests={interests}");
+    expect(page).toContain("now={now.getTime()}");
+    expect(page).toContain("sessions={sessionCards}");
     expect(page).toContain("<AroundEcosystem");
   });
 

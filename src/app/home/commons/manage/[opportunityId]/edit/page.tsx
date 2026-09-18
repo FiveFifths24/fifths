@@ -53,7 +53,7 @@ export default async function EditOpportunityPage({
     return <AccountUnavailable />;
   }
 
-  const [opportunityResult, managerResult, roleResult] = await Promise.all([
+  const [opportunityResult, managerResult] = await Promise.all([
     supabase
       .from("creator_opportunities")
       .select("*")
@@ -63,8 +63,6 @@ export default async function EditOpportunityPage({
     supabase.rpc("can_manage_creator_opportunity", {
       p_opportunity_id: opportunityId,
     }),
-
-    supabase.from("user_roles").select("role").eq("user_id", userData.user.id),
   ]);
 
   if (
@@ -197,7 +195,10 @@ export default async function EditOpportunityPage({
     );
   }
 
-  let circles: Array<{ id: string; name: string }> = [];
+  const circles = (hostedCircleResult.data ?? []).map((circle) => ({
+    id: circle.id,
+    name: circle.name,
+  }));
 
   const responseDeadlineLocal = toLocalDateTimeInput(
     opportunity.response_deadline,

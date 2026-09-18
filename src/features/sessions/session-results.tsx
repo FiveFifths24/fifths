@@ -14,6 +14,7 @@ type InterestOption = {
 type Props = {
   sessions: SessionCardItem[];
   interests: InterestOption[];
+  now: number;
 };
 
 type SessionFormatFilter = "all" | "online" | "in_person" | "hybrid";
@@ -21,13 +22,12 @@ type TimingFilter = "all" | "today" | "week" | "month";
 
 const SIX_HOURS = 6 * 60 * 60 * 1000;
 
-export function SessionResults({ sessions, interests }: Props) {
+export function SessionResults({ sessions, interests, now }: Props) {
   const [selectedInterest, setSelectedInterest] = useState("");
   const [selectedFormat, setSelectedFormat] =
     useState<SessionFormatFilter>("all");
   const [selectedTiming, setSelectedTiming] = useState<TimingFilter>("all");
 
-  const now = Date.now();
   const sixHoursFromNow = now + SIX_HOURS;
 
   const filteredSessions = useMemo(() => {

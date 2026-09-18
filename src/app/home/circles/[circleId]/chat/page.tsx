@@ -188,11 +188,6 @@ export default async function CircleChatPage({
 
                   const username = profile?.username?.trim() ?? null;
                   const isCurrentUser = message.user_id === userData.user.id;
-                  const isDeleted = Boolean(message.deleted_at);
-                  const deletionLabel =
-                    message.deletion_type === "moderator"
-                      ? "Removed by moderator"
-                      : "Deleted by sender";
                   const canModerateMessage =
                     membership.role === "owner" && !isCurrentUser;
 

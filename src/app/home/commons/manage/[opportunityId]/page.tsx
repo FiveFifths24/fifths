@@ -4,12 +4,10 @@ import {
   CheckCircle2,
   CircleDollarSign,
   ClipboardCheck,
-  Eye,
   HeartHandshake,
   LockKeyhole,
   Rocket,
   Users,
-  XCircle,
 } from "lucide-react";
 
 import { AccountUnavailable } from "@/components/account/account-unavailable";

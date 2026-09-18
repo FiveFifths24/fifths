@@ -167,41 +167,6 @@ export default async function OpportunityDetailPage({
     0,
     opportunity.positions - opportunity.accepted_count,
   );
-  const commonsShell =
-    "overflow-hidden rounded-[32px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01))] shadow-[0_0_0_1px_rgba(255,255,255,0.03),0_24px_80px_rgba(0,0,0,0.45)]";
-
-  const commonsSectionLabel =
-    "text-[11px] font-semibold uppercase tracking-[0.34em] text-white/45";
-
-  const commonsPill =
-    "inline-flex items-center rounded-full border border-white/12 bg-white/[0.04] px-4 py-1.5 text-sm font-semibold text-white/80";
-
-  const commonsPillStrong =
-    "inline-flex items-center rounded-full border border-white/18 bg-white/[0.08] px-4 py-1.5 text-sm font-semibold text-white";
-
-  const commonsPillSoft =
-    "inline-flex items-center rounded-full border border-white/10 bg-white/[0.03] px-4 py-1.5 text-sm font-semibold text-white/65";
-
-  const commonsMetaLabel = "text-sm text-white/40";
-  const commonsMetaValue = "mt-2 text-xl font-semibold text-white";
-
-  const commonsPanel =
-    "rounded-[24px] border border-white/10 bg-white/[0.02] p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]";
-
-  const commonsPanelTitle =
-    "text-[15px] font-semibold uppercase tracking-[0.22em] text-white/45";
-  const commonsPanelHeading =
-    "text-[2rem] font-semibold leading-tight text-white";
-  const commonsBody = "text-base leading-7 text-white/72";
-
-  const commonsNeutralTag =
-    "inline-flex items-center rounded-full border border-white/12 bg-white/[0.04] px-3 py-1 text-sm font-medium text-white/80";
-
-  const commonsPrimaryButton =
-    "inline-flex min-h-11 items-center justify-center rounded-full bg-gradient-to-r from-white via-zinc-100 to-zinc-300 px-6 py-3 text-sm font-bold text-black transition hover:from-zinc-100 hover:via-white hover:to-zinc-200";
-
-  const commonsSecondaryButton =
-    "inline-flex min-h-11 items-center justify-center rounded-full border border-white/15 bg-white/[0.03] px-6 py-3 text-sm font-bold text-white/80 transition hover:bg-white/[0.06] hover:text-white";
 
   return (
     <article className="mx-auto w-full max-w-6xl">
