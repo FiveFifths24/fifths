@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { Activity, Sparkles } from "lucide-react";
+import { Activity, Map, Sparkles } from "lucide-react";
 import { AccountUnavailable } from "@/components/account/account-unavailable";
 import { ButtonLink } from "@/components/ui/button-link";
 import { PreviewState } from "@/components/ui/preview-state";
 import { StatusMessage } from "@/components/ui/status-message";
 import { FriendsActivity } from "@/features/activity/friends-activity";
+import { updateTutorialAction } from "@/features/onboarding/tutorial-actions";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = { title: "Your Home" };
@@ -78,29 +79,35 @@ export default async function PersonalHomePage({
   const { data: userData } = await supabase.auth.getUser();
   const activityBefore = validActivityCursor(parameters?.activityBefore);
   const activityBeforeId = validActivityId(parameters?.activityBeforeId);
-  const [pulseResult, modeResult, profileResult, activityResult] =
-    await Promise.all([
-      supabase
-        .from("pulse_check_ins")
-        .select("*")
-        .gt("expires_at", "now")
-        .order("created_at", { ascending: false })
-        .limit(1)
-        .maybeSingle(),
-      supabase.from("modes").select("id, slug, name").order("sort_order"),
-      userData.user
-        ? supabase
-            .from("profiles")
-            .select("display_name")
-            .eq("id", userData.user.id)
-            .maybeSingle()
-        : Promise.resolve({ data: null, error: null }),
-      supabase.rpc("get_friend_activity", {
-        p_before: activityBefore,
-        p_before_id: activityBeforeId,
-        p_limit: 20,
-      }),
-    ]);
+  const [
+    pulseResult,
+    modeResult,
+    profileResult,
+    activityResult,
+    tutorialResult,
+  ] = await Promise.all([
+    supabase
+      .from("pulse_check_ins")
+      .select("*")
+      .gt("expires_at", "now")
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+    supabase.from("modes").select("id, slug, name").order("sort_order"),
+    userData.user
+      ? supabase
+          .from("profiles")
+          .select("display_name")
+          .eq("id", userData.user.id)
+          .maybeSingle()
+      : Promise.resolve({ data: null, error: null }),
+    supabase.rpc("get_friend_activity", {
+      p_before: activityBefore,
+      p_before_id: activityBeforeId,
+      p_limit: 20,
+    }),
+    supabase.from("signal_tutorial_progress").select("status").maybeSingle(),
+  ]);
 
   if (pulseResult.error) {
     return (
@@ -116,6 +123,8 @@ export default async function PersonalHomePage({
     : null;
   const displayName = profileResult.data?.display_name ?? "You";
   const dailySignal = getDailySignal();
+  const showTutorialWelcome =
+    !tutorialResult.data || tutorialResult.data.status === "not_started";
 
   return (
     <div>
@@ -129,6 +138,45 @@ export default async function PersonalHomePage({
         <StatusMessage className="mt-8" tone="success">
           Your Home is ready.
         </StatusMessage>
+      ) : null}
+
+      {showTutorialWelcome ? (
+        <section className="mt-8 rounded-[2rem] border border-[#f359d2]/30 bg-[radial-gradient(circle_at_top_right,rgba(243,89,210,.13),transparent_42%),rgba(0,0,0,.42)] p-6 text-center shadow-[0_18px_60px_rgba(0,0,0,.3)] sm:p-8 sm:text-left">
+          <div className="flex flex-col items-center gap-6 sm:flex-row sm:justify-between">
+            <div>
+              <p className="flex items-center justify-center gap-2 text-xs font-black tracking-[0.18em] text-[#f359d2] uppercase sm:justify-start">
+                <Map aria-hidden="true" className="size-4" />
+                New to SIGNAL?
+              </p>
+              <h2 className="mt-2 text-3xl font-black text-white">
+                Learn it one place at a time.
+              </h2>
+              <p className="mt-3 max-w-2xl text-sm leading-7 text-neutral-300">
+                Take a short, skippable tour using real product routes. Your
+                place is saved so you can return later.
+              </p>
+            </div>
+
+            <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+              <ButtonLink
+                className="w-full sm:w-auto"
+                href="/home/getting-started"
+              >
+                Start Tour
+              </ButtonLink>
+              <form action={updateTutorialAction}>
+                <input name="intent" type="hidden" value="skip" />
+                <input name="step" type="hidden" value="0" />
+                <button
+                  className="inline-flex min-h-12 w-full items-center justify-center rounded-full border border-white/15 px-6 py-3 text-sm font-bold text-white transition hover:bg-white/7 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f359d2] sm:w-auto"
+                  type="submit"
+                >
+                  Explore On My Own
+                </button>
+              </form>
+            </div>
+          </div>
+        </section>
       ) : null}
 
       <header className="mt-10 text-center sm:text-left">

@@ -24,6 +24,12 @@ export default function RealmSafetyPage() {
         tools, communication norms, content boundaries, and how someone can
         pause or leave participation without retaliation.
       </p>
+      <p>
+        Useful tools may include a session zero, lines and veils, open-door
+        expectations, check-ins, breaks, and a simple pause or stop signal. No
+        participant must disclose a diagnosis or personal history to set a
+        boundary.
+      </p>
       <h2>Content notes</h2>
       <p>
         Material themes should be described plainly enough for informed choice
@@ -35,6 +41,14 @@ export default function RealmSafetyPage() {
         Harassment, discrimination, threats, coercion, nonconsensual content,
         and deliberate boundary violations are not permitted. Reports will
         receive human review.
+      </p>
+      <h2>Game master and player responsibilities</h2>
+      <p>
+        Game masters should communicate material changes, apply expectations
+        consistently, respond to boundary concerns, and avoid using narrative
+        authority to pressure players. Players should respect agreed limits,
+        other participants’ agency, scheduling commitments, and a game master’s
+        good-faith safety direction.
       </p>
       <h2>Copyright boundary</h2>
       <p>
@@ -53,6 +67,13 @@ export default function RealmSafetyPage() {
         The initial beta is for adults 18 and older. Final emergency, venue,
         reporting, removal, appeal, and organizer-liability procedures require
         legal and operational review before launch.
+      </p>
+      <h2>Reporting concerns</h2>
+      <p>
+        Harassment, threats, unsafe offline behavior, sexual misconduct, and
+        deliberate boundary violations may be reported privately through SIGNAL.
+        Immediate danger requires local emergency services; SIGNAL is not
+        emergency response.
       </p>
     </LegalPage>
   );

@@ -21,6 +21,7 @@ const footerGroups = [
     links: [
       ["Your Account", "/account"],
       ["Your Home", "/home"],
+      ["Getting Started", "/home/getting-started"],
       ["Community Guidelines", "/community-guidelines"],
       ["Commons Guidelines", "/commons/guidelines"],
       ["Realm Safety", "/realm/safety"],
@@ -40,6 +41,7 @@ const footerGroups = [
     links: [
       ["Privacy", "/privacy"],
       ["Terms", "/terms"],
+      ["Accessibility", "/accessibility"],
     ],
   },
 ] as const;

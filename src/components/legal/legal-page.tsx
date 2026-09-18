@@ -29,15 +29,16 @@ export function LegalPage({
             {summary}
           </p>
           <p className="mt-5 text-xs text-neutral-400">
-            Draft updated July 31, 2026
+            Draft updated September 18, 2026
           </p>
         </Container>
       </header>
       <Container className="grid gap-10 py-14 lg:grid-cols-[0.7fr_2fr] lg:py-20">
         <aside>
           <StatusMessage>
-            This is a Phase 1 draft. Legal review is required before public
-            launch. The initial beta is planned for adults 18 and older.
+            This is a launch-readiness draft. It is not legal advice or an
+            attorney-approved policy. Professional legal review is required
+            before public launch. SIGNAL is intended for adults 18 and older.
           </StatusMessage>
         </aside>
         <div className="document-content max-w-3xl">{children}</div>

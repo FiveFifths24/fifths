@@ -58,6 +58,7 @@ npm run check:release
 - [Manual founder setup](docs/MANUAL_SETUP.md)
 - [Known limitations](docs/KNOWN_LIMITATIONS.md)
 - [Release readiness and rollback](docs/RELEASE_READINESS.md)
+- [Current launch-readiness foundation](docs/LAUNCH_READINESS_FOUNDATION.md)
 - [Glossary](docs/GLOSSARY.md)
 
 ## Current architecture

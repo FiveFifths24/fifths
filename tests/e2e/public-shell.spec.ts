@@ -119,7 +119,9 @@ test("legal and safety pages disclose their review status", async ({
   ]) {
     await page.goto(path);
 
-    await expect(page.getByText(/this is a phase 1 draft/i)).toBeVisible();
+    await expect(
+      page.getByText(/this is a launch-readiness draft/i),
+    ).toBeVisible();
 
     await expect(
       page.getByText(/legal review is required before public launch/i).first(),
@@ -127,4 +129,39 @@ test("legal and safety pages disclose their review status", async ({
 
     await expect(page.getByText(/18 and older/i).first()).toBeVisible();
   }
+});
+
+test("accessibility statement is reachable and makes conservative claims", async ({
+  page,
+}) => {
+  await page.goto("/accessibility");
+
+  await expect(
+    page.getByRole("heading", { level: 1, name: /make room for people/i }),
+  ).toBeVisible();
+  await expect(
+    page.getByText(/has not received independent accessibility certification/i),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: /share accessibility feedback/i }),
+  ).toHaveAttribute("href", "/home/safety");
+});
+
+test("unknown routes show the branded, useful 404 without internal details", async ({
+  page,
+}) => {
+  const response = await page.goto("/this-signal-does-not-exist");
+
+  expect(response?.status()).toBe(404);
+  await expect(
+    page.getByRole("heading", { level: 1, name: /this frequency is quiet/i }),
+  ).toBeVisible();
+  await expect(page.getByText(/no signal found/i)).toBeVisible();
+  await expect(page.getByRole("link", { name: /go to home/i })).toHaveAttribute(
+    "href",
+    "/home",
+  );
+  await expect(
+    page.getByRole("link", { name: /explore circles/i }),
+  ).toHaveAttribute("href", "/home/circles");
 });

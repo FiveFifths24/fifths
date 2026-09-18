@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import type { ActionState } from "@/features/auth/state";
+import { recordAnalyticsSafely } from "@/lib/analytics/server";
 import { createClient } from "@/lib/supabase/server";
 import {
   circleIdSchema,
@@ -383,6 +384,14 @@ export async function joinCircleAction(
         status: "error",
         message: "The Circle could not accept this membership action.",
       };
+    }
+    if (data === "active") {
+      await recordAnalyticsSafely(supabase, {
+        eventName: "circle_joined",
+        route: `/home/circles/${parsed.data.circleId}`,
+        entityType: "circle",
+        entityId: parsed.data.circleId,
+      });
     }
     revalidatePath(`/home/circles/${parsed.data.circleId}`);
     revalidatePath("/home/circles/memberships");

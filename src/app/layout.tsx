@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { SiteFooter } from "@/components/shell/site-footer";
 import { SiteHeader } from "@/components/shell/site-header";
+import { PageViewTracker } from "@/features/analytics/page-view-tracker";
 import { ProfilePresenceHeartbeat } from "@/features/profiles/profile-presence-heartbeat";
 import "./globals.css";
 
@@ -27,6 +28,7 @@ export default function RootLayout({
         </a>
         <SiteHeader />
         <ProfilePresenceHeartbeat />
+        <PageViewTracker />
         <main id="main-content">{children}</main>
         <SiteFooter />
       </body>

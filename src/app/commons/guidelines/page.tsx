@@ -40,7 +40,24 @@ export default function CommonsGuidelinesPage() {
       <p>
         A creator cannot issue themselves verified activity. Completed
         collaboration credit will require confirmation through an authorized
-        workflow or administrator review.
+        workflow or administrator review. Marking work complete confirms the
+        platform workflow only; it does not settle payment, ownership, quality,
+        or a legal dispute.
+      </p>
+      <h2>No exploitative or unlawful arrangements</h2>
+      <p>
+        Do not disguise employment, demand illegal or unsafe work, request
+        intimate or discriminatory services, require undisclosed fees, solicit
+        financial credentials, or use “exposure” to misrepresent material
+        compensation. Volunteer and portfolio work must be labeled plainly.
+      </p>
+      <h2>Changes, disputes, and reporting</h2>
+      <p>
+        Material scope, deadline, compensation, location, and ownership changes
+        should be communicated before additional work is expected. SIGNAL does
+        not arbitrate contracts or guarantee payment. Members may report scams,
+        harassment, unsafe conduct, or serious misrepresentation through the
+        private Trust and Safety process.
       </p>
       <h2>Safety and eligibility</h2>
       <p>
@@ -51,8 +68,10 @@ export default function CommonsGuidelinesPage() {
       </p>
       <h2>Draft notice</h2>
       <p>
+        This is not legal, tax, employment, or intellectual-property advice.
         Reporting, disputes, takedown, cancellation, and evidence-retention
-        procedures require legal and operational review before public launch.
+        procedures require professional legal and operational review before
+        public launch.
       </p>
     </LegalPage>
   );

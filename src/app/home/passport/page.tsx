@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import {
   BadgeCheck,
+  CheckCircle2,
   Layers3,
   LockKeyhole,
+  Map,
   ShieldCheck,
   Tags,
 } from "lucide-react";
@@ -35,7 +37,7 @@ export default async function PassportPage() {
     return <AccountUnavailable />;
   }
 
-  const [entryResult, profileResult] = await Promise.all([
+  const [entryResult, profileResult, starterResult] = await Promise.all([
     supabase
       .from("passport_entries")
       .select("*")
@@ -50,6 +52,8 @@ export default async function PassportPage() {
       .select("timezone")
       .eq("id", userData.user.id)
       .maybeSingle(),
+
+    supabase.from("signal_starter_path_tasks").select("task_key"),
   ]);
 
   if (entryResult.error) {
@@ -63,6 +67,9 @@ export default async function PassportPage() {
   const entries = entryResult.data ?? [];
   const summary = summarizePassport(entries);
   const timezone = profileResult.data?.timezone ?? "UTC";
+  const starterCount = (starterResult.data ?? []).filter(
+    (task) => task.task_key !== "starter_complete",
+  ).length;
 
   return (
     <div className="mx-auto w-full max-w-7xl">
@@ -131,6 +138,28 @@ export default async function PassportPage() {
           </dd>
         </div>
       </dl>
+
+      <section className="mt-6 rounded-[1.75rem] border border-[#ca9aff]/25 bg-[#0d0714] p-6 text-center sm:text-left">
+        <div className="flex flex-col items-center gap-5 sm:flex-row sm:justify-between">
+          <div>
+            <p className="flex items-center justify-center gap-2 text-xs font-black tracking-[0.18em] text-[#ca9aff] uppercase sm:justify-start">
+              <Map aria-hidden="true" className="size-4" />
+              Private onboarding progress
+            </p>
+            <h2 className="mt-2 text-2xl font-black text-white">
+              Starter Path: {starterCount} of 8
+            </h2>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-neutral-400">
+              Starter tasks help you learn SIGNAL. They are not verified
+              Passport activities and never increase the verified totals above.
+            </p>
+          </div>
+          <ButtonLink href="/home/getting-started" variant="secondary">
+            <CheckCircle2 aria-hidden="true" className="size-4" />
+            View Starter Path
+          </ButtonLink>
+        </div>
+      </section>
 
       {summary.correctionCount ? (
         <StatusMessage className="mt-6">

@@ -7,6 +7,7 @@ import {
   Compass,
   House,
   LogOut,
+  Map,
   Menu,
   Settings,
   X,
@@ -170,6 +171,15 @@ export function SiteHeader() {
                 >
                   <Compass aria-hidden="true" className="size-4" />
                   Explore Ecosystem
+                </ButtonLink>
+                <ButtonLink
+                  className="w-full md:w-auto"
+                  href="/home/getting-started"
+                  onClick={() => setOpen(false)}
+                  variant="secondary"
+                >
+                  <Map aria-hidden="true" className="size-4" />
+                  Getting Started
                 </ButtonLink>
 
                 <ButtonLink

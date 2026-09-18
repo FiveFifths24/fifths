@@ -9,6 +9,101 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      account_data_requests: {
+        Row: {
+          id: string;
+          user_id: string;
+          request_type: Database["public"]["Enums"]["account_data_request_type"];
+          status: Database["public"]["Enums"]["account_data_request_status"];
+          member_note: string | null;
+          created_at: string;
+          reviewed_at: string | null;
+          completed_at: string | null;
+        };
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
+      signal_tutorial_progress: {
+        Row: {
+          user_id: string;
+          status: "not_started" | "in_progress" | "skipped" | "completed";
+          current_step: number;
+          started_at: string | null;
+          completed_at: string | null;
+          skipped_at: string | null;
+          updated_at: string;
+        };
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
+      signal_starter_path_tasks: {
+        Row: {
+          user_id: string;
+          task_key:
+            | "tour_complete"
+            | "profile_customized"
+            | "pulse_complete"
+            | "circle_joined"
+            | "session_registered"
+            | "commons_explored"
+            | "realm_visited"
+            | "passport_opened"
+            | "starter_complete";
+          completion_source:
+            "tutorial" | "verified_state" | "exploration" | "system";
+          completed_at: string;
+        };
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
+      communication_preferences: {
+        Row: {
+          user_id: string;
+          session_activity_email: boolean;
+          circle_activity_email: boolean;
+          commons_activity_email: boolean;
+          realm_activity_email: boolean;
+          passport_activity_email: boolean;
+          social_activity_email: boolean;
+          newsletter_email: boolean;
+          five_fifths_updates_email: boolean;
+          ehub_updates_email: boolean;
+          fundraising_email: boolean;
+          community_events_email: boolean;
+          feature_announcements_email: boolean;
+          marketing_consented_at: string | null;
+          marketing_consent_source:
+            | "signup"
+            | "onboarding"
+            | "account_settings"
+            | "newsletter_form"
+            | null;
+          marketing_revoked_at: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
+      product_analytics_events: {
+        Row: {
+          id: number;
+          actor_user_id: string | null;
+          event_name: string;
+          route: string | null;
+          entity_type: string | null;
+          entity_id: string | null;
+          properties: Json;
+          created_at: string;
+        };
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
       activity_sharing_preferences: {
         Row: {
           user_id: string;
@@ -1205,6 +1300,61 @@ export type Database = {
     };
     Views: Record<string, never>;
     Functions: {
+      set_signal_tutorial_progress: {
+        Args: { p_action: string; p_step?: number | null };
+        Returns: Database["public"]["Tables"]["signal_tutorial_progress"]["Row"];
+      };
+      record_signal_exploration: {
+        Args: { p_destination: "commons" | "realm" | "passport" };
+        Returns: undefined;
+      };
+      sync_signal_starter_path: {
+        Args: Record<PropertyKey, never>;
+        Returns: Database["public"]["Tables"]["signal_starter_path_tasks"]["Row"][];
+      };
+      update_communication_preferences: {
+        Args: {
+          p_session_activity: boolean;
+          p_circle_activity: boolean;
+          p_commons_activity: boolean;
+          p_realm_activity: boolean;
+          p_passport_activity: boolean;
+          p_social_activity: boolean;
+          p_newsletter: boolean;
+          p_five_fifths_updates: boolean;
+          p_ehub_updates: boolean;
+          p_fundraising: boolean;
+          p_community_events: boolean;
+          p_feature_announcements: boolean;
+          p_source?: string;
+        };
+        Returns: Database["public"]["Tables"]["communication_preferences"]["Row"];
+      };
+      unsubscribe_optional_email: {
+        Args: Record<PropertyKey, never>;
+        Returns: Database["public"]["Tables"]["communication_preferences"]["Row"];
+      };
+      record_product_analytics_event: {
+        Args: {
+          p_event_name: string;
+          p_route?: string | null;
+          p_entity_type?: string | null;
+          p_entity_id?: string | null;
+          p_properties?: Json;
+        };
+        Returns: number;
+      };
+      request_account_data_action: {
+        Args: {
+          p_request_type: Database["public"]["Enums"]["account_data_request_type"];
+          p_member_note?: string | null;
+        };
+        Returns: string;
+      };
+      cancel_account_data_request: {
+        Args: { p_request_id: string };
+        Returns: undefined;
+      };
       delete_circle: {
         Args: {
           p_circle_id: string;
@@ -2115,6 +2265,9 @@ export type Database = {
       remove_blocked_word: { Args: { p_word_id: string }; Returns: undefined };
     };
     Enums: {
+      account_data_request_type: "deactivation" | "deletion";
+      account_data_request_status:
+        "submitted" | "in_review" | "cancelled" | "completed" | "declined";
       signal_activity_type:
         | "session_created"
         | "session_joined"

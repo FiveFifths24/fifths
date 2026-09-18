@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { recordAnalyticsSafely } from "@/lib/analytics/server";
 
 import {
   actionValuesFromFormData,
@@ -141,6 +142,13 @@ export async function registerForSessionAction(
           "Registration could not be completed. The Session may have filled or closed.",
       };
     }
+
+    await recordAnalyticsSafely(supabase, {
+      eventName: "session_registered",
+      route: `/home/sessions/${parsed.data.sessionId}`,
+      entityType: "session",
+      entityId: parsed.data.sessionId,
+    });
   } catch {
     return {
       status: "error",

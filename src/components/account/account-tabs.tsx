@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CircleUserRound, ShieldCheck } from "lucide-react";
+import { CircleUserRound, FileLock2, Mail, ShieldCheck } from "lucide-react";
 
 const tabs = [
   {
@@ -12,18 +12,35 @@ const tabs = [
     label: "Safety & Connections",
     icon: ShieldCheck,
   },
+  {
+    href: "/account/data",
+    label: "Account & Data",
+    icon: FileLock2,
+  },
+  {
+    href: "/account/communications",
+    label: "Communications",
+    icon: Mail,
+  },
 ] as const;
 
-export function AccountTabs({ active }: { active: "profile" | "safety" }) {
+export function AccountTabs({
+  active,
+}: {
+  active: "profile" | "safety" | "data" | "communications";
+}) {
   return (
     <nav
       aria-label="Account settings"
-      className="mt-8 grid gap-3 rounded-[1.5rem] border border-white/10 bg-black/35 p-2 sm:inline-grid sm:grid-cols-2"
+      className="mt-8 grid gap-3 rounded-[1.5rem] border border-white/10 bg-black/35 p-2 sm:inline-grid sm:grid-cols-2 lg:grid-cols-4"
     >
       {tabs.map((tab) => {
         const isActive =
           (active === "profile" && tab.href === "/account") ||
-          (active === "safety" && tab.href === "/account/safety");
+          (active === "safety" && tab.href === "/account/safety") ||
+          (active === "data" && tab.href === "/account/data") ||
+          (active === "communications" &&
+            tab.href === "/account/communications");
         const Icon = tab.icon;
 
         return (

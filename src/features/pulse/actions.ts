@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import type { ActionState } from "@/features/auth/state";
+import { recordAnalyticsSafely } from "@/lib/analytics/server";
 import { createClient } from "@/lib/supabase/server";
 import { pulseCheckInSchema } from "./schemas";
 
@@ -56,6 +57,11 @@ export async function recordPulseCheckInAction(
           "Your Pulse could not be saved. Refresh the page and try again.",
       };
     }
+
+    await recordAnalyticsSafely(supabase, {
+      eventName: "pulse_check_in_completed",
+      route: "/home/pulse",
+    });
   } catch {
     return {
       status: "error",

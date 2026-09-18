@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 
 import type { ActionState } from "@/features/auth/state";
+import { recordAnalyticsSafely } from "@/lib/analytics/server";
 import { createClient } from "@/lib/supabase/server";
 
 import { onboardingSchema } from "./schemas";
@@ -165,6 +166,10 @@ export async function completeOnboardingAction(
           "Your profile was created, but its visibility choice could not be saved.",
       };
     }
+    await recordAnalyticsSafely(supabase, {
+      eventName: "onboarding_completed",
+      route: "/onboarding",
+    });
   } catch (error) {
     console.error("SIGNAL onboarding service error:", error);
 

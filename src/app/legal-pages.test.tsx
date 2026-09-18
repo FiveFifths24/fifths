@@ -1,20 +1,41 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+
+import AccessibilityPage from "./accessibility/page";
 import CommunityGuidelinesPage from "./community-guidelines/page";
 import PrivacyPage from "./privacy/page";
-import RealmSafetyPage from "./realm/safety/page";
+import TermsPage from "./terms/page";
 
-describe("legal and safety drafts", () => {
+describe("launch legal and accessibility routes", () => {
   it.each([
-    ["privacy", PrivacyPage],
-    ["community", CommunityGuidelinesPage],
-    ["realm safety", RealmSafetyPage],
-  ])("marks the %s page as a draft requiring legal review", (_name, Page) => {
-    render(<Page />);
-    expect(screen.getByText(/this is a phase 1 draft/i)).toBeInTheDocument();
+    ["Terms of Use", <TermsPage key="terms" />],
+    ["Privacy Policy", <PrivacyPage key="privacy" />],
+    [
+      "Community Guidelines",
+      <CommunityGuidelinesPage key="community-guidelines" />,
+    ],
+  ])("renders the %s draft and legal-review warning", (heading, page) => {
+    render(page);
     expect(
-      screen.getByText(/legal review is required before public launch/i),
+      screen.getByRole("heading", { level: 1, name: heading }),
     ).toBeInTheDocument();
-    expect(screen.getAllByText(/18 and older/i).length).toBeGreaterThan(0);
+    expect(
+      screen.getByText(/professional legal review is required/i),
+    ).toBeInTheDocument();
+  });
+
+  it("publishes an honest Accessibility Statement with a feedback route", () => {
+    render(<AccessibilityPage />);
+    expect(
+      screen.getByRole("heading", { level: 1, name: /make room for people/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        /has not received independent accessibility certification/i,
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: /share accessibility feedback/i }),
+    ).toHaveAttribute("href", "/home/safety");
   });
 });
