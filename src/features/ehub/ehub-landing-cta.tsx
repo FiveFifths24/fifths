@@ -85,7 +85,7 @@ export function EHubLandingCta() {
           <div className="mt-5 flex flex-col gap-2">
             <a
               className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[linear-gradient(90deg,#3b82f6_0%,#8b5cf6_25%,#f472b6_50%,#fb923c_75%,#a3e635_100%)] px-6 text-sm font-black text-white transition hover:-translate-y-0.5 hover:brightness-110"
-              href="/home/ehub"
+              href="/ehub"
             >
               Explore The eHub
               <ArrowRight aria-hidden="true" className="size-4" />
