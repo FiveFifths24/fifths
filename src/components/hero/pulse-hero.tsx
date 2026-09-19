@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import type { CSSProperties } from "react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import {
   Activity,
   CalendarDays,
@@ -52,98 +52,9 @@ const featureLinks = [
   },
 ] as const;
 
-const SIGNAL_COLORS = [
-  "#3f2cff",
-  "#9d46ec",
-  "#f359d2",
-  "#22d3ee",
-  "#7cff00",
-] as const;
-
-const SIGNAL_DURATION = 2400;
-const SIGNAL_ORIGIN_PX = 22;
 const DESKTOP_SIGNAL_SCALE = 2.4;
 
 type PulseDialMode = "mobile" | "desktop";
-
-type SignalShot = {
-  id: number;
-  angle: number;
-  color: string;
-  distance: number;
-  duration: number;
-};
-
-type SignalBurstDetail = {
-  id: number;
-  x: number;
-  y: number;
-  angle: number;
-  color: string;
-  distance: number;
-  duration: number;
-};
-
-function normalizeAngle(angle: number) {
-  return ((angle % 360) + 360) % 360;
-}
-
-function chooseNextRotation(currentRotation: number) {
-  const currentAngle = normalizeAngle(currentRotation);
-  let targetAngle = Math.random() * 360;
-  let difference = ((targetAngle - currentAngle + 540) % 360) - 180;
-
-  if (Math.abs(difference) < 42) {
-    difference += difference >= 0 ? 62 : -62;
-    targetAngle = normalizeAngle(currentAngle + difference);
-  }
-
-  return {
-    angle: targetAngle,
-    rotation: currentRotation + difference,
-  };
-}
-
-function getSignalDistance(
-  x: number,
-  y: number,
-  angle: number,
-  mode: PulseDialMode,
-) {
-  const radians = (angle * Math.PI) / 180;
-  const directionX = Math.cos(radians);
-  const directionY = Math.sin(radians);
-  const margin = mode === "desktop" ? 72 : 28;
-  const limits: number[] = [];
-
-  if (directionX > 0.01) {
-    limits.push((window.innerWidth - x - margin) / directionX);
-  } else if (directionX < -0.01) {
-    limits.push((x - margin) / -directionX);
-  }
-
-  if (directionY > 0.01) {
-    limits.push((window.innerHeight - y - margin) / directionY);
-  } else if (directionY < -0.01) {
-    limits.push((y - margin) / -directionY);
-  }
-
-  const minimumDistance = mode === "desktop" ? 260 : 90;
-  const maximumDistance = mode === "desktop" ? 520 : 190;
-  const positiveLimits = limits.filter((limit) => limit > 0);
-  const availableDistance = positiveLimits.length
-    ? Math.min(...positiveLimits)
-    : maximumDistance;
-  const availableMaximum = Math.max(
-    minimumDistance,
-    Math.min(maximumDistance, availableDistance - 20),
-  );
-
-  return (
-    minimumDistance +
-    Math.random() * Math.max(0, availableMaximum - minimumDistance)
-  );
-}
 
 function SignalSonar({ mode }: { mode: PulseDialMode }) {
   const sonarRef = useRef<HTMLDivElement | null>(null);
@@ -231,135 +142,10 @@ function SignalSonar({ mode }: { mode: PulseDialMode }) {
 }
 
 function PulseDial({ mode }: { mode: PulseDialMode }) {
-  const dialRef = useRef<HTMLDivElement | null>(null);
-  const currentRotationRef = useRef(-25);
-  const nextShotIdRef = useRef(0);
-  const visibleRef = useRef(false);
-  const [headRotation, setHeadRotation] = useState(-25);
-  const [shots, setShots] = useState<SignalShot[]>([]);
-
-  useEffect(() => {
-    const dial = dialRef.current;
-
-    if (!dial) {
-      return;
-    }
-
-    const desktopQuery =
-      typeof window.matchMedia === "function"
-        ? window.matchMedia("(min-width: 1024px)")
-        : { matches: false };
-
-    const reducedMotionQuery =
-      typeof window.matchMedia === "function"
-        ? window.matchMedia("(prefers-reduced-motion: reduce)")
-        : { matches: false };
-    const timers = new Set<number>();
-
-    const isCorrectViewport = () =>
-      mode === "desktop" ? desktopQuery.matches : !desktopQuery.matches;
-
-    const isActive = () =>
-      visibleRef.current && isCorrectViewport() && !reducedMotionQuery.matches;
-
-    const schedule = (callback: () => void, delay: number) => {
-      const timer = window.setTimeout(() => {
-        timers.delete(timer);
-        callback();
-      }, delay);
-
-      timers.add(timer);
-    };
-
-    const launchSignal = (angle: number) => {
-      if (!isActive()) {
-        return;
-      }
-
-      const rect = dial.getBoundingClientRect();
-      const x = rect.left + rect.width / 2;
-      const y = rect.top + rect.height / 2;
-      const visualScale = mode === "desktop" ? DESKTOP_SIGNAL_SCALE : 1;
-      const visualDistance = getSignalDistance(x, y, angle, mode);
-      const internalDistance = visualDistance / visualScale;
-      const color =
-        SIGNAL_COLORS[Math.floor(Math.random() * SIGNAL_COLORS.length)]!;
-      const id = nextShotIdRef.current++;
-      const shot = {
-        id,
-        angle,
-        color,
-        distance: internalDistance,
-        duration: SIGNAL_DURATION,
-      };
-
-      setShots((current) => [...current, shot]);
-
-      window.dispatchEvent(
-        new CustomEvent<SignalBurstDetail>("signal:burst", {
-          detail: {
-            id,
-            x,
-            y,
-            angle,
-            color,
-            distance: visualDistance,
-            duration: SIGNAL_DURATION,
-          },
-        }),
-      );
-
-      schedule(() => {
-        setShots((current) => current.filter((item) => item.id !== id));
-      }, SIGNAL_DURATION + 300);
-    };
-
-    const scan = () => {
-      if (!isActive()) {
-        schedule(scan, 650);
-        return;
-      }
-
-      const next = chooseNextRotation(currentRotationRef.current);
-
-      currentRotationRef.current = next.rotation;
-      setHeadRotation(next.rotation);
-
-      schedule(scan, 3000 + Math.random() * 1800);
-    };
-
-    let observer: IntersectionObserver | null = null;
-
-    if (typeof IntersectionObserver === "function") {
-      observer = new IntersectionObserver(
-        ([entry]) => {
-          visibleRef.current = Boolean(entry?.isIntersecting);
-        },
-        { threshold: 0.2 },
-      );
-
-      observer.observe(dial);
-    } else {
-      // Vitest/JSDOM does not provide IntersectionObserver.
-      visibleRef.current = true;
-    }
-
-    schedule(scan, 500);
-
-    return () => {
-      observer?.disconnect();
-
-      for (const timer of timers) {
-        window.clearTimeout(timer);
-      }
-    };
-  }, [mode]);
-
   const visualScale = mode === "desktop" ? DESKTOP_SIGNAL_SCALE : 1;
 
   return (
     <div
-      ref={dialRef}
       aria-hidden="true"
       className="relative flex size-32 shrink-0 items-center justify-center overflow-visible sm:size-40 lg:size-44"
     >
