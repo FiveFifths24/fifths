@@ -539,11 +539,11 @@ export function OnboardingForm({
             label="Your Time Zone"
             name="timezone"
           >
-            <option value="America/New_York">Eastern time</option>
-            <option value="America/Chicago">Central time</option>
-            <option value="America/Denver">Mountain time</option>
-            <option value="America/Phoenix">Arizona time</option>
-            <option value="America/Los_Angeles">Pacific time</option>
+            <option value="America/New_York">Eastern Time</option>
+            <option value="America/Chicago">Central Time</option>
+            <option value="America/Denver">Mountain Time</option>
+            <option value="America/Phoenix">Arizona Time</option>
+            <option value="America/Los_Angeles">Pacific Time</option>
             <option value="UTC">UTC</option>
           </SelectField>
         </div>
@@ -681,9 +681,9 @@ export function OnboardingForm({
             label="Who can see where you’re based?"
             name="locationVisibility"
           >
-            <option value="hidden">Keep it private</option>
-            <option value="city_region">Show my city and region</option>
-            <option value="region_only">Show only my region</option>
+            <option value="hidden">Keep It Private</option>
+            <option value="city_region">Show My City and Region</option>
+            <option value="region_only">Show Only My Region</option>
           </SelectField>
         </div>
 
@@ -693,9 +693,9 @@ export function OnboardingForm({
           label="Who can see your connections?"
           name="friendListVisibility"
         >
-          <option value="private">Only me</option>
-          <option value="friends">My friends</option>
-          <option value="members">SIGNAL members</option>
+          <option value="private">Only Me</option>
+          <option value="friends">My Friends</option>
+          <option value="members">SIGNAL Members</option>
         </SelectField>
 
         <SelectField
@@ -705,8 +705,8 @@ export function OnboardingForm({
           name="profileVisibility"
         >
           <option value="public">Anyone</option>
-          <option value="members">SIGNAL members</option>
-          <option value="private">Friends only</option>
+          <option value="members">SIGNAL Members</option>
+          <option value="private">Friends Only</option>
         </SelectField>
 
         <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-white/10 bg-black/30 p-5 has-checked:border-[#ca9aff]/70 has-checked:bg-[#6c14ce]/15">
@@ -737,7 +737,7 @@ export function OnboardingForm({
         className={currentStep === 2 ? "space-y-7" : "hidden"}
       >
         <h3 className="sr-only" id="interests-step">
-          Interests and skills
+          Interests and Skills
         </h3>
 
         <ChoiceGrid
@@ -761,7 +761,7 @@ export function OnboardingForm({
         className={currentStep === 3 ? "space-y-7" : "hidden"}
       >
         <h3 className="sr-only" id="connections-step">
-          Connection preferences
+          Connection Preferences
         </h3>
 
         <fieldset>
@@ -823,7 +823,7 @@ export function OnboardingForm({
             className="mb-2 block text-sm font-bold text-white/85"
             htmlFor="accessibilityNotes"
           >
-            Anything else that would help?
+            Anything Else That Would Help?
           </label>
 
           <textarea
@@ -847,7 +847,7 @@ export function OnboardingForm({
         className={currentStep === 5 ? "space-y-7" : "hidden"}
       >
         <h3 className="sr-only" id="confirmation-step">
-          Final confirmation
+          Final Confirmation
         </h3>
 
         <div className="rounded-3xl border border-white/10 bg-black/30 p-6">
@@ -856,7 +856,7 @@ export function OnboardingForm({
 
         <div className="text-center">
           <p className="text-sm font-semibold text-white">
-            You won’t be starting alone.
+            You Won’t Be Starting Alone.
           </p>
 
           <p className="mt-2 text-sm leading-6 text-white/45">

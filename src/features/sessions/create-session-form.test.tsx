@@ -11,7 +11,7 @@ describe("CreateSessionForm", () => {
         interests={[
           {
             id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
-            name: "Arts & culture",
+            name: "Arts & Culture",
           },
         ]}
         modes={[
@@ -44,7 +44,7 @@ describe("CreateSessionForm", () => {
       expect(screen.getByLabelText(label)).toBeInTheDocument();
     }
 
-    expect(screen.getByText("Arts & culture")).toBeInTheDocument();
+    expect(screen.getByText("Arts & Culture")).toBeInTheDocument();
 
     expect(
       screen.getByText(/Your Session will start as a draft/i),

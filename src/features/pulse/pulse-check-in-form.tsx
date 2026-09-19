@@ -71,11 +71,13 @@ function ChoiceField({
 export function PulseCheckInForm({
   modes,
   interests,
+  fromStarterPath = false,
 }: {
   modes: Array<Pick<Mode, "id" | "name" | "description">>;
   interests: Array<Pick<Interest, "id" | "name">>;
+  fromStarterPath?: boolean;
 }) {
-  const [state, action] = useActionState(
+    const [state, action] = useActionState(
     recordPulseCheckInAction,
     initialActionState,
   );
@@ -84,6 +86,9 @@ export function PulseCheckInForm({
 
   return (
     <form action={action} aria-label="Check your Pulse" className="space-y-9">
+  {fromStarterPath ? (
+  <input name="starter" type="hidden" value="1" />
+) : null}
       <ActionStatus state={state} />
 
       <ChoiceField

@@ -12,7 +12,7 @@ const modes = [
 const interests = [
   {
     id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
-    name: "Arts & culture",
+    name: "Arts & Culture",
   },
 ];
 

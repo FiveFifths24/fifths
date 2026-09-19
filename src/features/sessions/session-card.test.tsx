@@ -20,7 +20,7 @@ const session: SessionCardItem = {
   stimulation_level: "moderate",
   social_intensity: "social",
   modeName: "Create",
-  interestNames: ["Arts & culture"],
+  interestNames: ["Arts & Culture"],
   reasons: ["Fits Your Current Mode", "Matches Your Available Energy"],
   fit: "strong",
 };

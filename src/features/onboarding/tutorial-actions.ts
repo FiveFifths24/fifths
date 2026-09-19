@@ -122,3 +122,23 @@ export async function recordStarterExplorationAction(formData: FormData) {
   revalidatePath("/home/getting-started");
   redirect(href);
 }
+export async function resetTutorialAction() {
+  let failed = false;
+
+  try {
+    const supabase = await createClient();
+    const { error } = await supabase.rpc("reset_signal_tutorial");
+    failed = Boolean(error);
+  } catch {
+    failed = true;
+  }
+
+  if (failed) {
+    redirect("/home/getting-started?notice=error");
+  }
+
+  revalidatePath("/home");
+  revalidatePath("/home/getting-started");
+
+  redirect("/home/getting-started?notice=reset");
+}

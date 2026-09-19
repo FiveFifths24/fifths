@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { CSSProperties, ReactNode } from "react";
 import { Container } from "@/components/ui/container";
 
@@ -29,11 +30,13 @@ const memberGlitter = Array.from({ length: 120 }, (_, index) => ({
 
 export function MemberShell({
   children,
+  continueTourHref,
 }: {
   displayName: string;
   children: ReactNode;
+  continueTourHref?: string | null;
 }) {
-  return (
+    return (
     <section className="relative isolate min-h-screen overflow-hidden bg-[#020205] pt-8 pb-16 text-white sm:pt-10 sm:pb-24">
       <style>{`
         @keyframes member-glitter-float {
@@ -105,6 +108,15 @@ export function MemberShell({
       <Container className="relative z-10">
         <div>{children}</div>
       </Container>
+
+      {continueTourHref ? (
+        <Link
+          className="fixed right-5 bottom-5 z-50 inline-flex min-h-12 items-center justify-center rounded-full bg-[linear-gradient(90deg,#6c14ce,#f359d2)] px-6 py-3 text-sm font-black text-white shadow-[0_14px_45px_rgba(243,89,210,.35)] transition hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f359d2] sm:right-8 sm:bottom-8"
+          href={continueTourHref}
+        >
+          Continue Tour
+        </Link>
+      ) : null}
     </section>
-  );
+      );
 }

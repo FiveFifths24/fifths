@@ -7,7 +7,14 @@ import { createClient } from "@/lib/supabase/server";
 export const metadata: Metadata = { title: "Check your Pulse" };
 export const dynamic = "force-dynamic";
 
-export default async function PulseCheckInPage() {
+export default async function PulseCheckInPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ starter?: string }>;
+}) {
+    const parameters = await searchParams;
+  const fromStarterPath = parameters?.starter === "1";
+
   let supabase;
   try {
     supabase = await createClient();
@@ -60,10 +67,11 @@ export default async function PulseCheckInPage() {
         />
 
         <div className="relative">
-          <PulseCheckInForm
-            interests={interestResult.data ?? []}
-            modes={modeResult.data ?? []}
-          />
+<PulseCheckInForm
+  fromStarterPath={fromStarterPath}
+  interests={interestResult.data ?? []}
+  modes={modeResult.data ?? []}
+/>
         </div>
       </div>
     </div>
