@@ -145,42 +145,86 @@ function getSignalDistance(
   );
 }
 
-function SignalWave() {
-  return (
-    <svg className="signal-pulse__shape" fill="none" viewBox="0 0 80 56">
-      <path
-        d="M6 4 Q18 28 6 52"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeWidth="1.7"
-      />
-    </svg>
-  );
-}
+function SignalSonar({ mode }: { mode: PulseDialMode }) {
+  const sonarRef = useRef<HTMLDivElement | null>(null);
+  const sweepRef = useRef<HTMLDivElement | null>(null);
 
-function SignalRobot({ rotation }: { rotation: number }) {
+  useEffect(() => {
+    const sonar = sonarRef.current;
+    const sweep = sweepRef.current;
+
+    if (!sonar || !sweep) {
+      return;
+    }
+
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    const desktopQuery = window.matchMedia("(min-width: 1024px)");
+
+    const isCorrectViewport = () =>
+      mode === "desktop" ? desktopQuery.matches : !desktopQuery.matches;
+
+    if (reducedMotion.matches) {
+      sweep.style.transform = "rotate(0deg)";
+      return;
+    }
+
+    let animationFrame = 0;
+    let startedAt = performance.now();
+
+    const trackSweep = (time: number) => {
+      if (!isCorrectViewport()) {
+        startedAt = time;
+        animationFrame = requestAnimationFrame(trackSweep);
+        return;
+      }
+
+      const rect = sonar.getBoundingClientRect();
+
+      if (rect.width === 0 || rect.height === 0) {
+        animationFrame = requestAnimationFrame(trackSweep);
+        return;
+      }
+
+      const angle = (((time - startedAt) / 6000) * 360) % 360;
+
+      // Visual line and star detection now use the exact same angle.
+      sweep.style.transform = `rotate(${angle}deg)`;
+
+      window.dispatchEvent(
+        new CustomEvent("signal:sonar", {
+          detail: {
+            x: rect.left + rect.width / 2,
+            y: rect.top + rect.height / 2,
+            angle,
+            distance: Math.hypot(window.innerWidth, window.innerHeight),
+          },
+        }),
+      );
+
+      animationFrame = requestAnimationFrame(trackSweep);
+    };
+
+    animationFrame = requestAnimationFrame(trackSweep);
+
+    return () => {
+      cancelAnimationFrame(animationFrame);
+    };
+  }, [mode]);
+
   return (
-    <div className="signal-robot">
+    <div ref={sonarRef} className="signal-robot">
       <div
-        className="signal-bot__head absolute inset-0"
-        style={{ transform: `rotate(${rotation}deg)` }}
+        ref={sweepRef}
+        className="absolute inset-0"
+        style={{
+          transformOrigin: "center",
+          willChange: "transform",
+        }}
       >
-        <span className="absolute top-1/2 left-1/2 flex h-7 w-9 -translate-x-1/2 -translate-y-1/2 rounded-xl bg-[linear-gradient(135deg,#1800ad_0%,#6c14ce_30%,#f359d2_65%,#7cff00_100%)] p-px shadow-[0_0_12px_rgba(108,20,206,0.7),0_0_24px_rgba(243,89,210,0.4)]">
-          <span className="relative flex size-full items-center rounded-[0.7rem] bg-[#050508]/90">
-            <span className="absolute inset-x-2 bottom-1 h-px bg-[linear-gradient(90deg,#1800ad,#6c14ce,#f359d2,#7cff00)]" />
+        <span className="absolute top-1/2 left-1/2 h-px w-32 origin-left bg-[linear-gradient(90deg,rgba(255,255,255,0.9)_0%,rgba(255,255,255,0.35)_42%,transparent_100%)] shadow-[0_0_6px_rgba(255,255,255,0.22)]" />
 
-            <span className="absolute top-1/2 right-1.5 flex -translate-y-1/2 flex-col gap-1">
-              <span className="size-1 rounded-full bg-[#f359d2] shadow-[0_0_6px_#f359d2]" />
-              <span className="size-1 rounded-full bg-[#22d3ee] shadow-[0_0_6px_#22d3ee]" />
-            </span>
-          </span>
-
-          <span className="absolute -top-2 left-1/2 h-2 w-px -translate-x-1/2 bg-[#f359d2]">
-            <span className="absolute -top-0.5 left-1/2 size-1.5 -translate-x-1/2 rounded-full bg-white shadow-[0_0_7px_#f359d2]" />
-          </span>
-
-          <span className="absolute top-1/2 -right-1 size-2 -translate-y-1/2 rounded-full bg-white shadow-[0_0_6px_#7cff00,0_0_12px_#f359d2]" />
-        </span>
+        <span className="absolute top-1/2 left-1/2 z-10 size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white shadow-[0_0_5px_rgba(255,255,255,0.95),0_0_12px_rgba(255,255,255,0.35)]" />
       </div>
     </div>
   );
@@ -281,7 +325,6 @@ function PulseDial({ mode }: { mode: PulseDialMode }) {
       currentRotationRef.current = next.rotation;
       setHeadRotation(next.rotation);
 
-      schedule(() => launchSignal(next.rotation), 620);
       schedule(scan, 3000 + Math.random() * 1800);
     };
 
@@ -324,42 +367,7 @@ function PulseDial({ mode }: { mode: PulseDialMode }) {
         className="signal-stage"
         style={{ "--signal-scale": visualScale } as CSSProperties}
       >
-        {shots.map((shot) => (
-          <div
-            className="signal-emission"
-            key={shot.id}
-            style={
-              {
-                "--signal-angle": `${shot.angle}deg`,
-                "--signal-color": shot.color,
-                "--signal-distance": `${shot.distance}px`,
-                "--signal-duration": `${shot.duration}ms`,
-                "--signal-node-delay": `${Math.round(shot.duration * 0.68)}ms`,
-                "--signal-travel-distance": `${Math.max(
-                  18,
-                  shot.distance - SIGNAL_ORIGIN_PX,
-                )}px`,
-                color: shot.color,
-              } as CSSProperties
-            }
-          >
-            <span className="signal-pulse signal-pulse--one">
-              <SignalWave />
-            </span>
-
-            <span className="signal-pulse signal-pulse--two">
-              <SignalWave />
-            </span>
-
-            <span className="signal-pulse signal-pulse--three">
-              <SignalWave />
-            </span>
-
-            <span className="signal-emission__node" />
-          </div>
-        ))}
-
-        <SignalRobot rotation={headRotation} />
+        <SignalSonar mode={mode} />
       </div>
     </div>
   );
@@ -397,14 +405,16 @@ export function PulseHero() {
       <div className="relative mx-auto w-full max-w-[86rem]">
         <div className="grid items-center gap-10 lg:grid-cols-[1.15fr_0.85fr] xl:gap-14">
           <div className="text-center lg:text-left">
-            <p className="mx-auto mb-5 w-fit bg-[linear-gradient(90deg,#1800ad_0%,#6c14ce_32%,#f359d2_68%,#7cff00_100%)] bg-clip-text font-mono text-[0.62rem] font-black tracking-[0.24em] text-transparent uppercase drop-shadow-[0_0_12px_rgba(243,89,210,0.25)] [-webkit-text-fill-color:transparent] sm:text-[0.68rem] lg:mx-0">
+            <p className="mx-auto mb-5 w-fit bg-[linear-gradient(90deg,#1800ad_0%,#6c14ce_33%,#f359d2_66%,#7cff00_100%)] bg-clip-text font-mono text-xs font-black tracking-[0.22em] text-transparent uppercase [-webkit-text-fill-color:transparent] sm:text-sm lg:mx-0 lg:bg-[linear-gradient(90deg,#1800ad_40%,#6c14ce_45%,#f359d2_50%,#7cff00_60%)]">
               No Ads. No Algorithmic Feed.
             </p>
 
             <h1 className="display-type mx-auto max-w-[36rem] text-[clamp(2rem,11vw,5rem)] leading-[0.96] tracking-[-0.045em] text-[#f4f2ef] lg:mx-0 lg:text-[clamp(3rem,3.4vw,4rem)]">
-              <span className="block text-white">Find Your Space.</span>
+              <span className="block text-white [text-shadow:0_0_3px_rgba(255,255,255,0.75),0_0_8px_rgba(255,255,255,0.32),0_0_16px_rgba(255,255,255,0.14)]">
+                Find Your Space.
+              </span>
 
-              <span className="mt-1 block bg-[linear-gradient(30deg,#1800ad,#6c14ce,#f359d2)] bg-clip-text text-[4.5rem] leading-[0.9] text-transparent [-webkit-text-fill-color:transparent] sm:text-[5.25rem] lg:text-[7rem] xl:text-[7.5rem]">
+              <span className="mt-1 block bg-[linear-gradient(90deg,#1800ad_10%,#6c14ce_15%,#f359d2_30%,#7cff00_70%)] bg-clip-text text-[4.5rem] leading-[0.9] text-transparent [-webkit-text-fill-color:transparent] sm:text-[5.25rem] lg:text-[7rem] xl:text-[7.5rem]">
                 Match Your Energy
               </span>
             </h1>

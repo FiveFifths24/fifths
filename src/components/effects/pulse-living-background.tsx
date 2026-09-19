@@ -37,6 +37,12 @@ type ActiveSignal = SignalBurstDetail & {
   startedAt: number;
   rgbColor: string;
 };
+type SonarSweepDetail = {
+  x: number;
+  y: number;
+  angle: number;
+  distance: number;
+};
 
 const STAR_COLORS = [
   "255,255,255",
@@ -84,6 +90,7 @@ export function PulseLivingBackground() {
     let pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
     let stars: Star[] = [];
     let activeSignals: ActiveSignal[] = [];
+    let activeSonar: SonarSweepDetail | null = null;
     let animationFrame = 0;
     let isVisible = !document.hidden;
 
@@ -194,6 +201,44 @@ export function PulseLivingBackground() {
         }
       }
     };
+    const applySonarHit = (
+      star: Star,
+      starX: number,
+      starY: number,
+      time: number,
+    ) => {
+      if (!activeSonar) {
+        return;
+      }
+
+      const radians = (activeSonar.angle * Math.PI) / 180;
+      const directionX = Math.cos(radians);
+      const directionY = Math.sin(radians);
+
+      const relativeX = starX - activeSonar.x;
+      const relativeY = starY - activeSonar.y;
+
+      const forwardDistance = relativeX * directionX + relativeY * directionY;
+
+      const sideDistance = Math.abs(
+        -relativeX * directionY + relativeY * directionX,
+      );
+
+      const beamWidth = 18 + forwardDistance * 0.025;
+
+      if (
+        forwardDistance >= 0 &&
+        forwardDistance <= activeSonar.distance &&
+        sideDistance <= beamWidth
+      ) {
+        const strength = Math.max(0, 1 - sideDistance / beamWidth);
+
+        star.hitStartedAt = time;
+        star.hitUntil = time + 1100;
+        star.hitColor = star.color;
+        star.hitStrength = Math.max(1.25, strength * 1.8);
+      }
+    };
 
     const drawStars = (time: number) => {
       activeSignals = activeSignals.filter(
@@ -204,6 +249,7 @@ export function PulseLivingBackground() {
         const position = getStarPosition(star, time);
 
         applySignalHits(star, position.x, position.y, time);
+        applySonarHit(star, position.x, position.y, time);
 
         const flicker =
           (Math.sin(time * star.flickerSpeed + star.flickerPhase) + 1) / 2;
@@ -216,11 +262,16 @@ export function PulseLivingBackground() {
           2;
 
         const hitDuration = Math.max(1, star.hitUntil - star.hitStartedAt);
+
         const hitProgress =
           star.hitUntil > time
-            ? Math.max(0, (star.hitUntil - time) / hitDuration)
-            : 0;
-        const hitGlow = hitProgress * star.hitStrength;
+            ? Math.max(0, (time - star.hitStartedAt) / hitDuration)
+            : 1;
+
+        const hitEnvelope =
+          star.hitUntil > time ? Math.pow(1 - hitProgress, 1.8) : 0;
+
+        const hitGlow = hitEnvelope * star.hitStrength;
         const opacity = Math.min(
           star.opacity +
             flicker * star.flickerAmount +
@@ -228,7 +279,7 @@ export function PulseLivingBackground() {
             hitGlow * 0.85,
           1,
         );
-        const radiusBoost = flicker * 0.25 + hitGlow * 1.7;
+        const radiusBoost = flicker * 0.25 + hitGlow * 4.2;
         const drawColor = hitGlow > 0 ? star.hitColor : star.color;
 
         ctx.beginPath();
@@ -242,7 +293,7 @@ export function PulseLivingBackground() {
 
         ctx.fillStyle = `rgba(${drawColor}, ${opacity})`;
         ctx.shadowBlur =
-          hitGlow > 0 ? 8 + hitGlow * 24 : opacity > 0.58 ? 10 : 3;
+          hitGlow > 0 ? 18 + hitGlow * 42 : opacity > 0.58 ? 10 : 3;
         ctx.shadowColor = `rgba(${drawColor}, ${Math.max(opacity, hitGlow)})`;
 
         ctx.fill();
@@ -296,6 +347,15 @@ export function PulseLivingBackground() {
         rgbColor: hexToRgb(detail.color),
       });
     };
+    const handleSonarSweep = (event: Event) => {
+      const { detail } = event as CustomEvent<SonarSweepDetail>;
+
+      if (!detail) {
+        return;
+      }
+
+      activeSonar = detail;
+    };
 
     const handleVisibility = () => {
       isVisible = !document.hidden;
@@ -305,6 +365,7 @@ export function PulseLivingBackground() {
 
     window.addEventListener("resize", resizeCanvas);
     window.addEventListener("signal:burst", handleSignalBurst);
+    window.addEventListener("signal:sonar", handleSonarSweep);
     document.addEventListener("visibilitychange", handleVisibility);
 
     if (reducedMotion.matches) {
@@ -319,6 +380,7 @@ export function PulseLivingBackground() {
 
       window.removeEventListener("resize", resizeCanvas);
       window.removeEventListener("signal:burst", handleSignalBurst);
+      window.removeEventListener("signal:sonar", handleSonarSweep);
       document.removeEventListener("visibilitychange", handleVisibility);
     };
   }, []);
