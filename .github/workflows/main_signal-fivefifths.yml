@@ -41,7 +41,6 @@ jobs:
           name: node-app
           path: .next/standalone
           include-hidden-files: true
-          
 
   deploy:
     runs-on: ubuntu-latest

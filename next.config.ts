@@ -52,7 +52,7 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   output: "standalone",
   reactStrictMode: true,
-    experimental: {
+  experimental: {
     serverActions: {
       // The profile form can contain five independently validated 5 MB images.
       // Each file is still byte-decoded and capped at 5 MB on the server.
