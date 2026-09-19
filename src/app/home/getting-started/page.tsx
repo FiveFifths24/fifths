@@ -9,7 +9,6 @@ import {
 } from "@/features/onboarding/signal-tutorial";
 import {
   recordStarterExplorationAction,
-  resetTutorialAction,
   updateTutorialAction,
 } from "@/features/onboarding/tutorial-actions";
 import { createClient } from "@/lib/supabase/server";
