@@ -1304,6 +1304,10 @@ export type Database = {
         Args: { p_action: string; p_step?: number | null };
         Returns: Database["public"]["Tables"]["signal_tutorial_progress"]["Row"];
       };
+      reset_signal_tutorial: {
+  Args: Record<PropertyKey, never>;
+  Returns: Database["public"]["Tables"]["signal_tutorial_progress"]["Row"];
+};
       record_signal_exploration: {
         Args: { p_destination: "commons" | "realm" | "passport" };
         Returns: undefined;
