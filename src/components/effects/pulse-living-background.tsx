@@ -224,7 +224,7 @@ export function PulseLivingBackground() {
         -relativeX * directionY + relativeY * directionX,
       );
 
-      const beamWidth = 18 + forwardDistance * 0.025;
+      const beamWidth = 8 + forwardDistance * 0.012;
 
       if (
         forwardDistance >= 0 &&
@@ -234,9 +234,9 @@ export function PulseLivingBackground() {
         const strength = Math.max(0, 1 - sideDistance / beamWidth);
 
         star.hitStartedAt = time;
-        star.hitUntil = time + 1100;
+        star.hitUntil = time + 900;
         star.hitColor = star.color;
-        star.hitStrength = Math.max(1.25, strength * 1.8);
+        star.hitStrength = Math.max(0.65, strength * 1.05);
       }
     };
 
@@ -279,7 +279,7 @@ export function PulseLivingBackground() {
             hitGlow * 0.85,
           1,
         );
-        const radiusBoost = flicker * 0.25 + hitGlow * 4.2;
+        const radiusBoost = flicker * 0.25 + hitGlow * 2.2;
         const drawColor = hitGlow > 0 ? star.hitColor : star.color;
 
         ctx.beginPath();
@@ -293,7 +293,7 @@ export function PulseLivingBackground() {
 
         ctx.fillStyle = `rgba(${drawColor}, ${opacity})`;
         ctx.shadowBlur =
-          hitGlow > 0 ? 18 + hitGlow * 42 : opacity > 0.58 ? 10 : 3;
+          hitGlow > 0 ? 10 + hitGlow * 24 : opacity > 0.58 ? 10 : 3;
         ctx.shadowColor = `rgba(${drawColor}, ${Math.max(opacity, hitGlow)})`;
 
         ctx.fill();

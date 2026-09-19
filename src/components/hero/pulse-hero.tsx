@@ -97,7 +97,7 @@ function SignalSonar({ mode }: { mode: PulseDialMode }) {
         return;
       }
 
-      const angle = (((time - startedAt) / 6000) * 360) % 360;
+      const angle = (((time - startedAt) / 8000) * 360) % 360;
 
       // Visual line and star detection now use the exact same angle.
       sweep.style.transform = `rotate(${angle}deg)`;
@@ -108,7 +108,7 @@ function SignalSonar({ mode }: { mode: PulseDialMode }) {
             x: rect.left + rect.width / 2,
             y: rect.top + rect.height / 2,
             angle,
-            distance: Math.hypot(window.innerWidth, window.innerHeight),
+            distance: mode === "desktop" ? 310 : 128,
           },
         }),
       );
