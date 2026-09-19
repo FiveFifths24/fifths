@@ -36,7 +36,7 @@ export function MemberShell({
   children: ReactNode;
   continueTourHref?: string | null;
 }) {
-    return (
+  return (
     <section className="relative isolate min-h-screen overflow-hidden bg-[#020205] pt-8 pb-16 text-white sm:pt-10 sm:pb-24">
       <style>{`
         @keyframes member-glitter-float {
@@ -118,5 +118,5 @@ export function MemberShell({
         </Link>
       ) : null}
     </section>
-      );
+  );
 }

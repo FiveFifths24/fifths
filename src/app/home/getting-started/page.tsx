@@ -64,7 +64,7 @@ export default async function GettingStartedPage({
     completed.has(task.key),
   ).length;
   const showTour =
-  progress?.status === "in_progress" || parameters?.step !== undefined;
+    progress?.status === "in_progress" || parameters?.step !== undefined;
 
   return (
     <div className="mx-auto w-full max-w-6xl">
@@ -279,32 +279,32 @@ export default async function GettingStartedPage({
                 <p className="mt-2 grow text-sm leading-6 text-neutral-400">
                   {task.description}
                 </p>
-{exploration ? (
-  <form
-    action={recordStarterExplorationAction}
-    className="mt-4"
-  >
-    <input
-      name="destination"
-      type="hidden"
-      value={exploration}
-    />
-    <button
-      className="min-h-11 rounded-full border border-white/15 px-4 py-2 text-sm font-bold text-white transition hover:bg-white/7 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#b7ff3c]"
-      type="submit"
-    >
-      {isComplete ? "View Again" : "Begin Task"}
-    </button>
-  </form>
-) : (
-  <ButtonLink
-    className="mt-4"
-    href={`${task.href}?starter=1`}
-    variant="secondary"
-  >
-    {isComplete ? "View Again" : "Begin Task"}
-  </ButtonLink>
-)}
+                {exploration ? (
+                  <form
+                    action={recordStarterExplorationAction}
+                    className="mt-4"
+                  >
+                    <input
+                      name="destination"
+                      type="hidden"
+                      value={exploration}
+                    />
+                    <button
+                      className="min-h-11 rounded-full border border-white/15 px-4 py-2 text-sm font-bold text-white transition hover:bg-white/7 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#b7ff3c]"
+                      type="submit"
+                    >
+                      {isComplete ? "View Again" : "Begin Task"}
+                    </button>
+                  </form>
+                ) : (
+                  <ButtonLink
+                    className="mt-4"
+                    href={`${task.href}?starter=1`}
+                    variant="secondary"
+                  >
+                    {isComplete ? "View Again" : "Begin Task"}
+                  </ButtonLink>
+                )}
               </li>
             );
           })}

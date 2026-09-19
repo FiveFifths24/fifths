@@ -12,7 +12,7 @@ export default async function PulseCheckInPage({
 }: {
   searchParams?: Promise<{ starter?: string }>;
 }) {
-    const parameters = await searchParams;
+  const parameters = await searchParams;
   const fromStarterPath = parameters?.starter === "1";
 
   let supabase;
@@ -67,11 +67,11 @@ export default async function PulseCheckInPage({
         />
 
         <div className="relative">
-<PulseCheckInForm
-  fromStarterPath={fromStarterPath}
-  interests={interestResult.data ?? []}
-  modes={modeResult.data ?? []}
-/>
+          <PulseCheckInForm
+            fromStarterPath={fromStarterPath}
+            interests={interestResult.data ?? []}
+            modes={modeResult.data ?? []}
+          />
         </div>
       </div>
     </div>

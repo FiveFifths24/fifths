@@ -10,7 +10,7 @@ export async function recordPulseCheckInAction(
   _previousState: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
-    const fromStarterPath = formData.get("starter") === "1";
+  const fromStarterPath = formData.get("starter") === "1";
   const parsed = pulseCheckInSchema.safeParse({
     modeId: formData.get("modeId"),
     energyLevel: formData.get("energyLevel"),
@@ -71,8 +71,8 @@ export async function recordPulseCheckInAction(
   }
 
   redirect(
-  fromStarterPath
-    ? "/home/getting-started?notice=pulse-complete"
-    : "/home?pulse=recorded",
-);
+    fromStarterPath
+      ? "/home/getting-started?notice=pulse-complete"
+      : "/home?pulse=recorded",
+  );
 }

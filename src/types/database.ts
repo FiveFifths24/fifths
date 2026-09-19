@@ -1305,9 +1305,9 @@ export type Database = {
         Returns: Database["public"]["Tables"]["signal_tutorial_progress"]["Row"];
       };
       reset_signal_tutorial: {
-  Args: Record<PropertyKey, never>;
-  Returns: Database["public"]["Tables"]["signal_tutorial_progress"]["Row"];
-};
+        Args: Record<PropertyKey, never>;
+        Returns: Database["public"]["Tables"]["signal_tutorial_progress"]["Row"];
+      };
       record_signal_exploration: {
         Args: { p_destination: "commons" | "realm" | "passport" };
         Returns: undefined;
